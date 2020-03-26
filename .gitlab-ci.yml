@@ -1,0 +1,41 @@
+cache:
+  key: "$CI_BUILD_REF_NAME"
+
+before_script:
+  - export GRADLE_USER_HOME="/cache/.gradle"
+
+"test:debug":
+  script:
+    - ./gradlew lint testDebug
+  stage: test
+  tags:
+    - android
+
+"test:release":
+  script:
+    - ./gradlew lint testRelease
+  stage: test
+  tags:
+    - android
+
+"deploy:release":
+  script:
+    - cat $KEYSTORE | base64 -d > keystore.jks
+    - bundle check || bundle install --path=/cache
+    - bundle exec fastlane deploy_release
+  stage: deploy
+  tags:
+    - android
+  only:
+    - tags
+
+"deploy:debug":
+  script:
+    - cat $KEYSTORE | base64 -d > keystore.jks
+    - bundle check || bundle install --path=/cache
+    - bundle exec fastlane deploy_debug
+  stage: deploy
+  tags:
+    - android
+  only:
+    - tags

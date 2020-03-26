@@ -10,14 +10,25 @@ android {
         applicationId "pl.gov.anna"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode System.env.CI_JOB_ID ? System.env.CI_JOB_ID.toInteger() : 1
+        versionName System.env.CI_COMMIT_TAG ? System.env.CI_COMMIT_TAG : "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            storeFile file("../keystore.jks")
+            storePassword System.env.STORE_PASSWORD
+            keyAlias System.env.KEY_ALIAS
+            keyPassword System.env.KEY_PASSWORD
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
