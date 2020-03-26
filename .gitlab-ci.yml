@@ -21,7 +21,10 @@ before_script:
 "deploy:release":
   script:
     - cat $KEYSTORE | base64 -d > keystore.jks
+    - ls
+    - echo "1"
     - bundle check || bundle install --path=/cache
+    - echo "2"
     - bundle exec fastlane deploy_release
   stage: deploy
   tags:
