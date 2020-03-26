@@ -1,6 +1,6 @@
 ---
 name: Zgłoszenie błędu
-about: Stwórz zgłoszenie błędu Create a report to help us improve
+about: Stwórz zgłoszenie błędu
 title: ''
 labels: ''
 assignees: ''
@@ -34,7 +34,7 @@ Jeżeli to możliwe załącz zrzut ekranu z opisem błędu. Zrzut ekranu pomoże
  - System operacyjny: [np iOS albo Android]
  - Wersja systemu operacyjnego: [np iOS 13.1 albo Android 10]
  - Wersja aplikacji [np. numer wersji aplikacji X znajdziesz w .. -> ..]
- 
+
  **Środowisko**
  - Wersja środowiska: [np. środowisko dev, stag, prod]
 

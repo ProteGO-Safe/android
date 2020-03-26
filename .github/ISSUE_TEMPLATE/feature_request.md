@@ -1,20 +1,20 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: Propozycja funkcji
+about: Zgłoś propozycję nowej lub ulepszenia istniejącej funkcji w aplikacji
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+**Opis prozypozycji rozwiązania**
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+Opisz krótko i czytelnie czego dotyczy propozycja i jaki jest oczekiwany rezultat działania funkcji w aplikacji.
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+**Opis alternatywnych rozwiązań**
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+Opisz krótko i czytelnie alternatywne rozwiązania, które mogą być brane pod uwagę.
+
+**Dodatkowe informacje**
+
+Tutaj możesz podać dodatkowe informacje, które pomogą lepiej zrozumieć istotę proponowanej funkcji lub jej ulepszenia.
