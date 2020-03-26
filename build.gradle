@@ -24,11 +24,70 @@ android {
     targetSdkVersion 29
     versionCode 1
     versionName "1.0"
+
+    proguardFiles "shrink-rules.pro"
   }
 
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  def uploadKeystore = file("upload.keystore")
+  def keystoreProperties = file("upload-keystore.properties")
+  def useUploadKeystore = uploadKeystore.exists() && keystoreProperties.exists()
+
+  signingConfigs {
+    debug {
+      keyAlias "safe_safe"
+      keyPassword "safesafe"
+      storeFile file("debug.keystore")
+      storePassword "safesafe"
+    }
+    if (useUploadKeystore) {
+      final signingProps = new Properties()
+      keystoreProperties.withInputStream {
+        signingProps.load(it)
+      }
+      upload {
+        keyAlias "safe_safe"
+        keyPassword signingProps["keyPassword"]
+        storeFile uploadKeystore
+        storePassword signingProps["storePassword"]
+      }
+    }
+  }
+
+  buildTypes {
+    debug {
+      signingConfig signingConfigs.debug
+    }
+
+    release {
+      if (useUploadKeystore) {
+        signingConfig signingConfigs.upload
+      } else {
+        signingConfig signingConfigs.debug
+      }
+
+      minifyEnabled true
+      shrinkResources true
+    }
+  }
+
+  packagingOptions {
+    exclude "**/*.properties"
+    exclude "*.properties"
+    exclude "META-INF/*.version"
+    exclude "META-INF/proguard/*"
+    exclude "META-INF/*.properties"
+    exclude "META-INF/androidx.*"
+    exclude "META-INF/CHANGES"
+    exclude "META-INF/CHANGES.md"
+    exclude "META-INF/CHANGES.txt"
+    exclude "META-INF/README"
+    exclude "META-INF/README.md"
+    exclude "META-INF/README.txt"
   }
 }
 

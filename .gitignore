@@ -11,5 +11,9 @@
 /local.properties
 /captures
 
+# Release app signing
+/upload.keystore
+/upload-keystore.properties
+
 # OSX
 .DS_Store
