@@ -12,20 +12,58 @@ buildscript {
 apply plugin: "com.android.application"
 
 repositories {
+  mavenCentral()
   google()
 }
+
+def twaManifest = [
+    applicationId: "io.thecoders.safesafe",
+    hostName: "safesafe.thecoders.io",
+    launchUrl: "/",
+    name: "SafeSafe",
+    themeColor: "#303f9f",
+    navigationColor: "#303f9f",
+    backgroundColor: "#bababa",
+    enableNotifications: false,
+]
 
 android {
   compileSdkVersion 29
 
   defaultConfig {
-    applicationId "io.thecoders.safesafe"
-    minSdkVersion 21
+    applicationId twaManifest.applicationId
+    minSdkVersion 23
     targetSdkVersion 29
     versionCode 1
     versionName "1.0"
 
     proguardFiles "shrink-rules.pro"
+
+    resValue "string", "appName", twaManifest.name
+
+    def launchUrl = "https://${twaManifest.hostName}${twaManifest.launchUrl}"
+    resValue "string", "launchUrl", launchUrl
+
+    resValue "string", "crosLaunchUrl", launchUrl
+
+    resValue "string", "hostName", twaManifest.hostName
+
+    resValue "string", "assetStatements", """
+            [{
+                "relation": ["delegate_permission/common.handle_all_urls"],
+                "target": {
+                    "namespace": "web",
+                    "site": "https://$twaManifest.hostName"
+                }
+            }]"""
+
+    resValue "color", "colorPrimary", twaManifest.themeColor
+
+    resValue "color", "navigationColor", twaManifest.navigationColor
+
+    resValue "color", "backgroundColor", twaManifest.backgroundColor
+
+    resValue "bool", "enableNotification", "${twaManifest.enableNotifications}"
   }
 
   compileOptions {
@@ -92,5 +130,5 @@ android {
 }
 
 dependencies {
-  compileOnly "androidx.annotation:annotation:1.1.0"
+  implementation "com.google.androidbrowserhelper:androidbrowserhelper:1.2.0"
 }
