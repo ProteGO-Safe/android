@@ -29,8 +29,8 @@ before_script:
   stage: deploy
   tags:
     - android
-#  only:
-#    - tags
+  only:
+    - tags
 
 "deploy:debug":
   script:
@@ -40,5 +40,5 @@ before_script:
   stage: deploy
   tags:
     - android
-#  only:
-#    - tags
+  only:
+    - tags

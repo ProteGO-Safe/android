@@ -11,7 +11,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 29
         versionCode System.env.CI_JOB_ID ? System.env.CI_JOB_ID.toInteger() : 1
-        versionName System.env.CI_COMMIT_TAG ? System.env.CI_COMMIT_TAG : "1.0.0"
+        versionName System.env.CI_COMMIT_TAG ? System.env.CI_COMMIT_TAG : "0.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
