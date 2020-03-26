@@ -1,0 +1,15 @@
+# IDEA
+*.iml
+/.idea
+
+# Gradle
+/.gradle
+/build
+/reports
+
+# Gradle Android
+/local.properties
+/captures
+
+# OSX
+.DS_Store
