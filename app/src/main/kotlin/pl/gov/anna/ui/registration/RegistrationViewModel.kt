@@ -17,6 +17,7 @@ class RegistrationViewModel(
 )  : ViewModel() {
 
     val msisdnError = MutableLiveData<String?>()
+    val registrationCode = MutableLiveData<String>()
 
     private var disposables = CompositeDisposable()
 
@@ -33,6 +34,7 @@ class RegistrationViewModel(
             .startRegistration(msisdn)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess { if(it.code != null) registrationCode.value = it.code }
             .subscribeBy(
                 onError = { Timber.e(it, "Registration Error") },
                 onSuccess = { Timber.d("Registration request succeed") }

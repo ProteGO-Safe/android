@@ -13,6 +13,7 @@ import android.text.TextWatcher
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
 
@@ -34,6 +35,10 @@ class RegistrationActivity : AppCompatActivity() {
 
        registrationViewModel.msisdnError.observe(this, Observer { errorMessage ->
            msisdn_edit_text_layout.error = errorMessage
+       })
+
+       registrationViewModel.registrationCode.observe(this, Observer {
+           Toast.makeText(this, "Verification code: $it", Toast.LENGTH_LONG).show()
        })
     }
 

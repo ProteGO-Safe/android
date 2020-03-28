@@ -12,7 +12,7 @@ open class StandardRequestData (
     @SerializedName("os_version")
     val osVersion: String,
 
-    @SerializedName("device_name")
+    @SerializedName("device_type")
     val deviceName : String,
 
     @SerializedName("app_version")
@@ -45,7 +45,10 @@ class RegistrationRequest (
     standardRequestData: StandardRequestData
 ) : StandardRequestData(standardRequestData)
 
-data class RegistrationResponse(@SerializedName("registration_id") val registrationId: String)
+data class RegistrationResponse(
+    @SerializedName("registration_id") val registrationId: String?,
+    @SerializedName("code") val code: String?
+)
 
 class ConfirmRegistrationRequest(
     @SerializedName("registration_id")
