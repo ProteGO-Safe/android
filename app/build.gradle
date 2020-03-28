@@ -30,11 +30,15 @@ android {
             signingConfig signingConfigs.release
             applicationIdSuffix ".prod"
             versionNameSuffix "-prod"
+            buildConfigField "String", "BASE_API_URL", "\"https://google.com/\""
+            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
         debug {
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
             debuggable true
+            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-anna-dev-272212.cloudfunctions.net/\""
+            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
     }
 
@@ -77,6 +81,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation "org.koin:koin-androidx-viewmodel:2.0.1"
+    implementation 'com.google.android.material:material:1.1.0'
 
     // Koin
     implementation 'org.koin:koin-android:2.0.1'
@@ -98,6 +103,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.3.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
