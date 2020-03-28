@@ -5,6 +5,12 @@ import pl.gov.anna.information.AppInformation
 import pl.gov.anna.information.PhoneInformation
 import pl.gov.anna.information.Session
 
+class RegistrationRequestComposer(
+    private val requestComposer: RequestComposer
+) {
+    operator fun invoke(msisdn: String) = RegistrationRequest(msisdn, requestComposer.standardRequestData)
+}
+
 class RequestComposer(
     val phoneInformation: PhoneInformation,
     val appInformation: AppInformation,
@@ -22,11 +28,4 @@ class RequestComposer(
                 userId = session.userId
             )
         }
-}
-
-class RegistrationRequestComposer(
-    private val requestComposer: RequestComposer
-) {
-
-    operator fun invoke(msisdn: String) = RegistrationRequest(msisdn, requestComposer.standardRequestData)
 }

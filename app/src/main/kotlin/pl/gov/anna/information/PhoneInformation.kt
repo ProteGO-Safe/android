@@ -13,7 +13,5 @@ class PhoneInformation {
         get() = android.os.Build.VERSION.SDK_INT.toString()
 
     val platform: String
-     get() = "android"
-
-
+        get() = "android"
 }

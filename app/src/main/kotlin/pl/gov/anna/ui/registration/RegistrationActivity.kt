@@ -14,6 +14,7 @@ import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
 
@@ -40,6 +41,10 @@ class RegistrationActivity : AppCompatActivity() {
        registrationViewModel.registrationCode.observe(this, Observer {
            Toast.makeText(this, "Verification code: $it", Toast.LENGTH_LONG).show()
        })
+    }
+
+    fun <T> MutableLiveData<T> .addObserver(observer: (T) -> Unit) {
+        observe(this@RegistrationActivity, Observer { observer(it) })
     }
 
     private fun TextInputEditText.onTextChanged(onChange: (String) -> Unit) {
