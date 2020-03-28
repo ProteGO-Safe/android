@@ -27,7 +27,7 @@ class RegistrationActivity : AppCompatActivity() {
         setContentView(R.layout.registration_view)
 
         register_button.setOnClickListener {
-
+            registrationViewModel.onStartRegistration(msisdn_edit_text.text.toString())
         }
 
         msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
