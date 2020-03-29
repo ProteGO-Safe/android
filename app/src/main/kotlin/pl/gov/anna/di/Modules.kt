@@ -16,6 +16,7 @@ import pl.gov.anna.file.FileManager
 import pl.gov.anna.information.AppInformation
 import pl.gov.anna.information.PhoneInformation
 import pl.gov.anna.information.Session
+import pl.gov.anna.ui.registration.RegistrationConfirmationViewModel
 import pl.gov.anna.ui.registration.RegistrationViewModel
 import pl.gov.anna.ui.validator.MsisdnValidator
 import retrofit2.Retrofit
@@ -25,6 +26,7 @@ import timber.log.Timber
 
 val viewModule: Module = module {
     viewModel { RegistrationViewModel(get(), get()) }
+    viewModel { RegistrationConfirmationViewModel(get()) }
     single { MsisdnValidator() }
 }
 
@@ -36,13 +38,12 @@ val filesModule: Module = module {
 }
 
 val appModule = module {
-//    single { androidContext() }
     single { PhoneInformation() }
     single { AppInformation() }
 }
 
 val domainModule = module {
-    single { AnnaServer(get()) }
+    single { AnnaServer(get(), get()) }
     single { RegistrationService(get(), get(), get()) }
     single { RegistrationRequestComposer(get()) }
     single { RequestComposer(get(), get(), get()) }

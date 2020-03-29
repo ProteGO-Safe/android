@@ -4,15 +4,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.registration_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import pl.gov.anna.ui.mian.MainActivityViewModel
-import android.telephony.PhoneNumberFormattingTextWatcher
 import pl.gov.anna.R
-import android.R.attr.password
+import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -34,13 +29,19 @@ class RegistrationActivity : AppCompatActivity() {
 
         msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
 
-       registrationViewModel.msisdnError.observe(this, Observer { errorMessage ->
-           msisdn_edit_text_layout.error = errorMessage
-       })
+       registrationViewModel.msisdnError.addObserver {
+           msisdn_edit_text_layout.error = it
+       }
 
-       registrationViewModel.registrationCode.observe(this, Observer {
-           Toast.makeText(this, "Verification code: $it", Toast.LENGTH_LONG).show()
-       })
+        registrationViewModel.registrationCode.addObserver {
+            Toast.makeText(this, "Verification code: $it", Toast.LENGTH_LONG).show()
+            navigateToConfirmation()
+        }
+    }
+
+    private fun navigateToConfirmation() {
+        startActivity(Intent(this, RegistrationConfirmationActivity::class.java))
+        finish()
     }
 
     fun <T> MutableLiveData<T> .addObserver(observer: (T) -> Unit) {

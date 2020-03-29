@@ -31,7 +31,7 @@ class RegistrationViewModel(
 
     fun onStartRegistration(msisdn: String) {
         annaServer
-            .startRegistration(msisdn)
+            .initRegistration(msisdn)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess { if(it.code != null) registrationCode.value = it.code }

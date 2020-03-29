@@ -3,7 +3,7 @@ package pl.gov.anna.backend.api
 import com.google.gson.annotations.SerializedName
 
 class RegistrationRequest (
-    @SerializedName("phone_no")
+    @SerializedName("msisdn")
     val msisdn: String,
     standardRequestData: StandardRequestData
 ) : StandardRequestData(standardRequestData)
@@ -17,8 +17,9 @@ class ConfirmRegistrationRequest(
     @SerializedName("registration_id")
     val registrationId: String,
     @SerializedName("code")
-    val confirmationCode: String
-)
+    val confirmationCode: String,
+    standardRequestData: StandardRequestData
+) : StandardRequestData(standardRequestData)
 
 data class ConfirmationRegistrationResponse(
     @SerializedName("user_id")
@@ -34,7 +35,7 @@ open class StandardRequestData (
     @SerializedName("os_version")
     val osVersion: String,
 
-    @SerializedName("device_type")
+    @SerializedName("device_name")
     val deviceName : String,
 
     @SerializedName("app_version")

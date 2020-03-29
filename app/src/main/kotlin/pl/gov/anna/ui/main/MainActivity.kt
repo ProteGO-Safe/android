@@ -1,4 +1,4 @@
-package pl.gov.anna.ui.mian
+package pl.gov.anna.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -8,7 +8,12 @@ import pl.gov.anna.information.Session
 class RegistrationRequestComposer(
     private val requestComposer: RequestComposer
 ) {
-    operator fun invoke(msisdn: String) = RegistrationRequest(msisdn, requestComposer.standardRequestData)
+    fun init(msisdn: String) = RegistrationRequest(msisdn, requestComposer.standardRequestData)
+    fun confirm(code: String, registrationId: String) =
+        ConfirmRegistrationRequest(
+            confirmationCode = code,
+            registrationId = registrationId,
+            standardRequestData = requestComposer.standardRequestData)
 }
 
 class RequestComposer(
