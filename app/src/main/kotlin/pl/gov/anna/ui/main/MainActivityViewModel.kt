@@ -1,4 +1,4 @@
-package pl.gov.anna.ui.mian
+package pl.gov.anna.ui.main
 
 import androidx.lifecycle.ViewModel
 import pl.gov.anna.file.FileManager

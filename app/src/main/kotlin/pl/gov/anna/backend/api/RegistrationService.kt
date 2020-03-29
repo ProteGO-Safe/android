@@ -14,13 +14,18 @@ class RegistrationService (
     private val requestComposer: RegistrationRequestComposer
     ) {
 
-    fun startRegistration(msisdn: String): Single<RegistrationResponse> =
+    fun initRegistration(msisdn: String): Single<RegistrationResponse> =
         Single.just(msisdn.withCountyCode(MsisdnCountryCode.PL))
         .doOnSuccess { if(!msisdnValidator.validateWithCountryCode(it)) {
             throw InvalidMsisdnException("$it is not a valid MSISDN")
         } }
-        .map { requestComposer(it) }
+        .map { requestComposer.init(it) }
         .flatMap { registrationAPI.register(it) }
+
+    fun confirmRegistration(code: String, registrationId: String) =
+        Single.just(code)
+            .map { requestComposer.confirm(code, registrationId) }
+            .flatMap { registrationAPI.confirmRegistration(it) }
 }
 
 private fun String.withCountyCode(countryCode: MsisdnCountryCode): String
