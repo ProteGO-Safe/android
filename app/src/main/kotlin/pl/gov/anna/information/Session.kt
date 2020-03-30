@@ -1,43 +1,73 @@
 package pl.gov.anna.information
 
+import io.reactivex.Single
 import pl.gov.anna.backend.api.ConfirmationRegistrationResponse
 import pl.gov.anna.backend.api.RegistrationResponse
+import pl.gov.anna.repository.SessionRepository
 import java.lang.IllegalStateException
 
 enum class SessionState {
     UNREGISTERED,
     REGISTRATION,
-    IDLE
+    LOGGED_IN;
+
+    companion object {
+        fun byName(stateName: String?) = SessionState.values().firstOrNull { it.name == stateName } ?: UNREGISTERED
+    }
 }
 
-class Session {
+data class SessionData(
+    val state: SessionState,
+    val userId: String? = null,
+    val registrationId: String? = null,
+    val msisdn: String? = null
+)
 
-    private var sessionState = SessionState.UNREGISTERED
-     @Synchronized get
-     @Synchronized set
+class Session(
+    private val sessionRepository: SessionRepository
+) {
+
+    var sessionData = SessionData(SessionState.UNREGISTERED)
+        @Synchronized get
+        @Synchronized private set
 
     private var msisdn: String? = null
-    var userId: String? = null
-        private set
+    val userId: String?
+        get() = sessionData.userId
+
+    init {
+        sessionData = sessionRepository.restore()
+    }
 
     fun initRegistration(msisdn: String) {
-        sessionState = SessionState.REGISTRATION
+        sessionData = sessionData.copy(state = SessionState.REGISTRATION)
         this.msisdn = msisdn
     }
 
-    fun registered(confirmationRegistrationResponse: ConfirmationRegistrationResponse) {
-        sessionState = SessionState.IDLE
-        userId = confirmationRegistrationResponse.userId
+    fun registered(confirmationRegistrationResponse: ConfirmationRegistrationResponse): Single<SessionData> {
+        return Single.create<SessionData> {
+            sessionData = sessionData.copy(state = SessionState.LOGGED_IN, userId = confirmationRegistrationResponse.userId)
+            sessionRepository.store(sessionData)
+            it.onSuccess(sessionData)
+        }
     }
 
-    fun save(registrationResponse: RegistrationResponse) {
-        _registrationId = registrationResponse.registrationId
+    fun save(registrationResponse: RegistrationResponse): Single<SessionData> {
+        return Single.create<SessionData> {
+            sessionData = sessionData.copy(registrationId = registrationResponse.registrationId)
+            sessionRepository.store(sessionData)
+            it.onSuccess(sessionData)
+        }
     }
 
-    private var _registrationId: String? = null
+    fun logout() {
+        sessionData = SessionData(state = SessionState.UNREGISTERED)
+        sessionRepository.store(sessionData)
+    }
+
     val registrationId: String
-        get() = if (!_registrationId.isNullOrEmpty()) _registrationId!! else throw IllegalStateException("RegistrationId is not defined.")
+        get() = sessionData.registrationId ?: throw IllegalStateException("RegistrationId is not defined.")
 
     val isActiveRegistrationProcess: Boolean
-        get()= sessionState == SessionState.REGISTRATION
+        get()= sessionData.state == SessionState.REGISTRATION
 }
