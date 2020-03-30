@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Anna</string>
+    <string name="app_name">ProteGo</string>
     <string name="registration_title">Dołącz do aplikacji!</string>
     <string name="registration_content">Żeby potwierdzić Twoje konto podaj swój numer telefonu. Prześlemy Ci kod weryfikujący. Nie będziemy łączyć Twoich danych z numerem telefonu.</string>
     <string name="registration_confirmation_title">Wpisz swój kod</string>
