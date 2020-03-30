@@ -2,6 +2,7 @@ package pl.gov.anna.di
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 
 import org.koin.core.module.Module
@@ -16,6 +17,7 @@ import pl.gov.anna.file.FileManager
 import pl.gov.anna.information.AppInformation
 import pl.gov.anna.information.PhoneInformation
 import pl.gov.anna.information.Session
+import pl.gov.anna.repository.SessionRepository
 import pl.gov.anna.ui.registration.RegistrationConfirmationViewModel
 import pl.gov.anna.ui.registration.RegistrationViewModel
 import pl.gov.anna.ui.validator.MsisdnValidator
@@ -25,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 
 val viewModule: Module = module {
-    viewModel { RegistrationViewModel(get(), get()) }
+    viewModel { RegistrationViewModel(get(), get(), get()) }
     viewModel { RegistrationConfirmationViewModel(get()) }
     single { MsisdnValidator() }
 }
@@ -40,6 +42,9 @@ val filesModule: Module = module {
 val appModule = module {
     single { PhoneInformation() }
     single { AppInformation() }
+    single{
+        androidApplication().getSharedPreferences("ProteGo",  android.content.Context.MODE_PRIVATE)
+    }
 }
 
 val domainModule = module {
@@ -47,7 +52,8 @@ val domainModule = module {
     single { RegistrationService(get(), get(), get()) }
     single { RegistrationRequestComposer(get()) }
     single { RequestComposer(get(), get(), get()) }
-    single { Session() }
+    single { Session(get()) }
+    single { SessionRepository(get()) }
 }
 
 val networkingModule = module {

@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
+import pl.gov.anna.information.SessionState
+import pl.gov.anna.ui.main.MainActivity
 
 
 class RegistrationActivity : AppCompatActivity() {
@@ -29,18 +31,38 @@ class RegistrationActivity : AppCompatActivity() {
 
         msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
 
-       registrationViewModel.msisdnError.addObserver {
-           msisdn_edit_text_layout.error = it
-       }
+        observeMsisdnValidation()
+        observeRegistrationStatus()
 
-        registrationViewModel.registrationCode.addObserver {
-            Toast.makeText(this, "Verification code: $it", Toast.LENGTH_LONG).show()
-            navigateToConfirmation()
+        registrationViewModel.fetchSession()
+    }
+
+    private fun observeRegistrationStatus() {
+        registrationViewModel.sessionData.addObserver {
+            if (it.state == SessionState.REGISTRATION) {
+                Toast.makeText(this, "Verification code: $it", Toast.LENGTH_LONG).show()
+                navigateToConfirmation()
+            }
+            when(it.state) {
+                SessionState.REGISTRATION -> navigateToConfirmation().also { Toast.makeText(this, "Verification code: $it.code", Toast.LENGTH_LONG).show() }
+                SessionState.LOGGED_IN -> navigateToMain()
+            }
+        }
+    }
+
+    private fun observeMsisdnValidation() {
+        registrationViewModel.msisdnError.addObserver {
+            msisdn_edit_text_layout.error = it
         }
     }
 
     private fun navigateToConfirmation() {
         startActivity(Intent(this, RegistrationConfirmationActivity::class.java))
+        finish()
+    }
+
+    private fun navigateToMain() {
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
