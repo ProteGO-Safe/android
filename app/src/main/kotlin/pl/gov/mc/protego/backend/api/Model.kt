@@ -2,6 +2,22 @@ package pl.gov.mc.protego.backend.api
 
 import com.google.gson.annotations.SerializedName
 
+class GetStatusRequest (
+    @SerializedName("last_beacon_date")
+    val lastBeaconDate: String,
+    standardRequestData: StandardRequestData
+) : StandardRequestData(standardRequestData)
+
+data class GetStatusResponse(
+    @SerializedName("status") val status: String,
+    @SerializedName("beacon_ids") val id: List<BeaconId>
+)
+
+data class BeaconId(
+    @SerializedName("date") val date: String,
+    @SerializedName("beacon_id") val id: String
+)
+
 class RegistrationRequest (
     @SerializedName("msisdn")
     val msisdn: String,
@@ -35,7 +51,7 @@ open class StandardRequestData (
     @SerializedName("os_version")
     val osVersion: String,
 
-    @SerializedName("device_name")
+    @SerializedName("device_type")
     val deviceName : String,
 
     @SerializedName("app_version")

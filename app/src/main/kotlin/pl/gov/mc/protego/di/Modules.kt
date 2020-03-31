@@ -8,16 +8,14 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import pl.gov.mc.protego.BuildConfig
-import pl.gov.mc.protego.backend.api.RegistrationAPI
-import pl.gov.mc.protego.backend.api.RegistrationRequestComposer
-import pl.gov.mc.protego.backend.api.RegistrationService
-import pl.gov.mc.protego.backend.api.RequestComposer
+import pl.gov.mc.protego.backend.api.*
 import pl.gov.mc.protego.backend.domain.ProtegoServer
 import pl.gov.mc.protego.file.FileManager
 import pl.gov.mc.protego.information.AppInformation
 import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.repository.SessionRepository
+import pl.gov.mc.protego.ui.main.MainActivityViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationConfirmationViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationViewModel
 import pl.gov.mc.protego.ui.validator.MsisdnValidator
@@ -29,6 +27,7 @@ import timber.log.Timber
 val viewModule: Module = module {
     viewModel { RegistrationViewModel(get(), get(), get()) }
     viewModel { RegistrationConfirmationViewModel(get()) }
+    viewModel { MainActivityViewModel(get()) }
     single { MsisdnValidator() }
 }
 
@@ -48,9 +47,11 @@ val appModule = module {
 }
 
 val domainModule = module {
-    single { ProtegoServer(get(), get()) }
+    single { ProtegoServer(get(), get(), get()) }
     single { RegistrationService(get(), get(), get()) }
+    single { StatusService(get(), get()) }
     single { RegistrationRequestComposer(get()) }
+    single { StatusRequestComposer(get()) }
     single { RequestComposer(get(), get(), get()) }
     single { Session(get()) }
     single { SessionRepository(get()) }
@@ -84,5 +85,9 @@ val networkingModule = module {
 
     single {
         get<Retrofit>().create(RegistrationAPI::class.java)
+    }
+
+    single {
+        get<Retrofit>().create(StatusApi::class.java)
     }
 }

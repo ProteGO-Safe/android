@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.ui.registration.RegistrationActivity
 
 class MainActivity : AppCompatActivity() {
 
+    private val viewModel: MainActivityViewModel by viewModel()
     private val session: Session by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,5 +23,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, RegistrationActivity::class.java))
             finish()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
     }
 }

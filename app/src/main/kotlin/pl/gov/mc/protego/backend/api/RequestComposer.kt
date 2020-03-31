@@ -19,6 +19,15 @@ class RegistrationRequestComposer(
         )
 }
 
+class StatusRequestComposer(
+    private val requestComposer: RequestComposer
+) {
+    fun status(date: String) = GetStatusRequest(
+        date,
+        requestComposer.standardRequestData
+    )
+}
+
 class RequestComposer(
     val phoneInformation: PhoneInformation,
     val appInformation: AppInformation,
