@@ -1,15 +1,34 @@
 package pl.gov.mc.protego.ui.main
 
 import androidx.lifecycle.ViewModel
-import pl.gov.mc.protego.file.FileManager
-import pl.gov.mc.protego.gcs.GoogleCloudStorage
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
+import pl.gov.mc.protego.backend.domain.ProtegoServer
+import timber.log.Timber
 
 class MainActivityViewModel(
-    val fileManager: FileManager,
-    val googleCloudStorage: GoogleCloudStorage
+    val protegoServer: ProtegoServer
 ) : ViewModel() {
 
-    fun sendSampleFileToGcs() {
+    private var disposables = CompositeDisposable()
 
+    fun onResume() {
+        protegoServer
+            .fetchState()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onError = { Timber.e(it, "Fetch State Error") },
+                onSuccess = { Timber.d("State fetched") }
+            )
+            .addTo(disposables)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
     }
 }

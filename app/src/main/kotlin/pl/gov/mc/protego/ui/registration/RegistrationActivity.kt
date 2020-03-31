@@ -38,13 +38,9 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun observeRegistrationStatus() {
-        registrationViewModel.sessionData.addObserver {
-            if (it.state == SessionState.REGISTRATION) {
-                Toast.makeText(this, "Verification code: $it", Toast.LENGTH_LONG).show()
-                navigateToConfirmation()
-            }
-            when(it.state) {
-                SessionState.REGISTRATION -> navigateToConfirmation().also { Toast.makeText(this, "Verification code: $it.code", Toast.LENGTH_LONG).show() }
+        registrationViewModel.sessionData.addObserver { sessionData ->
+            when(sessionData.state) {
+                SessionState.REGISTRATION -> navigateToConfirmation().also { Toast.makeText(this, "Verification code: ${sessionData.debugCode}", Toast.LENGTH_LONG).show() }
                 SessionState.LOGGED_IN -> navigateToMain()
             }
         }
@@ -58,7 +54,6 @@ class RegistrationActivity : AppCompatActivity() {
 
     private fun navigateToConfirmation() {
         startActivity(Intent(this, RegistrationConfirmationActivity::class.java))
-        finish()
     }
 
     private fun navigateToMain() {
