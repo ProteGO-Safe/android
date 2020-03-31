@@ -231,6 +231,9 @@ class ProteGoGattServer(
             Timber.e("invalid onConnectionStateChange params")
             return
         }
+        if (newState == BluetoothGatt.STATE_DISCONNECTED) {
+            this.pendingWrites.remove(device)
+        }
     }
 
     override fun onPhyRead(device: BluetoothDevice?, txPhy: Int, rxPhy: Int, status: Int) {
