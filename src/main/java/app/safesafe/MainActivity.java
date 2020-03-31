@@ -1,4 +1,4 @@
-package io.thecoders.safesafe;
+package app.safesafe;
 
 import android.app.Activity;
 import android.os.Bundle;
