@@ -6,13 +6,24 @@ import pl.gov.mc.protego.bluetooth.ProteGoServiceUUIDString
 import pl.gov.mc.protego.bluetooth.toHexString
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
-import java.lang.IllegalStateException
 import java.util.*
 import kotlin.collections.HashMap
 
-class ProteGoGattServer(
+class ProteGoGattServer private constructor(
     private val callback: ProteGoGattServerCallback
 ) : BluetoothGattServerCallback() {
+
+    companion object {
+        fun startGattServer(callback: ProteGoGattServerCallback, gattServerCreator: (BluetoothGattServerCallback) -> BluetoothGattServer?): ServerResult {
+            val annaGattServer = ProteGoGattServer(callback)
+            val gattServer = gattServerCreator(annaGattServer)
+            if (gattServer == null) {
+                Timber.w("failed to open GATT server")
+                return ServerResult.Failure.CannotObtainGattServer
+            }
+            return annaGattServer.initialize(gattServer) ?: ServerResult.Success(annaGattServer)
+        }
+    }
 
     // This should be nullable as there is potential race condition in the API between callback
     // registration and receiving GattServer instance.
@@ -23,10 +34,10 @@ class ProteGoGattServer(
 
     // Lifecycle -----------------------------------------------------------------------------------
 
-    fun initialize(gattServer: BluetoothGattServer): Boolean {
-        if (this.gattServer != null ) {
+    private fun initialize(gattServer: BluetoothGattServer): ServerResult.Failure? {
+        check(this.gattServer != null) {
             gattServer.close()
-            throw IllegalStateException("Please create a new instance of AnnaGattServer for a new GATT server handle")
+            "Please create a new instance of AnnaGattServer for a new GATT server handle"
         }
         this.gattServer = gattServer
 
@@ -42,16 +53,16 @@ class ProteGoGattServer(
         if (!gattService.addCharacteristic(gattCharacteristic)) {
             Timber.d("Failed to add characteristic")
             gattServer.close()
-            return false
+            return ServerResult.Failure.CannotAddCharacteristic
         }
 
         if (!gattServer.addService(gattService)) {
             Timber.d("Failed to add service")
             gattServer.close()
-            return false
+            return ServerResult.Failure.CannotAddService
         }
 
-        return true
+        return null
     }
 
     fun close(): Boolean {

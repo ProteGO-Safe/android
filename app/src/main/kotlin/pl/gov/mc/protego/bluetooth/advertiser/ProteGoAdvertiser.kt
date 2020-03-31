@@ -27,15 +27,25 @@ class ProteGoAdvertiser(
     // General enable / disable functions ----------------------------------------------------------
     private var isEnabled = false
 
-    fun enable() {
+    fun enable(): EnableResult {
         Timber.d("enabling advertiser")
         if (isEnabled) {
             Timber.d("advertiser already enabled")
-            return
+            return EnableResult.PreconditionFailure.AlreadyEnabled
+        }
+        val bluetoothAdapter = bluetoothManager.adapter
+        if (bluetoothAdapter == null) {
+            Timber.w("failed to get bluetooth adapter")
+            return EnableResult.PreconditionFailure.CannotObtainBluetoothAdapter
+        }
+        if (!bluetoothAdapter.isEnabled) {
+            Timber.d("bluetooth is not enabled")
+            return EnableResult.PreconditionFailure.BluetoothOff
         }
         isEnabled = true
-        startGattServer()
-        startAdvertising()
+        val serverResult: ServerResult = startGattServer()
+        val advertiserResult: AdvertiserResult = startAdvertising(bluetoothAdapter)
+        return EnableResult.Started(advertiserResult, serverResult)
     }
 
     fun disable() {
@@ -67,39 +77,29 @@ class ProteGoAdvertiser(
     }
 
     private fun isAdvertisingSupported(): Boolean {
-        return bluetoothManager.adapter.isMultipleAdvertisementSupported &&
-                bluetoothManager.adapter.state == BluetoothAdapter.STATE_ON
+        return bluetoothManager.adapter.isMultipleAdvertisementSupported
     }
 
-    private fun startAdvertising() {
+    private fun startAdvertising(bluetoothAdapter: BluetoothAdapter): AdvertiserResult {
         Timber.d("startAdvertising")
-        if (isAdvertising) {
-            Timber.w("advertising already pending")
-            return
-        }
+        check(!isAdvertising) { "advertising already pending" }
 
         if (!isAdvertisingSupported()) {
             Timber.w("advertising is not supported")
-            return
+            return AdvertiserResult.Failure.NotSupported
         }
 
         val tokenData = this.tokenData
         if (tokenData == null || tokenData.second < Date()) {
             Timber.w("token data is invalid or expired.")
             listener.tokenDataExpired(this, tokenData)
-            return
+            return AdvertiserResult.Failure.InvalidToken(tokenData)
         }
 
-        val adapter = bluetoothManager.adapter
-        if (adapter == null) {
-            Timber.w("failed to get bluetooth adapter to start advertising")
-            return
-        }
-
-        val leAdvertiser = adapter.bluetoothLeAdvertiser
+        val leAdvertiser = bluetoothAdapter.bluetoothLeAdvertiser
         if (leAdvertiser == null) {
             Timber.w("failed to get leAdvertiser to start advertising")
-            return
+            return AdvertiserResult.Failure.CannotObtainBluetoothAdvertiser
         }
 
         val advertiseSettings = AdvertiseSettings.Builder()
@@ -134,7 +134,7 @@ class ProteGoAdvertiser(
 
         val advertiseData = AdvertiseData.Builder()
             .setIncludeDeviceName(false)
-            .setIncludeTxPowerLevel(false)
+            .setIncludeTxPowerLevel(true)
             .addManufacturerData(ProteGoManufacturerId, data)
             .addServiceUuid(ParcelUuid(UUID.fromString(ProteGoServiceUUIDString)))
             .build()
@@ -158,6 +158,7 @@ class ProteGoAdvertiser(
             }
         }, tokenData.second)
         this.advertisementTimer = timer
+        return AdvertiserResult.Success
     }
 
     private fun stopAdvertising() {
@@ -194,28 +195,22 @@ class ProteGoAdvertiser(
 
     private var gattServer: ProteGoGattServer? = null
 
-    private fun startGattServer() {
+    private fun startGattServer(): ServerResult {
         Timber.d("starting GATT server...")
-        if (gattServer != null) {
-            Timber.d("GATT server already started")
-            return
-        }
+        check(gattServer == null) { "GATT server already started" }
 
-        val annaGattServer = ProteGoGattServer(this)
-        val gattServer = bluetoothManager.openGattServer(context, annaGattServer)
-        if (gattServer == null) {
-            Timber.w("failed to open GATT server")
-            return
-        }
-        this.gattServer = annaGattServer
-        if (!annaGattServer.initialize(gattServer)) {
-            Timber.e("failed to initialize ProteGoGattServer")
-            this.gattServer = null
-            return
-        }
-
-        Timber.d("GATT server start initiated")
-        return
+        return ProteGoGattServer.startGattServer(this) { bluetoothManager.openGattServer(context, it) }
+            .also {
+                when(it) {
+                    is ServerResult.Success -> {
+                        Timber.d("GATT server start initiated")
+                        this.gattServer = it.proteGoGattServer
+                    }
+                    ServerResult.Failure.CannotObtainGattServer -> Timber.w("failed to open GATT server")
+                    ServerResult.Failure.CannotAddService -> Timber.w("failed to initialize ProteGoGattServer")
+                    ServerResult.Failure.CannotAddCharacteristic -> Timber.w("failed to initialize ProteGoGattServer")
+                }
+            }
     }
 
     private fun stopGattServer() {
@@ -272,7 +267,12 @@ class ProteGoAdvertiser(
 
         // Reset advertisement data
         stopAdvertising()
-        startAdvertising()
+        val bluetoothAdapter = bluetoothManager.adapter
+        if (bluetoothAdapter != null) {
+            startAdvertising(bluetoothAdapter)
+        } else {
+            Timber.w("bluetooth adapter is null on updateTokenData")
+        }
     }
 
     override fun getTokenData(gattServer: ProteGoGattServer): ByteArray? {
