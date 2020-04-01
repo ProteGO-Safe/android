@@ -3,8 +3,6 @@ package pl.gov.mc.protego.ui.splash
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.ui.observeLiveData
 
