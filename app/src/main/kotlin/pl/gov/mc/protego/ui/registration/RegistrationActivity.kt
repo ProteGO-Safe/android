@@ -9,11 +9,10 @@ import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
 import pl.gov.mc.protego.information.SessionState
 import pl.gov.mc.protego.ui.main.MainActivity
+import pl.gov.mc.protego.ui.observeLiveData
 
 
 class RegistrationActivity : AppCompatActivity() {
@@ -38,7 +37,7 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun observeRegistrationStatus() {
-        registrationViewModel.sessionData.addObserver { sessionData ->
+        observeLiveData(registrationViewModel.sessionData) { sessionData ->
             when(sessionData.state) {
                 SessionState.REGISTRATION -> navigateToConfirmation().also { Toast.makeText(this, "Verification code: ${sessionData.debugCode}", Toast.LENGTH_LONG).show() }
                 SessionState.LOGGED_IN -> navigateToMain()
@@ -47,7 +46,7 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun observeMsisdnValidation() {
-        registrationViewModel.msisdnError.addObserver {
+        observeLiveData(registrationViewModel.msisdnError) {
             msisdn_edit_text_layout.error = it
         }
     }
@@ -59,10 +58,6 @@ class RegistrationActivity : AppCompatActivity() {
     private fun navigateToMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
-    }
-
-    fun <T> MutableLiveData<T> .addObserver(observer: (T) -> Unit) {
-        observe(this@RegistrationActivity, Observer { observer(it) })
     }
 
     private fun TextInputEditText.onTextChanged(onChange: (String) -> Unit) {

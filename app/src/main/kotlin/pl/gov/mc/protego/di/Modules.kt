@@ -18,6 +18,7 @@ import pl.gov.mc.protego.repository.SessionRepository
 import pl.gov.mc.protego.ui.main.MainActivityViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationConfirmationViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationViewModel
+import pl.gov.mc.protego.ui.splash.SplashScreenViewModel
 import pl.gov.mc.protego.ui.validator.MsisdnValidator
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -28,6 +29,7 @@ val viewModule: Module = module {
     viewModel { RegistrationViewModel(get(), get(), get()) }
     viewModel { RegistrationConfirmationViewModel(get()) }
     viewModel { MainActivityViewModel(get()) }
+    viewModel { SplashScreenViewModel(get()) }
     single { MsisdnValidator() }
 }
 
