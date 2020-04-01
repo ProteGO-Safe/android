@@ -21,7 +21,7 @@ class ProteGoAdvertiser(
 ) : AdvertiserInterface, ProteGoGattServerCallback {
 
     // Advertisement timer task
-    var advertisementTimer: Timer? = null
+    private var advertisementTimer: Timer? = null
 
     // Token data advertised and send by a GATT server.
     private var tokenData: Pair<ByteArray, Date>? = null
@@ -260,7 +260,7 @@ class ProteGoAdvertiser(
     }
 
     override fun updateTokenData(data: ByteArray, expirationDate: Date) {
-        Timber.d("updateTokenData, data: ${data.toHexString()}, expirationDate: ${expirationDate}")
+        Timber.d("updateTokenData, data: ${data.toHexString()}, expirationDate: $expirationDate")
         this.tokenData = Pair(data, expirationDate)
 
         if (!isEnabled) {
@@ -300,7 +300,7 @@ class ProteGoAdvertiser(
         byteArray: ByteArray,
         rssi: Int?
     ) {
-        Timber.d("receivedTokenData, byteArray: ${byteArray.toHexString()}, rssi: ${rssi}")
+        Timber.d("receivedTokenData, byteArray: ${byteArray.toHexString()}, rssi: $rssi")
         this.listener.synchronizedTokenData(this, byteArray, rssi)
     }
 }
