@@ -1,0 +1,4 @@
+testCockpit: # just temporary, feel free to delete it
+  type: action
+  description: "Test Cockpit" # optional
+  buttonText: "Perform test" # this value is optional
