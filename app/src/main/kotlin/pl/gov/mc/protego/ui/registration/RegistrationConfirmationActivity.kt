@@ -4,12 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.ui.main.MainActivity
+import pl.gov.mc.protego.ui.observeLiveData
 
 class RegistrationConfirmationActivity : AppCompatActivity() {
 
@@ -27,11 +26,11 @@ class RegistrationConfirmationActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.confirmationError.addObserver {
+        observeLiveData(viewModel.confirmationError) {
             Toast.makeText(this, "Problem z rejestracją: $it", Toast.LENGTH_LONG).show()
         }
 
-        viewModel.confirmationSuccess.addObserver {
+        observeLiveData(viewModel.confirmationSuccess) {
             navigateToMain()
         }
     }
@@ -41,7 +40,4 @@ class RegistrationConfirmationActivity : AppCompatActivity() {
         finish()
     }
 
-    fun <T> MutableLiveData<T>.addObserver(observer: (T) -> Unit) {
-        observe(this@RegistrationConfirmationActivity, Observer { observer(it) })
-    }
 }
