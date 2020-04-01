@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "953044710318",
+    "firebase_url": "https://protego-dev.firebaseio.com",
+    "project_id": "protego-dev",
+    "storage_bucket": "protego-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953044710318:android:926f5baccffc6f59734e3f",
+        "android_client_info": {
+          "package_name": "pl.gov.mc.protego.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953044710318-rablc0o2feonld7hq854mtgl4fts63qo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5tGeGILVrCOHNT2GdL8H3WnbnukXt2IE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953044710318-rablc0o2feonld7hq854mtgl4fts63qo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
