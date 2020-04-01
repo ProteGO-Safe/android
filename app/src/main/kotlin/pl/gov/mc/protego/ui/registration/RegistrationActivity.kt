@@ -12,7 +12,6 @@ import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.SessionState
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.MainActivity
-import timber.log.Timber
 import pl.gov.mc.protego.ui.observeLiveData
 
 

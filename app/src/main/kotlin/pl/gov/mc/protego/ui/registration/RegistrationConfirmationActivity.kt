@@ -1,21 +1,14 @@
 package pl.gov.mc.protego.ui.registration
 
-import android.content.Context
 import android.content.Intent
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import com.polidea.cockpit.cockpit.Cockpit
 import com.squareup.seismic.ShakeDetector
 import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.MainActivity
-import timber.log.Timber
 import pl.gov.mc.protego.ui.observeLiveData
 
 class RegistrationConfirmationActivity : BaseActivity() {
