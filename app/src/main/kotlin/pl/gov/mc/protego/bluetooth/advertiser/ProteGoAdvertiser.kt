@@ -6,6 +6,8 @@ import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.os.ParcelUuid
 import pl.gov.mc.protego.bluetooth.*
 import timber.log.Timber
@@ -150,11 +152,15 @@ class ProteGoAdvertiser(
         }
 
         timer = Timer("ProteGoAdvertisementTimer")
+        val hopefullyCurrentLooper = Looper.myLooper() ?: Looper.getMainLooper().also {
+            Timber.w("Cannot obtain current thread looper")
+        }
+        val handler = Handler(hopefullyCurrentLooper)
         timer.schedule(object : TimerTask() {
             override fun run() {
                 Timber.d("Advertisement timer fired")
                 // TODO: Make sure that it's on the same thread as a normal operation.
-                tokenDataExpired()
+                handler.post { tokenDataExpired() }
             }
         }, tokenData.second)
         this.advertisementTimer = timer
