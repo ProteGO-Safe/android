@@ -1,8 +1,10 @@
 package pl.gov.mc.protego.bluetooth.advertiser
 
 import android.bluetooth.*
+import android.content.Context
 import pl.gov.mc.protego.bluetooth.ProteGoCharacteristicUUIDString
 import pl.gov.mc.protego.bluetooth.ProteGoServiceUUIDString
+import pl.gov.mc.protego.bluetooth.safeCurrentThreadHandler
 import pl.gov.mc.protego.bluetooth.toHexString
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
@@ -10,12 +12,17 @@ import java.util.*
 import kotlin.collections.HashMap
 
 class ProteGoGattServer private constructor(
+    private val context: Context,
     private val callback: ProteGoGattServerCallback
 ) : BluetoothGattServerCallback() {
 
     companion object {
-        fun startGattServer(callback: ProteGoGattServerCallback, gattServerCreator: (BluetoothGattServerCallback) -> BluetoothGattServer?): ServerResult {
-            val annaGattServer = ProteGoGattServer(callback)
+        fun startGattServer(
+            context: Context,
+            callback: ProteGoGattServerCallback,
+            gattServerCreator: (BluetoothGattServerCallback) -> BluetoothGattServer?
+        ): ServerResult {
+            val annaGattServer = ProteGoGattServer(context, callback)
             val gattServer = gattServerCreator(annaGattServer)
             if (gattServer == null) {
                 Timber.w("failed to open GATT server")
@@ -32,6 +39,17 @@ class ProteGoGattServer private constructor(
     // Hash map containing pending values for the characteristic.
     private var pendingWrites: HashMap<BluetoothDevice, ByteArray> = HashMap()
 
+    // Hash map containing RSSI grabbers.
+    private var rssiLatches: HashMap<BluetoothDevice, ProteGoGattRSSILatch> = HashMap()
+
+    private var bluetoothHandler = safeCurrentThreadHandler()
+
+    private fun BluetoothDevice.latchRssi() {
+        rssiLatches[this] = ProteGoGattRSSILatch(context, this, bluetoothHandler)
+    }
+
+    private fun BluetoothDevice.getLatchedRssi() = rssiLatches[this]?.rssi
+
     // Lifecycle -----------------------------------------------------------------------------------
 
     private fun initialize(gattServer: BluetoothGattServer): ServerResult.Failure? {
@@ -44,11 +62,13 @@ class ProteGoGattServer private constructor(
         val gattCharacteristic = BluetoothGattCharacteristic(
             UUID.fromString(ProteGoCharacteristicUUIDString),
             BluetoothGattCharacteristic.PROPERTY_READ or BluetoothGattCharacteristic.PROPERTY_WRITE,
-            BluetoothGattCharacteristic.PERMISSION_READ or BluetoothGattCharacteristic.PERMISSION_WRITE)
+            BluetoothGattCharacteristic.PERMISSION_READ or BluetoothGattCharacteristic.PERMISSION_WRITE
+        )
 
         val gattService = BluetoothGattService(
             UUID.fromString(ProteGoServiceUUIDString),
-            BluetoothGattService.SERVICE_TYPE_PRIMARY)
+            BluetoothGattService.SERVICE_TYPE_PRIMARY
+        )
 
         if (!gattService.addCharacteristic(gattCharacteristic)) {
             Timber.d("Failed to add characteristic")
@@ -73,6 +93,8 @@ class ProteGoGattServer private constructor(
         }
 
         pendingWrites.clear()
+        rssiLatches.values.forEach { it.cancel() }
+        rssiLatches.clear()
         gattServer.close()
         this.gattServer = null
         Timber.d("GATT server closed")
@@ -145,8 +167,7 @@ class ProteGoGattServer private constructor(
             if (pendingWrite != null) {
                 status = BluetoothGatt.GATT_SUCCESS
                 value = pendingWrite
-                // TODO: Get RSSI somehow?
-                this.callback.receivedTokenData(this, pendingWrite, null)
+                this.callback.receivedTokenData(this, pendingWrite, device.getLatchedRssi())
             }
         } else {
             // We always allow cancelling request.
@@ -199,8 +220,7 @@ class ProteGoGattServer private constructor(
         } else {
             // Got simple write.
             status = BluetoothGatt.GATT_SUCCESS
-            // TODO: Get RSSI somehow?
-            this.callback.receivedTokenData(this, value, null)
+            this.callback.receivedTokenData(this, value, device.getLatchedRssi())
         }
 
         if (responseNeeded) {
@@ -244,6 +264,10 @@ class ProteGoGattServer private constructor(
         }
         if (newState == BluetoothProfile.STATE_DISCONNECTED) {
             this.pendingWrites.remove(device)
+            this.rssiLatches.remove(device)
+        }
+        if (newState == BluetoothProfile.STATE_CONNECTED) {
+            device.latchRssi()
         }
     }
 

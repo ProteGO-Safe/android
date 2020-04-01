@@ -6,8 +6,6 @@ import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.os.ParcelUuid
 import pl.gov.mc.protego.bluetooth.*
 import timber.log.Timber
@@ -152,14 +150,10 @@ class ProteGoAdvertiser(
         }
 
         timer = Timer("ProteGoAdvertisementTimer")
-        val hopefullyCurrentLooper = Looper.myLooper() ?: Looper.getMainLooper().also {
-            Timber.w("Cannot obtain current thread looper")
-        }
-        val handler = Handler(hopefullyCurrentLooper)
+        val handler = safeCurrentThreadHandler()
         timer.schedule(object : TimerTask() {
             override fun run() {
                 Timber.d("Advertisement timer fired")
-                // TODO: Make sure that it's on the same thread as a normal operation.
                 handler.post { tokenDataExpired() }
             }
         }, tokenData.second)
@@ -205,9 +199,9 @@ class ProteGoAdvertiser(
         Timber.d("starting GATT server...")
         check(gattServer == null) { "GATT server already started" }
 
-        return ProteGoGattServer.startGattServer(this) { bluetoothManager.openGattServer(context, it) }
+        return ProteGoGattServer.startGattServer(context, this) { bluetoothManager.openGattServer(context, it) }
             .also {
-                when(it) {
+                when (it) {
                     is ServerResult.Success -> {
                         Timber.d("GATT server start initiated")
                         this.gattServer = it.proteGoGattServer
