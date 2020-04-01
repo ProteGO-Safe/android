@@ -35,7 +35,7 @@ class ProteGoGattServer private constructor(
     // Lifecycle -----------------------------------------------------------------------------------
 
     private fun initialize(gattServer: BluetoothGattServer): ServerResult.Failure? {
-        check(this.gattServer != null) {
+        check(this.gattServer == null) {
             gattServer.close()
             "Please create a new instance of AnnaGattServer for a new GATT server handle"
         }

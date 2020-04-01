@@ -134,7 +134,7 @@ class ProteGoAdvertiser(
 
         val advertiseData = AdvertiseData.Builder()
             .setIncludeDeviceName(false)
-            .setIncludeTxPowerLevel(true)
+            .setIncludeTxPowerLevel(false)
             .addManufacturerData(ProteGoManufacturerId, data)
             .addServiceUuid(ParcelUuid(UUID.fromString(ProteGoServiceUUIDString)))
             .build()
@@ -256,6 +256,11 @@ class ProteGoAdvertiser(
     override fun updateTokenData(data: ByteArray, expirationDate: Date) {
         Timber.d("updateTokenData, data: ${data.toHexString()}, expirationDate: ${expirationDate}")
         this.tokenData = Pair(data, expirationDate)
+
+        if (!isEnabled) {
+            Timber.d("received token data when not enabled")
+            return
+        }
 
         // Check if expiration date is actually OK.
         if (expirationDate < Date()) {
