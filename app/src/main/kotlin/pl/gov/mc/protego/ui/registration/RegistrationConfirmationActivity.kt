@@ -13,11 +13,12 @@ import com.squareup.seismic.ShakeDetector
 import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
+import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.MainActivity
 import timber.log.Timber
 import pl.gov.mc.protego.ui.observeLiveData
 
-class RegistrationConfirmationActivity : AppCompatActivity(), ShakeDetector.Listener {
+class RegistrationConfirmationActivity : BaseActivity() {
 
     private val viewModel: RegistrationConfirmationViewModel by viewModel()
     private val shakeDetector = ShakeDetector(this)
@@ -41,27 +42,10 @@ class RegistrationConfirmationActivity : AppCompatActivity(), ShakeDetector.List
         observeLiveData(viewModel.confirmationSuccess) {
             navigateToMain()
         }
-
-        initShakeDetection()
-        Cockpit.addTestCockpitActionRequestCallback({ lifecycle }) { Timber.d("Cockpit test run") }
-    }
-
-    private fun initShakeDetection() {
-        val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        shakeDetector.start(sensorManager)
     }
 
     private fun navigateToMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        shakeDetector.stop()
-    }
-
-    override fun hearShake() {
-        Cockpit.showCockpit(supportFragmentManager)
     }
 }
