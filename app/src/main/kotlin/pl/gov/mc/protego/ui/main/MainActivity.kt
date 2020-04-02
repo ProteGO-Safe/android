@@ -15,6 +15,7 @@ import io.realm.Realm
 
 import io.realm.RealmObject
 import pl.gov.mc.protego.realm.RealmEncryption
+import pl.gov.mc.protego.realm.RealmInitializer
 
 import timber.log.Timber
 
@@ -26,7 +27,7 @@ class MainActivity : BaseActivity() {
 
     private val viewModel: MainActivityViewModel by viewModel()
     private val session: Session by inject()
-    private val realmEncryption: RealmEncryption by inject()
+    private val reaInitializer: RealmInitializer by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,16 +37,7 @@ class MainActivity : BaseActivity() {
             startActivity(Intent(this, RegistrationActivity::class.java))
             finish()
         }
-        Realm.init(this)
-//        store.unlockKeyStore(1)
-
-//        realmEncryption.reset(this)
-        val realmKey = realmEncryption.generateOrGetRealmEncryptionKey(this)
-
-        val realmConfig =
-//            RealmConfiguration.Builder().build()
-            RealmConfiguration.Builder().encryptionKey(realmKey).build()
-        Realm.setDefaultConfiguration(realmConfig)
+        reaInitializer.setup(this)
 
         val realm = getRealm()!!
 //        realm.beginTransaction()

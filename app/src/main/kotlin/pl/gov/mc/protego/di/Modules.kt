@@ -17,6 +17,7 @@ import pl.gov.mc.protego.file.FileManager
 import pl.gov.mc.protego.information.AppInformation
 import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
+import pl.gov.mc.protego.realm.RealmInitializer
 import pl.gov.mc.protego.repository.SessionRepository
 import pl.gov.mc.protego.ui.base.CockpitShakeDetector
 import pl.gov.mc.protego.ui.main.MainActivityViewModel
@@ -72,7 +73,8 @@ val securityModule = module {
     single { RealmEncryption(get(), get()) }
     factory { RandomKey(get()) }
     factory { SecureRandom() }
-    single { EncryptionKeyStore() }
+    factory { EncryptionKeyStore() }
+    single { RealmInitializer(get()) }
 }
 
 val networkingModule = module {

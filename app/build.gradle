@@ -33,8 +33,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            ext.enableCrashlytics = false
-            buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             applicationIdSuffix ".prod"
             versionNameSuffix "-prod"
             buildConfigField "String", "BASE_API_URL", "\"https://google.com/\""
@@ -49,8 +47,6 @@ android {
         }
         stg {
             initWith debug
-            ext.enableCrashlytics = false
-            buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             debuggable true
             zipAlignEnabled false
             applicationIdSuffix ".stg"
