@@ -7,7 +7,6 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:paddingHorizontal="@dimen/huge_margin"
     tools:context=".ui.registration.RegistrationActivity">
 
     <include layout="@layout/toolbar"/>
@@ -19,7 +18,8 @@
         android:layout_marginTop="@dimen/huge_margin"
         style="@style/AppText.Header"
         android:text="@string/registration_title"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginHorizontal="@dimen/huge_margin"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/huge_margin"
         style="@style/AppText"
+        android:layout_marginHorizontal="@dimen/huge_margin"
         android:text="@string/registration_content"
         app:layout_constraintTop_toBottomOf="@+id/header"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +41,7 @@
         style="@style/AppText.Input"
         android:layout_marginTop="@dimen/medium_margin"
         android:layout_marginRight="@dimen/small_margin"
+        android:layout_marginLeft="@dimen/huge_margin"
         app:layout_constraintTop_toBottomOf="@+id/content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/msisdn_edit_text_layout"
@@ -64,6 +66,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/AppText.Input"
+        android:layout_marginRight="@dimen/huge_margin"
         app:layout_constraintTop_toTopOf="@+id/msisdn_prefix_layout"
         app:layout_constraintBottom_toBottomOf="@+id/msisdn_prefix_layout"
         app:layout_constraintLeft_toRightOf="@+id/msisdn_prefix_layout"
@@ -88,6 +91,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/register_button"
+        android:layout_marginHorizontal="@dimen/huge_margin"
         style="@style/Button.Primary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
