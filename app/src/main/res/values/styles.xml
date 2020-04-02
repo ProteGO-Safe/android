@@ -7,6 +7,46 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    
+    <style name="AppText" parent="TextAppearance.AppCompat">
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:textSize">@dimen/regular_text_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    
+    <style name="AppText.Header" parent="AppText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/header_text_size</item>
+    </style>
+
+    <style name="AppText.Input" parent="AppText">
+        <item name="font">@font/poppins_medium</item>
+    </style>
+
+    <style name="AppText.Input.Special" parent="AppText.Input">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppText.Description" parent="AppText">
+        <item name="android:textSize">@dimen/description_text_size</item>
+        <item name="android:textColor">@color/greyishBrown</item>
+    </style>
+
+    <style name="Button" parent="TextAppearance.AppCompat.Button">
+        <item name="fontFamily">@font/poppins</item>
+        <item name="fontWeight">500</item>
+    </style>
+
+    <style name="Button.Primary" parent="Button">
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Button.Secondary" parent="Button">
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
 
     <style name="SplashScreenTheme" parent = "Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>

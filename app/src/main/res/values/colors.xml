@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">@color/bluishGreen</color>
+    <color name="colorPrimaryDark">@color/darkSeaGreen</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="bluishGreen">#15bb5f</color>
+    <color name="darkSeaGreen">#129A4E</color>
+    <color name="macaroniAndCheese">#eab946</color>
+    <color name="copper">#c63a27</color>
+    <color name="greyishBrown">#545350</color>
+    <color name="black">#2f2d2a</color>
+    <color name="greyish">#a09f9e</color>
+    <color name="white">#ffffff</color>
 </resources>
