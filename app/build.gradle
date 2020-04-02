@@ -33,6 +33,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            ext.enableCrashlytics = false
+            buildConfigField 'Boolean', 'enableCrashlytics', 'false'
             applicationIdSuffix ".prod"
             versionNameSuffix "-prod"
             buildConfigField "String", "BASE_API_URL", "\"https://google.com/\""
@@ -44,6 +46,15 @@ android {
             debuggable true
             buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-dev.cloudfunctions.net/\""
             buildConfigField "int", "SUPPORTED_API_VERSION", "1"
+        }
+        stg {
+            initWith debug
+            ext.enableCrashlytics = false
+            buildConfigField 'Boolean', 'enableCrashlytics', 'false'
+            debuggable true
+            zipAlignEnabled false
+            applicationIdSuffix ".stg"
+            versionNameSuffix "-stg"
         }
     }
 
