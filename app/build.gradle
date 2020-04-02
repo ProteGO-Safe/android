@@ -5,12 +5,14 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 apply plugin: 'com.polidea.cockpit'
 apply plugin: "de.mannodermaus.android-junit5"
+apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "pl.gov.mc.protego"
-        minSdkVersion 22
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode System.env.CI_JOB_ID ? System.env.CI_JOB_ID.toInteger() : 1
         versionName System.env.CI_COMMIT_TAG ? System.env.CI_COMMIT_TAG : "0.0.1"
@@ -40,7 +42,7 @@ android {
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
             debuggable true
-            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-anna-dev-272212.cloudfunctions.net/\""
+            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-dev.cloudfunctions.net/\""
             buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
     }
