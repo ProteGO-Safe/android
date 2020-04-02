@@ -7,8 +7,9 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:paddingHorizontal="@dimen/huge_margin"
     tools:context=".ui.registration.RegistrationActivity">
+
+    <include layout="@layout/toolbar"/>
 
     <TextView
         android:id="@+id/header"
@@ -18,9 +19,9 @@
         android:text="@string/registration_confirmation_title"
         android:layout_marginTop="@dimen/large_margin"
         style="@style/AppText.Header"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/content" />
+        android:layout_marginHorizontal="@dimen/huge_margin"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/content"
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/huge_margin"
         style="@style/AppText"
+        android:layout_marginHorizontal="@dimen/huge_margin"
         android:text="@string/registration_confirmation_content"
         app:layout_constraintTop_toBottomOf="@+id/header"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +40,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/medium_margin"
+        android:layout_marginHorizontal="@dimen/huge_margin"
         style="@style/AppText.Input"
         app:layout_constraintTop_toBottomOf="@+id/content"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,6 +64,7 @@
         android:id="@+id/confirm_registration_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/huge_margin"
         android:layout_marginVertical="@dimen/medium_margin"
         style="@style/Button.Primary"
         android:text="@string/confirm_register_button"
@@ -70,6 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/small_margin"
+        android:layout_marginHorizontal="@dimen/huge_margin"
         style="@style/AppText.Description"
         android:text="@string/registration_confirmation_rules"
         app:layout_constraintTop_toBottomOf="@id/confirm_registration_button"
