@@ -3,7 +3,6 @@ package pl.gov.mc.protego.ui.registration
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import com.squareup.seismic.ShakeDetector
 import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
@@ -14,7 +13,6 @@ import pl.gov.mc.protego.ui.observeLiveData
 class RegistrationConfirmationActivity : BaseActivity() {
 
     private val viewModel: RegistrationConfirmationViewModel by viewModel()
-    private val shakeDetector = ShakeDetector(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

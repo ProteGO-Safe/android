@@ -15,6 +15,7 @@ import pl.gov.mc.protego.information.AppInformation
 import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.repository.SessionRepository
+import pl.gov.mc.protego.ui.base.CockpitShakeDetector
 import pl.gov.mc.protego.ui.main.MainActivityViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationConfirmationViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationViewModel
@@ -31,6 +32,10 @@ val viewModule: Module = module {
     viewModel { MainActivityViewModel(get()) }
     viewModel { SplashScreenViewModel(get()) }
     single { MsisdnValidator() }
+}
+
+val debugModule: Module = module {
+    factory { CockpitShakeDetector() }
 }
 
 val gcsModule: Module = module {
