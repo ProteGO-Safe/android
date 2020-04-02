@@ -10,6 +10,8 @@
     android:paddingHorizontal="@dimen/huge_margin"
     tools:context=".ui.registration.RegistrationActivity">
 
+    <include layout="@layout/toolbar"/>
+
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"

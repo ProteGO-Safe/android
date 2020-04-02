@@ -7,6 +7,8 @@
     android:layout_gravity=""
     tools:context=".ui.main.MainActivity">
 
+    <include layout="@layout/toolbar"/>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/status_container"
         android:layout_width="match_parent"
@@ -15,7 +17,7 @@
         android:layout_marginTop="16dp"
         android:background="#F1F0F0"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_parent"
         app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="16dp">
 
