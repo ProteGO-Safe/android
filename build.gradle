@@ -23,7 +23,7 @@ android {
     applicationId "app.safesafe"
     minSdkVersion 21
     targetSdkVersion 29
-    versionCode 1
+    versionCode headCommitCount()
     versionName "1.0"
 
     proguardFiles "shrink-rules.pro"
@@ -94,4 +94,13 @@ android {
 
 dependencies {
   compileOnly "androidx.annotation:annotation:1.1.0"
+}
+
+private def headCommitCount() {
+  def stdOut = new ByteArrayOutputStream()
+  exec {
+    commandLine 'git', 'rev-list', '--count', 'HEAD'
+    standardOutput = stdOut
+  }
+  return "$stdOut".trim().toInteger()
 }
