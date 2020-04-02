@@ -1,24 +1,23 @@
 package pl.gov.mc.protego.ui.registration
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.registration_view.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import pl.gov.mc.protego.R
 import android.content.Intent
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.android.synthetic.main.registration_view.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.SessionState
+import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.MainActivity
 import pl.gov.mc.protego.ui.observeLiveData
 
 
-class RegistrationActivity : AppCompatActivity() {
+class RegistrationActivity : BaseActivity() {
 
     private val registrationViewModel: RegistrationViewModel by viewModel()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

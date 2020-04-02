@@ -3,14 +3,14 @@ package pl.gov.mc.protego.ui.registration
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
+import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.MainActivity
 import pl.gov.mc.protego.ui.observeLiveData
 
-class RegistrationConfirmationActivity : AppCompatActivity() {
+class RegistrationConfirmationActivity : BaseActivity() {
 
     private val viewModel: RegistrationConfirmationViewModel by viewModel()
 
@@ -39,5 +39,4 @@ class RegistrationConfirmationActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
-
 }

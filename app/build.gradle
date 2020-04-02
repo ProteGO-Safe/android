@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
+apply plugin: 'com.polidea.cockpit'
 apply plugin: "de.mannodermaus.android-junit5"
 
 android {
@@ -90,6 +91,10 @@ dependencies {
 
     // Koin
     implementation 'org.koin:koin-android:2.0.1'
+
+    // Cockpit, the debug menu
+    debugImplementation 'com.polidea.cockpit:cockpit:3.1.2'
+    implementation 'com.squareup:seismic:1.0.2'
 
     // Rx
     implementation "io.reactivex.rxjava2:rxkotlin:2.3.0"

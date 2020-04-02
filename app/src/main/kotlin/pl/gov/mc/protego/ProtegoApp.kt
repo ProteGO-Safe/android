@@ -25,7 +25,8 @@ class ProtegoApp : Application() {
                 filesModule,
                 appModule,
                 domainModule,
-                networkingModule
+                networkingModule,
+                debugModule
             )
         )
     }
