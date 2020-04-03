@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
+import com.polidea.cockpit.cockpit.Cockpit
 import kotlinx.android.synthetic.main.registration_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
@@ -37,8 +38,15 @@ class RegistrationActivity : BaseActivity() {
 
     private fun observeRegistrationStatus() {
         observeLiveData(registrationViewModel.sessionData) { sessionData ->
-            when(sessionData.state) {
-                SessionState.REGISTRATION -> navigateToConfirmation().also { Toast.makeText(this, "Verification code: ${sessionData.debugCode}", Toast.LENGTH_LONG).show() }
+            when (sessionData.state) {
+                SessionState.REGISTRATION -> navigateToConfirmation().also {
+                    if (!Cockpit.isSendSmsDuringRegistration())
+                        Toast.makeText(
+                            this,
+                            "kod weryfikacyjny: ${sessionData.debugCode}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                }
                 SessionState.LOGGED_IN -> navigateToMain()
             }
         }

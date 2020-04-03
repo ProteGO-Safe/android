@@ -1,5 +1,6 @@
 package pl.gov.mc.protego.backend.api
 
+import com.polidea.cockpit.cockpit.Cockpit
 import pl.gov.mc.protego.information.AppInformation
 import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
@@ -9,7 +10,7 @@ class RegistrationRequestComposer(
 ) {
     fun init(msisdn: String) = RegistrationRequest(
         msisdn = msisdn,
-        sendSms = false,
+        sendSms = Cockpit.isSendSmsDuringRegistration(),
         standardRequestData = requestComposer.standardRequestData
     )
     fun confirm(code: String, registrationId: String) =

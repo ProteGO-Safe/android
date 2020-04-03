@@ -6,7 +6,7 @@ import retrofit2.http.POST
 
 interface RegistrationAPI {
 
-    @POST("register_device")
+    @POST("register")
     fun register(@Body registrationRequest: RegistrationRequest): Single<RegistrationResponse>
 
     @POST("confirm_registration")
