@@ -99,6 +99,9 @@ dependencies {
     // Crashlytics for dev build
     debugImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
+    // Leak Canary for dev build
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+
     // Koin
     implementation 'org.koin:koin-android:2.0.1'
 

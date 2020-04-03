@@ -12,4 +12,5 @@
     <color name="black">#2f2d2a</color>
     <color name="greyish">#a09f9e</color>
     <color name="white">#ffffff</color>
+    <color name="transparent">#00000000</color>
 </resources>
