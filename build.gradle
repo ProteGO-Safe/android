@@ -61,10 +61,14 @@ android {
 
   buildTypes {
     debug {
+      buildConfigField "String", "appUrl", "\"https://safesafe.thecoders.io/\""
+
       signingConfig signingConfigs.debug
     }
 
     release {
+      buildConfigField "String", "appUrl", "\"https://safesafe.app/\""
+
       if (useUploadKeystore) {
         signingConfig signingConfigs.upload
       } else {

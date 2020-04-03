@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
     settings.setJavaScriptEnabled(true);
     settings.setDomStorageEnabled(true);
     settings.setDatabaseEnabled(true);
-    webView.loadUrl("https://safesafe.thecoders.io/");
+    webView.loadUrl(BuildConfig.appUrl);
   }
 
   @Override public void onBackPressed() {
