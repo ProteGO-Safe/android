@@ -61,10 +61,22 @@ android {
 
   buildTypes {
     debug {
+      applicationIdSuffix ".debug"
+      buildConfigField "String", "appUrl", "\"https://safesafe.thecoders.io/\""
+
+      signingConfig signingConfigs.debug
+    }
+
+    dev {
       applicationIdSuffix ".dev"
       buildConfigField "String", "appUrl", "\"https://safesafe.thecoders.io/\""
 
       signingConfig signingConfigs.debug
+
+      debuggable false
+
+      minifyEnabled true
+      shrinkResources true
     }
 
     release {
