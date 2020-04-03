@@ -29,6 +29,15 @@
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
+    <style name="AppText.StatusHeader">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/status_header_text_size</item>
+    </style>
+
+    <style name="AppText.StatusDescription">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="AppText.Description" parent="AppText">
         <item name="android:textSize">@dimen/description_text_size</item>
         <item name="android:textColor">@color/greyishBrown</item>

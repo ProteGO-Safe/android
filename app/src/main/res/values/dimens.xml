@@ -6,6 +6,12 @@
     <dimen name="small_margin">8dp</dimen>
 
     <dimen name="header_text_size">28sp</dimen>
+    <dimen name="status_header_text_size">20sp</dimen>
     <dimen name="regular_text_size">16sp</dimen>
     <dimen name="description_text_size">12sp</dimen>
+    <dimen name="dashboard_big_margin">23dp</dimen>
+    <dimen name="dashboard_small_margin">8dp</dimen>
+    <dimen name="dashboard_medium_margin">16dp</dimen>
+    <dimen name="dashboard_info_paragraph_icon_size">20dp</dimen>
+    <dimen name="dashboard_status_icon_size">30dp</dimen>
 </resources>

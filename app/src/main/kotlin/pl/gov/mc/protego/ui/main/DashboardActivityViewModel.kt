@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protego.backend.domain.ProtegoServer
 import timber.log.Timber
 
-class MainActivityViewModel(
+class DashboardActivityViewModel(
     val protegoServer: ProtegoServer
 ) : ViewModel() {
 
