@@ -19,7 +19,7 @@ platform :android do
   end
 
   desc "Deploy STG app to Shuttle"
-  lane :deploy_debug do
+  lane :deploy_stg do
     gradle(task: "assembleStg")
     deploy
     shuttle
