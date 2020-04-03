@@ -41,6 +41,7 @@ class OnboardingActivity : BaseActivity() {
         description.setText(pageInfo.description)
         back_button.visible(pageInfo.backButtonVisible)
         next_button.visible(pageInfo.nextButtonVisible)
+        status_legend.visible(pageInfo.statusLegendVisible)
     }
 
     private fun navigateToRegistration() =

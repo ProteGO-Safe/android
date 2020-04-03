@@ -25,6 +25,7 @@
     <style name="AppText.Header">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/header_text_size</item>
+        <item name="lineHeight">@dimen/header_line_height</item>
     </style>
 
     <style name="AppText.Input">
@@ -47,6 +48,10 @@
 
     <style name="AppText.StatusDescription">
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AppText.StatusLegend">
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Button" parent="TextAppearance.MaterialComponents.Button">

@@ -13,6 +13,7 @@ class OnboardingViewModel : ViewModel() {
             illustration = R.drawable.onboarding_01,
             title = R.string.onboarding_hello_title,
             description = R.string.onboarding_hello_description,
+            statusLegendVisible = false,
             backButtonVisible = false,
             nextButtonVisible = true
         ),
@@ -20,6 +21,7 @@ class OnboardingViewModel : ViewModel() {
             illustration = R.drawable.onboarding_02,
             header = R.string.onboarding_status_title,
             description = R.string.onboarding_status_description,
+            statusLegendVisible = true,
             backButtonVisible = true,
             nextButtonVisible = true
         ),
@@ -27,6 +29,7 @@ class OnboardingViewModel : ViewModel() {
             illustration = R.drawable.onboarding_03,
             header = R.string.onboarding_bluetooth_title,
             description = R.string.onboarding_bluetooth_description,
+            statusLegendVisible = false,
             backButtonVisible = true,
             nextButtonVisible = true
         ),
@@ -34,6 +37,7 @@ class OnboardingViewModel : ViewModel() {
             illustration = R.drawable.onboarding_04,
             header = R.string.onboarding_sharing_title,
             description = R.string.onboarding_sharing_description,
+            statusLegendVisible = false,
             backButtonVisible = true,
             nextButtonVisible = true
         )
@@ -75,6 +79,7 @@ data class PageInfo(
     @StringRes val title: Int? = null,
     @StringRes val header: Int? = null,
     @StringRes val description: Int,
+    val statusLegendVisible: Boolean,
     val backButtonVisible: Boolean,
     val nextButtonVisible: Boolean
 )
