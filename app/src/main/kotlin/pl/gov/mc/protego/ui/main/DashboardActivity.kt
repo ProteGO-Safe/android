@@ -10,9 +10,9 @@ import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.registration.RegistrationActivity
 
-class MainActivity : BaseActivity() {
+class DashboardActivity : BaseActivity() {
 
-    private val viewModel: MainActivityViewModel by viewModel()
+    private val viewModel: DashboardActivityViewModel by viewModel()
     private val session: Session by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {

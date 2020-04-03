@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.ui.base.BaseActivity
-import pl.gov.mc.protego.ui.main.MainActivity
+import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
 
 class RegistrationConfirmationActivity : BaseActivity() {
@@ -36,7 +36,7 @@ class RegistrationConfirmationActivity : BaseActivity() {
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, DashboardActivity::class.java))
         finish()
     }
 }

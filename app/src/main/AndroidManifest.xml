@@ -22,7 +22,7 @@
         </activity>
         <activity android:name=".ui.registration.RegistrationActivity"/>
         <activity android:name=".ui.registration.RegistrationConfirmationActivity"/>
-        <activity android:name=".ui.main.MainActivity"/>
+        <activity android:name=".ui.main.DashboardActivity"/>
     </application>
 
 </manifest>

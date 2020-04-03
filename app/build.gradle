@@ -40,7 +40,7 @@ android {
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
             debuggable true
-            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-anna-dev-272212.cloudfunctions.net/\""
+            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-dev.cloudfunctions.net/\""
             buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
     }

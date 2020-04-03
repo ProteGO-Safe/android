@@ -16,7 +16,7 @@ import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.repository.SessionRepository
 import pl.gov.mc.protego.ui.base.CockpitShakeDetector
-import pl.gov.mc.protego.ui.main.MainActivityViewModel
+import pl.gov.mc.protego.ui.main.DashboardActivityViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationConfirmationViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationViewModel
 import pl.gov.mc.protego.ui.splash.SplashScreenViewModel
@@ -29,7 +29,7 @@ import timber.log.Timber
 val viewModule: Module = module {
     viewModel { RegistrationViewModel(get(), get(), get()) }
     viewModel { RegistrationConfirmationViewModel(get()) }
-    viewModel { MainActivityViewModel(get()) }
+    viewModel { DashboardActivityViewModel(get()) }
     viewModel { SplashScreenViewModel(get()) }
     single { MsisdnValidator() }
 }

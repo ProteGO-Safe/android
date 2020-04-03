@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity=""
-    tools:context=".ui.main.MainActivity">
+    tools:context=".ui.main.DashboardActivity">
 
     <include layout="@layout/toolbar"/>
 
@@ -13,102 +13,67 @@
         android:id="@+id/status_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:background="#F1F0F0"
-        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        android:layout_marginHorizontal="@dimen/dashboard_big_margin"
+        android:layout_marginTop="@dimen/dashboard_big_margin"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="16dp">
+        app:cardElevation="0dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
-
-            <View
-                android:id="@+id/status_indicator"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="16dp"
-                android:background="@drawable/circle"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/status_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="@string/orange_status_title"
-                app:layout_constraintBottom_toBottomOf="@id/status_indicator"
-                app:layout_constraintLeft_toRightOf="@id/status_indicator"
-                app:layout_constraintTop_toTopOf="@id/status_indicator" />
-
-            <TextView
-                android:id="@+id/status_content"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="32dp"
-                android:text="@string/orange_status_content"
-                app:layout_constraintLeft_toLeftOf="@id/status_title"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/status_title" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <pl.gov.mc.protego.ui.main.component.OrangeStatusView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
 
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/info_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/status_container"
+        android:layout_marginHorizontal="@dimen/dashboard_big_margin"
+        android:layout_marginTop="@dimen/dashboard_big_margin"
+        app:layout_constraintTop_toBottomOf="@+id/status_container"
         app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="16dp">
+        app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp">
+            android:background="@drawable/greyish_background" >
 
-            <View
-                android:id="@+id/placeholder"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="16dp"
-                android:background="@drawable/squere"
+            <TextView
+                android:id="@+id/info_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dashboard_medium_margin"
+                android:layout_marginTop="@dimen/dashboard_medium_margin"
+                android:text="Aktualne zalecenia Ministerstwa"
+                style="@style/AppText.Header"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/placeholder_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="Najważniejsze zalecenia Ministerstwa"
-                app:layout_constraintBottom_toBottomOf="@id/placeholder"
-                app:layout_constraintLeft_toRightOf="@id/placeholder"
-                app:layout_constraintTop_toTopOf="@id/placeholder" />
+            <View
+                android:id="@+id/paragraph1_ic"
+                android:layout_width="@dimen/dashboard_info_paragraph_icon_size"
+                android:layout_height="@dimen/dashboard_info_paragraph_icon_size"
+                android:background="@drawable/ic_paragraph"
+                app:layout_constraintTop_toBottomOf="@id/info_title"
+                app:layout_constraintLeft_toLeftOf="@id/info_title" />
 
             <TextView
-                android:id="@+id/placeholder_content"
+                android:id="@+id/p1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="32dp"
-                android:text="@string/placeholder_content"
-                app:layout_constraintLeft_toLeftOf="@id/placeholder_title"
+                android:layout_marginBottom="@dimen/dashboard_big_margin"
+                android:layout_marginRight="@dimen/dashboard_big_margin"
+                android:layout_marginLeft="@dimen/dashboard_small_margin"
+                style="@style/AppText.Description"
+                android:text="Ograniczenia w przemieszczaniu się z wyjątkiem drogi do pracy, wolontariatu, załatwiania spraw niezbędnych do życia codziennego. "
+                app:layout_constraintLeft_toRightOf="@id/paragraph1_ic"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/placeholder_title" />
-
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/paragraph1_ic" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.cardview.widget.CardView>
 
     <Button
