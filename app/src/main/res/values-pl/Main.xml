@@ -75,7 +75,7 @@
   <!--Dashboard - status żółty-->
   <string name="dashboard_yellow_recommend_3">Całkowity zakaz zgromadzeń, chyba, że z najbliższymi.</string>
   <!--Dashboard - status żółty-->
-  <string name="dashboard_yellow_recommend_more_info_btn&#10;">Więcej informacji znajdziesz %@.</string>
+  <string name="dashboard_yellow_recommend_more_info_btn">Więcej informacji znajdziesz %@.</string>
   <!--Dashboard - status żółty-->
   <string name="dashboard_yellow_recommend_more_info_btn_here">tutaj</string>
   <!--Dashboard - status czerwony-->

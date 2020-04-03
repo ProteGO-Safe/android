@@ -11,7 +11,7 @@
   <!--Onboarding informacje o statusie-->
   <string name="onboarding_status_description">The application will presnet one of three statuses. You will learn in could be exposed to infected people within last 2 weeks.</string>
   <!--Onboarding informacje o statusie-->
-  <string name="onboarding_green_description">We didn't dectect any threat</string>
+  <string name="onboarding_green_description">We didn\'t dectect any threat</string>
   <!--Onboarding informacje o statusie-->
   <string name="onboarding_yellow_description">You could have been close to infected people</string>
   <!--Onboarding informacje o statusie-->
@@ -21,7 +21,7 @@
   <!--Onboarding informacje o bluetooth-->
   <string name="onboarding_bluetooth_title">Turn on Bluetooth</string>
   <!--Onboarding informacje o bluetooth-->
-  <string name="onboarding_bluetooth_description">The applicatioin requires Bluetooth to be turned on all the time\n\nProteGO scans your surrounding for other app users via Bluetooth.\n\nThe app stores the 2 weeks history of all your encounters encrypted on your device and doesn't send it anywhere.</string>
+  <string name="onboarding_bluetooth_description">The application requires Bluetooth to be turned on all the time\n\nProteGO scans your surrounding for other app users via Bluetooth.\n\nThe app stores the 2 weeks history of all your encounters encrypted on your device and doesn\'t send it anywhere.</string>
   <!--Onboarding informacje o dzieleniu się danymi-->
   <string name="onboarding_sharing_title">Sharing the data in case of threat</string>
   <!--Onboarding informacje o dzieleniu się danymi-->
@@ -75,7 +75,7 @@
   <!--Dashboard - status żółty-->
   <string name="dashboard_yellow_recommend_3">Total ban on gatherings, except with the closest ones.</string>
   <!--Dashboard - status żółty-->
-  <string name="dashboard_yellow_recommend_more_info_btn&#10;">More information %@.</string>
+  <string name="dashboard_yellow_recommend_more_info_btn">More information %@.</string>
   <!--Dashboard - status żółty-->
   <string name="dashboard_yellow_recommend_more_info_btn_here">here</string>
   <!--Dashboard - status czerwony-->
@@ -97,9 +97,9 @@
   <!--Dashboard - status czerwony-->
   <string name="dashboard_red_recommend_more_info_btn_here">here</string>
   <!--Dashboard - status zielony-->
-  <string name="dashboard_green_status_title">We didn't dectect any threat</string>
+  <string name="dashboard_green_status_title">We didn\'t dectect any threat</string>
   <!--Dashboard - status zielony-->
-  <string name="dashboard_green_status_description">It seems you weren't close to infected people</string>
+  <string name="dashboard_green_status_description">It seems you weren\'t close to infected people</string>
   <!--Dashboard - status zielony-->
   <string name="dashboard_green_status_more_info_btn">Learn more on about the precautions, click %@</string>
   <!--Dashboard - status zielony-->
@@ -131,7 +131,7 @@
   <!--Dashboard - ekran informacyjny - do usunięcia-->
   <string name="dashboard_info_contact_us_description">Need to send us an email?</string>
   <!--Dashboard - ekran informacyjny-->
-  <string name="dashboard_info_history_overview">Devices detected since %@: %@</string>
+  <string name="dashboard_info_history_overview">Devices detected since %1$s: %2$d</string>
   <!--Dashboard - ekran informacyjny-->
   <string name="dashboard_info_contact_us_email">protego@mc.gov.pl</string>
   <!--Dashboard - ekran informacyjny-->

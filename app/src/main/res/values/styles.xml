@@ -6,14 +6,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="displayOptions">useLogo</item>
-        <item name="android:displayOptions">useLogo</item>
+
+        <item name="android:textViewStyle">@style/AppText</item>
     </style>
 
     <style name="AppText" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:textSize">@dimen/regular_text_size</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AppText.Title" parent="AppText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="lineHeight">@dimen/title_line_height</item>
     </style>
 
     <style name="AppText.Header" parent="AppText">
@@ -46,6 +52,10 @@
     <style name="Button" parent="TextAppearance.MaterialComponents.Button">
         <item name="fontFamily">@font/poppins</item>
         <item name="fontWeight">500</item>
+        <item name="android:paddingLeft">@dimen/large_margin</item>
+        <item name="android:paddingRight">@dimen/large_margin</item>
+        <item name="android:paddingTop">@dimen/medium_margin</item>
+        <item name="android:paddingBottom">@dimen/medium_margin</item>
     </style>
 
     <style name="Button.Primary" parent="Button">

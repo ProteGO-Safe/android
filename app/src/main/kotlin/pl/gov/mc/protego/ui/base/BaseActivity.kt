@@ -35,7 +35,6 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private fun initShakeDetection() {
-
         val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         shakeDetector.startDetection(sensorManager)
         shakeDetector.setListener { CockpitMenuLauncher.showCockpit(supportFragmentManager) }
