@@ -21,6 +21,8 @@ data class BeaconId(
 class RegistrationRequest (
     @SerializedName("msisdn")
     val msisdn: String,
+    @SerializedName("send_sms")
+    val sendSms: Boolean = true,
     standardRequestData: StandardRequestData
 ) : StandardRequestData(standardRequestData)
 

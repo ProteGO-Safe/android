@@ -10,10 +10,14 @@ import org.koin.dsl.module
 import pl.gov.mc.protego.BuildConfig
 import pl.gov.mc.protego.backend.api.*
 import pl.gov.mc.protego.backend.domain.ProtegoServer
+import pl.gov.mc.protego.encryption.EncryptionKeyStore
+import pl.gov.mc.protego.encryption.RandomKey
+import pl.gov.mc.protego.realm.RealmEncryption
 import pl.gov.mc.protego.file.FileManager
 import pl.gov.mc.protego.information.AppInformation
 import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
+import pl.gov.mc.protego.realm.RealmInitializer
 import pl.gov.mc.protego.repository.SessionRepository
 import pl.gov.mc.protego.ui.base.CockpitShakeDetector
 import pl.gov.mc.protego.ui.main.MainActivityViewModel
@@ -25,6 +29,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
+import java.security.SecureRandom
 
 val viewModule: Module = module {
     viewModel { RegistrationViewModel(get(), get(), get()) }
@@ -62,6 +67,14 @@ val domainModule = module {
     single { RequestComposer(get(), get(), get()) }
     single { Session(get()) }
     single { SessionRepository(get()) }
+}
+
+val securityModule = module {
+    single { RealmEncryption(get(), get()) }
+    factory { RandomKey(get()) }
+    factory { SecureRandom() }
+    factory { EncryptionKeyStore() }
+    single { RealmInitializer(get()) }
 }
 
 val networkingModule = module {
