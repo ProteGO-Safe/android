@@ -47,6 +47,7 @@ class OnboardingViewModel : ViewModel() {
 
     val page = MutableLiveData<PageInfo>()
     val navigateToRegistration = MutableLiveData<Unit>()
+    val finishApplication = MutableLiveData<Unit>()
 
     init {
         page.value = pages[currentPageIndex]
@@ -63,6 +64,8 @@ class OnboardingViewModel : ViewModel() {
     fun onBackClicked() {
         if (currentPageIndex > 0) {
             currentPageIndex--
+        } else {
+            finishApplication.value = Unit
         }
     }
 }

@@ -23,9 +23,14 @@ class OnboardingActivity : BaseActivity() {
         with(viewModel) {
             page.observe(this@OnboardingActivity, Observer { showPage(it) })
             navigateToRegistration.observe(this@OnboardingActivity, Observer { navigateToRegistration() })
+            finishApplication.observe(this@OnboardingActivity, Observer { finish() })
         }
         back_button.setOnClickListener { viewModel.onBackClicked() }
         next_button.setOnClickListener { viewModel.onNextClicked() }
+    }
+
+    override fun onBackPressed() {
+        viewModel.onBackClicked()
     }
 
     private fun showPage(pageInfo: PageInfo) {
