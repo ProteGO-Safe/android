@@ -16,23 +16,28 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="AppText.Title" parent="AppText">
+    <style name="AppText.Title">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/title_text_size</item>
         <item name="lineHeight">@dimen/title_line_height</item>
     </style>
 
-    <style name="AppText.Header" parent="AppText">
+    <style name="AppText.Header">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/header_text_size</item>
     </style>
 
-    <style name="AppText.Input" parent="AppText">
+    <style name="AppText.Input">
         <item name="font">@font/poppins_medium</item>
     </style>
 
-    <style name="AppText.Input.Special" parent="AppText.Input">
+    <style name="AppText.Input.Special">
         <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppText.Description">
+        <item name="android:textSize">@dimen/description_text_size</item>
+        <item name="android:textColor">@color/greyishBrown</item>
     </style>
 
     <style name="AppText.StatusHeader">
@@ -44,11 +49,6 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="AppText.Description" parent="AppText">
-        <item name="android:textSize">@dimen/description_text_size</item>
-        <item name="android:textColor">@color/greyishBrown</item>
-    </style>
-
     <style name="Button" parent="TextAppearance.MaterialComponents.Button">
         <item name="fontFamily">@font/poppins</item>
         <item name="fontWeight">500</item>
@@ -58,12 +58,12 @@
         <item name="android:paddingBottom">@dimen/medium_margin</item>
     </style>
 
-    <style name="Button.Primary" parent="Button">
+    <style name="Button.Primary">
         <item name="backgroundTint">@color/colorPrimary</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="Button.Secondary" parent="Button">
+    <style name="Button.Secondary">
         <item name="backgroundTint">@color/white</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
