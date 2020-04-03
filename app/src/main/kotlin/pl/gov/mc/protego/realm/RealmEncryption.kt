@@ -29,9 +29,7 @@ class RealmEncryption(
             encryptionKeyStore.keystoreContainsEncryptionKey(KEY_ALIAS)
         if (encryptedRealmKey == null || !keystoreContainsEncryptionKey) {
             val realmKey = randomKey.generateKeyForRealm(RealmConfiguration.KEY_LENGTH)
-            encryptionKeyStore.generateKeyInKeystore(context,
-                KEY_ALIAS
-            )
+            encryptionKeyStore.generateKeyInKeystore(KEY_ALIAS)
             encryptedRealmKey = encryptionKeyStore.encryptAndSaveKeyForRealm(realmKey, KEY_ALIAS)
             saveEncryptedRealmKey(context, encryptedRealmKey)
             Arrays.fill(realmKey, 0.toByte())
