@@ -8,7 +8,7 @@ class RegistrationRequestComposer(
     private val requestComposer: RequestComposer
 ) {
     fun init(msisdn: String) = RegistrationRequest(
-        msisdn =msisdn,
+        msisdn = msisdn,
         sendSms = false,
         standardRequestData = requestComposer.standardRequestData
     )

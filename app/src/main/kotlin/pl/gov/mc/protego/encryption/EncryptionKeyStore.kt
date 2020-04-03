@@ -33,9 +33,7 @@ class EncryptionKeyStore {
             .build()
 
         keyGenerator.init(keySpec)
-
         keyGenerator.generateKey()
-
     }
 
     private fun prepareKeyStore() = KeyStore.getInstance(KEYSTORE_PROVIDER_NAME)
@@ -107,11 +105,9 @@ class EncryptionKeyStore {
     companion object {
 
         private const val KEYSTORE_PROVIDER_NAME = "AndroidKeyStore"
-
         private const val CIPHER = (KeyProperties.KEY_ALGORITHM_AES + "/"
                 + KeyProperties.BLOCK_MODE_CBC + "/"
                 + KeyProperties.ENCRYPTION_PADDING_PKCS7)
-
         private val ORDER_FOR_ENCRYPTED_DATA = ByteOrder.BIG_ENDIAN
     }
 
