@@ -22,13 +22,13 @@ class ProteGoGattServer private constructor(
             callback: ProteGoGattServerCallback,
             gattServerCreator: (BluetoothGattServerCallback) -> BluetoothGattServer?
         ): ServerResult {
-            val annaGattServer = ProteGoGattServer(context, callback)
-            val gattServer = gattServerCreator(annaGattServer)
+            val proteGoGattServer = ProteGoGattServer(context, callback)
+            val gattServer = gattServerCreator(proteGoGattServer)
             if (gattServer == null) {
                 Timber.w("failed to open GATT server")
                 return ServerResult.Failure.CannotObtainGattServer
             }
-            return annaGattServer.initialize(gattServer) ?: ServerResult.Success(annaGattServer)
+            return proteGoGattServer.initialize(gattServer) ?: ServerResult.Success(proteGoGattServer)
         }
     }
 
@@ -55,7 +55,7 @@ class ProteGoGattServer private constructor(
     private fun initialize(gattServer: BluetoothGattServer): ServerResult.Failure? {
         check(this.gattServer == null) {
             gattServer.close()
-            "Please create a new instance of AnnaGattServer for a new GATT server handle"
+            "Please create a new instance of ProteGoGattServer for a new GATT server handle"
         }
         this.gattServer = gattServer
 
