@@ -61,6 +61,7 @@ android {
 
   buildTypes {
     debug {
+      applicationIdSuffix ".dev"
       buildConfigField "String", "appUrl", "\"https://safesafe.thecoders.io/\""
 
       signingConfig signingConfigs.debug
