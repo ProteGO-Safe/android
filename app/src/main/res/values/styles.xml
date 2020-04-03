@@ -29,13 +29,12 @@
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <style name="AppText.StatusHeader" parent="AppText">
+    <style name="AppText.StatusHeader">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/header2_text_size</item>
+        <item name="android:textSize">@dimen/status_header_text_size</item>
     </style>
 
-    <style name="AppText.StatusDescription" parent="AppText">
-        <item name="android:textSize">@dimen/regular_text_size</item>
+    <style name="AppText.StatusDescription">
         <item name="android:textColor">@color/white</item>
     </style>
 

@@ -2,7 +2,7 @@ package pl.gov.mc.protego.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_dashboard.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
@@ -17,7 +17,7 @@ class DashboardActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_dashboard)
         logout_button.setOnClickListener {
             session.logout()
             startActivity(Intent(this, RegistrationActivity::class.java))
