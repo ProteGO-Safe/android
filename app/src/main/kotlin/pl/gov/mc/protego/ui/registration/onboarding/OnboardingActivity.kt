@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_onboarding.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.ui.base.BaseActivity
+import pl.gov.mc.protego.ui.observeLiveData
 import pl.gov.mc.protego.ui.registration.RegistrationActivity
 
 class OnboardingActivity : BaseActivity() {
@@ -21,9 +22,9 @@ class OnboardingActivity : BaseActivity() {
         setContentView(R.layout.activity_onboarding)
 
         with(viewModel) {
-            page.observe(this@OnboardingActivity, Observer { showPage(it) })
-            navigateToRegistration.observe(this@OnboardingActivity, Observer { navigateToRegistration() })
-            finishApplication.observe(this@OnboardingActivity, Observer { finish() })
+            observeLiveData(page, ::showPage)
+            observeLiveData(navigateToRegistration) { navigateToRegistration() }
+            observeLiveData(finishApplication) { finish() }
         }
         back_button.setOnClickListener { viewModel.onBackClicked() }
         next_button.setOnClickListener { viewModel.onNextClicked() }

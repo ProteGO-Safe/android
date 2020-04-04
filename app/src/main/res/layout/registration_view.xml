@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         style="@style/AppText.Input"
         android:layout_marginTop="@dimen/medium_margin"
-        android:layout_marginRight="@dimen/small_margin"
+        android:layout_marginRight="@dimen/x_small_margin"
         android:layout_marginLeft="@dimen/huge_margin"
         app:layout_constraintTop_toBottomOf="@+id/content"
         app:layout_constraintLeft_toLeftOf="parent"

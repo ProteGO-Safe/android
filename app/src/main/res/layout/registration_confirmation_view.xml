@@ -15,7 +15,7 @@
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_marginBottom="@dimen/x_small_margin"
         android:text="@string/registration_verify_title"
         android:layout_marginTop="@dimen/large_margin"
         style="@style/AppText.Header"
@@ -72,7 +72,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_marginBottom="@dimen/x_small_margin"
         android:layout_marginHorizontal="@dimen/huge_margin"
         style="@style/AppText.Description"
         android:text="@string/registration_terms_of_use_btn_regular_part"
