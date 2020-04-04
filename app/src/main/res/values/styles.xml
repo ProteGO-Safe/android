@@ -9,13 +9,13 @@
         <item name="displayOptions">useLogo</item>
         <item name="android:displayOptions">useLogo</item>
     </style>
-    
+
     <style name="AppText" parent="TextAppearance.AppCompat">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:textSize">@dimen/regular_text_size</item>
         <item name="android:textColor">@color/black</item>
     </style>
-    
+
     <style name="AppText.Header" parent="AppText">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/header_text_size</item>
@@ -59,8 +59,9 @@
     </style>
 
 
-    <style name="SplashScreenTheme" parent = "Theme.AppCompat.NoActionBar">
+    <style name="SplashScreenTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
+        <item name="android:statusBarColor">@color/transparent</item>
     </style>
 
 </resources>
