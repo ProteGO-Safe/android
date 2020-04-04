@@ -215,16 +215,13 @@ class ProteGoAdvertiser(
 
     private fun stopGattServer() {
         Timber.d("stopping GATT server")
-        val gattServer = this.gattServer
-        if (gattServer == null) {
-            Timber.d("GATT server already stopped")
-            return
+        this.gattServer = this.gattServer.run {
+            when (this) {
+                null -> Timber.d("GATT server already stopped")
+                else -> Timber.d("GATT server stopped successfully: ${close()}")
+            }
+            null
         }
-
-        gattServer.close()
-        this.gattServer = null
-        Timber.d("gatt server stopped")
-        return
     }
 
     override fun gattServerStarted(gattServer: ProteGoGattServer) {
