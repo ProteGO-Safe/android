@@ -144,7 +144,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/back_button"
         style="@style/Button.Secondary"
         android:layout_width="wrap_content"
@@ -156,7 +156,6 @@
 
     <Button
         android:id="@+id/next_button"
-        style="@style/Button.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/large_margin"
