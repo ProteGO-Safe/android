@@ -43,7 +43,7 @@
   <!--Rejestracja-->
   <string name="registration_verify_btn">Potwierdź kod</string>
   <!--Rejestracja-->
-  <string name="registration_terms_of_use_btn_regular_part">Dołączając do aplikacji, akceptujesz %@.</string>
+  <string name="registration_terms_of_use_btn_regular_part">Dołączając do aplikacji, akceptujesz %s.</string>
   <!--Rejestracja-->
   <string name="registration_terms_of_use_btn_underlined_part">Regulamin</string>
   <!--Ekran błedu - brak internetu-->

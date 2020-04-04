@@ -43,7 +43,7 @@
   <!--Rejestracja-->
   <string name="registration_verify_btn">Verify code</string>
   <!--Rejestracja-->
-  <string name="registration_terms_of_use_btn_regular_part">By joing the app you accept %@.</string>
+  <string name="registration_terms_of_use_btn_regular_part">By joing the app you accept %s.</string>
   <!--Rejestracja-->
   <string name="registration_terms_of_use_btn_underlined_part">Term of Use</string>
   <!--Ekran błedu - brak internetu-->
