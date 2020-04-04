@@ -93,7 +93,6 @@ dependencies {
     implementation 'androidx.core:core:1.2.0'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "org.koin:koin-androidx-viewmodel:2.0.1"
     implementation 'com.google.android.material:material:1.1.0'
 
     // Crashlytics for dev build
@@ -103,7 +102,8 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     // Koin
-    implementation 'org.koin:koin-android:2.0.1'
+    implementation 'org.koin:koin-android:2.1.5'
+    implementation "org.koin:koin-androidx-viewmodel:2.1.5"
 
     // Cockpit, the debug menu
     implementation 'com.polidea.cockpit:cockpit:3.1.2'
