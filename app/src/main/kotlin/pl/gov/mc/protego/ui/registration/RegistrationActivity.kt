@@ -7,13 +7,16 @@ import android.text.TextWatcher
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.polidea.cockpit.cockpit.Cockpit
+import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import kotlinx.android.synthetic.main.registration_view.*
+import kotlinx.android.synthetic.main.registration_view.scroll_view
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.SessionState
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
+import pl.gov.mc.protego.ui.scrollWhenFocusObtained
 
 
 class RegistrationActivity : BaseActivity() {
@@ -29,11 +32,17 @@ class RegistrationActivity : BaseActivity() {
         }
 
         msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
+        msisdn_edit_text.scrollWhenFocusObtained(scroll_view)
 
         observeMsisdnValidation()
         observeRegistrationStatus()
 
         registrationViewModel.fetchSession()
+    }
+
+    override fun onDestroy() {
+        sms_code.onFocusChangeListener = null
+        super.onDestroy()
     }
 
     private fun observeRegistrationStatus() {

@@ -20,8 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.registration.RegistrationActivity"/>
-        <activity android:name=".ui.registration.RegistrationConfirmationActivity"/>
+        <activity android:name=".ui.registration.RegistrationActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.registration.RegistrationConfirmationActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ui.main.DashboardActivity"/>
     </application>
 

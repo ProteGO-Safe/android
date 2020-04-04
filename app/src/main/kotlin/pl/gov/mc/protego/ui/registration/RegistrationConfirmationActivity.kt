@@ -9,6 +9,7 @@ import pl.gov.mc.protego.R
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
+import pl.gov.mc.protego.ui.scrollWhenFocusObtained
 
 class RegistrationConfirmationActivity : BaseActivity() {
 
@@ -25,6 +26,7 @@ class RegistrationConfirmationActivity : BaseActivity() {
                 sms_code_layout.error = "Wpisz kod"
             }
         }
+        sms_code.scrollWhenFocusObtained(scroll_view)
 
         observeLiveData(viewModel.confirmationError) {
             Toast.makeText(this, "Problem z rejestracją: $it", Toast.LENGTH_LONG).show()
@@ -33,6 +35,11 @@ class RegistrationConfirmationActivity : BaseActivity() {
         observeLiveData(viewModel.confirmationSuccess) {
             navigateToMain()
         }
+    }
+
+    override fun onDestroy() {
+        sms_code.onFocusChangeListener = null
+        super.onDestroy()
     }
 
     private fun navigateToMain() {
