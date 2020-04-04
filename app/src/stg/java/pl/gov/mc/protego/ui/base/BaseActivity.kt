@@ -4,23 +4,20 @@ import android.content.Context
 import android.hardware.SensorManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import com.polidea.cockpit.cockpit.Cockpit
+import kotlinx.android.synthetic.main.toolbar.*
 import org.koin.android.ext.android.inject
-import pl.gov.mc.protego.R
 
 abstract class BaseActivity : AppCompatActivity() {
     private val shakeDetector: CockpitShakeDetector by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupToolbar()
         initShakeDetection()
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        findViewById<Toolbar>(R.id.toolbar)?.apply {
+    private fun setupToolbar() {
+        toolbar?.apply {
             setSupportActionBar(this)
 
             supportActionBar?.apply {
