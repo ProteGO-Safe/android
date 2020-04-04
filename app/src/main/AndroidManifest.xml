@@ -4,6 +4,12 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".ProtegoApp"
@@ -38,6 +44,12 @@
         <activity
             android:name=".ui.main.DashboardActivity"
             android:launchMode="singleTask" />
+
+        <service android:name=".service.BluetoothService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":bluetoothservice"
+            android:foregroundServiceType="connectedDevice" />
     </application>
 
 </manifest>
