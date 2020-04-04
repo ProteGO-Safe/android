@@ -41,10 +41,6 @@ val viewModule: Module = module {
     single { MsisdnValidator() }
 }
 
-val debugModule: Module = module {
-    factory { CockpitShakeDetector() }
-}
-
 val gcsModule: Module = module {
 }
 
