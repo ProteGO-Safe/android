@@ -25,7 +25,7 @@ class RegistrationConfirmationViewModel(
     val confirmationSuccess: LiveData<Boolean>
         get() = _confirmationSuccess
 
-    private val _confirmationEnabled = MutableLiveData<Boolean>().apply { value = false }
+    private val _confirmationEnabled = MutableLiveData<Boolean>(false)
     val confirmationEnabled: LiveData<Boolean>
         get() = _confirmationEnabled
 
