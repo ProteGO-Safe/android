@@ -71,7 +71,9 @@ class RegistrationConfirmationActivity : BaseActivity() {
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, DashboardActivity::class.java))
+        startActivity(Intent(this, DashboardActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        })
         finish()
     }
 }
