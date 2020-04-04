@@ -22,8 +22,8 @@ class RegistrationActivity : BaseActivity() {
     private val registrationViewModel: RegistrationViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setContentView(R.layout.registration_view)
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.registration_view)
 
         register_button.setOnClickListener {
             registrationViewModel.onStartRegistration(msisdn_edit_text.text.toString())
