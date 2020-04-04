@@ -79,10 +79,10 @@
             android:id="@+id/msisdn_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/registration_phone_number_hint"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
-            android:inputType="phone"
-            android:hint="Numer telefonu"/>
+            android:inputType="number" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

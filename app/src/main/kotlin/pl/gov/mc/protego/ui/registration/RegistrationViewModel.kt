@@ -7,6 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import pl.gov.mc.protego.R
 import pl.gov.mc.protego.backend.domain.ProtegoServer
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.information.SessionData
@@ -17,13 +18,11 @@ class RegistrationViewModel(
     private val msisdnValidator: MsisdnValidator,
     private val protegoServer: ProtegoServer,
     private val session: Session
-)  : ViewModel() {
+) : ViewModel() {
 
-    val msisdnError = MutableLiveData<String?>()
+    val msisdnError = MutableLiveData<Int?>()
     val sessionData = MutableLiveData<SessionData>()
-
     private var disposables = CompositeDisposable()
-
 
     fun fetchSession() {
         sessionData.value = session.sessionData
@@ -31,7 +30,7 @@ class RegistrationViewModel(
 
     fun onNewMsisdn(msisdn: String) {
         if (!msisdnValidator.validate(msisdn)) {
-            msisdnError.value = "Niepoprawny numer telefonu"
+            msisdnError.value = R.string.registration_phone_number_validation_failed
         } else {
             msisdnError.value = null
         }

@@ -1,6 +1,8 @@
 <resources>
     <string name="registration_title">Dołącz do aplikacji!</string>
     <string name="registration_content">Żeby potwierdzić Twoje konto podaj swój numer telefonu. Prześlemy Ci kod weryfikujący. Nie będziemy łączyć Twoich danych z numerem telefonu.</string>
+    <string name="registration_phone_number_hint">Numer telefonu</string>
+    <string name="registration_phone_number_validation_failed">Niepoprawny numer telefonu</string>
     <string name="registration_confirmation_title">Wpisz swój kod</string>
     <string name="registration_confirmation_rules">Dołączając do aplikacji akceptujesz regulamin</string>
     <string name="registration_confirmation_content">Wpisz swój kod, który otrzymałeś w SMSie wysłanym na numer xxx-xxx-xxx.</string>
