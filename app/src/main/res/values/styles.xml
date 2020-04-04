@@ -61,6 +61,8 @@
         <item name="android:paddingRight">@dimen/large_margin</item>
         <item name="android:paddingTop">@dimen/small_margin</item>
         <item name="android:paddingBottom">@dimen/x_small_margin</item>
+        <item name="backgroundTint">@color/button_primary_color</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="Button.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -69,6 +71,7 @@
         <item name="android:paddingRight">@dimen/large_margin</item>
         <item name="android:paddingTop">@dimen/small_margin</item>
         <item name="android:paddingBottom">@dimen/x_small_margin</item>
+        <item name="android:textColor">@color/button_primary_color</item>
     </style>
 
     <style name="SplashScreenTheme" parent="Theme.MaterialComponents.NoActionBar">
