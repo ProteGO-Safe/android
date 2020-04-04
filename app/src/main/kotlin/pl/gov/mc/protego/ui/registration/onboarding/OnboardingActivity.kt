@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_onboarding.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,9 +41,9 @@ class OnboardingActivity : BaseActivity() {
         page_title.displayIfNotNull(pageInfo.title)
         header.displayIfNotNull(pageInfo.header)
         description.setText(pageInfo.description)
-        back_button.visible(pageInfo.backButtonVisible)
-        next_button.visible(pageInfo.nextButtonVisible)
-        status_legend.visible(pageInfo.statusLegendVisible)
+        back_button.isVisible = pageInfo.backButtonVisible
+        next_button.isVisible = pageInfo.nextButtonVisible
+        status_legend.isVisible = pageInfo.statusLegendVisible
     }
 
     private fun navigateToRegistration() =
@@ -56,8 +57,4 @@ private fun TextView.displayIfNotNull(@StringRes textId: Int?) {
         visibility = View.VISIBLE
         setText(textId)
     }
-}
-
-private fun View.visible(visible: Boolean) {
-    visibility = if (visible) View.VISIBLE else View.GONE
 }

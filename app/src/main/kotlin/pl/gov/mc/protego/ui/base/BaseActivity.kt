@@ -14,19 +14,13 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initShakeDetection()
-    }
-
-    override fun onStart() {
-        super.onStart()
-
         findViewById<Toolbar>(R.id.toolbar)?.apply {
             setSupportActionBar(this)
-
             supportActionBar?.apply {
                 setDisplayShowTitleEnabled(false)
             }
         }
+        initShakeDetection()
     }
 
     override fun onStop() {

@@ -2,6 +2,7 @@ package pl.gov.mc.protego.ui.registration.onboarding
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import pl.gov.mc.protego.R
@@ -46,22 +47,28 @@ class OnboardingViewModel : ViewModel() {
     private var currentPageIndex = 0
         set(value) {
             field = value
-            page.value = pages[currentPageIndex]
+            _page.value = pages[currentPageIndex]
         }
 
-    val page = MutableLiveData<PageInfo>()
-    val navigateToRegistration = MutableLiveData<Unit>()
-    val finishApplication = MutableLiveData<Unit>()
+    val _page = MutableLiveData<PageInfo>()
+    val page: LiveData<PageInfo>
+        get() = _page
+    val navigateToRegistration: LiveData<Unit>
+        get() = _navigateToRegistration
+    val _navigateToRegistration = MutableLiveData<Unit>()
+    val _finishApplication = MutableLiveData<Unit>()
+    val finishApplication: LiveData<Unit>
+        get() = _finishApplication
 
     init {
-        page.value = pages[currentPageIndex]
+        _page.value = pages[currentPageIndex]
     }
 
     fun onNextClicked() {
         if (currentPageIndex < pages.lastIndex) {
             currentPageIndex++
         } else {
-            navigateToRegistration.value = Unit
+            _navigateToRegistration.value = Unit
         }
     }
 
@@ -69,7 +76,7 @@ class OnboardingViewModel : ViewModel() {
         if (currentPageIndex > 0) {
             currentPageIndex--
         } else {
-            finishApplication.value = Unit
+            _finishApplication.value = Unit
         }
     }
 }

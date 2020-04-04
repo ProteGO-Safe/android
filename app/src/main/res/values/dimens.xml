@@ -3,7 +3,7 @@
     <dimen name="huge_margin">32dp</dimen>
     <dimen name="large_margin">24dp</dimen>
     <dimen name="medium_margin">16dp</dimen>
-    <dimen name="smedium_margin">12dp</dimen>
+    <dimen name="small_margin">12dp</dimen>
     <dimen name="x_small_margin">8dp</dimen>
 
     <dimen name="dashboard_big_margin">23dp</dimen>
