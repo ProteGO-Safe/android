@@ -126,8 +126,9 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
                 }
             }
 
+    @Suppress("RemoveExplicitTypeArguments") // does not infer well
     private fun DiscoveryProcess.Finished.Found.readRemoteBeaconId(): Single<SyncEvent.Process.ReadBeaconId> =
-        Single.zip(
+        Single.zip<ByteArray, Int, SyncEvent.Process.ReadBeaconId>(
             this.connection.readCharacteristic(this.proteGoCharacteristic),
             this.connection.readRssi(),
             BiFunction { bytes, rssi ->
