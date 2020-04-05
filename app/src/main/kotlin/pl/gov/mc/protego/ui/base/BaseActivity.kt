@@ -1,10 +1,9 @@
 package pl.gov.mc.protego.ui.base
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.toolbar.*
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : BaseVariantActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
