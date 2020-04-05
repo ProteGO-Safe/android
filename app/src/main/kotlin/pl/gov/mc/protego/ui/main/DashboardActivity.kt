@@ -8,6 +8,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.ui.base.BaseActivity
+import pl.gov.mc.protego.ui.observeLiveData
 import pl.gov.mc.protego.ui.registration.onboarding.OnboardingActivity
 
 class DashboardActivity : BaseActivity() {
@@ -22,6 +23,12 @@ class DashboardActivity : BaseActivity() {
             session.logout()
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
+        }
+        observeLiveData(viewModel.noInternetConnection) { hasInternetConnection ->
+            if (!hasInternetConnection)
+                showNoInternetConnectionDialog()
+            else
+                hideNoInternetConnectionDialog()
         }
     }
 

@@ -14,6 +14,7 @@ import pl.gov.mc.protego.information.SessionState
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
+import timber.log.Timber
 
 
 class RegistrationActivity : BaseActivity() {
@@ -38,7 +39,20 @@ class RegistrationActivity : BaseActivity() {
         observeMsisdnValidation()
         observeRegistrationStatus()
 
-        registrationViewModel.fetchSession()
+        observeLiveData(registrationViewModel.noInternetConnection) { hasInternetConnection ->
+            if (!hasInternetConnection) {
+                Timber.d("Show no internet dialog")
+                showNoInternetConnectionDialog()
+            } else {
+                Timber.d("Hide no internet dialog")
+                hideNoInternetConnectionDialog()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registrationViewModel.onResume()
     }
 
     override fun onSupportNavigateUp(): Boolean {

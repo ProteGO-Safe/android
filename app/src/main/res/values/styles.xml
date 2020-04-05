@@ -80,4 +80,10 @@
         <item name="android:statusBarColor">@color/transparent</item>
     </style>
 
+    <style name="FullScreenDialogTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
 </resources>

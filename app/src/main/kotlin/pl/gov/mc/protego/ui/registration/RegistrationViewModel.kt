@@ -8,6 +8,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protego.backend.domain.ProtegoServer
+import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.information.SessionData
 import pl.gov.mc.protego.ui.validator.MsisdnValidator
@@ -16,16 +17,23 @@ import timber.log.Timber
 class RegistrationViewModel(
     private val msisdnValidator: MsisdnValidator,
     private val protegoServer: ProtegoServer,
-    private val session: Session
+    private val session: Session,
+    private val phoneInformation: PhoneInformation
 )  : ViewModel() {
 
     val msisdnError = MutableLiveData<String?>()
     val sessionData = MutableLiveData<SessionData>()
+    val noInternetConnection = MutableLiveData<Boolean>()
 
     private var disposables = CompositeDisposable()
 
+    fun onResume() {
+        fetchSession()
+        val hasActiveInternetConnection = phoneInformation.hasActiveInternetConnection
+        noInternetConnection.value = hasActiveInternetConnection
+    }
 
-    fun fetchSession() {
+    private fun fetchSession() {
         sessionData.value = session.sessionData
     }
 
