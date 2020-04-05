@@ -11,6 +11,13 @@ before_script:
   tags:
     - android
 
+"test:stg":
+  script:
+    - ./gradlew lint testStg
+  stage: test
+  tags:
+    - android
+
 "test:release":
   script:
     - ./gradlew lint testRelease
@@ -21,11 +28,19 @@ before_script:
 "deploy:release":
   script:
     - cat $KEYSTORE | base64 -d > keystore.jks
-    - ls
-    - echo "1"
     - bundle check || bundle install --path=/cache
-    - echo "2"
     - bundle exec fastlane deploy_release
+  stage: deploy
+  tags:
+    - android
+  only:
+    - tags
+
+"deploy:stg":
+  script:
+    - cat $KEYSTORE | base64 -d > keystore.jks
+    - bundle check || bundle install --path=/cache
+    - bundle exec fastlane deploy_stg
   stage: deploy
   tags:
     - android

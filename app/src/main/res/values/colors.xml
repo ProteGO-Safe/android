@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="bluishGreen">#15bb5f</color>
+    <color name="seafomBlue">#6ad399</color>
     <color name="darkSeaGreen">#129A4E</color>
     <color name="macaroniAndCheese">#eab946</color>
     <color name="copper">#c63a27</color>
@@ -12,4 +13,5 @@
     <color name="black">#2f2d2a</color>
     <color name="greyish">#a09f9e</color>
     <color name="white">#ffffff</color>
+    <color name="transparent">#00000000</color>
 </resources>

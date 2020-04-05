@@ -18,6 +18,13 @@ platform :android do
     shuttle
   end
 
+  desc "Deploy STG app to Shuttle"
+  lane :deploy_stg do
+    gradle(task: "assembleStg")
+    deploy
+    shuttle
+  end
+
   desc "Deploy release app to and Shuttle"
   lane :deploy_release do
     gradle(task: "assembleRelease")

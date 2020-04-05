@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.polidea.cockpit.cockpit.Cockpit
 import kotlinx.android.synthetic.main.registration_view.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.SessionState
@@ -30,10 +31,20 @@ class RegistrationActivity : BaseActivity() {
 
         msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
 
+        supportActionBar?.apply {
+            setHomeButtonEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+        }
+
         observeMsisdnValidation()
         observeRegistrationStatus()
 
         registrationViewModel.fetchSession()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
     private fun observeRegistrationStatus() {

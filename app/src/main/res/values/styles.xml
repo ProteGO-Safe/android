@@ -1,32 +1,45 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="displayOptions">useLogo</item>
-        <item name="android:displayOptions">useLogo</item>
+
+        <item name="materialButtonStyle">@style/Button</item>
+        <item name="android:textViewStyle">@style/AppText</item>
     </style>
-    
-    <style name="AppText" parent="TextAppearance.AppCompat">
+
+    <style name="AppText" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:textSize">@dimen/regular_text_size</item>
         <item name="android:textColor">@color/black</item>
     </style>
-    
-    <style name="AppText.Header" parent="AppText">
+
+    <style name="AppText.Title">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/header_text_size</item>
+        <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="lineHeight">@dimen/title_line_height</item>
     </style>
 
-    <style name="AppText.Input" parent="AppText">
+    <style name="AppText.Header">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/header_text_size</item>
+        <item name="lineHeight">@dimen/header_line_height</item>
+    </style>
+
+    <style name="AppText.Input">
         <item name="font">@font/poppins_medium</item>
     </style>
 
-    <style name="AppText.Input.Special" parent="AppText.Input">
+    <style name="AppText.Input.Special">
         <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppText.Description">
+        <item name="android:textSize">@dimen/description_text_size</item>
+        <item name="android:textColor">@color/greyishBrown</item>
     </style>
 
     <style name="AppText.StatusHeader">
@@ -38,29 +51,33 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="AppText.Description" parent="AppText">
-        <item name="android:textSize">@dimen/description_text_size</item>
-        <item name="android:textColor">@color/greyishBrown</item>
+    <style name="AppText.StatusLegend">
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Button" parent="TextAppearance.AppCompat.Button">
-        <item name="fontFamily">@font/poppins</item>
-        <item name="fontWeight">500</item>
-    </style>
-
-    <style name="Button.Primary" parent="Button">
-        <item name="backgroundTint">@color/colorPrimary</item>
+    <style name="Button" parent="Widget.MaterialComponents.Button">
+        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:paddingLeft">@dimen/large_margin</item>
+        <item name="android:paddingRight">@dimen/large_margin</item>
+        <item name="android:paddingTop">@dimen/small_margin</item>
+        <item name="android:paddingBottom">@dimen/x_small_margin</item>
+        <item name="backgroundTint">@color/button_primary_color</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="Button.Secondary" parent="Button">
-        <item name="backgroundTint">@color/white</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+    <style name="Button.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:paddingLeft">@dimen/large_margin</item>
+        <item name="android:paddingRight">@dimen/large_margin</item>
+        <item name="android:paddingTop">@dimen/small_margin</item>
+        <item name="android:paddingBottom">@dimen/x_small_margin</item>
+        <item name="android:textColor">@color/button_primary_color</item>
+        <item name="strokeColor">@color/button_primary_color</item>
     </style>
 
-
-    <style name="SplashScreenTheme" parent = "Theme.AppCompat.NoActionBar">
+    <style name="SplashScreenTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
+        <item name="android:statusBarColor">@color/transparent</item>
     </style>
 
 </resources>
