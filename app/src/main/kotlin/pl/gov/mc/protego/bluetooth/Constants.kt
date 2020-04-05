@@ -10,3 +10,4 @@ const val ProteGoServiceUUIDString = "0000FD6E-0000-1000-8000-00805F9B34FB"
 const val ProteGoCharacteristicUUIDString = "89a60001-4f57-4c1b-9042-7ed87d723b4e"
 
 const val PeripheralIgnoredTimeoutInSec = 60L
+const val PeripheralSynchronizationTimeoutInSec = 20L

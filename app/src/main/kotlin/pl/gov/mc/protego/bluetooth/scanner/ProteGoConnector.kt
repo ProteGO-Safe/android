@@ -3,12 +3,14 @@ package pl.gov.mc.protego.bluetooth.scanner
 import android.bluetooth.BluetoothGattCharacteristic
 import com.polidea.rxandroidble2.RxBleConnection
 import com.polidea.rxandroidble2.exceptions.BleAdapterDisabledException
+import com.polidea.rxandroidble2.exceptions.BleAlreadyConnectedException
 import com.polidea.rxandroidble2.exceptions.BleGattCharacteristicException
 import com.polidea.rxandroidble2.exceptions.BleGattException
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
+import pl.gov.mc.protego.bluetooth.PeripheralSynchronizationTimeoutInSec
 import pl.gov.mc.protego.bluetooth.ProteGoCharacteristicUUIDString
 import pl.gov.mc.protego.bluetooth.ProteGoServiceUUIDString
 import pl.gov.mc.protego.bluetooth.beacon.BeaconId
@@ -17,6 +19,8 @@ import pl.gov.mc.protego.bluetooth.beacon.BeaconIdLocal
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdRemote
 import timber.log.Timber
 import java.util.*
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
 
@@ -50,23 +54,57 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
         object NoBeaconId : BeaconIdToUse()
     }
 
+    private sealed class ConnectionResult {
+        object TimedOut : ConnectionResult()
+        object AlreadyConnecting : ConnectionResult()
+        data class Connected(val connection: RxBleConnection) : ConnectionResult()
+    }
+
     fun syncBeaconIds(proteGoPeripheral: ClassifiedPeripheral.ProteGo): Observable<SyncEvent> =
         proteGoPeripheral.bleDevice.establishConnection(true)
-            .flatMap { connection ->
-                connection.discoverServices()
-                    .map<DiscoveryProcess> { services ->
-                        services.bluetoothGattServices.find { it.uuid == uuidProteGoService }
-                            ?.getCharacteristic(uuidProteGoCharacteristic)
-                            ?.let { DiscoveryProcess.Finished.Found(connection, it) }
-                            ?: DiscoveryProcess.Finished.NotFound
-                    }
-                    .toObservable()
-                    .startWithArray(DiscoveryProcess.Started)
+            .timeout(PeripheralSynchronizationTimeoutInSec, TimeUnit.SECONDS)
+            .map<ConnectionResult> { ConnectionResult.Connected(it) }
+            .onErrorReturn {
+                when (it) {
+                    is BleAlreadyConnectedException -> ConnectionResult.AlreadyConnecting
+                    is TimeoutException -> ConnectionResult.TimedOut
+                    else -> throw it
+                }
             }
+            .switchMap { connectionResult ->
+                when (connectionResult) {
+                    ConnectionResult.TimedOut -> Observable.just(SyncEvent.Connection.Error.Timeout)
+                    ConnectionResult.AlreadyConnecting -> Observable.just(SyncEvent.Connection.Error.Duplicate)
+                    is ConnectionResult.Connected -> executeExchangeProcess(proteGoPeripheral, connectionResult.connection)
+                }
+            }
+            .startWithArray(SyncEvent.Connection.Connecting)
+            .takeUntil { it is SyncEvent.Process.End }
+            .onErrorReturn {
+                when (it) {
+                    is BleGattException -> SyncEvent.Connection.Error.Gatt(it.status)
+                    is BleAdapterDisabledException -> SyncEvent.Connection.Error.AdapterOff
+                    else -> throw it
+                }
+            }
+
+    private fun executeExchangeProcess(
+        proteGoPeripheral: ClassifiedPeripheral.ProteGo,
+        connection: RxBleConnection
+    ): Observable<SyncEvent> {
+        return connection.discoverServices()
+            .map<DiscoveryProcess> { services ->
+                services.bluetoothGattServices.find { it.uuid == uuidProteGoService }
+                    ?.getCharacteristic(uuidProteGoCharacteristic)
+                    ?.let { DiscoveryProcess.Finished.Found(connection, it) }
+                    ?: DiscoveryProcess.Finished.NotFound
+            }
+            .toObservable()
+            .startWithArray(DiscoveryProcess.Started)
             .flatMap {
                 when (it) {
                     DiscoveryProcess.Started -> Observable.just(SyncEvent.Connection.DiscoveringServices)
-                    DiscoveryProcess.Finished.NotFound -> Observable.just(SyncEvent.Process.End.Aborted)
+                    DiscoveryProcess.Finished.NotFound -> Observable.just(SyncEvent.Process.End.NoProteGoAttributes)
                         .also { Timber.d("[connection] Abort: ProteGoCharacteristic not found for classified peripheral: ${proteGoPeripheral.className()}") }
                     is DiscoveryProcess.Finished.Found -> when (proteGoPeripheral) {
                         is ClassifiedPeripheral.ProteGo.FullAdvertisement -> it.writeLocalBeaconIdOnly()
@@ -77,16 +115,7 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
                         .startWithArray(SyncEvent.Process.Start)
                 }
             }
-            .defaultIfEmpty(SyncEvent.Process.End.Aborted)
-            .startWithArray(SyncEvent.Connection.Connecting)
-            .takeUntil { it is SyncEvent.Process.End }
-            .onErrorReturn {
-                when (it) {
-                    is BleGattException -> SyncEvent.Connection.Error.Gatt(it.status)
-                    is BleAdapterDisabledException -> SyncEvent.Connection.Error.AdapterOff
-                    else -> throw it
-                }
-            }
+    }
 
     private fun DiscoveryProcess.Finished.Found.writeLocalBeaconIdOnly(): Observable<SyncEvent.Process> =
         this.writeLocalBeaconId().toObservable().cast(SyncEvent.Process::class.java)

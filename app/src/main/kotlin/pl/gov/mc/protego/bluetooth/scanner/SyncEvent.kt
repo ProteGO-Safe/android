@@ -12,6 +12,7 @@ sealed class SyncEvent {
             data class Gatt(val status: Int) : Error()
             object AdapterOff : Error()
             object Timeout : Error()
+            object Duplicate : Error()
         }
     }
 
@@ -31,7 +32,7 @@ sealed class SyncEvent {
         }
 
         sealed class End : Process() {
-            object Aborted : End()
+            object NoProteGoAttributes : End()
             object Finished : End()
         }
     }
@@ -42,6 +43,7 @@ sealed class SyncEvent {
         is Connection.Error.Gatt -> "Connection.Error.Gatt"
         Connection.Error.AdapterOff -> "Connection.Error.AdapterOff"
         Connection.Error.Timeout -> "Connection.Error.Timeout"
+        Connection.Error.Duplicate -> "Connection.Error.Duplicate"
         Process.Start -> "Process.Start"
         is Process.ReadBeaconId.Valid -> "Process.ReadBeaconId.Valid"
         Process.ReadBeaconId.Invalid -> "Process.ReadBeaconId.Invalid"
@@ -49,7 +51,7 @@ sealed class SyncEvent {
         Process.WrittenBeaconId.Success -> "Process.WrittenBeaconId.Success"
         Process.WrittenBeaconId.Invalid -> "Process.WrittenBeaconId.Invalid"
         is Process.WrittenBeaconId.Failure -> "Process.WrittenBeaconId.Failure"
-        Process.End.Aborted -> "Process.End.Aborted"
+        Process.End.NoProteGoAttributes -> "Process.End.NoProteGoAttributes"
         Process.End.Finished -> "Process.End.Finished"
     }
 }
