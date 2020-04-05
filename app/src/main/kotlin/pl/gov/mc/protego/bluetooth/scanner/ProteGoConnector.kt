@@ -133,7 +133,7 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
                 val writeLocalBeaconIdIfReadSuccessfulObs = readRemoteBeaconIdObs
                     .filter { it is SyncEvent.Process.ReadBeaconId.Valid }
                     .flatMapSingle { writeLocalBeaconId() }
-                Observable.concatArray(
+                Observable.merge(
                     readRemoteBeaconIdObs,
                     writeLocalBeaconIdIfReadSuccessfulObs
                 )

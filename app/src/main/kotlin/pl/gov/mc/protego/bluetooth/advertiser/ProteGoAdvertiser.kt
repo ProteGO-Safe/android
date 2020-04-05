@@ -232,7 +232,7 @@ class ProteGoAdvertiser(
 
     // Token management ----------------------------------------------------------------------------
 
-    fun updatedBeaconIdLocal(beaconIdLocal: BeaconIdLocal?) {
+    private fun updatedBeaconIdLocal(beaconIdLocal: BeaconIdLocal?) {
 
         if (!isEnabled) {
             timberWithLocalTag().d("updated beacon id when not enabled")
