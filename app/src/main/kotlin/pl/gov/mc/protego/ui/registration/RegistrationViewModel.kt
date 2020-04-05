@@ -23,7 +23,9 @@ class RegistrationViewModel(
 
     val msisdnError = MutableLiveData<String?>()
     val sessionData = MutableLiveData<SessionData>()
-    val noInternetConnection = MutableLiveData<Boolean>()
+    val _hasInternetConnection = MutableLiveData<Boolean>()
+    val hasInternetConnection: LiveData<Boolean>
+        get() = _hasInternetConnection
 
     private var disposables = CompositeDisposable()
 
