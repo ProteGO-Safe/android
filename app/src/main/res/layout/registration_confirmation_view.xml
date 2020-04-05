@@ -45,7 +45,7 @@
         app:layout_constraintTop_toBottomOf="@+id/content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:counterMaxLength="6"
+        app:counterMaxLength="@integer/max_sms_confirmation_code_chars"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -54,7 +54,8 @@
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
-            android:inputType="textCapCharacters"
+            android:inputType="number"
+            android:maxLength="@integer/max_sms_confirmation_code_chars"
             android:hint="@string/registration_verify_code_placeholder"/>
 
     </com.google.android.material.textfield.TextInputLayout>
