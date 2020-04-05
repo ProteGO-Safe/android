@@ -4,7 +4,6 @@ import android.content.Context
 import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.polidea.cockpit.cockpit.Cockpit
 import org.koin.android.ext.android.inject
 import pl.gov.mc.protego.R
 
@@ -35,7 +34,7 @@ abstract class BaseActivity : AppCompatActivity() {
         (getSystemService(Context.SENSOR_SERVICE) as? SensorManager)?.let { sensorManager ->
             shakeDetector.apply {
                 startDetection(sensorManager)
-                setListener { Cockpit.showCockpit(supportFragmentManager) }
+                setListener { CockpitMenuLauncher.showCockpit(supportFragmentManager) }
             }
         }
     }
