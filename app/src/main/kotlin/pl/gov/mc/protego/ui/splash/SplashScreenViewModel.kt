@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.information.SessionState
 import pl.gov.mc.protego.ui.main.DashboardActivity
-import pl.gov.mc.protego.ui.registration.RegistrationActivity
+import pl.gov.mc.protego.ui.registration.onboarding.OnboardingActivity
 
 class SplashScreenViewModel(
     private val session: Session
@@ -16,7 +16,7 @@ class SplashScreenViewModel(
     fun fetchTargetScreen() {
         targetScreen.value = when(session.sessionData.state.checkpoint) {
             SessionState.LOGGED_IN -> DashboardActivity::class.java
-            else -> RegistrationActivity::class.java
+            else -> OnboardingActivity::class.java
         }
     }
 

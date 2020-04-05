@@ -25,6 +25,7 @@
         <activity android:name=".ui.registration.RegistrationConfirmationActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ui.main.DashboardActivity"/>
+        <activity android:name=".ui.registration.onboarding.OnboardingActivity" />
     </application>
 
 </manifest>
