@@ -6,18 +6,25 @@ import com.polidea.rxandroidble2.exceptions.BleException
 import com.polidea.rxandroidble2.scan.ScanSettings
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.disposables.SerialDisposable
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.Function
 import io.reactivex.observables.GroupedObservable
 import io.reactivex.plugins.RxJavaPlugins
 import pl.gov.mc.protego.bluetooth.PeripheralIgnoredTimeoutInSec
+import pl.gov.mc.protego.bluetooth.ProteGoManufacturerDataVersion
+import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdRemote
-import java.util.*
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 
-class ProteGoScanner(private val context: Context) {
+class ProteGoScanner(context: Context, private val scannerListener: ScannerListener, private val beaconIdAgent: BeaconIdAgent) :
+    ScannerInterface {
+
+    private val client = RxBleClient.create(context)
+    private val serialDisposable = SerialDisposable()
 
     init {
         RxJavaPlugins.setErrorHandler { throwable ->
@@ -29,16 +36,30 @@ class ProteGoScanner(private val context: Context) {
         }
     }
 
-    fun enable(shouldExchangeBeaconId: Boolean) {
-        val client = RxBleClient.create(context)
+    override fun enable(inMode: ScannerInterface.Mode) {
+        Timber.d("[Scanner] enabling...")
+        check(serialDisposable.get() == null) { "[Scanner] already enabled" }
         val scanSettings = ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build()
-        val transformer: ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> =
-            if (!shouldExchangeBeaconId) scanOnlyBeaconId()
-            else exchangeBeaconId()
-        val classifiedPeripheralsScans = client.scanBleDevices(scanSettings)
+        val transformer: ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> = when (inMode) {
+            ScannerInterface.Mode.SCAN_ONLY -> scanOnlyBeaconId()
+            ScannerInterface.Mode.SCAN_AND_EXCHANGE_BEACON_IDS -> exchangeBeaconId(ProteGoConnector(beaconIdAgent))
+        }
+        client.scanBleDevices(scanSettings)
             .map(ScanResultClassification)
             .ofType(ClassifiedPeripheral.ProteGo::class.java)
             .compose(transformer)
+            .subscribe(
+                { beaconIdAgent.synchronizedBeaconId(it) },
+                {
+                    scannerListener.error(it)
+                    serialDisposable.set(null)
+                }
+            )
+            .let { serialDisposable.set(it) }
+    }
+
+    override fun disable() {
+        serialDisposable.set(null)
     }
 
     private fun scanOnlyBeaconId(): ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> =
@@ -46,10 +67,10 @@ class ProteGoScanner(private val context: Context) {
             proteGoScannedDevices.ofType(ClassifiedPeripheral.ProteGo.FullAdvertisement::class.java)
                 .groupBy { fa -> fa.beaconId }
                 .flatMap { it.throttleFirstPeripheralAutoCleanUp() }
-                .map { BeaconIdRemote(it.beaconId, Date()) }
+                .map { BeaconIdRemote(it.beaconId, ProteGoManufacturerDataVersion, it.rssi) }
         }
 
-    private fun exchangeBeaconId(): ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> =
+    private fun exchangeBeaconId(proteGoConnector: ProteGoConnector): ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> =
         ObservableTransformer { classifiedScannedDevices ->
             classifiedScannedDevices.publish { csd ->
                 Observable.merge(
@@ -64,7 +85,24 @@ class ProteGoScanner(private val context: Context) {
                         .flatMap { it.throttleFirstPeripheralAutoCleanUp() }
                 )
             }
-            classifiedScannedDevices.filter { false }.cast(BeaconIdRemote::class.java)
+                .flatMap { proteGoPeripheral ->
+                    val macAddress = proteGoPeripheral.bleDevice.macAddress
+                    proteGoConnector.syncBeaconIds(proteGoPeripheral)
+                        .doOnNext { Timber.d("[connection][$macAddress] ${it.className()}") }
+                        .ofType(SyncEvent.Process.ReadBeaconId.Valid::class.java)
+                        .map { it.beaconIdRemote }
+                        .let {
+                            if (proteGoPeripheral is ClassifiedPeripheral.ProteGo.FullAdvertisement)
+                                it.startWithArray(
+                                    BeaconIdRemote(
+                                        proteGoPeripheral.beaconId,
+                                        ProteGoManufacturerDataVersion,
+                                        proteGoPeripheral.rssi
+                                    )
+                                )
+                            else it
+                        }
+                }
         }
 
     private fun <T> GroupedObservable<*, T>.throttleFirstPeripheralAutoCleanUp() =

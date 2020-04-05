@@ -6,7 +6,7 @@ import pl.gov.mc.protego.bluetooth.beacon.BeaconId
 
 sealed class ClassifiedPeripheral {
     sealed class ProteGo(val bleDevice: RxBleDevice) : ClassifiedPeripheral() {
-        class FullAdvertisement(bleDevice: RxBleDevice, val beaconId: BeaconId) : ProteGo(bleDevice)
+        class FullAdvertisement(bleDevice: RxBleDevice, val beaconId: BeaconId, val rssi: Int) : ProteGo(bleDevice)
 
         // possibly PartialAdvertisement with partial beaconId
         class MinimalAdvertisement(bleDevice: RxBleDevice) : ProteGo(bleDevice)

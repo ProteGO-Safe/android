@@ -24,7 +24,7 @@ object ScanResultClassification : (ScanResult) -> ClassifiedPeripheral {
         val bleDevice = scanResult.bleDevice
         return when (scanResult.scanRecord) {
             in ProteGoAdvertisement -> potentialBeaconIdOf(scanResult.scanRecord).let {
-                if (it != null) ClassifiedPeripheral.ProteGo.FullAdvertisement(bleDevice, it)
+                if (it != null) ClassifiedPeripheral.ProteGo.FullAdvertisement(bleDevice, it, scanResult.rssi)
                 else ClassifiedPeripheral.ProteGo.MinimalAdvertisement(bleDevice)
             }
             in AppleAdvertisement -> ClassifiedPeripheral.ProteGo.PotentialAdvertisement(bleDevice)

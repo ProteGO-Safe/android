@@ -1,6 +1,4 @@
 package pl.gov.mc.protego.bluetooth.beacon
 
-import java.util.*
 
-
-data class BeaconIdRemote(val beaconId: BeaconId, val encounterDate: Date)
+data class BeaconIdRemote(val beaconId: BeaconId, val version: Int, val rssi: Int?)
