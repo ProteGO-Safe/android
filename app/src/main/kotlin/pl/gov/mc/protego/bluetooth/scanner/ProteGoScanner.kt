@@ -12,7 +12,6 @@ import io.reactivex.functions.Function
 import io.reactivex.observables.GroupedObservable
 import io.reactivex.plugins.RxJavaPlugins
 import pl.gov.mc.protego.bluetooth.PeripheralIgnoredTimeoutInSec
-import pl.gov.mc.protego.bluetooth.ProteGoManufacturerDataVersion
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdRemote
 import timber.log.Timber
@@ -51,14 +50,16 @@ class ProteGoScanner(context: Context, private val scannerListener: ScannerListe
             .subscribe(
                 { beaconIdAgent.synchronizedBeaconId(it) },
                 {
-                    scannerListener.error(it)
-                    serialDisposable.set(null)
+                    scannerListener.error(this, it)
+                    disable()
                 }
             )
             .let { serialDisposable.set(it) }
+        Timber.i("[Scanner] enabled")
     }
 
     override fun disable() {
+        Timber.i("[Scanner] disabled")
         serialDisposable.set(null)
     }
 
@@ -67,7 +68,7 @@ class ProteGoScanner(context: Context, private val scannerListener: ScannerListe
             proteGoScannedDevices.ofType(ClassifiedPeripheral.ProteGo.FullAdvertisement::class.java)
                 .groupBy { fa -> fa.beaconId }
                 .flatMap { it.throttleFirstPeripheralAutoCleanUp() }
-                .map { BeaconIdRemote(it.beaconId, ProteGoManufacturerDataVersion, it.rssi) }
+                .map { BeaconIdRemote(it.beaconId, it.rssi) }
         }
 
     private fun exchangeBeaconId(proteGoConnector: ProteGoConnector): ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> =
@@ -96,7 +97,6 @@ class ProteGoScanner(context: Context, private val scannerListener: ScannerListe
                                 it.startWithArray(
                                     BeaconIdRemote(
                                         proteGoPeripheral.beaconId,
-                                        ProteGoManufacturerDataVersion,
                                         proteGoPeripheral.rssi
                                     )
                                 )

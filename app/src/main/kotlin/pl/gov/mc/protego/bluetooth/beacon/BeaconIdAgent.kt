@@ -2,7 +2,7 @@ package pl.gov.mc.protego.bluetooth.beacon
 
 
 /**
- * Class implementing this protocol is responsible for giving out Beacon IDs and
+ * Class implementing this protocol is responsible for giving out valid Beacon IDs and
  * receiving them and storing locally.
  */
 interface BeaconIdAgent {
@@ -15,6 +15,12 @@ interface BeaconIdAgent {
     fun getBeaconId(): BeaconIdLocal?
 
     /**
+     * This function is called when new Beacon ID is synchronized.
+     * @param beaconIdRemote the BeaconIdRemote that was found
+     */
+    fun synchronizedBeaconId(beaconIdRemote: BeaconIdRemote)
+
+    /**
      * This method registers [BeaconIdAgent.Listener]
      * @param listener the [Listener]
      */
@@ -25,13 +31,6 @@ interface BeaconIdAgent {
      * @param listener the [Listener]
      */
     fun unregisterListener(listener: Listener)
-
-    /**
-     * This function is called when new Beacon ID is synchronized.
-     * @param beaconIdRemote the BeaconIdRemote that was found
-     * @param rssi the RSSI value for the BeaconId if available
-     */
-    fun synchronizedBeaconId(beaconIdRemote: BeaconIdRemote)
 
     /**
      * Class implementing this protocol will be able to register for notifications

@@ -1,5 +1,6 @@
 package pl.gov.mc.protego.bluetooth.advertiser
 
+import pl.gov.mc.protego.bluetooth.beacon.BeaconIdLocal
 import java.util.*
 
 
@@ -17,7 +18,7 @@ sealed class AdvertiserResult {
     sealed class Failure : AdvertiserResult() {
         object NotSupported : Failure()
         object CannotObtainBluetoothAdvertiser : Failure()
-        data class InvalidToken(val tokenData: Pair<ByteArray, Date>?) : Failure()
+        data class InvalidBeaconId(val beaconIdLocal: BeaconIdLocal?) : Failure()
     }
 }
 

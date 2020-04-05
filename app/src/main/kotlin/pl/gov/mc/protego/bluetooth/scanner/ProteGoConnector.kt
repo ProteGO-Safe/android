@@ -10,7 +10,6 @@ import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import pl.gov.mc.protego.bluetooth.ProteGoCharacteristicUUIDString
-import pl.gov.mc.protego.bluetooth.ProteGoManufacturerDataVersion
 import pl.gov.mc.protego.bluetooth.ProteGoServiceUUIDString
 import pl.gov.mc.protego.bluetooth.beacon.BeaconId
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
@@ -134,7 +133,7 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
             BiFunction { bytes, rssi ->
                 if (bytes.size == BeaconId.byteCount) {
                     val beaconId = BeaconId(bytes, 0)
-                    val remoteBeaconId = BeaconIdRemote(beaconId, ProteGoManufacturerDataVersion, rssi)
+                    val remoteBeaconId = BeaconIdRemote(beaconId, rssi)
                     SyncEvent.Process.ReadBeaconId.Valid(remoteBeaconId)
                 } else {
                     SyncEvent.Process.ReadBeaconId.Invalid
