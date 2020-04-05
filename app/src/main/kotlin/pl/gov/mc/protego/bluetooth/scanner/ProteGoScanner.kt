@@ -14,6 +14,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import pl.gov.mc.protego.bluetooth.PeripheralIgnoredTimeoutInSec
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdRemote
+import pl.gov.mc.protego.bluetooth.beacon.BeaconIdSource
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
@@ -68,7 +69,7 @@ class ProteGoScanner(context: Context, private val scannerListener: ScannerListe
             proteGoScannedDevices.ofType(ClassifiedPeripheral.ProteGo.FullAdvertisement::class.java)
                 .groupBy { fa -> fa.beaconId }
                 .flatMap { it.throttleFirstPeripheralAutoCleanUp() }
-                .map { BeaconIdRemote(it.beaconId, it.rssi) }
+                .map { BeaconIdRemote(it.beaconId, it.rssi, BeaconIdSource.SCANNER) }
         }
 
     private fun exchangeBeaconId(proteGoConnector: ProteGoConnector): ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> =
@@ -97,7 +98,8 @@ class ProteGoScanner(context: Context, private val scannerListener: ScannerListe
                                 it.startWithArray(
                                     BeaconIdRemote(
                                         proteGoPeripheral.beaconId,
-                                        proteGoPeripheral.rssi
+                                        proteGoPeripheral.rssi,
+                                        BeaconIdSource.SCANNER
                                     )
                                 )
                             else it

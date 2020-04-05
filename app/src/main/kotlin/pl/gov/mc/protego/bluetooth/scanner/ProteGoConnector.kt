@@ -13,10 +13,7 @@ import io.reactivex.subjects.BehaviorSubject
 import pl.gov.mc.protego.bluetooth.PeripheralSynchronizationTimeoutInSec
 import pl.gov.mc.protego.bluetooth.ProteGoCharacteristicUUIDString
 import pl.gov.mc.protego.bluetooth.ProteGoServiceUUIDString
-import pl.gov.mc.protego.bluetooth.beacon.BeaconId
-import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
-import pl.gov.mc.protego.bluetooth.beacon.BeaconIdLocal
-import pl.gov.mc.protego.bluetooth.beacon.BeaconIdRemote
+import pl.gov.mc.protego.bluetooth.beacon.*
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -162,7 +159,7 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
             BiFunction { bytes, rssi ->
                 if (bytes.size == BeaconId.byteCount) {
                     val beaconId = BeaconId(bytes, 0)
-                    val remoteBeaconId = BeaconIdRemote(beaconId, rssi)
+                    val remoteBeaconId = BeaconIdRemote(beaconId, rssi, BeaconIdSource.CONNECTION_OUTGOING)
                     SyncEvent.Process.ReadBeaconId.Valid(remoteBeaconId)
                 } else {
                     SyncEvent.Process.ReadBeaconId.Invalid

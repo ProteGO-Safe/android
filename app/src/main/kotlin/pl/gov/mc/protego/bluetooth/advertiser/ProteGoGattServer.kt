@@ -3,10 +3,7 @@ package pl.gov.mc.protego.bluetooth.advertiser
 import android.bluetooth.*
 import android.content.Context
 import pl.gov.mc.protego.bluetooth.*
-import pl.gov.mc.protego.bluetooth.beacon.BeaconId
-import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
-import pl.gov.mc.protego.bluetooth.beacon.BeaconIdLocal
-import pl.gov.mc.protego.bluetooth.beacon.BeaconIdRemote
+import pl.gov.mc.protego.bluetooth.beacon.*
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -183,7 +180,11 @@ class ProteGoGattServer private constructor(
             if (pendingWrite != null) {
                 status = BluetoothGatt.GATT_SUCCESS
                 value = pendingWrite
-                val beaconIdRemote = BeaconIdRemote(BeaconId(value, ProteGoManufacturerDataVersion), device.getLatchedRssi())
+                val beaconIdRemote = BeaconIdRemote(
+                    BeaconId(value, ProteGoManufacturerDataVersion),
+                    device.getLatchedRssi(),
+                    BeaconIdSource.CONNECTION_INCOMING
+                )
                 this.beaconIdAgent.synchronizedBeaconId(beaconIdRemote)
             }
         } else {
@@ -237,7 +238,8 @@ class ProteGoGattServer private constructor(
         } else {
             // Got simple write.
             status = BluetoothGatt.GATT_SUCCESS
-            val beaconIdRemote = BeaconIdRemote(BeaconId(value, ProteGoManufacturerDataVersion), device.getLatchedRssi())
+            val beaconIdRemote =
+                BeaconIdRemote(BeaconId(value, ProteGoManufacturerDataVersion), device.getLatchedRssi(), BeaconIdSource.CONNECTION_INCOMING)
             this.beaconIdAgent.synchronizedBeaconId(beaconIdRemote)
         }
 
