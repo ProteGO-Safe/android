@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
-            android:inputType="textCapCharacters|number"
+            android:inputType="number"
             android:maxLength="@integer/max_sms_confirmation_code_chars"
             android:hint="@string/registration_verify_code_placeholder"/>
 
