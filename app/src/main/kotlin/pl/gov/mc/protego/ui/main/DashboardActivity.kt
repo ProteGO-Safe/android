@@ -8,7 +8,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.ui.base.BaseActivity
-import pl.gov.mc.protego.ui.registration.RegistrationActivity
 import pl.gov.mc.protego.ui.registration.onboarding.OnboardingActivity
 
 class DashboardActivity : BaseActivity() {

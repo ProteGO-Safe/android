@@ -3,7 +3,6 @@ package pl.gov.mc.protego.ui.registration
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
-import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan

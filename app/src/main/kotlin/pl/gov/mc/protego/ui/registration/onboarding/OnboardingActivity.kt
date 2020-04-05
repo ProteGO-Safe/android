@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_onboarding.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
