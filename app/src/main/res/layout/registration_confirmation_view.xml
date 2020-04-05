@@ -15,8 +15,8 @@
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/small_margin"
-        android:text="@string/registration_confirmation_title"
+        android:layout_marginBottom="@dimen/x_small_margin"
+        android:text="@string/registration_verify_title"
         android:layout_marginTop="@dimen/large_margin"
         style="@style/AppText.Header"
         android:layout_marginHorizontal="@dimen/huge_margin"
@@ -30,7 +30,7 @@
         android:layout_marginBottom="@dimen/huge_margin"
         style="@style/AppText"
         android:layout_marginHorizontal="@dimen/huge_margin"
-        android:text="@string/registration_confirmation_content"
+        android:text="@string/registration_verify_description"
         app:layout_constraintTop_toBottomOf="@+id/header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -45,9 +45,8 @@
         app:layout_constraintTop_toBottomOf="@+id/content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:counterMaxLength="9"
-        app:errorEnabled="true"
-        tools:text="600 400 500">
+        app:counterMaxLength="@integer/max_sms_confirmation_code_chars"
+        app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/sms_code"
@@ -57,7 +56,7 @@
             android:importantForAutofill="no"
             android:inputType="textCapCharacters|number"
             android:maxLength="@integer/max_sms_confirmation_code_chars"
-            android:hint="kod SMS"/>
+            android:hint="@string/registration_verify_code_placeholder"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,17 +66,17 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/huge_margin"
         android:layout_marginVertical="@dimen/medium_margin"
-        style="@style/Button.Primary"
-        android:text="@string/confirm_register_button"
+        android:text="@string/registration_verify_btn"
         app:layout_constraintTop_toBottomOf="@id/sms_code_layout" />
 
     <TextView
+        android:id="@+id/accept_tou"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_marginBottom="@dimen/x_small_margin"
         android:layout_marginHorizontal="@dimen/huge_margin"
         style="@style/AppText.Description"
-        android:text="@string/registration_confirmation_rules"
+        android:text="@string/registration_terms_of_use_btn_regular_part"
         app:layout_constraintTop_toBottomOf="@id/confirm_registration_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

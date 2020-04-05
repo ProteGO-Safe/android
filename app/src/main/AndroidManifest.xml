@@ -23,6 +23,7 @@
         <activity android:name=".ui.registration.RegistrationActivity"/>
         <activity android:name=".ui.registration.RegistrationConfirmationActivity"/>
         <activity android:name=".ui.main.DashboardActivity"/>
+        <activity android:name=".ui.registration.onboarding.OnboardingActivity" />
     </application>
 
 </manifest>
