@@ -1,0 +1,4 @@
+logout:
+  type: action
+  buttonText: "Logout"
+  group: "Session"

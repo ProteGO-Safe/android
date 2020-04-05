@@ -2,3 +2,8 @@ sendSmsDuringRegistration:
   group: "Registration"
   description: "Send sms during registration"
   value: true
+
+logout:
+  type: action
+  buttonText: "Logout"
+  group: "Session"
