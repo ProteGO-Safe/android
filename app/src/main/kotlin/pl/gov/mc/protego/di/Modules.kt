@@ -18,6 +18,7 @@ import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.realm.RealmEncryption
 import pl.gov.mc.protego.realm.RealmInitializer
 import pl.gov.mc.protego.repository.SessionRepository
+import pl.gov.mc.protego.service.BluetoothServiceConnection
 import pl.gov.mc.protego.ui.main.DashboardActivityViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationConfirmationViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationViewModel
@@ -106,4 +107,8 @@ val networkingModule = module {
     single {
         get<Retrofit>().create(StatusApi::class.java)
     }
+}
+
+val serviceModule = module {
+    single { BluetoothServiceConnection(get()) }
 }

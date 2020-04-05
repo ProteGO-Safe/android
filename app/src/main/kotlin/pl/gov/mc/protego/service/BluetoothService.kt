@@ -5,9 +5,7 @@ import android.app.*
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.os.IBinder
-import android.os.PowerManager
+import android.os.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import pl.gov.mc.protego.R
@@ -23,25 +21,28 @@ class BluetoothService : Service() {
     }
     private lateinit var wakeLock: PowerManager.WakeLock
 
-    override fun onBind(intent: Intent): IBinder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    private val messenger = Messenger(Handler { TODO() })
+
+    override fun onBind(intent: Intent): IBinder = messenger.binder
 
     @SuppressLint("WakelockTimeout")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(startId, createServiceRunningNotification())
+        // wake lock obtained to keep bluetooth scanning and advertising running
+        wakeLock = powerService.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG)
+            .apply {
+                acquire()
+            }
 
-        wakeLock = powerService.newWakeLock(
-            PowerManager.PARTIAL_WAKE_LOCK,
-            WAKE_LOCK_TAG
-        ).apply {
-            acquire()
-        }
+        // start bluetooth scanning and advertising
 
         return START_STICKY
     }
 
     override fun onDestroy() {
+
+        // stop bluetooth scanning and advertising
+
         wakeLock.release()
         super.onDestroy()
     }

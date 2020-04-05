@@ -9,13 +9,22 @@
 
     <include layout="@layout/toolbar"/>
 
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/service_toggle"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_parent"
+        android:showText="true"
+        android:text="@string/service_switch_label"
+        android:layout_marginHorizontal="@dimen/large_margin"
+        android:layout_marginVertical="@dimen/medium_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/status_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dashboard_big_margin"
-        android:layout_marginTop="@dimen/dashboard_big_margin"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_parent"
+        app:layout_constraintTop_toBottomOf="@id/service_toggle"
         app:cardElevation="0dp">
 
         <pl.gov.mc.protego.ui.main.component.OrangeStatusView

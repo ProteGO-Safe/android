@@ -152,4 +152,14 @@
   <string name="send_data_alert_title">Dziękujemy!</string>
   <!--Alert po wysłaniu danych-->
   <string name="send_data_alert_description">Twoje dane zostały przekazane do Głównego Inspektoratu Sanitarnego.\nZapewniamy, że żadne osoby, którym ewentualnie się skontaktujemy nie poznają Twoich danych osobowych.\n\nW razie jakichkolwiek pytań napisz do nas na %@\nlub zadzwoń %@</string>
+  <!--Nazwa kanału powiadomienia wskazującego na działanie usługi w tle-->
+  <string name="channel_name">Usługa bluetooth</string>
+  <!--Opis kanału powiadomienia wskazującego na działanie usługi w tle-->
+  <string name="channel_description">Usługa wysyłająca i odbierająca pakiety bluetooth</string>
+  <!--Tytuł powiadomienia wskazującego na działanie usługi w tle-->
+  <string name="bluetooth_service_running_title">Usługa Bluetooth jest włączona.</string>
+  <!--Opis powiadomienia wskazującego na działanie usługi w tle-->
+  <string name="bluetooth_service_running_description">Wysyłanie i odbieranie danych w toku</string>
+  <!--Opis przełącznika usługi w tle-->
+  <string name="service_switch_label">Usługa Bluetooth</string>
 </resources>

@@ -152,4 +152,14 @@
   <string name="send_data_alert_title">Thank you!</string>
   <!--Alert po wysłaniu danych-->
   <string name="send_data_alert_description">Your data was sent to GIS.\nWe guarantee nobody will use your personal data while contacting with other people.\n\nIf you have any questions please email as at %@\nor call %@</string>
+  <!--Nazwa kanału powiadomienia wskazującego na działanie usługi w tle-->
+  <string name="channel_name">Bluetooth service</string>
+  <!--Opis kanału powiadomienia wskazującego na działanie usługi w tle-->
+  <string name="channel_description">Sending and receiving bluetooth data</string>
+  <!--Tytuł powiadomienia wskazującego na działanie usługi w tle-->
+  <string name="bluetooth_service_running_title">Bluetooth service running</string>
+  <!--Opis powiadomienia wskazującego na działanie usługi w tle-->
+  <string name="bluetooth_service_running_description">Sending and receiving bluetooth data</string>
+  <!--Opis przełącznika usługi w tle-->
+  <string name="service_switch_label">Bluetooth service</string>
 </resources>
