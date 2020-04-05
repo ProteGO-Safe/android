@@ -90,7 +90,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/registration_send_code_btn"
-        android:enabled="false"
         android:layout_marginHorizontal="@dimen/huge_margin"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
