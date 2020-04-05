@@ -53,7 +53,7 @@
 
             <Button
                 android:id="@+id/go_to_internet_settings"
-                style="@style/Button.Primary"
+                style="@style/Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/large_margin"
