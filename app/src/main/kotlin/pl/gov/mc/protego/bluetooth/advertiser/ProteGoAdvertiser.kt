@@ -19,7 +19,7 @@ class ProteGoAdvertiser(
     private val bluetoothManager: BluetoothManager,
     private val beaconIdAgent: BeaconIdAgent,
     private val advertiserListener: AdvertiserListener
-) : AdvertiserInterface, ProteGoGattServerCallback, BeaconIdAgent by beaconIdAgent {
+) : AdvertiserInterface, ProteGoGattServerCallback {
 
     private val beaconIdAgentListener = object : BeaconIdAgent.Listener {
         override fun useBeaconId(beaconIdLocal: BeaconIdLocal?) {
@@ -193,7 +193,7 @@ class ProteGoAdvertiser(
         timberWithLocalTag().d("starting GATT server...")
         check(gattServer == null) { "[advertiser] GATT server already started" }
 
-        return ProteGoGattServer.startGattServer(context, this, this) { bluetoothManager.openGattServer(context, it) }
+        return ProteGoGattServer.startGattServer(context, beaconIdAgent, this) { bluetoothManager.openGattServer(context, it) }
             .also {
                 when (it) {
                     is ServerResult.Success -> {
