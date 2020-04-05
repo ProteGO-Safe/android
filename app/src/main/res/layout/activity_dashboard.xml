@@ -41,13 +41,14 @@
 
             <TextView
                 android:id="@+id/info_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dashboard_medium_margin"
+                android:layout_marginHorizontal="@dimen/dashboard_medium_margin"
                 android:layout_marginTop="@dimen/dashboard_medium_margin"
                 android:text="Aktualne zalecenia Ministerstwa"
                 style="@style/AppText.Header"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <View
@@ -55,22 +56,62 @@
                 android:layout_width="@dimen/dashboard_info_paragraph_icon_size"
                 android:layout_height="@dimen/dashboard_info_paragraph_icon_size"
                 android:background="@drawable/ic_paragraph"
+                android:layout_marginTop="@dimen/dashboard_big_margin"
                 app:layout_constraintTop_toBottomOf="@id/info_title"
-                app:layout_constraintLeft_toLeftOf="@id/info_title" />
+                app:layout_constraintStart_toStartOf="@id/info_title" />
 
             <TextView
                 android:id="@+id/p1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dashboard_big_margin"
-                android:layout_marginRight="@dimen/dashboard_big_margin"
-                android:layout_marginLeft="@dimen/dashboard_small_margin"
+                android:layout_marginStart="@dimen/dashboard_small_margin"
                 style="@style/AppText.Description"
-                android:text="Ograniczenia w przemieszczaniu się z wyjątkiem drogi do pracy, wolontariatu, załatwiania spraw niezbędnych do życia codziennego. "
-                app:layout_constraintLeft_toRightOf="@id/paragraph1_ic"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="@string/dashboard_yellow_recommend_1"
+                app:layout_constraintStart_toEndOf="@id/paragraph1_ic"
+                app:layout_constraintEnd_toEndOf="@+id/info_title"
                 app:layout_constraintTop_toTopOf="@id/paragraph1_ic" />
+
+            <View
+                android:id="@+id/paragraph2_ic"
+                android:layout_width="@dimen/dashboard_info_paragraph_icon_size"
+                android:layout_height="@dimen/dashboard_info_paragraph_icon_size"
+                android:background="@drawable/ic_paragraph"
+                android:layout_marginTop="@dimen/dashboard_big_margin"
+                app:layout_constraintTop_toBottomOf="@id/p1"
+                app:layout_constraintStart_toStartOf="@id/info_title" />
+
+            <TextView
+                android:id="@+id/p2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dashboard_small_margin"
+                style="@style/AppText.Description"
+                android:text="@string/dashboard_yellow_recommend_2"
+                app:layout_constraintStart_toEndOf="@id/paragraph2_ic"
+                app:layout_constraintEnd_toEndOf="@+id/info_title"
+                app:layout_constraintTop_toTopOf="@id/paragraph2_ic" />
+
+            <View
+                android:id="@+id/paragraph3_ic"
+                android:layout_width="@dimen/dashboard_info_paragraph_icon_size"
+                android:layout_height="@dimen/dashboard_info_paragraph_icon_size"
+                android:background="@drawable/ic_paragraph"
+                android:layout_marginTop="@dimen/dashboard_big_margin"
+                app:layout_constraintTop_toBottomOf="@id/p2"
+                app:layout_constraintStart_toStartOf="@id/info_title" />
+
+            <TextView
+                android:id="@+id/p3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dashboard_big_margin"
+                android:layout_marginStart="@dimen/dashboard_small_margin"
+                style="@style/AppText.Description"
+                android:text="@string/dashboard_yellow_recommend_3"
+                app:layout_constraintStart_toEndOf="@id/paragraph3_ic"
+                app:layout_constraintEnd_toEndOf="@+id/info_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/paragraph3_ic" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
