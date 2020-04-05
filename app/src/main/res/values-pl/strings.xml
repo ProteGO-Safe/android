@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cannot_start_wireless_config">Nie można otworzyć ustawień. Włącz internet aby korzystać z aplikacji.</string>
+</resources>

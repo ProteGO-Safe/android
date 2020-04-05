@@ -11,10 +11,9 @@ import pl.gov.mc.protego.R
 import pl.gov.mc.protego.ui.dialog.NoInternetConnectionDialog
 import kotlinx.android.synthetic.main.toolbar.*
 
+
 abstract class BaseActivity : AppCompatActivity() {
     private val shakeDetector: CockpitShakeDetector by inject()
-
-    private var noInternetConnectionDialog: DialogFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,16 +31,18 @@ abstract class BaseActivity : BaseVariantActivity() {
     }
 
     fun showNoInternetConnectionDialog() {
-        noInternetConnectionDialog =
-            noInternetConnectionDialog ?: NoInternetConnectionDialog().apply {
-                show(supportFragmentManager, null)
-            }
+        supportFragmentManager.findFragmentByTag(NO_INTERNET_DIALOG) ?: NoInternetConnectionDialog().apply {
+            show(supportFragmentManager, NO_INTERNET_DIALOG)
+        }
     }
 
     fun hideNoInternetConnectionDialog() {
-        noInternetConnectionDialog?.also {
-            it.dismiss()
-            noInternetConnectionDialog = null
+        supportFragmentManager.findFragmentByTag(NO_INTERNET_DIALOG)?.also {
+            (it as DialogFragment).dismiss()
         }
+    }
+
+    companion object {
+        private const val NO_INTERNET_DIALOG = "NO_INTERNET_DIALOG"
     }
 }
