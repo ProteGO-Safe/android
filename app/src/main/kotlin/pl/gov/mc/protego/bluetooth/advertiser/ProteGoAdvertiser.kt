@@ -38,37 +38,39 @@ class ProteGoAdvertiser(
     // General enable / disable functions ----------------------------------------------------------
     private var isEnabled = false
 
+    private fun timberWithLocalTag() = Timber.tag("[advertiser]")
+
     override fun enable(): EnableResult {
-        Timber.d("[advertiser] enabling advertiser")
+        timberWithLocalTag().d("enabling advertiser")
         if (isEnabled) {
-            Timber.d("[advertiser] advertiser already enabled")
+            timberWithLocalTag().d("advertiser already enabled")
             return EnableResult.PreconditionFailure.AlreadyEnabled
         }
         val bluetoothAdapter = bluetoothManager.adapter
         if (bluetoothAdapter == null) {
-            Timber.w("[advertiser] failed to get bluetooth adapter")
+            timberWithLocalTag().w("failed to get bluetooth adapter")
             return EnableResult.PreconditionFailure.CannotObtainBluetoothAdapter
         }
         if (!bluetoothAdapter.isEnabled) {
-            Timber.d("[advertiser] bluetooth is not enabled")
+            timberWithLocalTag().d("bluetooth is not enabled")
             return EnableResult.PreconditionFailure.BluetoothOff
         }
         isEnabled = true
         val serverResult: ServerResult = startGattServer()
         val advertiserResult: AdvertiserResult = startAdvertising(bluetoothAdapter)
-        Timber.d("[advertiser] enabled")
+        timberWithLocalTag().d("enabled")
         return EnableResult.Started(advertiserResult, serverResult)
     }
 
     override fun disable() {
-        Timber.d("[advertiser] disabling advertiser")
+        timberWithLocalTag().d("disabling advertiser")
         if (!isEnabled) {
-            Timber.d("[advertiser] advertiser already disabled")
+            timberWithLocalTag().d("advertiser already disabled")
         }
         isEnabled = false
         stopAdvertising()
         stopGattServer()
-        Timber.d("[advertiser] disabled")
+        timberWithLocalTag().d("disabled")
     }
 
     // Advertisement -------------------------------------------------------------------------------
@@ -78,13 +80,13 @@ class ProteGoAdvertiser(
     private val advertiseCallback = object : AdvertiseCallback() {
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
             super.onStartSuccess(settingsInEffect)
-            Timber.d("[advertiser] advertisement started")
+            timberWithLocalTag().d("advertisement started")
             isAdvertising = true
         }
 
         override fun onStartFailure(errorCode: Int) {
             super.onStartFailure(errorCode)
-            Timber.d("[advertiser] advertisement failed, error=${errorCode}")
+            timberWithLocalTag().d("advertisement failed, error=${errorCode}")
             disable()
             advertiserListener.error(this@ProteGoAdvertiser, AdvertiserListener.AdvertiserError.Advertiser(errorCode))
         }
@@ -95,23 +97,23 @@ class ProteGoAdvertiser(
     }
 
     private fun startAdvertising(bluetoothAdapter: BluetoothAdapter): AdvertiserResult {
-        Timber.d("[advertiser] startAdvertising...")
+        timberWithLocalTag().d("startAdvertising...")
         check(!isAdvertising) { "[advertiser] advertising already pending" }
 
         if (!isAdvertisingSupported()) {
-            Timber.w("[advertiser] advertising is not supported")
+            timberWithLocalTag().w("advertising is not supported")
             return AdvertiserResult.Failure.NotSupported
         }
 
         val beaconId = this.currentBeaconIdLocal
         if (beaconId == null || beaconId.expirationDate < Date()) {
-            Timber.w("[advertiser] token data is invalid or expired.")
+            timberWithLocalTag().w("token data is invalid or expired.")
             return AdvertiserResult.Failure.InvalidBeaconId(beaconId)
         }
 
         val leAdvertiser = bluetoothAdapter.bluetoothLeAdvertiser
         if (leAdvertiser == null) {
-            Timber.w("[advertiser] failed to get leAdvertiser to start advertising")
+            timberWithLocalTag().w("failed to get leAdvertiser to start advertising")
             return AdvertiserResult.Failure.CannotObtainBluetoothAdvertiser
         }
 
@@ -135,7 +137,7 @@ class ProteGoAdvertiser(
 
         val data =
             if (beaconIdByteArray.size > remainingAdvertisementData) {
-                Timber.w("[advertiser] Token data too long, truncating...")
+                timberWithLocalTag().w("Token data too long, truncating...")
                 val stream = ByteArrayOutputStream(remainingAdvertisementData + 1)
                 stream.write(ProteGoManufacturerDataVersion)
                 stream.write(beaconIdByteArray, 0, remainingAdvertisementData)
@@ -161,22 +163,22 @@ class ProteGoAdvertiser(
     }
 
     private fun stopAdvertising() {
-        Timber.d("[advertiser] stopAdvertising...")
+        timberWithLocalTag().d("stopAdvertising...")
         if (!isAdvertising) {
-            Timber.d("[advertiser] advertising already stopped")
+            timberWithLocalTag().d("advertising already stopped")
             return
         }
         isAdvertising = false
 
         val adapter = bluetoothManager.adapter
         if (adapter == null) {
-            Timber.w("[advertiser] failed to get adapter to stop advertisement")
+            timberWithLocalTag().w("failed to get adapter to stop advertisement")
             return
         }
 
         val leAdvertiser = adapter.bluetoothLeAdvertiser
         if (leAdvertiser == null) {
-            Timber.w("[advertiser] failed to get leAdvertiser to stop advertisement")
+            timberWithLocalTag().w("failed to get leAdvertiser to stop advertisement")
             return
         }
 
@@ -188,42 +190,42 @@ class ProteGoAdvertiser(
     private var gattServer: ProteGoGattServer? = null
 
     private fun startGattServer(): ServerResult {
-        Timber.d("[advertiser] starting GATT server...")
+        timberWithLocalTag().d("starting GATT server...")
         check(gattServer == null) { "[advertiser] GATT server already started" }
 
         return ProteGoGattServer.startGattServer(context, this, this) { bluetoothManager.openGattServer(context, it) }
             .also {
                 when (it) {
                     is ServerResult.Success -> {
-                        Timber.d("[advertiser] GATT server start initiated")
+                        timberWithLocalTag().d("GATT server start initiated")
                         this.gattServer = it.proteGoGattServer
                     }
-                    ServerResult.Failure.CannotObtainGattServer -> Timber.w("[advertiser] failed to open GATT server")
-                    ServerResult.Failure.CannotAddService -> Timber.w("[advertiser] failed to initialize ProteGoGattServer")
-                    ServerResult.Failure.CannotAddCharacteristic -> Timber.w("[advertiser] failed to initialize ProteGoGattServer")
+                    ServerResult.Failure.CannotObtainGattServer -> timberWithLocalTag().w("failed to open GATT server")
+                    ServerResult.Failure.CannotAddService -> timberWithLocalTag().w("failed to initialize ProteGoGattServer")
+                    ServerResult.Failure.CannotAddCharacteristic -> timberWithLocalTag().w("failed to initialize ProteGoGattServer")
                 }
             }
     }
 
     private fun stopGattServer() {
-        Timber.d("stopping GATT server")
+        timberWithLocalTag().d("stopping GATT server")
         this.gattServer = this.gattServer.run {
             when (this) {
-                null -> Timber.d("[advertiser] GATT server already stopped")
-                else -> Timber.d("[advertiser] GATT server stopped successfully: ${close()}")
+                null -> timberWithLocalTag().d("GATT server already stopped")
+                else -> timberWithLocalTag().d("GATT server stopped successfully: ${close()}")
             }
             null
         }
     }
 
     override fun gattServerStarted(gattServer: ProteGoGattServer) {
-        Timber.i("[advertiser] GATT server started")
+        timberWithLocalTag().i("GATT server started")
         // TODO: Maybe start advertisement here? On the other hand we could fail to
         // start gatt server but managed to start advertisement alone, which is also beneficial.
     }
 
     override fun gattServerFailed(gattServer: ProteGoGattServer, status: Int) {
-        Timber.e("[advertiser] GATT server failed with status: $status")
+        timberWithLocalTag().e("GATT server failed with status: $status")
         disable()
         advertiserListener.error(this, AdvertiserListener.AdvertiserError.Server(status))
     }
@@ -233,7 +235,7 @@ class ProteGoAdvertiser(
     fun updatedBeaconIdLocal(beaconIdLocal: BeaconIdLocal?) {
 
         if (!isEnabled) {
-            Timber.d("[advertiser] updated beacon id when not enabled")
+            timberWithLocalTag().d("updated beacon id when not enabled")
             return
         }
 
@@ -241,16 +243,16 @@ class ProteGoAdvertiser(
         stopAdvertising()
 
         if (beaconIdLocal == null) {
-            Timber.d("[advertiser] updated beacon id is null. cannot start new advertisement")
+            timberWithLocalTag().d("updated beacon id is null. cannot start new advertisement")
             return
         }
 
         val expirationDate = beaconIdLocal.expirationDate
-        Timber.d("[advertiser] updatedBeaconIdLocal, data: ${beaconIdLocal.beaconId.byteArray.toHexString()}, expirationDate: $expirationDate")
+        timberWithLocalTag().d("updatedBeaconIdLocal, data: ${beaconIdLocal.beaconId.byteArray.toHexString()}, expirationDate: $expirationDate")
 
         // Check if expiration date is actually OK.
         if (expirationDate < Date()) {
-            Timber.e("[advertiser] received expired beacon id. cannot start new advertisement")
+            timberWithLocalTag().e("received expired beacon id. cannot start new advertisement")
             return
         }
 
@@ -258,7 +260,7 @@ class ProteGoAdvertiser(
         if (bluetoothAdapter != null) {
             startAdvertising(bluetoothAdapter)
         } else {
-            Timber.w("[advertiser] bluetooth adapter is null on updateTokenData")
+            timberWithLocalTag().w("bluetooth adapter is null on updateTokenData")
         }
     }
 }

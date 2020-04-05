@@ -37,11 +37,13 @@ class ProteGoGattServer private constructor(
             val proteGoGattServer = ProteGoGattServer(context, beaconIdAgent, proteGoGattServerCallback)
             val gattServer = gattServerCreator(proteGoGattServer)
             if (gattServer == null) {
-                Timber.w("[server] failed to open GATT server")
+                timberWithLocalTag().w("failed to open GATT server")
                 return ServerResult.Failure.CannotObtainGattServer
             }
             return proteGoGattServer.initialize(gattServer) ?: ServerResult.Success(proteGoGattServer)
         }
+
+        private fun timberWithLocalTag() = Timber.tag("[server]")
     }
 
     // This should be nullable as there is potential race condition in the API between callback
@@ -83,25 +85,25 @@ class ProteGoGattServer private constructor(
         )
 
         if (!gattService.addCharacteristic(gattCharacteristic)) {
-            Timber.d("[server] Failed to add characteristic")
+            timberWithLocalTag().d("Failed to add characteristic")
             gattServer.close()
             return ServerResult.Failure.CannotAddCharacteristic
         }
 
         if (!gattServer.addService(gattService)) {
-            Timber.d("[server] Failed to add service")
+            timberWithLocalTag().d("Failed to add service")
             gattServer.close()
             return ServerResult.Failure.CannotAddService
         }
 
-        Timber.i("[server] GATT server initialized")
+        timberWithLocalTag().i("GATT server initialized")
         return null
     }
 
     fun close(): Boolean {
         val gattServer = this.gattServer
         if (gattServer == null) {
-            Timber.d("[server] GATT server already closed")
+            timberWithLocalTag().d("GATT server already closed")
             return false
         }
 
@@ -110,7 +112,7 @@ class ProteGoGattServer private constructor(
         rssiLatches.clear()
         gattServer.close()
         this.gattServer = null
-        Timber.i("[server] GATT server closed")
+        timberWithLocalTag().i("GATT server closed")
         return true
     }
 
@@ -123,10 +125,10 @@ class ProteGoGattServer private constructor(
         descriptor: BluetoothGattDescriptor?
     ) {
         super.onDescriptorReadRequest(device, requestId, offset, descriptor)
-        Timber.d("[server] onDescriptorReadRequest, device=${device?.address}, requestId=${requestId}, offset=${offset}, desc=${descriptor?.uuid}")
+        timberWithLocalTag().d("onDescriptorReadRequest, device=${device?.address}, requestId=${requestId}, offset=${offset}, desc=${descriptor?.uuid}")
         val gattServer = this.gattServer
         if (gattServer == null || device == null) {
-            Timber.e("[server] invalid onDescriptorReadRequest params")
+            timberWithLocalTag().e("invalid onDescriptorReadRequest params")
             return
         }
         gattServer.sendResponse(device, requestId, BluetoothGatt.GATT_READ_NOT_PERMITTED, offset, null)
@@ -134,40 +136,40 @@ class ProteGoGattServer private constructor(
 
     override fun onNotificationSent(device: BluetoothDevice?, status: Int) {
         super.onNotificationSent(device, status)
-        Timber.d("[server] onNotificationSent, device=${device?.address}, status=${status}")
+        timberWithLocalTag().d("onNotificationSent, device=${device?.address}, status=${status}")
         val gattServer = this.gattServer
         if (gattServer == null || device == null) {
-            Timber.e("[server] invalid onNotificationSent params")
+            timberWithLocalTag().e("invalid onNotificationSent params")
             return
         }
     }
 
     override fun onMtuChanged(device: BluetoothDevice?, mtu: Int) {
         super.onMtuChanged(device, mtu)
-        Timber.d("[server] onMtuChanged, device=${device?.address}, mtu=${mtu}")
+        timberWithLocalTag().d("onMtuChanged, device=${device?.address}, mtu=${mtu}")
         val gattServer = this.gattServer
         if (gattServer == null || device == null) {
-            Timber.e("[server] invalid onMtuChanged params")
+            timberWithLocalTag().e("invalid onMtuChanged params")
             return
         }
     }
 
     override fun onPhyUpdate(device: BluetoothDevice?, txPhy: Int, rxPhy: Int, status: Int) {
         super.onPhyUpdate(device, txPhy, rxPhy, status)
-        Timber.d("[server] onPhyUpdate, device=${device?.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
+        timberWithLocalTag().d("onPhyUpdate, device=${device?.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
         val gattServer = this.gattServer
         if (gattServer == null || device == null) {
-            Timber.e("[server] invalid onPhyUpdate params")
+            timberWithLocalTag().e("invalid onPhyUpdate params")
             return
         }
     }
 
     override fun onExecuteWrite(device: BluetoothDevice?, requestId: Int, execute: Boolean) {
         super.onExecuteWrite(device, requestId, execute)
-        Timber.d("[server] onExecuteWrite, device=${device?.address}, reqId=${requestId}, execute=${execute}")
+        timberWithLocalTag().d("onExecuteWrite, device=${device?.address}, reqId=${requestId}, execute=${execute}")
         val gattServer = this.gattServer
         if (gattServer == null || device == null) {
-            Timber.e("[server] invalid onExecuteWrite params")
+            timberWithLocalTag().e("invalid onExecuteWrite params")
             return
         }
 
@@ -213,10 +215,10 @@ class ProteGoGattServer private constructor(
             offset,
             value
         )
-        Timber.d("[server] onCharacteristicWriteRequest, device=${device?.address}, reqId=${requestId}, char=${characteristic?.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value?.toHexString()}")
+        timberWithLocalTag().d("onCharacteristicWriteRequest, device=${device?.address}, reqId=${requestId}, char=${characteristic?.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value?.toHexString()}")
         val gattServer = this.gattServer
         if (gattServer == null || device == null || characteristic == null || value == null) {
-            Timber.e("[server] invalid onCharacteristicWriteRequest params")
+            timberWithLocalTag().e("invalid onCharacteristicWriteRequest params")
             return
         }
 
@@ -255,10 +257,10 @@ class ProteGoGattServer private constructor(
         characteristic: BluetoothGattCharacteristic?
     ) {
         super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
-        Timber.d("[server] onCharacteristicReadRequest, device: ${device?.address}, reqId=${requestId}, offset=${offset}, char=${characteristic?.uuid}")
+        timberWithLocalTag().d("onCharacteristicReadRequest, device: ${device?.address}, reqId=${requestId}, offset=${offset}, char=${characteristic?.uuid}")
         val gattServer = this.gattServer
         if (gattServer == null || device == null) {
-            Timber.e("[server] invalid onCharacteristicReadRequest params")
+            timberWithLocalTag().e("invalid onCharacteristicReadRequest params")
             return
         }
 
@@ -276,10 +278,10 @@ class ProteGoGattServer private constructor(
 
     override fun onConnectionStateChange(device: BluetoothDevice?, status: Int, newState: Int) {
         super.onConnectionStateChange(device, status, newState)
-        Timber.d("[server] onConnectionStateChange, device=${device?.address}, status=${status}, newState=${newState}")
+        timberWithLocalTag().d("onConnectionStateChange, device=${device?.address}, status=${status}, newState=${newState}")
         val gattServer = this.gattServer
         if (gattServer == null || device == null) {
-            Timber.e("[server] invalid onConnectionStateChange params")
+            timberWithLocalTag().e("invalid onConnectionStateChange params")
             return
         }
         if (newState == BluetoothProfile.STATE_DISCONNECTED) {
@@ -293,10 +295,10 @@ class ProteGoGattServer private constructor(
 
     override fun onPhyRead(device: BluetoothDevice?, txPhy: Int, rxPhy: Int, status: Int) {
         super.onPhyRead(device, txPhy, rxPhy, status)
-        Timber.d("[server] onPhyRead, device=${device?.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
+        timberWithLocalTag().d("onPhyRead, device=${device?.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
         val gattServer = this.gattServer
         if (gattServer == null || device == null) {
-            Timber.e("[server] invalid onPhyRead params")
+            timberWithLocalTag().e("invalid onPhyRead params")
             return
         }
     }
@@ -319,10 +321,10 @@ class ProteGoGattServer private constructor(
             offset,
             value
         )
-        Timber.d("[server] onDescriptorWriteRequest, device=${device?.address}, reqId=${requestId}, descriptor=${descriptor?.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value?.toHexString()}")
+        timberWithLocalTag().d("onDescriptorWriteRequest, device=${device?.address}, reqId=${requestId}, descriptor=${descriptor?.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value?.toHexString()}")
         val gattServer = this.gattServer
         if (device == null || descriptor == null || gattServer == null) {
-            Timber.e("[server] invalid onDescriptorWriteRequest params")
+            timberWithLocalTag().e("invalid onDescriptorWriteRequest params")
             return
         }
         if (responseNeeded) {
@@ -332,9 +334,9 @@ class ProteGoGattServer private constructor(
 
     override fun onServiceAdded(status: Int, service: BluetoothGattService?) {
         super.onServiceAdded(status, service)
-        Timber.d("[server] onServiceAdded status=${status}, service=${service?.uuid}")
+        timberWithLocalTag().d("onServiceAdded status=${status}, service=${service?.uuid}")
         if (status != BluetoothGatt.GATT_SUCCESS) {
-            Timber.e("[server] failed to add service: ${service?.uuid ?: "-"}")
+            timberWithLocalTag().e("failed to add service: ${service?.uuid ?: "-"}")
             callback.gattServerFailed(this, status)
             return
         } else {

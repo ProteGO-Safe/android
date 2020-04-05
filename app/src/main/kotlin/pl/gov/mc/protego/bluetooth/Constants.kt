@@ -11,3 +11,4 @@ const val ProteGoCharacteristicUUIDString = "89a60001-4f57-4c1b-9042-7ed87d723b4
 
 const val PeripheralIgnoredTimeoutInSec = 60L
 const val PeripheralSynchronizationTimeoutInSec = 20L
+const val PeripheralIgnoredGracePeriodIfNoProteGoCharacteristicInMin = 15L

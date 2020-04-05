@@ -2,12 +2,10 @@ package pl.gov.mc.protego.bluetooth.scanner
 
 import android.bluetooth.BluetoothGattCharacteristic
 import com.polidea.rxandroidble2.RxBleConnection
-import com.polidea.rxandroidble2.exceptions.BleAdapterDisabledException
-import com.polidea.rxandroidble2.exceptions.BleAlreadyConnectedException
-import com.polidea.rxandroidble2.exceptions.BleGattCharacteristicException
-import com.polidea.rxandroidble2.exceptions.BleGattException
+import com.polidea.rxandroidble2.exceptions.*
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.exceptions.CompositeException
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import pl.gov.mc.protego.bluetooth.PeripheralSynchronizationTimeoutInSec
@@ -58,7 +56,7 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
     }
 
     fun syncBeaconIds(proteGoPeripheral: ClassifiedPeripheral.ProteGo): Observable<SyncEvent> =
-        proteGoPeripheral.bleDevice.establishConnection(true)
+        proteGoPeripheral.bleDevice.establishConnection(false)
             .timeout(PeripheralSynchronizationTimeoutInSec, TimeUnit.SECONDS)
             .map<ConnectionResult> { ConnectionResult.Connected(it) }
             .onErrorReturn {
@@ -77,13 +75,19 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
             }
             .startWithArray(SyncEvent.Connection.Connecting)
             .takeUntil { it is SyncEvent.Process.End }
-            .onErrorReturn {
-                when (it) {
-                    is BleGattException -> SyncEvent.Connection.Error.Gatt(it.status)
-                    is BleAdapterDisabledException -> SyncEvent.Connection.Error.AdapterOff
-                    else -> throw it
-                }
+            .onErrorReturn { classifyError(it) }
+
+    private fun classifyError(throwable: Throwable): SyncEvent =
+        when (throwable) {
+            is BleDisconnectedException -> SyncEvent.Connection.Error.Gatt(throwable.state)
+            is BleGattException -> SyncEvent.Connection.Error.Gatt(throwable.status)
+            is BleAdapterDisabledException -> SyncEvent.Connection.Error.AdapterOff
+            is CompositeException -> {
+                if (throwable.exceptions.size == 1) classifyError(throwable.exceptions[0])
+                else throw throwable
             }
+            else -> throw throwable
+        }
 
     private fun executeExchangeProcess(
         proteGoPeripheral: ClassifiedPeripheral.ProteGo,
@@ -102,7 +106,12 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
                 when (it) {
                     DiscoveryProcess.Started -> Observable.just(SyncEvent.Connection.DiscoveringServices)
                     DiscoveryProcess.Finished.NotFound -> Observable.just(SyncEvent.Process.End.NoProteGoAttributes)
-                        .also { Timber.d("[connection] Abort: ProteGoCharacteristic not found for classified peripheral: ${proteGoPeripheral.className()}") }
+                        .also {
+                            if (proteGoPeripheral !is ClassifiedPeripheral.ProteGo.PotentialAdvertisement) {
+                                Timber.tag("[connection]")
+                                    .w("ProteGoCharacteristic not found for: ${proteGoPeripheral.className()}")
+                            }
+                        }
                     is DiscoveryProcess.Finished.Found -> when (proteGoPeripheral) {
                         is ClassifiedPeripheral.ProteGo.FullAdvertisement -> it.writeLocalBeaconIdOnly()
                         is ClassifiedPeripheral.ProteGo.MinimalAdvertisement,
