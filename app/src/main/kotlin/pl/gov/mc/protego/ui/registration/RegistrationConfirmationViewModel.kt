@@ -3,6 +3,7 @@ package pl.gov.mc.protego.ui.registration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.polidea.cockpit.cockpit.Cockpit
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -48,6 +49,6 @@ class RegistrationConfirmationViewModel(
     }
 
     fun onCodeChanged(code: String) {
-        _confirmationEnabled.value = code.length == 6
+        _confirmationEnabled.value = code.length == Cockpit.getSmsCodeLength()
     }
 }
