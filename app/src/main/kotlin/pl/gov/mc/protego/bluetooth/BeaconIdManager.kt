@@ -7,6 +7,7 @@ import pl.gov.mc.protego.bluetooth.beacon.BeaconIdLocal
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdRemote
 import timber.log.Timber
 import java.util.*
+import java.util.concurrent.CopyOnWriteArraySet
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -42,7 +43,7 @@ class BeaconIdManager : BeaconIdAgent {
         return newBeaconId
     }
 
-    private var listeners = setOf<BeaconIdAgent.Listener>()
+    private var listeners = CopyOnWriteArraySet<BeaconIdAgent.Listener>()
 
     private var currentBeaconId = createNewBeaconId()
         set (value) {
@@ -53,12 +54,12 @@ class BeaconIdManager : BeaconIdAgent {
     override fun getBeaconId(): BeaconIdLocal? = currentBeaconId
 
     override fun registerListener(listener: BeaconIdAgent.Listener) {
-        listeners = listeners + listener
+        listeners.add(listener)
         listener.useBeaconId(currentBeaconId)
     }
 
     override fun unregisterListener(listener: BeaconIdAgent.Listener) {
-        listeners = listeners - listener
+        listeners.remove(listener)
     }
 
     override fun synchronizedBeaconId(beaconIdRemote: BeaconIdRemote) {
