@@ -9,6 +9,9 @@ import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.registration.onboarding.OnboardingActivity
+import android.view.Menu
+import android.view.MenuItem
+
 
 class DashboardActivity : BaseActivity() {
 
@@ -30,5 +33,36 @@ class DashboardActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.dshboard_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        if (id == R.id.action_menu) {
+            val fragment = supportFragmentManager.findFragmentByTag(HISTORY_PANEL_TAG)
+            if (fragment != null  && fragment is HistoryFragment) {
+                supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right)
+                    .remove(fragment)
+                    .commit()
+            } else {
+                supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right)
+                    .add(R.id.container, HistoryFragment(), HISTORY_PANEL_TAG)
+                    .commit()
+            }
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        private const val HISTORY_PANEL_TAG = "histPanel"
     }
 }
