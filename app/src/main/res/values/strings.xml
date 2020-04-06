@@ -1,13 +1,2 @@
 <resources>
-    <string name="registration_title">Dołącz do aplikacji!</string>
-    <string name="registration_content">Żeby potwierdzić Twoje konto podaj swój numer telefonu. Prześlemy Ci kod weryfikujący. Nie będziemy łączyć Twoich danych z numerem telefonu.</string>
-    <string name="registration_phone_number_validation_failed">Niepoprawny numer telefonu</string>
-    <string name="registration_confirmation_title">Wpisz swój kod</string>
-    <string name="registration_confirmation_rules">Dołączając do aplikacji akceptujesz regulamin</string>
-    <string name="registration_confirmation_content">Wpisz swój kod, który otrzymałeś w SMSie wysłanym na numer xxx-xxx-xxx.</string>
-    <string name="register_button">Prześlij kod</string>
-    <string name="confirm_register_button">Dołącz do</string>
-    <string name="orange_status_title">Uważaj na siebie</string>
-    <string name="orange_status_content">Prawdopodobnie przebywałeś w miejscach, w których znajdowały się osoby zarażone. Zachowaj ostrożość i ogranicz wyjścia do minimum. Po więcej informacji kliknij [tutaj].</string>
-    <string name="placeholder_content">- Ograniczenia w przemieszczaniu się z wyjatkiem drogi do pracy, wolontariatu, załatwiania spraw niezbędnych do życia codziennego.\n- W autobusie może być tyle osób ile wynosi połowa liczby miejsc siedzących.\n- Całkowity zakaz zgromadzeń - chyba, że z najbliższymi. Więcej informacji [tuta].</string>
 </resources>

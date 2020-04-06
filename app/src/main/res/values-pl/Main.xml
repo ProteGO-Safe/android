@@ -31,6 +31,8 @@
   <!--Rejestracja-->
   <string name="registration_send_description">Potrzebujemy Twojego numeru telefonu, aby móc się z Tobą skontaktować jeśli byłeś w pobliżu osób zarażonych.\n\nPotwierdzimy Twój numer przesyłając Ci kod weryfikacyjny SMSem.</string>
   <!--Rejestracja-->
+  <string name="registration_phone_number_validation_failed">Niepoprawny numer telefonu</string>
+  <!--Rejestracja-->
   <string name="registration_phone_placeholder">xxx xxx xxx</string>
   <!--Rejestracja-->
   <string name="registration_send_code_btn">Prześlij kod</string>

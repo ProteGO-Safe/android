@@ -83,8 +83,7 @@
             app:counterMaxLength="9"
             android:hint="@string/registration_phone_placeholder"
             app:errorEnabled="true"
-            tools:text="600 400 500"
-            android:inputType="number">
+            tools:text="600 400 500">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/msisdn_edit_text"
@@ -93,7 +92,7 @@
                 android:imeOptions="actionDone"
                 android:importantForAutofill="no"
                 android:inputType="number"/>
-          
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
