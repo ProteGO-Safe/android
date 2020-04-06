@@ -10,7 +10,7 @@ fun <T> AppCompatActivity.observeLiveData(liveData: LiveData<T>, observer: (T) -
 }
 
 fun <T> Fragment.observeLiveData(liveData: LiveData<T>, observer: (T) -> Unit) {
-    liveData.observe(this, Observer { observer(it) })
+    liveData.observe(this.viewLifecycleOwner, Observer { observer(it) })
 }
 
 open class Event<out T>(private val content: T) {

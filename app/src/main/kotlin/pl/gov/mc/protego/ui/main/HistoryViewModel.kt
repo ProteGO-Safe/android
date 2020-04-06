@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.net.Uri
 import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.polidea.cockpit.cockpit.Cockpit
@@ -23,16 +24,21 @@ class HistoryViewModel(
     private val emailClientAdapter: EmailClientAdapter
 ) : ViewModel() {
 
-    val versionLiveData = MutableLiveData<String>()
-    val intentToStart = MutableLiveData<Event<IntentToLaunch>>()
+    private val _versionLiveData = MutableLiveData<String>()
+    val versionLiveData: LiveData<String>
+        get() = _versionLiveData
+
+    private val _intentToStart = MutableLiveData<Event<IntentToLaunch>>()
+    val intentToStart: LiveData<Event<IntentToLaunch>>
+        get() = _intentToStart
 
     fun fetchData() {
-        versionLiveData.value = appInformation.versionName
+        _versionLiveData.value = appInformation.versionName
     }
 
     fun onContactClicked() {
         //TODO add copy for error and title
-        intentToStart.value =
+        _intentToStart.value =
             Event(IntentToLaunch(
                 emailClientAdapter.createIntent(resources.getString(R.string.dashboard_info_contact_us_email)),
                 R.string.missing_email_client
@@ -41,7 +47,7 @@ class HistoryViewModel(
 
     fun onTermsAndConditionsClicked() {
         //TODO add copy for error
-        intentToStart.value = Event(IntentToLaunch(
+        _intentToStart.value = Event(IntentToLaunch(
             Intent(Intent.ACTION_VIEW, Uri.parse(Cockpit.getTermsAndConditions())),
             R.string.missing_web_browser
         ))

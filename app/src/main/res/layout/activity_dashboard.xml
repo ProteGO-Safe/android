@@ -1,20 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?><androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.DashboardActivity">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/toolbar" />
+    <include layout="@layout/toolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include">
+        app:layout_constraintTop_toBottomOf="@id/toolbar_parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/status_container"
@@ -31,108 +30,108 @@
 
         </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/info_container"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/info_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dashboard_big_margin"
+            android:layout_marginTop="@dimen/dashboard_big_margin"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/status_container"
+            app:layout_constraintVertical_bias="0.0">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/greyish_background">
+
+                <TextView
+                    android:id="@+id/info_title"
+                    style="@style/AppText.Header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/dashboard_big_margin"
+                    android:layout_marginHorizontal="@dimen/dashboard_medium_margin"
+                    android:layout_marginTop="@dimen/dashboard_medium_margin"
+                    android:text="Aktualne zalecenia Ministerstwa"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/paragraph1_ic"
+                    android:layout_width="@dimen/dashboard_info_paragraph_icon_size"
+                    android:layout_height="@dimen/dashboard_info_paragraph_icon_size"
                     android:layout_marginTop="@dimen/dashboard_big_margin"
-                    app:cardElevation="0dp"
-                    app:layout_constraintTop_toBottomOf="@+id/status_container"
-                    app:layout_constraintVertical_bias="0.0">
+                    android:background="@drawable/ic_paragraph"
+                    app:layout_constraintStart_toStartOf="@id/info_title"
+                    app:layout_constraintTop_toBottomOf="@id/info_title" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/greyish_background">
-
-                        <TextView
-                            android:id="@+id/info_title"
-                            style="@style/AppText.Header"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/dashboard_medium_margin"
-                            android:layout_marginTop="@dimen/dashboard_medium_margin"
-                            android:text="Aktualne zalecenia Ministerstwa"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <View
-                            android:id="@+id/paragraph1_ic"
-                            android:layout_width="@dimen/dashboard_info_paragraph_icon_size"
-                            android:layout_height="@dimen/dashboard_info_paragraph_icon_size"
-                            android:layout_marginTop="@dimen/dashboard_big_margin"
-                            android:background="@drawable/ic_paragraph"
-                            app:layout_constraintStart_toStartOf="@id/info_title"
-                            app:layout_constraintTop_toBottomOf="@id/info_title" />
-
-                        <TextView
-                            android:id="@+id/p1"
-                            style="@style/AppText.Description"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dashboard_small_margin"
-                            android:text="@string/dashboard_yellow_recommend_1"
-                            app:layout_constraintEnd_toEndOf="@+id/info_title"
-                            app:layout_constraintStart_toEndOf="@id/paragraph1_ic"
-                            app:layout_constraintTop_toTopOf="@id/paragraph1_ic" />
-
-                        <View
-                            android:id="@+id/paragraph2_ic"
-                            android:layout_width="@dimen/dashboard_info_paragraph_icon_size"
-                            android:layout_height="@dimen/dashboard_info_paragraph_icon_size"
-                            android:layout_marginTop="@dimen/dashboard_big_margin"
-                            android:background="@drawable/ic_paragraph"
-                            app:layout_constraintStart_toStartOf="@id/info_title"
-                            app:layout_constraintTop_toBottomOf="@id/p1" />
-
-                        <TextView
-                            android:id="@+id/p2"
-                            style="@style/AppText.Description"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dashboard_small_margin"
-                            android:text="@string/dashboard_yellow_recommend_2"
-                            app:layout_constraintEnd_toEndOf="@+id/info_title"
-                            app:layout_constraintStart_toEndOf="@id/paragraph2_ic"
-                            app:layout_constraintTop_toTopOf="@id/paragraph2_ic" />
-
-                        <View
-                            android:id="@+id/paragraph3_ic"
-                            android:layout_width="@dimen/dashboard_info_paragraph_icon_size"
-                            android:layout_height="@dimen/dashboard_info_paragraph_icon_size"
-                            android:layout_marginTop="@dimen/dashboard_big_margin"
-                            android:background="@drawable/ic_paragraph"
-                            app:layout_constraintStart_toStartOf="@id/info_title"
-                            app:layout_constraintTop_toBottomOf="@id/p2" />
-
-                        <TextView
-                            android:id="@+id/p3"
-                            style="@style/AppText.Description"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/dashboard_small_margin"
-                            android:layout_marginBottom="@dimen/dashboard_big_margin"
-                            android:text="@string/dashboard_yellow_recommend_3"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/info_title"
-                            app:layout_constraintStart_toEndOf="@id/paragraph3_ic"
-                            app:layout_constraintTop_toTopOf="@id/paragraph3_ic" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <Button
-                    android:id="@+id/logout_button"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/p1"
+                    style="@style/AppText.Description"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:text="Wyloguj"
+                    android:layout_marginStart="@dimen/dashboard_small_margin"
+                    android:text="@string/dashboard_yellow_recommend_1"
+                    app:layout_constraintEnd_toEndOf="@+id/info_title"
+                    app:layout_constraintStart_toEndOf="@id/paragraph1_ic"
+                    app:layout_constraintTop_toTopOf="@id/paragraph1_ic" />
+
+                <View
+                    android:id="@+id/paragraph2_ic"
+                    android:layout_width="@dimen/dashboard_info_paragraph_icon_size"
+                    android:layout_height="@dimen/dashboard_info_paragraph_icon_size"
+                    android:layout_marginTop="@dimen/dashboard_big_margin"
+                    android:background="@drawable/ic_paragraph"
+                    app:layout_constraintStart_toStartOf="@id/info_title"
+                    app:layout_constraintTop_toBottomOf="@id/p1" />
+
+                <TextView
+                    android:id="@+id/p2"
+                    style="@style/AppText.Description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dashboard_small_margin"
+                    android:text="@string/dashboard_yellow_recommend_2"
+                    app:layout_constraintEnd_toEndOf="@+id/info_title"
+                    app:layout_constraintStart_toEndOf="@id/paragraph2_ic"
+                    app:layout_constraintTop_toTopOf="@id/paragraph2_ic" />
+
+                <View
+                    android:id="@+id/paragraph3_ic"
+                    android:layout_width="@dimen/dashboard_info_paragraph_icon_size"
+                    android:layout_height="@dimen/dashboard_info_paragraph_icon_size"
+                    android:layout_marginTop="@dimen/dashboard_big_margin"
+                    android:background="@drawable/ic_paragraph"
+                    app:layout_constraintStart_toStartOf="@id/info_title"
+                    app:layout_constraintTop_toBottomOf="@id/p2" />
+
+                <TextView
+                    android:id="@+id/p3"
+                    style="@style/AppText.Description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dashboard_small_margin"
+                    android:layout_marginBottom="@dimen/dashboard_big_margin"
+                    android:text="@string/dashboard_yellow_recommend_3"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent" />
+                    app:layout_constraintEnd_toEndOf="@+id/info_title"
+                    app:layout_constraintStart_toEndOf="@id/paragraph3_ic"
+                    app:layout_constraintTop_toTopOf="@id/paragraph3_ic" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wyloguj"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
