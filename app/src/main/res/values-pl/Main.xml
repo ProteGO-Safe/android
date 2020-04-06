@@ -39,7 +39,7 @@
   <!--Rejestracja-->
   <string name="registration_verify_description">Wpisz swój kod, który otrzymałeś w SMSie wysłanym na numer</string>
   <!--Rejestracja-->
-  <string name="registration_verify_code_placeholder">xxxxx</string>
+  <string name="registration_verify_code_placeholder">xxxxxx</string>
   <!--Rejestracja-->
   <string name="registration_verify_btn">Potwierdź kod</string>
   <!--Rejestracja-->
