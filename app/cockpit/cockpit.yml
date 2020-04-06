@@ -2,5 +2,6 @@ sendSmsDuringRegistration:
   group: "Registration"
   description: "Send sms during registration"
   value: false
+
 termsAndConditions:
   value: "https://www.gov.pl/web/koronawirus"
