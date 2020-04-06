@@ -20,7 +20,9 @@ class DashboardActivity : BaseActivity() {
         setContentView(R.layout.activity_dashboard)
         logout_button.setOnClickListener {
             session.logout()
-            startActivity(Intent(this, OnboardingActivity::class.java))
+            startActivity(Intent(this, OnboardingActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            })
             finish()
         }
     }
