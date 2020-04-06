@@ -1,3 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--MUST be consulted with someone responsible for copy-->
+    <string name="missing_email_client">Błąd uruchomienia klienta poczty.</string>
+    <string name="missing_web_browser">Błąd otwierania przeglądarki.</string>
+    <string name="send_email_window_title">Wyślij wiadomość</string>
 </resources>

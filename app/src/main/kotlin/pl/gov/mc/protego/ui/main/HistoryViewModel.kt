@@ -37,7 +37,6 @@ class HistoryViewModel(
     }
 
     fun onContactClicked() {
-        //TODO add copy for error and title
         _intentToStart.value =
             Event(IntentToLaunch(
                 emailClientAdapter.createIntent(resources.getString(R.string.dashboard_info_contact_us_email)),
@@ -46,7 +45,6 @@ class HistoryViewModel(
     }
 
     fun onTermsAndConditionsClicked() {
-        //TODO add copy for error
         _intentToStart.value = Event(IntentToLaunch(
             Intent(Intent.ACTION_VIEW, Uri.parse(Cockpit.getTermsAndConditions())),
             R.string.missing_web_browser
