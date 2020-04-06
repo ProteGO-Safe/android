@@ -14,9 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.splash.SplashScreenActivity"
-            android:theme="@style/SplashScreenTheme"
-            android:noHistory="true">
+        <activity
+            android:name=".ui.splash.SplashScreenActivity"
+            android:noHistory="true"
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
