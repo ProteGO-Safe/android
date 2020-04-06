@@ -1,52 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:id="@+id/scroll_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    tools:context=".ui.registration.RegistrationActivity">
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
 
-    <include layout="@layout/toolbar"/>
-
-    <TextView
-        android:id="@+id/header"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/x_small_margin"
-        android:text="@string/registration_verify_title"
-        android:layout_marginTop="@dimen/large_margin"
-        style="@style/AppText.Header"
-        android:layout_marginHorizontal="@dimen/huge_margin"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingBottom="@dimen/medium_margin"
+        tools:context=".ui.registration.RegistrationActivity">
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/huge_margin"
-        style="@style/AppText"
-        android:layout_marginHorizontal="@dimen/huge_margin"
-        android:text="@string/registration_verify_description"
-        app:layout_constraintTop_toBottomOf="@+id/header"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <include layout="@layout/toolbar"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/sms_code_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/medium_margin"
-        android:layout_marginHorizontal="@dimen/huge_margin"
-        style="@style/AppText.Input"
-        app:layout_constraintTop_toBottomOf="@+id/content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:counterMaxLength="@integer/max_sms_confirmation_code_chars"
-        app:errorEnabled="true">
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x_small_margin"
+            android:text="@string/registration_verify_title"
+            android:layout_marginTop="@dimen/large_margin"
+            style="@style/AppText.Header"
+            android:layout_marginHorizontal="@dimen/huge_margin"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/huge_margin"
+            style="@style/AppText"
+            android:layout_marginHorizontal="@dimen/huge_margin"
+            android:text="@string/registration_verify_description"
+            app:layout_constraintTop_toBottomOf="@+id/header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sms_code_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/medium_margin"
+            android:layout_marginHorizontal="@dimen/huge_margin"
+            style="@style/AppText.Input"
+            app:layout_constraintTop_toBottomOf="@+id/content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:counterMaxLength="@integer/max_sms_confirmation_code_chars"
+            app:errorEnabled="true"
+            android:hint="@string/registration_verify_code_placeholder"
+            >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/sms_code"
@@ -58,28 +69,29 @@
             android:maxLength="@integer/max_sms_confirmation_code_chars"
             android:hint="@string/registration_verify_code_placeholder"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/confirm_registration_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/huge_margin"
-        android:layout_marginVertical="@dimen/medium_margin"
-        android:text="@string/registration_verify_btn"
-        app:layout_constraintTop_toBottomOf="@id/sms_code_layout" />
+        <Button
+            android:id="@+id/confirm_registration_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/huge_margin"
+            android:layout_marginVertical="@dimen/medium_margin"
+            android:text="@string/registration_verify_btn"
+            app:layout_constraintTop_toBottomOf="@id/sms_code_layout" />
 
-    <TextView
-        android:id="@+id/accept_tou"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/x_small_margin"
-        android:layout_marginHorizontal="@dimen/huge_margin"
-        style="@style/AppText.Description"
-        android:text="@string/registration_terms_of_use_btn_regular_part"
-        app:layout_constraintTop_toBottomOf="@id/confirm_registration_button"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        />
+        <TextView
+            android:id="@+id/accept_tou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/x_small_margin"
+            android:layout_marginHorizontal="@dimen/huge_margin"
+            style="@style/AppText.Description"
+            android:text="@string/registration_terms_of_use_btn_regular_part"
+            app:layout_constraintTop_toBottomOf="@id/confirm_registration_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

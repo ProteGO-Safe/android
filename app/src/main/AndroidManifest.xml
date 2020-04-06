@@ -29,11 +29,13 @@
 
         <activity
             android:name=".ui.registration.RegistrationActivity"
-            android:parentActivityName=".ui.registration.onboarding.OnboardingActivity" />
+            android:parentActivityName=".ui.registration.onboarding.OnboardingActivity"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".ui.registration.RegistrationConfirmationActivity"
-            android:parentActivityName=".ui.registration.RegistrationActivity" />
+            android:parentActivityName=".ui.registration.RegistrationActivity"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".ui.main.DashboardActivity"

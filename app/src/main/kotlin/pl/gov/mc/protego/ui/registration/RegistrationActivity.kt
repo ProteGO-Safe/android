@@ -14,6 +14,7 @@ import pl.gov.mc.protego.information.SessionState
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
+import pl.gov.mc.protego.ui.scrollWhenFocusObtained
 
 
 class RegistrationActivity : BaseActivity() {
@@ -29,6 +30,7 @@ class RegistrationActivity : BaseActivity() {
         }
 
         msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
+        msisdn_edit_text.scrollWhenFocusObtained(scroll_view)
 
         supportActionBar?.apply {
             setHomeButtonEnabled(true)
@@ -39,6 +41,11 @@ class RegistrationActivity : BaseActivity() {
         observeRegistrationStatus()
 
         registrationViewModel.fetchSession()
+    }
+
+    override fun onDestroy() {
+        msisdn_edit_text.onFocusChangeListener = null
+        super.onDestroy()
     }
 
     override fun onSupportNavigateUp(): Boolean {
