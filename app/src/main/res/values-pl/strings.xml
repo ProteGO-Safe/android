@@ -1,6 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="orange_status_title">Uważaj na siebie</string>
-    <string name="orange_status_content">Prawdopodobnie przebywałeś w miejscach, w których znajdowały się osoby zarażone. Zachowaj ostrożość i ogranicz wyjścia do minimum. Po więcej informacji kliknij [tutaj].</string>
-    <string name="placeholder_content">- Ograniczenia w przemieszczaniu się z wyjatkiem drogi do pracy, wolontariatu, załatwiania spraw niezbędnych do życia codziennego. - W autobusie może być tyle osób ile wynosi połowa liczby miejsc siedzących. - Całkowity zakaz zgromadzeń - chyba, że z najbliższymi. Więcej informacji [tuta].</string>
 </resources>
