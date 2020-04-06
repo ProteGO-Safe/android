@@ -58,10 +58,16 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
     }
+    
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     lintOptions {
         lintConfig file("lint.xml")
     }
@@ -106,8 +112,10 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:2.1.5"
 
     // Cockpit, the debug menu
-    implementation 'com.polidea.cockpit:cockpit:3.1.2'
-    implementation 'com.squareup:seismic:1.0.2'
+    debugImplementation 'com.polidea.cockpit:cockpit:3.1.2'
+    debugImplementation 'com.squareup:seismic:1.0.2'
+    stgImplementation 'com.polidea.cockpit:cockpit:3.1.2'
+    stgImplementation 'com.squareup:seismic:1.0.2'
 
     // Rx
     implementation "io.reactivex.rxjava2:rxkotlin:2.3.0"

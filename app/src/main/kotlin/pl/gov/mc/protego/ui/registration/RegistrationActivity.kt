@@ -30,10 +30,20 @@ class RegistrationActivity : BaseActivity() {
 
         msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
 
+        supportActionBar?.apply {
+            setHomeButtonEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+        }
+
         observeMsisdnValidation()
         observeRegistrationStatus()
 
         registrationViewModel.fetchSession()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
     private fun observeRegistrationStatus() {

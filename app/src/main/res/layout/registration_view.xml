@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/huge_margin"
         style="@style/AppText.Header"
-        android:text="@string/registration_title"
+        android:text="@string/registration_send_title"
         android:layout_marginHorizontal="@dimen/huge_margin"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
@@ -29,7 +29,7 @@
         android:layout_marginBottom="@dimen/huge_margin"
         style="@style/AppText"
         android:layout_marginHorizontal="@dimen/huge_margin"
-        android:text="@string/registration_content"
+        android:text="@string/registration_send_description"
         app:layout_constraintTop_toBottomOf="@+id/header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -40,14 +40,13 @@
         android:layout_height="wrap_content"
         style="@style/AppText.Input"
         android:layout_marginTop="@dimen/medium_margin"
-        android:layout_marginRight="@dimen/small_margin"
+        android:layout_marginRight="@dimen/x_small_margin"
         android:layout_marginLeft="@dimen/huge_margin"
         app:layout_constraintTop_toBottomOf="@+id/content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/msisdn_edit_text_layout"
-        app:counterMaxLength="9"
-        app:errorEnabled="true"
-        tools:text="600 400 500">
+        app:counterMaxLength="3"
+        app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/msisdn_prefix"
@@ -72,6 +71,7 @@
         app:layout_constraintLeft_toRightOf="@+id/msisdn_prefix_layout"
         app:layout_constraintRight_toRightOf="parent"
         app:counterMaxLength="9"
+        android:hint="@string/registration_phone_placeholder"
         app:errorEnabled="true"
         tools:text="600 400 500">
 
@@ -82,7 +82,7 @@
             android:hint="@string/registration_phone_number_hint"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
-            android:inputType="number" />
+            android:inputType="number"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,9 +90,8 @@
         android:id="@+id/register_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/register_button"
+        android:text="@string/registration_send_code_btn"
         android:layout_marginHorizontal="@dimen/huge_margin"
-        style="@style/Button.Primary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/msisdn_edit_text_layout" />

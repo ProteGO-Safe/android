@@ -23,7 +23,7 @@
         android:id="@+id/status_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/small_margin"
+        android:layout_marginLeft="@dimen/x_small_margin"
         android:text="@string/orange_status_title"
         style="@style/AppText.StatusHeader"
         android:layout_marginTop="@dimen/dashboard_big_margin"
