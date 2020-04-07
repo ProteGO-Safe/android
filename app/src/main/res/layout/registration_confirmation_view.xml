@@ -66,8 +66,7 @@
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="number"
-            android:maxLength="@integer/max_sms_confirmation_code_chars"
-            android:hint="@string/registration_verify_code_placeholder"/>
+            android:maxLength="@integer/max_sms_confirmation_code_chars"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
