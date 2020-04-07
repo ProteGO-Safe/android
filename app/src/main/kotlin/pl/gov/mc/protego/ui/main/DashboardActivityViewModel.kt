@@ -1,5 +1,7 @@
 package pl.gov.mc.protego.ui.main
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -13,7 +15,12 @@ class DashboardActivityViewModel(
     val protegoServer: ProtegoServer
 ) : ViewModel() {
 
+    private val dashboardPage = MutableLiveData<DashboardPage>().apply {
+        value = DashboardPage.MainPage()
+    }
     private var disposables = CompositeDisposable()
+
+    fun dashboardPage(): LiveData<DashboardPage> = dashboardPage
 
     fun onResume() {
         protegoServer
@@ -25,6 +32,13 @@ class DashboardActivityViewModel(
                 onSuccess = { Timber.d("State fetched") }
             )
             .addTo(disposables)
+    }
+
+    fun homeButtonPressed() {
+        dashboardPage.value = when (dashboardPage.value) {
+            is DashboardPage.MainPage -> DashboardPage.HistoryPage()
+            else -> DashboardPage.MainPage()
+        }
     }
 
     override fun onCleared() {
