@@ -10,11 +10,10 @@ import pl.gov.mc.protego.bluetooth.scanner.ScannerListener
 import timber.log.Timber
 
 
-class BluetoothBeaconIdExchangeManager(private val context: Context, private val beaconIdAgent: BeaconIdAgent) {
+class BluetoothBeaconIdExchangeManager(context: Context, bluetoothManager: BluetoothManager, beaconIdAgent: BeaconIdAgent) {
 
     private fun timberWithLocalTag() = Timber.tag("[BT_MNG]")
 
-    private val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
     private val proteGoAdvertiser =
         ProteGoAdvertiser(context, bluetoothManager, beaconIdAgent, object : AdvertiserListener {
             override fun error(advertiserInterface: AdvertiserInterface, advertiserError: AdvertiserListener.AdvertiserError) {

@@ -1,5 +1,7 @@
 package pl.gov.mc.protego.di
 
+import android.bluetooth.BluetoothManager
+import android.content.Context
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
@@ -13,6 +15,9 @@ import pl.gov.mc.protego.backend.api.RegistrationRequestComposer
 import pl.gov.mc.protego.backend.api.RegistrationService
 import pl.gov.mc.protego.backend.api.RequestComposer
 import pl.gov.mc.protego.backend.domain.ProtegoServer
+import pl.gov.mc.protego.bluetooth.BeaconIdManager
+import pl.gov.mc.protego.bluetooth.BluetoothBeaconIdExchangeManager
+import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
 import pl.gov.mc.protego.file.FileManager
 import pl.gov.mc.protego.information.AppInformation
 import pl.gov.mc.protego.information.PhoneInformation
@@ -85,4 +90,10 @@ val networkingModule = module {
     single {
         get<Retrofit>().create(RegistrationAPI::class.java)
     }
+}
+
+val bluetoothModule = module {
+    single<BeaconIdAgent> { BeaconIdManager() }
+    single { androidApplication().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager }
+    single { BluetoothBeaconIdExchangeManager(androidApplication(), get(), get()) }
 }
