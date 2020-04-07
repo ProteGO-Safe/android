@@ -12,15 +12,16 @@ import pl.gov.mc.protego.backend.domain.ProtegoServer
 import timber.log.Timber
 
 class DashboardActivityViewModel(
-    val protegoServer: ProtegoServer
+    private val protegoServer: ProtegoServer
 ) : ViewModel() {
 
-    private val dashboardPage = MutableLiveData<DashboardPage>().apply {
+    private val _dashboardPage = MutableLiveData<DashboardPage>().apply {
         value = DashboardPage.MainPage()
     }
-    private var disposables = CompositeDisposable()
+    val dashboardPage: LiveData<DashboardPage>
+        get() = _dashboardPage
 
-    fun dashboardPage(): LiveData<DashboardPage> = dashboardPage
+    private var disposables = CompositeDisposable()
 
     fun onResume() {
         protegoServer
@@ -34,8 +35,8 @@ class DashboardActivityViewModel(
             .addTo(disposables)
     }
 
-    fun homeButtonPressed() {
-        dashboardPage.value = when (dashboardPage.value) {
+    fun menuButtonPressed() {
+        _dashboardPage.value = when (_dashboardPage.value) {
             is DashboardPage.MainPage -> DashboardPage.HistoryPage()
             else -> DashboardPage.MainPage()
         }

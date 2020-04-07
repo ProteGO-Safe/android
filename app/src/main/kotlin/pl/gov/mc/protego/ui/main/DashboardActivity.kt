@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.ui.base.BaseActivity
+import pl.gov.mc.protego.ui.observeLiveData
 
 
 class DashboardActivity : BaseActivity() {
@@ -18,7 +18,7 @@ class DashboardActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        viewModel.dashboardPage().observe(this, Observer { page -> changePage(page) })
+        observeLiveData(viewModel.dashboardPage) { changePage(it) }
     }
 
     override fun onResume() {
@@ -35,7 +35,7 @@ class DashboardActivity : BaseActivity() {
         val id = item.itemId
 
         if (id == R.id.action_menu) {
-            viewModel.homeButtonPressed()
+            viewModel.menuButtonPressed()
             return true
         }
 
@@ -43,8 +43,8 @@ class DashboardActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (viewModel.dashboardPage().value is DashboardPage.HistoryPage) {
-            viewModel.homeButtonPressed()
+        if (viewModel.dashboardPage.value is DashboardPage.HistoryPage) {
+            viewModel.menuButtonPressed()
         } else {
             super.onBackPressed()
         }

@@ -24,7 +24,7 @@ sealed class DashboardPage(
                 currentFragment?.tag == pageFragmentTag -> return
                 currentFragment != null -> {
                     fragmentManager.beginTransaction()
-                        .setCustomAnimations(-1, R.anim.slide_to_right)
+                        .setCustomAnimations(NO_ANIMATION_RES_ID, R.anim.slide_to_right)
                         .remove(currentFragment)
                         .commit()
                 }
@@ -46,11 +46,15 @@ sealed class DashboardPage(
                 fragmentToShow.tag == pageFragmentTag -> return
                 else -> {
                     fragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_from_right, -1)
+                        .setCustomAnimations(R.anim.slide_from_right, NO_ANIMATION_RES_ID)
                         .add(R.id.container, fragmentToShow, pageFragmentTag)
                         .commit()
                 }
             }
         }
+    }
+
+    companion object {
+        private const val NO_ANIMATION_RES_ID = -1
     }
 }
