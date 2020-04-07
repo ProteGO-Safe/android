@@ -133,7 +133,7 @@ class ProteGoAdvertiser(
         val proteGoUUID = UUID.fromString(ProteGoServiceUUIDString)
         val remainingAdvertisementData = 21 - proteGoUUID.advertisementByteLength()
 
-        val beaconIdByteArray = beaconId.beaconId.byteArray
+        val beaconIdByteArray = beaconId.id.byteArray
 
         val data =
             if (beaconIdByteArray.size > remainingAdvertisementData) {
@@ -248,7 +248,7 @@ class ProteGoAdvertiser(
         }
 
         val expirationDate = beaconIdLocal.expirationDate
-        timberWithLocalTag().d("updatedBeaconIdLocal, data: ${beaconIdLocal.beaconId.byteArray.toHexString()}, expirationDate: $expirationDate")
+        timberWithLocalTag().d("updatedBeaconIdLocal, data: ${beaconIdLocal.id.byteArray.toHexString()}, expirationDate: $expirationDate")
 
         // Check if expiration date is actually OK.
         if (expirationDate < Date()) {

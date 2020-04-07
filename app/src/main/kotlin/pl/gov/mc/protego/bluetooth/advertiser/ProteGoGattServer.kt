@@ -267,7 +267,7 @@ class ProteGoGattServer private constructor(
         var value: ByteArray? = null
         var status = BluetoothGatt.GATT_READ_NOT_PERMITTED
 
-        val beaconIdLocalByteArray = this.beaconIdLocal?.beaconId?.byteArray
+        val beaconIdLocalByteArray = this.beaconIdLocal?.id?.byteArray
         if (beaconIdLocalByteArray != null && offset < beaconIdLocalByteArray.size) {
             value = beaconIdLocalByteArray.sliceArray(offset until beaconIdLocalByteArray.size)
             status = BluetoothGatt.GATT_SUCCESS

@@ -26,7 +26,7 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
         override fun useBeaconId(beaconIdLocal: BeaconIdLocal?) {
             val beaconIdToUse = when (beaconIdLocal) {
                 null -> BeaconIdToUse.NoBeaconId
-                else -> BeaconIdToUse.CurrentBeaconId(beaconIdLocal.beaconId)
+                else -> BeaconIdToUse.CurrentBeaconId(beaconIdLocal.id)
             }
             this@ProteGoConnector.beaconIdToUseSubject.onNext(beaconIdToUse)
         }
