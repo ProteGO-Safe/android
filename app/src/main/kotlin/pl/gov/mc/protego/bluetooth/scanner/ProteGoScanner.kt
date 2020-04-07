@@ -22,8 +22,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 
-class ProteGoScanner(context: Context, private val scannerListener: ScannerListener, private val beaconIdAgent: BeaconIdAgent) :
-    ScannerInterface {
+class ProteGoScanner(context: Context, private val beaconIdAgent: BeaconIdAgent) : ScannerInterface {
 
     private val client = RxBleClient.create(context)
     private val serialDisposable = SerialDisposable()
@@ -39,8 +38,8 @@ class ProteGoScanner(context: Context, private val scannerListener: ScannerListe
         }
     }
 
-    override fun enable(inMode: ScannerInterface.Mode) {
-        timberWithLocalTag().d("enabling...")
+    override fun enable(inMode: ScannerInterface.Mode, listener: ScannerListener) {
+        timberWithLocalTag().i("enabling...")
         check(serialDisposable.get() == null) { "[scanner] already enabled" }
         val scanMode = when (inMode) {
             ScannerInterface.Mode.SCAN_ONLY -> ScanSettings.SCAN_MODE_LOW_POWER
@@ -58,7 +57,7 @@ class ProteGoScanner(context: Context, private val scannerListener: ScannerListe
             .subscribe(
                 { beaconIdAgent.synchronizedBeaconId(it) },
                 {
-                    scannerListener.error(this, it)
+                    listener.error(this, it)
                     disable()
                 }
             )

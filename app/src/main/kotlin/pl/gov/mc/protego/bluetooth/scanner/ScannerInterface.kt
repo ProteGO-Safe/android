@@ -10,8 +10,9 @@ interface ScannerInterface {
     /**
      * Method that enables the [ScannerInterface] in particular mode
      * @param inMode the [Mode] that [ScannerInterface] should work with
+     * @param listener
      */
-    fun enable(inMode: Mode)
+    fun enable(inMode: Mode, listener: ScannerListener)
 
     /**
      * Method that disables the [ScannerInterface]

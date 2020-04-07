@@ -17,8 +17,7 @@ import java.util.*
 class ProteGoAdvertiser(
     private val context: Context,
     private val bluetoothManager: BluetoothManager,
-    private val beaconIdAgent: BeaconIdAgent,
-    private val advertiserListener: AdvertiserListener
+    private val beaconIdAgent: BeaconIdAgent
 ) : AdvertiserInterface, ProteGoGattServerCallback {
 
     private val beaconIdAgentListener = object : BeaconIdAgent.Listener {
@@ -38,10 +37,12 @@ class ProteGoAdvertiser(
     // General enable / disable functions ----------------------------------------------------------
     private var isEnabled = false
 
+    private var advertiserListener: AdvertiserListener? = null
+
     private fun timberWithLocalTag() = Timber.tag("[advertiser]")
 
-    override fun enable(): EnableResult {
-        timberWithLocalTag().d("enabling advertiser")
+    override fun enable(listener: AdvertiserListener): EnableResult {
+        timberWithLocalTag().i("enabling...")
         if (isEnabled) {
             timberWithLocalTag().d("advertiser already enabled")
             return EnableResult.PreconditionFailure.AlreadyEnabled
@@ -56,21 +57,23 @@ class ProteGoAdvertiser(
             return EnableResult.PreconditionFailure.BluetoothOff
         }
         isEnabled = true
+        this.advertiserListener = listener
         val serverResult: ServerResult = startGattServer()
         val advertiserResult: AdvertiserResult = startAdvertising(bluetoothAdapter)
-        timberWithLocalTag().d("enabled")
+        timberWithLocalTag().i("enabled")
         return EnableResult.Started(advertiserResult, serverResult)
     }
 
     override fun disable() {
-        timberWithLocalTag().d("disabling advertiser")
+        timberWithLocalTag().d("disabling...")
         if (!isEnabled) {
             timberWithLocalTag().d("advertiser already disabled")
         }
         isEnabled = false
+        this.advertiserListener = null
         stopAdvertising()
         stopGattServer()
-        timberWithLocalTag().d("disabled")
+        timberWithLocalTag().i("disabled")
     }
 
     // Advertisement -------------------------------------------------------------------------------
@@ -88,7 +91,7 @@ class ProteGoAdvertiser(
             super.onStartFailure(errorCode)
             timberWithLocalTag().d("advertisement failed, error=${errorCode}")
             disable()
-            advertiserListener.error(this@ProteGoAdvertiser, AdvertiserListener.AdvertiserError.Advertiser(errorCode))
+            advertiserListener?.error(this@ProteGoAdvertiser, AdvertiserListener.AdvertiserError.Advertiser(errorCode))
         }
     }
 
@@ -227,7 +230,7 @@ class ProteGoAdvertiser(
     override fun gattServerFailed(gattServer: ProteGoGattServer, status: Int) {
         timberWithLocalTag().e("GATT server failed with status: $status")
         disable()
-        advertiserListener.error(this, AdvertiserListener.AdvertiserError.Server(status))
+        advertiserListener?.error(this, AdvertiserListener.AdvertiserError.Server(status))
     }
 
     // Token management ----------------------------------------------------------------------------
