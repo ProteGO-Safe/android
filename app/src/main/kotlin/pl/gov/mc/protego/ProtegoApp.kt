@@ -29,6 +29,7 @@ class ProtegoApp : Application() {
                         domainModule,
                         networkingModule,
                         securityModule,
+                        utilModule,
                         serviceModule
                     )
                 )

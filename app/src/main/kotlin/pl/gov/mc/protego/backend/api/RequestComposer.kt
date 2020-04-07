@@ -41,7 +41,7 @@ class RequestComposer(
                 platform = phoneInformation.platform,
                 osVersion = phoneInformation.osVersion,
                 deviceName = phoneInformation.deviceName,
-                appVersion = appInformation.version,
+                appVersion = appInformation.versionCode,
                 apiVersion = appInformation.api,
                 lang = phoneInformation.lang,
                 userId = session.userId
