@@ -48,7 +48,7 @@ android {
             buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
         prod {
-            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-dev.cloudfunctions.net/\""
+            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-stag.cloudfunctions.net/\""
             buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
         stg {
