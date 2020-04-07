@@ -1,6 +1,5 @@
 package pl.gov.mc.protego.bluetooth
 
-import android.os.Handler
 import pl.gov.mc.protego.bluetooth.beacon.BeaconId
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdLocal
@@ -23,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class BeaconIdManager : BeaconIdAgent {
 
     private val beaconIdPart = AtomicInteger(0x0f)
-    private val handler = Handler()
+    private val handler = safeCurrentThreadHandler()
     private fun createNewBeaconId(): BeaconIdLocal {
         val newBeaconId = BeaconIdLocal(
             BeaconId(

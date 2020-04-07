@@ -90,7 +90,7 @@ class ProteGoScanner(context: Context, private val scannerListener: ScannerListe
                         .groupBy { ma -> ma.bleDevice.macAddress }
                         .flatMap { it.syncAtMostOnceEveryMinute(proteGoConnector) },
                     csd.ofType(ClassifiedPeripheral.ProteGo.PotentialAdvertisement::class.java)
-                        .groupBy { ma -> ma.bleDevice.macAddress }
+                        .groupBy { pa -> pa.bleDevice.macAddress }
                         .flatMap({ it.syncAtMostOnceEveryMinuteIfValidProteGoElseIgnore(proteGoConnector) }, 2)
                 )
                     .takeOnlyValidReadBeacons()
