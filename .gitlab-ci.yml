@@ -6,21 +6,21 @@ before_script:
 
 "test:debug":
   script:
-    - ./gradlew lint testDebug
+    - ./gradlew lint testDevDebug
   stage: test
   tags:
     - android
 
 "test:stg":
   script:
-    - ./gradlew lint testStg
+    - ./gradlew lint testStgRelease
   stage: test
   tags:
     - android
 
-"test:release":
+"test:prod":
   script:
-    - ./gradlew lint testRelease
+    - ./gradlew lint testProdRelease
   stage: test
   tags:
     - android
