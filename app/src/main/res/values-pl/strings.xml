@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--MUST be consulted with someone responsible for copy-->
     <string name="missing_email_client">Błąd uruchomienia klienta poczty.</string>
