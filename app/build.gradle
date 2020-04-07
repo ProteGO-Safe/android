@@ -33,24 +33,29 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            applicationIdSuffix ".prod"
-            versionNameSuffix "-prod"
-            buildConfigField "String", "BASE_API_URL", "\"https://google.com/\""
-            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
         debug {
+            debuggable true
+        }
+    }
+
+    flavorDimensions "version"
+    productFlavors {
+        dev {
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
-            debuggable true
             buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-dev.cloudfunctions.net/\""
             buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
+        prod {
+            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-stag.cloudfunctions.net/\""
+            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
+        }
         stg {
-            initWith debug
-            debuggable true
-            zipAlignEnabled false
             applicationIdSuffix ".stg"
             versionNameSuffix "-stg"
+            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-stag.cloudfunctions.net/\""
+            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
     }
 

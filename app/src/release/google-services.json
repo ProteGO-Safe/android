@@ -8,7 +8,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:0:android:0",
         "android_client_info": {
-          "package_name": "pl.gov.mc.protego.prod"
+          "package_name": "pl.gov.mc.protego"
         }
       },
       "api_key": [
@@ -17,5 +17,31 @@
         }
       ]
     },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:0:android:0",
+        "android_client_info": {
+          "package_name": "pl.gov.mc.protego.stg"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "none"
+        }
+      ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:0:android:0",
+        "android_client_info": {
+          "package_name": "pl.gov.mc.protego.dev"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "none"
+        }
+      ]
+    }
   ]
 }
