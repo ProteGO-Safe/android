@@ -98,7 +98,7 @@ class ProteGoScanner(context: Context, private val scannerListener: ScannerListe
         }
 
     /**
-     * This function sync emissions from a grouped observable at most once every minute. If sync will fail due to peripheral noe being
+     * This function sync emissions from a grouped observable at most once every minute. If syncs will fail due to peripheral not being
      * a valid ProteGO peripheral no more syncs will happen for time specified in Constants file
      */
     private fun GroupedObservable<*, ClassifiedPeripheral.ProteGo.PotentialAdvertisement>.syncAtMostOnceEveryMinuteIfValidProteGoElseIgnore(

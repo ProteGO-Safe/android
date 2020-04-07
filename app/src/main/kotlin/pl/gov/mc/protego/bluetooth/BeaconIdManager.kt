@@ -11,7 +11,15 @@ import java.util.concurrent.CopyOnWriteArraySet
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
-
+// TODO: [DS 07-Apr-2020] Create proper implementation. Currently it is a dummy.
+/**
+ * Class responsible for [BeaconIdLocal] and [BeaconIdRemote] handling. Granular responsibilities:
+ * 1. Registering and unregistering [listeners]
+ * 2. Distributing valid [BeaconIdLocal] to [listeners]
+ * 3. Storing received [BeaconIdRemote]
+ *
+ * This class implements basic measures to be used in a multithreaded context (it should not crash).
+ */
 class BeaconIdManager : BeaconIdAgent {
 
     private val beaconIdPart = AtomicInteger(0x0f)
