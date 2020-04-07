@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import pl.gov.mc.protego.R
+import pl.gov.mc.protego.ui.Event
 
 class OnboardingViewModel : ViewModel() {
 
@@ -46,29 +47,32 @@ class OnboardingViewModel : ViewModel() {
 
     private var currentPageIndex = 0
         set(value) {
+            val forward = value > field
             field = value
-            _page.value = pages[currentPageIndex]
+            _page.value = PageChange(pages[currentPageIndex], forward)
         }
 
-    val _page = MutableLiveData<PageInfo>()
-    val page: LiveData<PageInfo>
+    val page: LiveData<PageChange>
         get() = _page
-    val navigateToRegistration: LiveData<Unit>
+    private val _page = MutableLiveData<PageChange>()
+
+    val navigateToRegistration: LiveData<Event<Unit>>
         get() = _navigateToRegistration
-    val _navigateToRegistration = MutableLiveData<Unit>()
-    val _finishApplication = MutableLiveData<Unit>()
-    val finishApplication: LiveData<Unit>
+    private val _navigateToRegistration = MutableLiveData<Event<Unit>>()
+
+    val finishApplication: LiveData<Event<Unit>>
         get() = _finishApplication
+    private val _finishApplication = MutableLiveData<Event<Unit>>()
 
     init {
-        _page.value = pages[currentPageIndex]
+        _page.value = PageChange(pages[currentPageIndex], true)
     }
 
     fun onNextClicked() {
         if (currentPageIndex < pages.lastIndex) {
             currentPageIndex++
         } else {
-            _navigateToRegistration.value = Unit
+            _navigateToRegistration.value = Event(Unit)
         }
     }
 
@@ -76,10 +80,12 @@ class OnboardingViewModel : ViewModel() {
         if (currentPageIndex > 0) {
             currentPageIndex--
         } else {
-            _finishApplication.value = Unit
+            _finishApplication.value = Event(Unit)
         }
     }
 }
+
+data class PageChange(val pageInfo: PageInfo, val forward: Boolean)
 
 data class PageInfo(
     @DrawableRes val illustration: Int,
