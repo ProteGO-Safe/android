@@ -138,8 +138,6 @@
   <string name="dashboard_info_terms_of_use_btn">ProteGO Terms of Use</string>
   <!--Dashboard - ekran informacyjny-->
   <string name="dashboard_info_version">version</string>
-  <!--Dashboard - wyloguj-->
-  <string name="dashboard_logout">Logout</string>
   <!--Ekran wysyłania danych-->
   <string name="send_data_title">Send encounters list</string>
   <!--Ekran wysyłania danych-->

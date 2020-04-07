@@ -138,8 +138,6 @@
   <string name="dashboard_info_terms_of_use_btn">Regulamin ProteGO</string>
   <!--Dashboard - ekran informacyjny-->
   <string name="dashboard_info_version">version</string>
-  <!--Dashboard - wyloguj-->
-  <string name="dashboard_logout">Wyloguj</string>
   <!--Ekran wysyłania danych-->
   <string name="send_data_title">Wyślij listę spotkań</string>
   <!--Ekran wysyłania danych-->
