@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="extremely_huge_margin">40dp</dimen>
     <dimen name="huge_margin">32dp</dimen>
     <dimen name="large_margin">24dp</dimen>
     <dimen name="medium_margin">16dp</dimen>
@@ -21,4 +22,6 @@
     <dimen name="dashboard_info_paragraph_icon_size">20dp</dimen>
     <dimen name="dashboard_status_icon_size">30dp</dimen>
     <dimen name="status_legend_icon_size">18dp</dimen>
+
+    <dimen name="history_version_margin">2dp</dimen>
 </resources>

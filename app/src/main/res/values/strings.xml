@@ -1,2 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--MUST be consulted with someone responsible for copy-->
+    <string name="missing_email_client">Can not open e-mail client.</string>
+    <string name="missing_web_browser">Can not open web browser</string>
+    <string name="send_email_window_title">Send e-mail</string>
 </resources>
