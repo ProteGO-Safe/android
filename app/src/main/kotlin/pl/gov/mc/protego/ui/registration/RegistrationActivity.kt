@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputEditText
 import com.polidea.cockpit.cockpit.Cockpit
 import kotlinx.android.synthetic.main.registration_view.*
@@ -15,6 +16,9 @@ import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
 import pl.gov.mc.protego.ui.scrollWhenFocusObtained
+import pl.gov.mc.protego.ui.validator.MsisdnIncomplete
+import pl.gov.mc.protego.ui.validator.MsisdnInvalid
+import pl.gov.mc.protego.ui.validator.MsisdnOk
 
 
 class RegistrationActivity : BaseActivity() {
@@ -25,6 +29,7 @@ class RegistrationActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration_view)
 
+        register_button.isVisible = false
         register_button.setOnClickListener {
             registrationViewModel.onStartRegistration(msisdn_edit_text.text.toString())
         }
@@ -71,7 +76,9 @@ class RegistrationActivity : BaseActivity() {
 
     private fun observeMsisdnValidation() {
         observeLiveData(registrationViewModel.msisdnError) {
-            msisdn_edit_text_layout.error = it
+            register_button.isVisible = it == MsisdnOk
+            msisdn_edit_text_layout.error =
+                if (it == MsisdnInvalid) "Niepoprawny numer telefonu" else null
         }
     }
 
