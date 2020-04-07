@@ -31,7 +31,7 @@ class ProteGoAdvertiser(
         beaconIdAgent.registerListener(beaconIdAgentListener)
     }
 
-    // Beacon ID advertised and send by a GATT server.
+    // Beacon ID advertised and sent by a GATT server.
     private var currentBeaconIdLocal: BeaconIdLocal? = null
 
     // General enable / disable functions ----------------------------------------------------------
