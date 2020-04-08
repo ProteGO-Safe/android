@@ -3,6 +3,7 @@ package pl.gov.mc.protego.repository
 import android.content.SharedPreferences
 import pl.gov.mc.protego.information.SessionData
 import pl.gov.mc.protego.information.SessionState
+import timber.log.Timber
 
 class SessionRepository(
     private val sharedPreferences: SharedPreferences
@@ -15,9 +16,10 @@ class SessionRepository(
     }
 
     fun store(session: SessionData) {
+        Timber.d("Store session data: ${session}")
         sharedPreferences.edit().run {
             putString(USER_ID, session.userId)
-            putString(STATE, session.state.name)
+            putString(STATE, session.state.checkpoint.name)
             putString(MSISDN, session.msisdn)
             apply()
         }

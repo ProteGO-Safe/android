@@ -1,25 +1,25 @@
 package pl.gov.mc.protego.ui.registration
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.registration_view.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import pl.gov.mc.protego.R
 import android.content.Intent
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
+import com.polidea.cockpit.cockpit.Cockpit
+import kotlinx.android.synthetic.main.registration_view.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.SessionState
-import pl.gov.mc.protego.ui.main.MainActivity
+import pl.gov.mc.protego.ui.base.BaseActivity
+import pl.gov.mc.protego.ui.main.DashboardActivity
+import pl.gov.mc.protego.ui.observeLiveData
+import pl.gov.mc.protego.ui.scrollWhenFocusObtained
 
 
-class RegistrationActivity : AppCompatActivity() {
+class RegistrationActivity : BaseActivity() {
 
     private val registrationViewModel: RegistrationViewModel by viewModel()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +30,12 @@ class RegistrationActivity : AppCompatActivity() {
         }
 
         msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
+        msisdn_edit_text.scrollWhenFocusObtained(scroll_view)
+
+        supportActionBar?.apply {
+            setHomeButtonEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         observeMsisdnValidation()
         observeRegistrationStatus()
@@ -37,37 +43,45 @@ class RegistrationActivity : AppCompatActivity() {
         registrationViewModel.fetchSession()
     }
 
+    override fun onDestroy() {
+        msisdn_edit_text.onFocusChangeListener = null
+        super.onDestroy()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
     private fun observeRegistrationStatus() {
-        registrationViewModel.sessionData.addObserver {
-            if (it.state == SessionState.REGISTRATION) {
-                Toast.makeText(this, "Verification code: $it", Toast.LENGTH_LONG).show()
-                navigateToConfirmation()
-            }
-            when(it.state) {
-                SessionState.REGISTRATION -> navigateToConfirmation().also { Toast.makeText(this, "Verification code: $it.code", Toast.LENGTH_LONG).show() }
+        observeLiveData(registrationViewModel.sessionData) { sessionData ->
+            when (sessionData.state) {
+                SessionState.REGISTRATION -> navigateToConfirmation().also {
+                    if (!Cockpit.isSendSmsDuringRegistration())
+                        Toast.makeText(
+                            this,
+                            "kod weryfikacyjny: ${sessionData.debugCode}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                }
                 SessionState.LOGGED_IN -> navigateToMain()
             }
         }
     }
 
     private fun observeMsisdnValidation() {
-        registrationViewModel.msisdnError.addObserver {
+        observeLiveData(registrationViewModel.msisdnError) {
             msisdn_edit_text_layout.error = it
         }
     }
 
     private fun navigateToConfirmation() {
         startActivity(Intent(this, RegistrationConfirmationActivity::class.java))
-        finish()
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, DashboardActivity::class.java))
         finish()
-    }
-
-    fun <T> MutableLiveData<T> .addObserver(observer: (T) -> Unit) {
-        observe(this@RegistrationActivity, Observer { observer(it) })
     }
 
     private fun TextInputEditText.onTextChanged(onChange: (String) -> Unit) {

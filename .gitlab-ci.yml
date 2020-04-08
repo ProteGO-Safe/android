@@ -6,26 +6,41 @@ before_script:
 
 "test:debug":
   script:
-    - ./gradlew lint testDebug
+    - ./gradlew lint testDevDebug
   stage: test
   tags:
     - android
 
-"test:release":
+"test:stg":
   script:
-    - ./gradlew lint testRelease
+    - ./gradlew lint testStgRelease
   stage: test
   tags:
     - android
 
-"deploy:release":
+"test:prod":
+  script:
+    - ./gradlew lint testProdRelease
+  stage: test
+  tags:
+    - android
+
+"deploy:prod":
   script:
     - cat $KEYSTORE | base64 -d > keystore.jks
-    - ls
-    - echo "1"
     - bundle check || bundle install --path=/cache
-    - echo "2"
     - bundle exec fastlane deploy_release
+  stage: deploy
+  tags:
+    - android
+  only:
+    - tags
+
+"deploy:stg":
+  script:
+    - cat $KEYSTORE | base64 -d > keystore.jks
+    - bundle check || bundle install --path=/cache
+    - bundle exec fastlane deploy_stg
   stage: deploy
   tags:
     - android

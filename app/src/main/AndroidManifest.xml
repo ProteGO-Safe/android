@@ -16,15 +16,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.registration.RegistrationActivity">
+
+        <activity
+            android:name=".ui.splash.SplashScreenActivity"
+            android:noHistory="true"
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.registration.RegistrationConfirmationActivity"/>
-        <activity android:name=".ui.main.MainActivity"/>
+
+        <activity
+            android:name=".ui.registration.onboarding.OnboardingActivity"
+            android:launchMode="singleTask" />
+
+        <activity
+            android:name=".ui.registration.RegistrationActivity"
+            android:parentActivityName=".ui.registration.onboarding.OnboardingActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.registration.RegistrationConfirmationActivity"
+            android:parentActivityName=".ui.registration.RegistrationActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.main.DashboardActivity"
+            android:launchMode="singleTask" />
     </application>
 
 </manifest>

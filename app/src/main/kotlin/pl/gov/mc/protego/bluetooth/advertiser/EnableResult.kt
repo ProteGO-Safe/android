@@ -1,7 +1,6 @@
 package pl.gov.mc.protego.bluetooth.advertiser
 
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdLocal
-import java.util.*
 
 
 sealed class EnableResult {

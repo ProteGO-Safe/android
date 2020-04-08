@@ -23,15 +23,20 @@ class ProtegoApp : Application() {
     private fun initKoin() = startKoin {
         androidContext(this@ProtegoApp)
         modules(
-            listOf(
-                gcsModule,
-                viewModule,
-                filesModule,
-                appModule,
-                domainModule,
-                networkingModule,
-                bluetoothModule
-            )
+            variantSpecificModulesList
+                .plus(
+                    listOf(
+                        gcsModule,
+                        viewModule,
+                        filesModule,
+                        appModule,
+                        domainModule,
+                        networkingModule,
+                        bluetoothModule,
+                        securityModule,
+                        utilModule
+                    )
+                )
         )
     }
 }
