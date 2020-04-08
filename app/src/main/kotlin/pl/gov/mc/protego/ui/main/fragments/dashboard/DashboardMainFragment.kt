@@ -5,15 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.Session
+import pl.gov.mc.protego.ui.base.BaseFragment
 import pl.gov.mc.protego.ui.registration.onboarding.OnboardingActivity
 
-class DashboardMainFragment : Fragment() {
+class DashboardMainFragment : BaseFragment() {
 
+    override val viewModel: DashboardMainViewModel by viewModel()
     private val session: Session by inject()
 
     override fun onCreateView(
@@ -36,3 +38,4 @@ class DashboardMainFragment : Fragment() {
         }
     }
 }
+

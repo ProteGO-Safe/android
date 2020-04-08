@@ -18,6 +18,15 @@ data class BeaconId(
     @SerializedName("beacon_id") val id: String
 )
 
+class AnonymousRegistrationRequest(
+    standardRequestData: StandardRequestData
+) : StandardRequestData(standardRequestData)
+
+class AnonymousRegistrationResponse(
+    @SerializedName("user_id") val userId: String,
+    @SerializedName("status") val status: String
+)
+
 class RegistrationRequest (
     @SerializedName("msisdn")
     val msisdn: String,

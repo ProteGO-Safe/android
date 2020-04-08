@@ -29,6 +29,7 @@ import pl.gov.mc.protego.realm.RealmEncryption
 import pl.gov.mc.protego.realm.RealmInitializer
 import pl.gov.mc.protego.repository.SessionRepository
 import pl.gov.mc.protego.ui.main.DashboardActivityViewModel
+import pl.gov.mc.protego.ui.main.fragments.dashboard.DashboardMainViewModel
 import pl.gov.mc.protego.ui.main.fragments.history.HistoryViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationConfirmationViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationViewModel
@@ -46,6 +47,7 @@ val viewModule: Module = module {
     viewModel { RegistrationViewModel(get(), get(), get()) }
     viewModel { RegistrationConfirmationViewModel(get()) }
     viewModel { DashboardActivityViewModel(get()) }
+    viewModel { DashboardMainViewModel() }
     viewModel { SplashScreenViewModel(get()) }
     viewModel { OnboardingViewModel() }
     viewModel { HistoryViewModel(get(), get(), get()) }

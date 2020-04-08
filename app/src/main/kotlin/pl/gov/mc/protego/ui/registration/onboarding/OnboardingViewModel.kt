@@ -7,8 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.ui.Event
+import pl.gov.mc.protego.ui.base.BaseViewModel
 
-class OnboardingViewModel : ViewModel() {
+class OnboardingViewModel : BaseViewModel() {
 
     private val pages = listOf(
         PageInfo(

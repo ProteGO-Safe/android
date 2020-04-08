@@ -3,9 +3,13 @@ package pl.gov.mc.protego.ui.registration
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableString
+import android.text.Spanned
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.view.View
 import android.widget.Toast
-import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputEditText
 import com.polidea.cockpit.cockpit.Cockpit
 import kotlinx.android.synthetic.main.registration_view.*
@@ -23,7 +27,7 @@ import pl.gov.mc.protego.ui.validator.MsisdnOk
 
 class RegistrationActivity : BaseActivity() {
 
-    private val registrationViewModel: RegistrationViewModel by viewModel()
+    override val viewModel: RegistrationViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +35,14 @@ class RegistrationActivity : BaseActivity() {
 
         register_button.isEnabled = false
         register_button.setOnClickListener {
-            registrationViewModel.onStartRegistration(msisdn_edit_text.text.toString().replace(" ", ""))
+            viewModel.onStartRegistration(msisdn_edit_text.text.toString().replace(" ", ""))
         }
 
-        msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
+        skip_registration_button.setOnClickListener {
+            viewModel.onSkipRegistrationClicked()
+        }
+
+        msisdn_edit_text.onTextChanged(viewModel::onNewMsisdn)
         msisdn_edit_text.scrollWhenFocusObtained(scroll_view)
 
         supportActionBar?.apply {
@@ -42,10 +50,12 @@ class RegistrationActivity : BaseActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        setupLinkToTermsOfUse()
         observeMsisdnValidation()
         observeRegistrationStatus()
+        observeIntents()
 
-        registrationViewModel.fetchSession()
+        viewModel.fetchSession()
     }
 
     override fun onDestroy() {
@@ -59,7 +69,7 @@ class RegistrationActivity : BaseActivity() {
     }
 
     private fun observeRegistrationStatus() {
-        observeLiveData(registrationViewModel.sessionData) { sessionData ->
+        observeLiveData(viewModel.sessionData) { sessionData ->
             when (sessionData.state) {
                 SessionState.REGISTRATION -> navigateToConfirmation().also {
                     if (!Cockpit.isSendSmsDuringRegistration())
@@ -75,7 +85,7 @@ class RegistrationActivity : BaseActivity() {
     }
 
     private fun observeMsisdnValidation() {
-        observeLiveData(registrationViewModel.msisdnError) {
+        observeLiveData(viewModel.msisdnError) {
             register_button.isEnabled = it == MsisdnOk
             msisdn_edit_text_layout.error =
                 if (it == MsisdnInvalid) "Niepoprawny numer telefonu" else null
@@ -89,6 +99,28 @@ class RegistrationActivity : BaseActivity() {
     private fun navigateToMain() {
         startActivity(Intent(this, DashboardActivity::class.java))
         finish()
+    }
+
+    private fun setupLinkToTermsOfUse() {
+        accept_tou.apply {
+            val nonClickablePart = getString(
+                R.string.registration_terms_of_use_btn_regular_part
+            ).substringBefore("%")
+            val clickablePart = getString(R.string.registration_terms_of_use_btn_underlined_part)
+            text = SpannableString("$nonClickablePart$clickablePart").apply {
+                setSpan(
+                    object : ClickableSpan() {
+                        override fun onClick(widget: View) {
+                            viewModel.onTermsAndConditionsClicked()
+                        }
+                    },
+                    nonClickablePart.length,
+                    nonClickablePart.length + clickablePart.length,
+                    Spanned.SPAN_EXCLUSIVE_INCLUSIVE
+                )
+            }
+            movementMethod = LinkMovementMethod()
+        }
     }
 
     private fun TextInputEditText.onTextChanged(onChange: (String) -> Unit) {

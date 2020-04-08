@@ -12,7 +12,7 @@ import pl.gov.mc.protego.ui.observeLiveData
 
 class DashboardActivity : BaseActivity() {
 
-    private val viewModel: DashboardActivityViewModel by viewModel()
+    override val viewModel: DashboardActivityViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
