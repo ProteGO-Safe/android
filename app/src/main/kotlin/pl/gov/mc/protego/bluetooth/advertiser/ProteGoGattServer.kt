@@ -125,7 +125,7 @@ class ProteGoGattServer private constructor(
         descriptor: BluetoothGattDescriptor
     ) {
         super.onDescriptorReadRequest(device, requestId, offset, descriptor)
-        Timber.d("onDescriptorReadRequest, device=${device.address}, requestId=${requestId}, offset=${offset}, desc=${descriptor.uuid}")
+        timberWithLocalTag().d("[onDescriptorReadRequest] device=${device.address}, requestId=${requestId}, offset=${offset}, desc=${descriptor.uuid}")
         withGattServer("onDescriptorReadRequest") {
             sendResponse(device, requestId, BluetoothGatt.GATT_READ_NOT_PERMITTED, offset, null)
         }
@@ -133,22 +133,22 @@ class ProteGoGattServer private constructor(
 
     override fun onNotificationSent(device: BluetoothDevice, status: Int) {
         super.onNotificationSent(device, status)
-        Timber.d("onNotificationSent, device=${device.address}, status=${status}")
+        timberWithLocalTag().d("[onNotificationSent] device=${device.address}, status=${status}")
     }
 
     override fun onMtuChanged(device: BluetoothDevice, mtu: Int) {
         super.onMtuChanged(device, mtu)
-        Timber.d("onMtuChanged, device=${device.address}, mtu=${mtu}")
+        timberWithLocalTag().d("[onMtuChanged] device=${device.address}, mtu=${mtu}")
     }
 
     override fun onPhyUpdate(device: BluetoothDevice, txPhy: Int, rxPhy: Int, status: Int) {
         super.onPhyUpdate(device, txPhy, rxPhy, status)
-        Timber.d("onPhyUpdate, device=${device.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
+        timberWithLocalTag().d("[onPhyUpdate] device=${device.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
     }
 
     override fun onExecuteWrite(device: BluetoothDevice, requestId: Int, execute: Boolean) {
         super.onExecuteWrite(device, requestId, execute)
-        Timber.d("onExecuteWrite, device=${device.address}, reqId=${requestId}, execute=${execute}")
+        timberWithLocalTag().d("[onExecuteWrite] device=${device.address}, reqId=${requestId}, execute=${execute}")
 
         var value: ByteArray? = null
         var status = BluetoothGatt.GATT_WRITE_NOT_PERMITTED
@@ -194,7 +194,7 @@ class ProteGoGattServer private constructor(
             offset,
             value
         )
-        Timber.d("onCharacteristicWriteRequest, device=${device.address}, reqId=${requestId}, char=${characteristic.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value.toHexString()}")
+        timberWithLocalTag().d("[onCharacteristicWriteRequest] device=${device.address}, reqId=${requestId}, char=${characteristic.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value.toHexString()}")
         var status = BluetoothGatt.GATT_WRITE_NOT_PERMITTED
 
         if (preparedWrite) {
@@ -232,7 +232,7 @@ class ProteGoGattServer private constructor(
         characteristic: BluetoothGattCharacteristic
     ) {
         super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
-        Timber.d("onCharacteristicReadRequest, device: ${device.address}, reqId=${requestId}, offset=${offset}, char=${characteristic.uuid}")
+        timberWithLocalTag().d("[onCharacteristicReadRequest] device: ${device.address}, reqId=${requestId}, offset=${offset}, char=${characteristic.uuid}")
 
         var value: ByteArray? = null
         var status = BluetoothGatt.GATT_READ_NOT_PERMITTED
@@ -250,7 +250,7 @@ class ProteGoGattServer private constructor(
 
     override fun onConnectionStateChange(device: BluetoothDevice, status: Int, newState: Int) {
         super.onConnectionStateChange(device, status, newState)
-        Timber.d("onConnectionStateChange, device=${device.address}, status=${status}, newState=${newState}")
+        timberWithLocalTag().d("[onConnectionStateChange] device=${device.address}, status=${status}, newState=${newState}")
         if (newState == BluetoothProfile.STATE_DISCONNECTED) {
             this.pendingWrites.remove(device)
             this.rssiLatches.remove(device)
@@ -262,7 +262,7 @@ class ProteGoGattServer private constructor(
 
     override fun onPhyRead(device: BluetoothDevice, txPhy: Int, rxPhy: Int, status: Int) {
         super.onPhyRead(device, txPhy, rxPhy, status)
-        Timber.d("onPhyRead, device=${device.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
+        timberWithLocalTag().d("[onPhyRead] device=${device.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
     }
 
     override fun onDescriptorWriteRequest(
@@ -283,7 +283,7 @@ class ProteGoGattServer private constructor(
             offset,
             value
         )
-        Timber.d("onDescriptorWriteRequest, device=${device.address}, reqId=${requestId}, descriptor=${descriptor.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value.toHexString()}")
+        timberWithLocalTag().d("[onDescriptorWriteRequest] device=${device.address}, reqId=${requestId}, descriptor=${descriptor.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value.toHexString()}")
         if (responseNeeded) {
             withGattServer("onDescriptorWriteRequest") {
                 sendResponse(device, requestId, BluetoothGatt.GATT_WRITE_NOT_PERMITTED, offset, null)
@@ -293,9 +293,9 @@ class ProteGoGattServer private constructor(
 
     override fun onServiceAdded(status: Int, service: BluetoothGattService) {
         super.onServiceAdded(status, service)
-        timberWithLocalTag().d("onServiceAdded status=${status}, service=${service.uuid}")
+        timberWithLocalTag().d("[onServiceAdded] status=${status}, service=${service.uuid}")
         if (status != BluetoothGatt.GATT_SUCCESS) {
-            timberWithLocalTag().e("failed to add service: ${service.uuid ?: "-"}")
+            timberWithLocalTag().e("[onServiceAdded] failed to add service: ${service.uuid ?: "-"}")
             callback.gattServerFailed(this, status)
             return
         } else {
