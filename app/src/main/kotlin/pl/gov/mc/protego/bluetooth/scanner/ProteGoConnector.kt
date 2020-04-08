@@ -36,6 +36,8 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
         beaconIdAgent.registerListener(beaconIdAgentListener)
     }
 
+    // region Private helper sealed classes ----------------------------------------------------------
+
     private sealed class DiscoveryProcess {
         object Started : DiscoveryProcess()
         sealed class Finished : DiscoveryProcess() {
@@ -54,6 +56,10 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
         object AlreadyConnecting : ConnectionResult()
         data class Connected(val connection: RxBleConnection) : ConnectionResult()
     }
+
+    // endregion
+
+    // region Public functions ----------------------------------------------------------
 
     fun syncBeaconIds(proteGoPeripheral: ClassifiedPeripheral.ProteGo): Observable<SyncEvent> =
         proteGoPeripheral.bleDevice.establishConnection(false)
@@ -76,6 +82,10 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
             .startWithArray(SyncEvent.Connection.Connecting)
             .takeUntil { it is SyncEvent.Process.End }
             .onErrorReturn { classifyError(it) }
+
+    // endregion
+
+    // region Private functions ----------------------------------------------------------
 
     private fun classifyError(throwable: Throwable): SyncEvent =
         when (throwable) {
@@ -179,4 +189,6 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
                 if (it is BleGattCharacteristicException) SyncEvent.Process.ReadBeaconId.Failure(it.status)
                 else throw it
             }
+
+    // endregion
 }

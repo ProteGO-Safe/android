@@ -38,6 +38,8 @@ class ProteGoScanner(context: Context, private val beaconIdAgent: BeaconIdAgent)
         }
     }
 
+    // region General enable / disable functions ----------------------------------------------------------
+
     override fun enable(inMode: ScannerInterface.Mode, listener: ScannerListener) {
         timberWithLocalTag().i("enabling...")
         check(serialDisposable.get() == null) { "[scanner] already enabled" }
@@ -69,6 +71,10 @@ class ProteGoScanner(context: Context, private val beaconIdAgent: BeaconIdAgent)
         timberWithLocalTag().i("disabled")
         serialDisposable.set(null)
     }
+
+    // endregion
+
+    // region Private functions ----------------------------------------------------------
 
     private fun scanOnlyBeaconId(): ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> =
         ObservableTransformer { proteGoScannedDevices ->
@@ -147,4 +153,6 @@ class ProteGoScanner(context: Context, private val beaconIdAgent: BeaconIdAgent)
             .map { it.beaconIdRemote }
 
     private data class Timeout(val timespan: Long, val timeUnit: TimeUnit)
+
+    // endregion
 }

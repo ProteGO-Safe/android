@@ -31,15 +31,15 @@ class ProteGoAdvertiser(
         beaconIdAgent.registerListener(beaconIdAgentListener)
     }
 
+    private fun timberWithLocalTag() = Timber.tag("[advertiser]")
+
     // Beacon ID advertised and sent by a GATT server.
     private var currentBeaconIdLocal: BeaconIdLocal? = null
 
-    // General enable / disable functions ----------------------------------------------------------
+    // region General enable / disable functions ----------------------------------------------------------
     private var isEnabled = false
 
     private var advertiserListener: AdvertiserListener? = null
-
-    private fun timberWithLocalTag() = Timber.tag("[advertiser]")
 
     override fun enable(listener: AdvertiserListener): EnableResult {
         timberWithLocalTag().i("enabling...")
@@ -76,7 +76,9 @@ class ProteGoAdvertiser(
         timberWithLocalTag().i("disabled")
     }
 
-    // Advertisement -------------------------------------------------------------------------------
+    // endregion
+
+    // region Advertisement -------------------------------------------------------------------------------
 
     private var isAdvertising = false
 
@@ -188,7 +190,9 @@ class ProteGoAdvertiser(
         leAdvertiser.stopAdvertising(advertiseCallback)
     }
 
-    // GATT Server ---------------------------------------------------------------------------------
+    // endregion
+
+    // region GATT Server ---------------------------------------------------------------------------------
 
     private var gattServer: ProteGoGattServer? = null
 
@@ -233,7 +237,9 @@ class ProteGoAdvertiser(
         advertiserListener?.error(this, AdvertiserListener.AdvertiserError.Server(status))
     }
 
-    // Token management ----------------------------------------------------------------------------
+    // endregion
+
+    // region Token management ----------------------------------------------------------------------------
 
     private fun updatedBeaconIdLocal(beaconIdLocal: BeaconIdLocal?) {
 
@@ -266,4 +272,6 @@ class ProteGoAdvertiser(
             timberWithLocalTag().w("bluetooth adapter is null on updateTokenData")
         }
     }
+
+    // endregion
 }

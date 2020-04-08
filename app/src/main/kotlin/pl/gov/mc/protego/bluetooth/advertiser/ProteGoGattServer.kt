@@ -64,7 +64,7 @@ class ProteGoGattServer private constructor(
 
     private fun BluetoothDevice.getLatchedRssi() = rssiLatches[this]?.rssi
 
-    // Lifecycle -----------------------------------------------------------------------------------
+    // region Lifecycle -----------------------------------------------------------------------------------
 
     private fun initialize(gattServer: BluetoothGattServer): ServerResult.Failure? {
         check(this.gattServer == null) {
@@ -116,7 +116,9 @@ class ProteGoGattServer private constructor(
         return true
     }
 
-    // GATT Server callbacks -----------------------------------------------------------------------
+    // endregion Lifecycle
+
+    // region GATT Server callbacks -----------------------------------------------------------------------
 
     override fun onDescriptorReadRequest(
         device: BluetoothDevice,
@@ -310,4 +312,6 @@ class ProteGoGattServer private constructor(
             true -> Unit
         }
     }
+
+    // endregion
 }
