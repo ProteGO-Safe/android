@@ -6,7 +6,7 @@ import com.squareup.seismic.ShakeDetector
 class CockpitShakeDetector {
     private var onShake: () -> Unit = {}
 
-    private val shakeDetector = ShakeDetector { onShake() }.apply { setSensitivity(10) }
+    private val shakeDetector = ShakeDetector { onShake() }
 
     fun startDetection(sensorManager: SensorManager) {
         shakeDetector.start(sensorManager)
