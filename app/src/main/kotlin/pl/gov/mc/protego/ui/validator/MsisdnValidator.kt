@@ -11,7 +11,7 @@ object MsisdnOk : MsisdnValidationResult()
 
 class MsisdnValidator {
     // https://pl.wikipedia.org/wiki/Numery_telefoniczne_w_Polsce#Sieci_ruchome_(komórkowe)
-    var prefixes = listOf(50, 51, 53, 57, 60, 66, 69, 72, 73, 78, 79, 88).map{it.toString()}
+    var prefixes = listOf(45, 50, 51, 53, 57, 60, 66, 69, 72, 73, 78, 79, 88).map{it.toString()}
 
     fun validate(msisdn: String) =
         when {
