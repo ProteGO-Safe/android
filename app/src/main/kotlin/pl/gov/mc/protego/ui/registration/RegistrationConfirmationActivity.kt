@@ -8,6 +8,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
@@ -24,24 +25,31 @@ class RegistrationConfirmationActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration_confirmation_view)
 
+        sms_code.doOnTextChanged { text, _, _, _ -> viewModel.onCodeChanged(text.toString()) }
+
         confirm_registration_button.setOnClickListener {
-            if (sms_code.text.toString().isNotEmpty()) {
-                viewModel.confirm(sms_code.text.toString())
-            } else {
-                sms_code_layout.error = "Wpisz kod"
-            }
+            viewModel.confirm(sms_code.text.toString())
         }
         sms_code.scrollWhenFocusObtained(scroll_view)
 
         setupLinkToTermsOfUse()
 
-        observeLiveData(viewModel.confirmationError) {
-            Toast.makeText(this, "Problem z rejestracją: $it", Toast.LENGTH_LONG).show()
+        with(viewModel) {
+            observeLiveData(confirmationEnabled) { confirm_registration_button.isEnabled = it }
+
+            observeLiveData(confirmationError) {
+                Toast.makeText(
+                    this@RegistrationConfirmationActivity,
+                    "Problem z rejestracją: $it",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            observeLiveData(confirmationSuccess) {
+                navigateToMain()
+            }
         }
 
-        observeLiveData(viewModel.confirmationSuccess) {
-            navigateToMain()
-        }
     }
 
     override fun onDestroy() {
