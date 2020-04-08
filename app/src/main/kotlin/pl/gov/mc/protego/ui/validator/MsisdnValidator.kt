@@ -17,9 +17,9 @@ class MsisdnValidator {
         when {
             msisdn.length < 2 -> MsisdnIncomplete
             msisdn.length < 9 ->
-                if (prefixes.any{msisdn.startsWith(it)}) MsisdnIncomplete else MsisdnInvalid
+                if (prefixes.any { msisdn.startsWith(it) }) MsisdnIncomplete else MsisdnInvalid
             msisdn.length == 9 ->
-                if (prefixes.any{msisdn.startsWith(it)}) MsisdnOk else MsisdnInvalid
+                if (prefixes.any { msisdn.startsWith(it) }) MsisdnOk else MsisdnInvalid
             else -> MsisdnInvalid
         }
     fun validateWithCountryCode(msisdn: String) = msisdn.length == 12

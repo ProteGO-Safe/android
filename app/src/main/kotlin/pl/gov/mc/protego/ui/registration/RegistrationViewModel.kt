@@ -33,7 +33,7 @@ class RegistrationViewModel(
     }
 
     fun onNewMsisdn(msisdn: String) {
-        msisdnError.value = msisdnValidator.validate(msisdn)
+        msisdnError.value = msisdnValidator.validate(msisdn.replace(" ", ""))
     }
 
     fun onStartRegistration(msisdn: String) {

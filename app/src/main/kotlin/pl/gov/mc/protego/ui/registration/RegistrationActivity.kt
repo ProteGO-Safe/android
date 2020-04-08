@@ -31,7 +31,7 @@ class RegistrationActivity : BaseActivity() {
 
         register_button.isEnabled = false
         register_button.setOnClickListener {
-            registrationViewModel.onStartRegistration(msisdn_edit_text.text.toString())
+            registrationViewModel.onStartRegistration(msisdn_edit_text.text.toString().replace(" ", ""))
         }
 
         msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
