@@ -29,7 +29,7 @@ class RegistrationActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration_view)
 
-        register_button.isVisible = false
+        register_button.isEnabled = false
         register_button.setOnClickListener {
             registrationViewModel.onStartRegistration(msisdn_edit_text.text.toString())
         }
@@ -76,7 +76,7 @@ class RegistrationActivity : BaseActivity() {
 
     private fun observeMsisdnValidation() {
         observeLiveData(registrationViewModel.msisdnError) {
-            register_button.isVisible = it == MsisdnOk
+            register_button.isEnabled = it == MsisdnOk
             msisdn_edit_text_layout.error =
                 if (it == MsisdnInvalid) "Niepoprawny numer telefonu" else null
         }
