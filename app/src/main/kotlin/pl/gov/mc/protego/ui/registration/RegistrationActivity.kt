@@ -70,7 +70,7 @@ class RegistrationActivity : BaseActivity() {
     }
 
     private fun observeMsisdnValidation() {
-        observeLiveData(registrationViewModel.msisdnError) {
+        observeLiveData(registrationViewModel.msisdnErrorResId) {
             msisdn_edit_text_layout.error = if (it != null) getString(it) else null
         }
     }
