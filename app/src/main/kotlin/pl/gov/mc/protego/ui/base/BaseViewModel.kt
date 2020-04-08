@@ -22,6 +22,10 @@ abstract class BaseViewModel : ViewModel() {
     val intentToStart: LiveData<Event<IntentToLaunch>>
         get() = _intentToStart
 
+    protected val _isInProgress = MutableLiveData(false)
+    val isInProgress: LiveData<Boolean>
+        get() = _isInProgress
+
 
     //TODO: move all navigation here, ie. navigateToMain/Dashboard, Registration, etc.
     protected fun navigateToTermsAndConditions() {

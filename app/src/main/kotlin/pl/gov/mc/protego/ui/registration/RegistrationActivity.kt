@@ -54,6 +54,7 @@ class RegistrationActivity : BaseActivity() {
         observeMsisdnValidation()
         observeRegistrationStatus()
         observeIntents()
+        observeIsInProgress()
 
         viewModel.fetchSession()
     }
@@ -66,6 +67,14 @@ class RegistrationActivity : BaseActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
+    }
+
+    override fun observeIsInProgress() {
+        observeLiveData(viewModel.isInProgress) {
+            msisdn_edit_text_layout.isEnabled = !it
+            skip_registration_button.isEnabled = !it
+            register_button.isEnabled = !it
+        }
     }
 
     private fun observeRegistrationStatus() {

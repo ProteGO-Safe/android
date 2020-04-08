@@ -37,4 +37,6 @@ abstract class BaseActivity : BaseVariantActivity() {
             //TODO add conditional finish of this activity
         }
     }
+
+    protected abstract fun observeIsInProgress()
 }

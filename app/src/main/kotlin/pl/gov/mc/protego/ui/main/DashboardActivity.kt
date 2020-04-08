@@ -55,4 +55,6 @@ class DashboardActivity : BaseActivity() {
             supportFragmentManager.findFragmentByTag(page.pageFragmentTag) ?: page.createFragment()
         page.showFragment(supportFragmentManager, fragmentToAdd)
     }
+
+    override fun observeIsInProgress() = Unit
 }

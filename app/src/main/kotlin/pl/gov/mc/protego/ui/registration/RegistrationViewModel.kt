@@ -30,7 +30,6 @@ class RegistrationViewModel(
 
     private val disposables = CompositeDisposable()
 
-
     fun fetchSession() {
         _sessionData.value = session.sessionData
     }
@@ -45,6 +44,8 @@ class RegistrationViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess { _sessionData.value = it }
+            .doFinally { _isInProgress.value = false }
+            .doOnSubscribe { _isInProgress.value = true }
             .subscribeBy(
                 onError = { Timber.e(it, "Registration Error") },
                 onSuccess = { Timber.d("Registration request succeed") }
@@ -65,6 +66,8 @@ class RegistrationViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess { _sessionData.value = it }
+            .doFinally { _isInProgress.value = false }
+            .doOnSubscribe { _isInProgress.value = true }
             .subscribeBy(
                 onError = { Timber.e(it, "Anonymous registration Error") },
                 onSuccess = { Timber.d("Anonymous registration request succeed") }

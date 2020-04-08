@@ -50,6 +50,14 @@ class RegistrationConfirmationActivity : BaseActivity() {
             }
         }
         observeIntents()
+        observeIsInProgress()
+    }
+
+    override fun observeIsInProgress() {
+        observeLiveData(viewModel.isInProgress) {
+            sms_code.isEnabled = !it
+            confirm_registration_button.isEnabled = !it
+        }
     }
 
     override fun onDestroy() {

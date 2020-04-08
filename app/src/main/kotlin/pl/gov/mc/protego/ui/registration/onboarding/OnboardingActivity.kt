@@ -135,6 +135,8 @@ class OnboardingActivity : BaseActivity() {
         }.start()
     }
 
+    override fun observeIsInProgress() = Unit
+
     private fun navigateToRegistration() =
         startActivity(Intent(this, RegistrationActivity::class.java))
 }
