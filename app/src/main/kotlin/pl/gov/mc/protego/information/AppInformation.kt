@@ -6,6 +6,9 @@ class AppInformation {
     val api: Int
         get() = BuildConfig.SUPPORTED_API_VERSION
 
-    val version: Int
+    val versionCode: Int
         get() = BuildConfig.VERSION_CODE
+
+    val versionName: String
+        get() = BuildConfig.VERSION_NAME
 }

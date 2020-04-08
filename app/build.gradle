@@ -33,24 +33,29 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            applicationIdSuffix ".prod"
-            versionNameSuffix "-prod"
-            buildConfigField "String", "BASE_API_URL", "\"https://google.com/\""
-            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
         debug {
+            debuggable true
+        }
+    }
+
+    flavorDimensions "version"
+    productFlavors {
+        dev {
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
-            debuggable true
             buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-dev.cloudfunctions.net/\""
             buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
+        prod {
+            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-stag.cloudfunctions.net/\""
+            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
+        }
         stg {
-            initWith debug
-            debuggable true
-            zipAlignEnabled false
             applicationIdSuffix ".stg"
             versionNameSuffix "-stg"
+            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-stag.cloudfunctions.net/\""
+            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
         }
     }
 
@@ -58,7 +63,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
     }
-    
+
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
@@ -102,6 +107,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
 
     // Crashlytics for dev build
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
     debugImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     // Leak Canary for dev build
@@ -135,6 +143,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.3.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
+
+    //ble
+    implementation 'com.polidea.rxandroidble2:rxandroidble:1.11.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
