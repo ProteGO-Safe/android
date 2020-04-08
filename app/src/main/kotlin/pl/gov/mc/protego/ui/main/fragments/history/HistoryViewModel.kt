@@ -1,4 +1,4 @@
-package pl.gov.mc.protego.ui.main
+package pl.gov.mc.protego.ui.main.fragments.history
 
 import android.content.Intent
 import android.content.res.Resources
@@ -38,16 +38,20 @@ class HistoryViewModel(
 
     fun onContactClicked() {
         _intentToStart.value =
-            Event(IntentToLaunch(
-                emailClientAdapter.createIntent(resources.getString(R.string.dashboard_info_contact_us_email)),
-                R.string.missing_email_client
-            ))
+            Event(
+                IntentToLaunch(
+                    emailClientAdapter.createIntent(resources.getString(R.string.dashboard_info_contact_us_email)),
+                    R.string.missing_email_client
+                )
+            )
     }
 
     fun onTermsAndConditionsClicked() {
-        _intentToStart.value = Event(IntentToLaunch(
-            Intent(Intent.ACTION_VIEW, Uri.parse(Cockpit.getTermsAndConditions())),
-            R.string.missing_web_browser
-        ))
+        _intentToStart.value = Event(
+            IntentToLaunch(
+                Intent(Intent.ACTION_VIEW, Uri.parse(Cockpit.getTermsAndConditions())),
+                R.string.missing_web_browser
+            )
+        )
     }
 }

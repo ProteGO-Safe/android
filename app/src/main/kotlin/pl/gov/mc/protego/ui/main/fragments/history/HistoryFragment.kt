@@ -1,4 +1,4 @@
-package pl.gov.mc.protego.ui.main
+package pl.gov.mc.protego.ui.main.fragments.history
 
 import android.content.ActivityNotFoundException
 import android.os.Bundle

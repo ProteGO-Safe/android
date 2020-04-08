@@ -20,7 +20,7 @@ import pl.gov.mc.protego.realm.RealmEncryption
 import pl.gov.mc.protego.realm.RealmInitializer
 import pl.gov.mc.protego.repository.SessionRepository
 import pl.gov.mc.protego.ui.main.DashboardActivityViewModel
-import pl.gov.mc.protego.ui.main.HistoryViewModel
+import pl.gov.mc.protego.ui.main.fragments.history.HistoryViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationConfirmationViewModel
 import pl.gov.mc.protego.ui.registration.RegistrationViewModel
 import pl.gov.mc.protego.ui.registration.onboarding.OnboardingViewModel
