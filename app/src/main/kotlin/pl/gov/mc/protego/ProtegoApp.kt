@@ -1,7 +1,6 @@
 package pl.gov.mc.protego
 
 import android.app.Application
-import android.content.Context
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -12,13 +11,8 @@ import timber.log.Timber
 
 class ProtegoApp : Application() {
 
-    companion object {
-        lateinit var context: Context
-    }
-
     override fun onCreate() {
         super.onCreate()
-        context = this
         initKoin()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
