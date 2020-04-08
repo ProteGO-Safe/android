@@ -1,10 +1,13 @@
 package pl.gov.mc.protego
 
 import android.app.Application
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import pl.gov.mc.protego.bluetooth.BluetoothBeaconIdExchangeManager
 import pl.gov.mc.protego.di.*
 import timber.log.Timber
+
 
 class ProtegoApp : Application() {
 
@@ -14,6 +17,7 @@ class ProtegoApp : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+        getKoin().get<BluetoothBeaconIdExchangeManager>().start()
     }
 
     private fun initKoin() = startKoin {
@@ -28,6 +32,7 @@ class ProtegoApp : Application() {
                         appModule,
                         domainModule,
                         networkingModule,
+                        bluetoothModule,
                         securityModule,
                         utilModule
                     )

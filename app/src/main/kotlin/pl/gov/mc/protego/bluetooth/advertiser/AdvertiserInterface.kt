@@ -1,13 +1,17 @@
 package pl.gov.mc.protego.bluetooth.advertiser
 
-import java.util.*
 
 interface AdvertiserInterface {
+
     /**
-     * Update advertised token data
-     *
-     * @param data Token data available during advertisement.
-     * @param expirationDate Date after which token is expired.
+     * Function that enables the [AdvertiserInterface]
+     * @param listener [AdvertiserListener] to be used until [disable] is called
+     * @return the result of enabling
      */
-    fun updateTokenData(data: ByteArray, expirationDate: Date)
+    fun enable(listener: AdvertiserListener): EnableResult
+
+    /**
+     * Method that disables the [AdvertiserInterface] and stops reporting to [AdvertiserListener] set via [enable]
+     */
+    fun disable()
 }

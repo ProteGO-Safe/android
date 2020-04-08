@@ -2,10 +2,8 @@ package pl.gov.mc.protego.bluetooth.advertiser
 
 import android.bluetooth.*
 import android.content.Context
-import pl.gov.mc.protego.bluetooth.ProteGoCharacteristicUUIDString
-import pl.gov.mc.protego.bluetooth.ProteGoServiceUUIDString
-import pl.gov.mc.protego.bluetooth.safeCurrentThreadHandler
-import pl.gov.mc.protego.bluetooth.toHexString
+import pl.gov.mc.protego.bluetooth.*
+import pl.gov.mc.protego.bluetooth.beacon.*
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -13,23 +11,39 @@ import kotlin.collections.HashMap
 
 class ProteGoGattServer private constructor(
     private val context: Context,
+    private val beaconIdAgent: BeaconIdAgent,
     private val callback: ProteGoGattServerCallback
 ) : BluetoothGattServerCallback() {
+
+    private var beaconIdLocal: BeaconIdLocal? = null
+
+    private val beaconIdAgentListener = object : BeaconIdAgent.Listener {
+        override fun useBeaconId(beaconIdLocal: BeaconIdLocal?) {
+            this@ProteGoGattServer.beaconIdLocal = beaconIdLocal
+        }
+    }
+
+    init {
+        beaconIdAgent.registerListener(beaconIdAgentListener)
+    }
 
     companion object {
         fun startGattServer(
             context: Context,
-            callback: ProteGoGattServerCallback,
+            beaconIdAgent: BeaconIdAgent,
+            proteGoGattServerCallback: ProteGoGattServerCallback,
             gattServerCreator: (BluetoothGattServerCallback) -> BluetoothGattServer?
         ): ServerResult {
-            val proteGoGattServer = ProteGoGattServer(context, callback)
+            val proteGoGattServer = ProteGoGattServer(context, beaconIdAgent, proteGoGattServerCallback)
             val gattServer = gattServerCreator(proteGoGattServer)
             if (gattServer == null) {
-                Timber.w("failed to open GATT server")
+                timberWithLocalTag().w("failed to open GATT server")
                 return ServerResult.Failure.CannotObtainGattServer
             }
             return proteGoGattServer.initialize(gattServer) ?: ServerResult.Success(proteGoGattServer)
         }
+
+        private fun timberWithLocalTag() = Timber.tag("[server]")
     }
 
     // This should be nullable as there is potential race condition in the API between callback
@@ -50,12 +64,12 @@ class ProteGoGattServer private constructor(
 
     private fun BluetoothDevice.getLatchedRssi() = rssiLatches[this]?.rssi
 
-    // Lifecycle -----------------------------------------------------------------------------------
+    // region Lifecycle -----------------------------------------------------------------------------------
 
     private fun initialize(gattServer: BluetoothGattServer): ServerResult.Failure? {
         check(this.gattServer == null) {
             gattServer.close()
-            "Please create a new instance of ProteGoGattServer for a new GATT server handle"
+            "[server] Please create a new instance of ProteGoGattServer for a new GATT server handle"
         }
         this.gattServer = gattServer
 
@@ -71,24 +85,25 @@ class ProteGoGattServer private constructor(
         )
 
         if (!gattService.addCharacteristic(gattCharacteristic)) {
-            Timber.d("Failed to add characteristic")
+            timberWithLocalTag().d("Failed to add characteristic")
             gattServer.close()
             return ServerResult.Failure.CannotAddCharacteristic
         }
 
         if (!gattServer.addService(gattService)) {
-            Timber.d("Failed to add service")
+            timberWithLocalTag().d("Failed to add service")
             gattServer.close()
             return ServerResult.Failure.CannotAddService
         }
 
+        timberWithLocalTag().i("GATT server initialized")
         return null
     }
 
     fun close(): Boolean {
         val gattServer = this.gattServer
         if (gattServer == null) {
-            Timber.d("GATT server already closed")
+            timberWithLocalTag().d("GATT server already closed")
             return false
         }
 
@@ -97,11 +112,13 @@ class ProteGoGattServer private constructor(
         rssiLatches.clear()
         gattServer.close()
         this.gattServer = null
-        Timber.d("GATT server closed")
+        timberWithLocalTag().i("GATT server closed")
         return true
     }
 
-    // GATT Server callbacks -----------------------------------------------------------------------
+    // endregion Lifecycle
+
+    // region GATT Server callbacks -----------------------------------------------------------------------
 
     override fun onDescriptorReadRequest(
         device: BluetoothDevice,
@@ -110,7 +127,7 @@ class ProteGoGattServer private constructor(
         descriptor: BluetoothGattDescriptor
     ) {
         super.onDescriptorReadRequest(device, requestId, offset, descriptor)
-        Timber.d("onDescriptorReadRequest, device=${device.address}, requestId=${requestId}, offset=${offset}, desc=${descriptor.uuid}")
+        timberWithLocalTag().d("[onDescriptorReadRequest] device=${device.address}, requestId=${requestId}, offset=${offset}, desc=${descriptor.uuid}")
         withGattServer("onDescriptorReadRequest") {
             sendResponse(device, requestId, BluetoothGatt.GATT_READ_NOT_PERMITTED, offset, null)
         }
@@ -118,22 +135,22 @@ class ProteGoGattServer private constructor(
 
     override fun onNotificationSent(device: BluetoothDevice, status: Int) {
         super.onNotificationSent(device, status)
-        Timber.d("onNotificationSent, device=${device.address}, status=${status}")
+        timberWithLocalTag().d("[onNotificationSent] device=${device.address}, status=${status}")
     }
 
     override fun onMtuChanged(device: BluetoothDevice, mtu: Int) {
         super.onMtuChanged(device, mtu)
-        Timber.d("onMtuChanged, device=${device.address}, mtu=${mtu}")
+        timberWithLocalTag().d("[onMtuChanged] device=${device.address}, mtu=${mtu}")
     }
 
     override fun onPhyUpdate(device: BluetoothDevice, txPhy: Int, rxPhy: Int, status: Int) {
         super.onPhyUpdate(device, txPhy, rxPhy, status)
-        Timber.d("onPhyUpdate, device=${device.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
+        timberWithLocalTag().d("[onPhyUpdate] device=${device.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
     }
 
     override fun onExecuteWrite(device: BluetoothDevice, requestId: Int, execute: Boolean) {
         super.onExecuteWrite(device, requestId, execute)
-        Timber.d("onExecuteWrite, device=${device.address}, reqId=${requestId}, execute=${execute}")
+        timberWithLocalTag().d("[onExecuteWrite] device=${device.address}, reqId=${requestId}, execute=${execute}")
 
         var value: ByteArray? = null
         var status = BluetoothGatt.GATT_WRITE_NOT_PERMITTED
@@ -144,7 +161,12 @@ class ProteGoGattServer private constructor(
             if (pendingWrite != null) {
                 status = BluetoothGatt.GATT_SUCCESS
                 value = pendingWrite
-                this.callback.receivedTokenData(this, pendingWrite, device.getLatchedRssi())
+                val beaconIdRemote = BeaconIdRemote(
+                    BeaconId(value, ProteGoManufacturerDataVersion),
+                    device.getLatchedRssi(),
+                    BeaconIdSource.CONNECTION_INCOMING
+                )
+                this.beaconIdAgent.synchronizedBeaconId(beaconIdRemote)
             }
         } else {
             // We always allow cancelling request.
@@ -174,7 +196,7 @@ class ProteGoGattServer private constructor(
             offset,
             value
         )
-        Timber.d("onCharacteristicWriteRequest, device=${device.address}, reqId=${requestId}, char=${characteristic.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value.toHexString()}")
+        timberWithLocalTag().d("[onCharacteristicWriteRequest] device=${device.address}, reqId=${requestId}, char=${characteristic.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value.toHexString()}")
         var status = BluetoothGatt.GATT_WRITE_NOT_PERMITTED
 
         if (preparedWrite) {
@@ -193,7 +215,9 @@ class ProteGoGattServer private constructor(
         } else {
             // Got simple write.
             status = BluetoothGatt.GATT_SUCCESS
-            this.callback.receivedTokenData(this, value, device.getLatchedRssi())
+            val beaconIdRemote =
+                BeaconIdRemote(BeaconId(value, ProteGoManufacturerDataVersion), device.getLatchedRssi(), BeaconIdSource.CONNECTION_INCOMING)
+            this.beaconIdAgent.synchronizedBeaconId(beaconIdRemote)
         }
 
         if (responseNeeded) {
@@ -210,14 +234,14 @@ class ProteGoGattServer private constructor(
         characteristic: BluetoothGattCharacteristic
     ) {
         super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
-        Timber.d("onCharacteristicReadRequest, device: ${device.address}, reqId=${requestId}, offset=${offset}, char=${characteristic.uuid}")
+        timberWithLocalTag().d("[onCharacteristicReadRequest] device: ${device.address}, reqId=${requestId}, offset=${offset}, char=${characteristic.uuid}")
 
         var value: ByteArray? = null
         var status = BluetoothGatt.GATT_READ_NOT_PERMITTED
 
-        val tokenData = this.callback.getTokenData(this)
-        if (tokenData != null && offset < tokenData.size) {
-            value = tokenData.sliceArray(offset until tokenData.size)
+        val beaconIdLocalByteArray = this.beaconIdLocal?.id?.byteArray
+        if (beaconIdLocalByteArray != null && offset < beaconIdLocalByteArray.size) {
+            value = beaconIdLocalByteArray.sliceArray(offset until beaconIdLocalByteArray.size)
             status = BluetoothGatt.GATT_SUCCESS
         }
 
@@ -228,7 +252,7 @@ class ProteGoGattServer private constructor(
 
     override fun onConnectionStateChange(device: BluetoothDevice, status: Int, newState: Int) {
         super.onConnectionStateChange(device, status, newState)
-        Timber.d("onConnectionStateChange, device=${device.address}, status=${status}, newState=${newState}")
+        timberWithLocalTag().d("[onConnectionStateChange] device=${device.address}, status=${status}, newState=${newState}")
         if (newState == BluetoothProfile.STATE_DISCONNECTED) {
             this.pendingWrites.remove(device)
             this.rssiLatches.remove(device)
@@ -240,7 +264,7 @@ class ProteGoGattServer private constructor(
 
     override fun onPhyRead(device: BluetoothDevice, txPhy: Int, rxPhy: Int, status: Int) {
         super.onPhyRead(device, txPhy, rxPhy, status)
-        Timber.d("onPhyRead, device=${device.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
+        timberWithLocalTag().d("[onPhyRead] device=${device.address}, txPhy=${txPhy}, rxPhy=${rxPhy}, status=${status}")
     }
 
     override fun onDescriptorWriteRequest(
@@ -261,7 +285,7 @@ class ProteGoGattServer private constructor(
             offset,
             value
         )
-        Timber.d("onDescriptorWriteRequest, device=${device.address}, reqId=${requestId}, descriptor=${descriptor.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value.toHexString()}")
+        timberWithLocalTag().d("[onDescriptorWriteRequest] device=${device.address}, reqId=${requestId}, descriptor=${descriptor.uuid}, prepWrite=${preparedWrite}, responseNeeded=${responseNeeded}, offset=${offset}, value=${value.toHexString()}")
         if (responseNeeded) {
             withGattServer("onDescriptorWriteRequest") {
                 sendResponse(device, requestId, BluetoothGatt.GATT_WRITE_NOT_PERMITTED, offset, null)
@@ -271,10 +295,10 @@ class ProteGoGattServer private constructor(
 
     override fun onServiceAdded(status: Int, service: BluetoothGattService) {
         super.onServiceAdded(status, service)
-        Timber.d("onServiceAdded status=${status}, service=${service.uuid}")
+        timberWithLocalTag().d("[onServiceAdded] status=${status}, service=${service.uuid}")
         if (status != BluetoothGatt.GATT_SUCCESS) {
-            Timber.e("failed to add service: ${service.uuid ?: "-"}")
-            callback.gattServerFailed(this)
+            timberWithLocalTag().e("[onServiceAdded] failed to add service: ${service.uuid ?: "-"}")
+            callback.gattServerFailed(this, status)
             return
         } else {
             callback.gattServerStarted(this)
@@ -283,9 +307,11 @@ class ProteGoGattServer private constructor(
 
     private inline fun withGattServer(callbackName: String, crossinline call: BluetoothGattServer.() -> Boolean) {
         when (this.gattServer?.run(call)) {
-            null -> Timber.e("[$callbackName] Cannot use BluetoothGattServer. Reference is 'null'.")
-            false -> Timber.w("[$callbackName] BluetoothGattServer returned 'false'")
+            null -> timberWithLocalTag().e("[$callbackName] Cannot use BluetoothGattServer. Reference is 'null'.")
+            false -> timberWithLocalTag().w("[$callbackName] BluetoothGattServer returned 'false'")
             true -> Unit
         }
     }
+
+    // endregion
 }

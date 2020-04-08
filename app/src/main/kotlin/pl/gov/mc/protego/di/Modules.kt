@@ -1,5 +1,7 @@
 package pl.gov.mc.protego.di
 
+import android.bluetooth.BluetoothManager
+import android.content.Context
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
@@ -10,6 +12,13 @@ import org.koin.dsl.module
 import pl.gov.mc.protego.BuildConfig
 import pl.gov.mc.protego.backend.api.*
 import pl.gov.mc.protego.backend.domain.ProtegoServer
+import pl.gov.mc.protego.bluetooth.BeaconIdManager
+import pl.gov.mc.protego.bluetooth.BluetoothBeaconIdExchangeManager
+import pl.gov.mc.protego.bluetooth.advertiser.AdvertiserInterface
+import pl.gov.mc.protego.bluetooth.advertiser.ProteGoAdvertiser
+import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
+import pl.gov.mc.protego.bluetooth.scanner.ProteGoScanner
+import pl.gov.mc.protego.bluetooth.scanner.ScannerInterface
 import pl.gov.mc.protego.encryption.EncryptionKeyStore
 import pl.gov.mc.protego.encryption.RandomKey
 import pl.gov.mc.protego.file.FileManager
@@ -53,8 +62,8 @@ val filesModule: Module = module {
 val appModule = module {
     single { PhoneInformation() }
     single { AppInformation() }
-    single {
-        androidApplication().getSharedPreferences("ProteGo", android.content.Context.MODE_PRIVATE)
+    single{
+        androidApplication().getSharedPreferences("ProteGo",  Context.MODE_PRIVATE)
     }
     single { androidContext().resources }
 }
@@ -115,4 +124,12 @@ val networkingModule = module {
     single {
         get<Retrofit>().create(StatusApi::class.java)
     }
+}
+
+val bluetoothModule = module {
+    single<BeaconIdAgent> { BeaconIdManager() }
+    single { androidApplication().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager }
+    single<AdvertiserInterface> { ProteGoAdvertiser(androidApplication(), get(), get()) }
+    single<ScannerInterface> { ProteGoScanner(androidApplication(), get()) }
+    single { BluetoothBeaconIdExchangeManager(get(), get()) }
 }
