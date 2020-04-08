@@ -1,6 +1,7 @@
 package pl.gov.mc.protego.ui.registration
 
 import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,7 +21,9 @@ class RegistrationViewModel(
     private val protegoServer: ProtegoServer,
     private val session: Session
 ) : ViewModel() {
-    val msisdnErrorResId = MutableLiveData<@StringRes Int?>()
+    private val _msisdnErrorResId = MutableLiveData<@StringRes Int?>()
+    val msisdnErrorResId: LiveData<Int?>
+        get() = _msisdnErrorResId
     val sessionData = MutableLiveData<SessionData>()
     private var disposables = CompositeDisposable()
 
@@ -30,9 +33,9 @@ class RegistrationViewModel(
 
     fun onNewMsisdn(msisdn: String) {
         if (!msisdnValidator.validate(msisdn)) {
-            msisdnErrorResId.value = R.string.registration_phone_number_validation_failed
+            _msisdnErrorResId.value = R.string.registration_phone_number_validation_failed
         } else {
-            msisdnErrorResId.value = null
+            _msisdnErrorResId.value = null
         }
     }
 
