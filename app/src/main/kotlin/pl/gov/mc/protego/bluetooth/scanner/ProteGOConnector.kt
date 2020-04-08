@@ -9,18 +9,18 @@ import io.reactivex.exceptions.CompositeException
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import pl.gov.mc.protego.bluetooth.PeripheralSynchronizationTimeoutInSec
-import pl.gov.mc.protego.bluetooth.ProteGoCharacteristicUUIDString
-import pl.gov.mc.protego.bluetooth.ProteGoServiceUUIDString
+import pl.gov.mc.protego.bluetooth.ProteGOCharacteristicUUIDString
+import pl.gov.mc.protego.bluetooth.ProteGOServiceUUIDString
 import pl.gov.mc.protego.bluetooth.beacon.*
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
-class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
+class ProteGOConnector(beaconIdAgent: BeaconIdAgent) {
 
-    private val uuidProteGoService = UUID.fromString(ProteGoServiceUUIDString)
-    private val uuidProteGoCharacteristic = UUID.fromString(ProteGoCharacteristicUUIDString)
+    private val uuidProteGOService = UUID.fromString(ProteGOServiceUUIDString)
+    private val uuidProteGOCharacteristic = UUID.fromString(ProteGOCharacteristicUUIDString)
     private val beaconIdToUseSubject: BehaviorSubject<BeaconIdToUse> = BehaviorSubject.createDefault(BeaconIdToUse.NoBeaconId)
     private val beaconIdAgentListener = object : BeaconIdAgent.Listener {
         override fun useBeaconId(beaconIdLocal: BeaconIdLocal?) {
@@ -28,7 +28,7 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
                 null -> BeaconIdToUse.NoBeaconId
                 else -> BeaconIdToUse.CurrentBeaconId(beaconIdLocal.id)
             }
-            this@ProteGoConnector.beaconIdToUseSubject.onNext(beaconIdToUse)
+            this@ProteGOConnector.beaconIdToUseSubject.onNext(beaconIdToUse)
         }
     }
 
@@ -61,7 +61,7 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
 
     // region Public functions ----------------------------------------------------------
 
-    fun syncBeaconIds(proteGoPeripheral: ClassifiedPeripheral.ProteGo): Observable<SyncEvent> =
+    fun syncBeaconIds(proteGoPeripheral: ClassifiedPeripheral.ProteGO): Observable<SyncEvent> =
         proteGoPeripheral.bleDevice.establishConnection(false)
             .timeout(PeripheralSynchronizationTimeoutInSec, TimeUnit.SECONDS)
             .map<ConnectionResult> { ConnectionResult.Connected(it) }
@@ -100,13 +100,13 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
         }
 
     private fun executeExchangeProcess(
-        proteGoPeripheral: ClassifiedPeripheral.ProteGo,
+        proteGoPeripheral: ClassifiedPeripheral.ProteGO,
         connection: RxBleConnection
     ): Observable<SyncEvent> {
         return connection.discoverServices()
             .map<DiscoveryProcess> { services ->
-                services.bluetoothGattServices.find { it.uuid == uuidProteGoService }
-                    ?.getCharacteristic(uuidProteGoCharacteristic)
+                services.bluetoothGattServices.find { it.uuid == uuidProteGOService }
+                    ?.getCharacteristic(uuidProteGOCharacteristic)
                     ?.let { DiscoveryProcess.Finished.Found(connection, it) }
                     ?: DiscoveryProcess.Finished.NotFound
             }
@@ -115,17 +115,17 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
             .flatMap {
                 when (it) {
                     DiscoveryProcess.Started -> Observable.just(SyncEvent.Connection.DiscoveringServices)
-                    DiscoveryProcess.Finished.NotFound -> Observable.just(SyncEvent.Process.End.NoProteGoAttributes)
+                    DiscoveryProcess.Finished.NotFound -> Observable.just(SyncEvent.Process.End.NoProteGOAttributes)
                         .also {
-                            if (proteGoPeripheral !is ClassifiedPeripheral.ProteGo.PotentialAdvertisement) {
+                            if (proteGoPeripheral !is ClassifiedPeripheral.ProteGO.PotentialAdvertisement) {
                                 Timber.tag("[connection]")
-                                    .w("ProteGoCharacteristic not found for: ${proteGoPeripheral.className()}")
+                                    .w("ProteGOCharacteristic not found for: ${proteGoPeripheral.className()}")
                             }
                         }
                     is DiscoveryProcess.Finished.Found -> when (proteGoPeripheral) {
-                        is ClassifiedPeripheral.ProteGo.FullAdvertisement -> it.writeLocalBeaconIdOnly()
-                        is ClassifiedPeripheral.ProteGo.MinimalAdvertisement,
-                        is ClassifiedPeripheral.ProteGo.PotentialAdvertisement -> it.syncBeaconIds()
+                        is ClassifiedPeripheral.ProteGO.FullAdvertisement -> it.writeLocalBeaconIdOnly()
+                        is ClassifiedPeripheral.ProteGO.MinimalAdvertisement,
+                        is ClassifiedPeripheral.ProteGO.PotentialAdvertisement -> it.syncBeaconIds()
                     }
                         .concatWith(Observable.just(SyncEvent.Process.End.Finished))
                         .startWithArray(SyncEvent.Process.Start)
@@ -150,7 +150,7 @@ class ProteGoConnector(beaconIdAgent: BeaconIdAgent) {
             }
 
     private fun DiscoveryProcess.Finished.Found.writeLocalBeaconId(): Single<SyncEvent.Process.WrittenBeaconId> =
-        this@ProteGoConnector.beaconIdToUseSubject
+        this@ProteGOConnector.beaconIdToUseSubject
             .take(1)
             .singleOrError()
             .flatMap { currentBeaconIdToUse ->

@@ -4,15 +4,15 @@ import android.os.ParcelUuid
 import com.polidea.rxandroidble2.scan.ScanRecord
 import com.polidea.rxandroidble2.scan.ScanResult
 import pl.gov.mc.protego.bluetooth.AppleManufacturerId
-import pl.gov.mc.protego.bluetooth.ProteGoManufacturerId
-import pl.gov.mc.protego.bluetooth.ProteGoServiceUUIDString
+import pl.gov.mc.protego.bluetooth.ProteGOManufacturerId
+import pl.gov.mc.protego.bluetooth.ProteGOServiceUUIDString
 import pl.gov.mc.protego.bluetooth.beacon.BeaconId
 
 
 object ScanResultClassification : (ScanResult) -> ClassifiedPeripheral {
 
-    private object ProteGoAdvertisement {
-        val searchedUuid: ParcelUuid = ParcelUuid.fromString(ProteGoServiceUUIDString)
+    private object ProteGOAdvertisement {
+        val searchedUuid: ParcelUuid = ParcelUuid.fromString(ProteGOServiceUUIDString)
         operator fun contains(scanRecord: ScanRecord) = scanRecord.serviceUuids?.contains(searchedUuid) ?: false
     }
 
@@ -23,17 +23,17 @@ object ScanResultClassification : (ScanResult) -> ClassifiedPeripheral {
     override fun invoke(scanResult: ScanResult): ClassifiedPeripheral {
         val bleDevice = scanResult.bleDevice
         return when (scanResult.scanRecord) {
-            in ProteGoAdvertisement -> potentialBeaconIdOf(scanResult.scanRecord).let {
-                if (it != null) ClassifiedPeripheral.ProteGo.FullAdvertisement(bleDevice, it, scanResult.rssi)
-                else ClassifiedPeripheral.ProteGo.MinimalAdvertisement(bleDevice)
+            in ProteGOAdvertisement -> potentialBeaconIdOf(scanResult.scanRecord).let {
+                if (it != null) ClassifiedPeripheral.ProteGO.FullAdvertisement(bleDevice, it, scanResult.rssi)
+                else ClassifiedPeripheral.ProteGO.MinimalAdvertisement(bleDevice)
             }
-            in AppleAdvertisement -> ClassifiedPeripheral.ProteGo.PotentialAdvertisement(bleDevice)
-            else -> ClassifiedPeripheral.NonProteGo
+            in AppleAdvertisement -> ClassifiedPeripheral.ProteGO.PotentialAdvertisement(bleDevice)
+            else -> ClassifiedPeripheral.NonProteGO
         }
     }
 
     private fun potentialBeaconIdOf(scanRecord: ScanRecord): BeaconId? =
-        scanRecord.manufacturerSpecificData[ProteGoManufacturerId]
+        scanRecord.manufacturerSpecificData[ProteGOManufacturerId]
             ?.let {
                 val expectedManufacturerSpecificDataSize = BeaconId.byteCount + 1 /* versioning */
                 if (it.size == expectedManufacturerSpecificDataSize) {

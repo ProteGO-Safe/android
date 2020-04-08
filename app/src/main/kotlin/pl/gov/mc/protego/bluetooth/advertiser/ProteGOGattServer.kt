@@ -9,17 +9,17 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 import kotlin.collections.HashMap
 
-class ProteGoGattServer private constructor(
+class ProteGOGattServer private constructor(
     private val context: Context,
     private val beaconIdAgent: BeaconIdAgent,
-    private val callback: ProteGoGattServerCallback
+    private val callback: ProteGOGattServerCallback
 ) : BluetoothGattServerCallback() {
 
     private var beaconIdLocal: BeaconIdLocal? = null
 
     private val beaconIdAgentListener = object : BeaconIdAgent.Listener {
         override fun useBeaconId(beaconIdLocal: BeaconIdLocal?) {
-            this@ProteGoGattServer.beaconIdLocal = beaconIdLocal
+            this@ProteGOGattServer.beaconIdLocal = beaconIdLocal
         }
     }
 
@@ -31,10 +31,10 @@ class ProteGoGattServer private constructor(
         fun startGattServer(
             context: Context,
             beaconIdAgent: BeaconIdAgent,
-            proteGoGattServerCallback: ProteGoGattServerCallback,
+            proteGoGattServerCallback: ProteGOGattServerCallback,
             gattServerCreator: (BluetoothGattServerCallback) -> BluetoothGattServer?
         ): ServerResult {
-            val proteGoGattServer = ProteGoGattServer(context, beaconIdAgent, proteGoGattServerCallback)
+            val proteGoGattServer = ProteGOGattServer(context, beaconIdAgent, proteGoGattServerCallback)
             val gattServer = gattServerCreator(proteGoGattServer)
             if (gattServer == null) {
                 timberWithLocalTag().w("failed to open GATT server")
@@ -54,12 +54,12 @@ class ProteGoGattServer private constructor(
     private var pendingWrites: HashMap<BluetoothDevice, ByteArray> = HashMap()
 
     // Hash map containing RSSI grabbers.
-    private var rssiLatches: HashMap<BluetoothDevice, ProteGoGattRSSILatch> = HashMap()
+    private var rssiLatches: HashMap<BluetoothDevice, ProteGOGattRSSILatch> = HashMap()
 
     private var bluetoothHandler = safeCurrentThreadHandler()
 
     private fun BluetoothDevice.latchRssi() {
-        rssiLatches[this] = ProteGoGattRSSILatch(context, this, bluetoothHandler)
+        rssiLatches[this] = ProteGOGattRSSILatch(context, this, bluetoothHandler)
     }
 
     private fun BluetoothDevice.getLatchedRssi() = rssiLatches[this]?.rssi
@@ -69,18 +69,18 @@ class ProteGoGattServer private constructor(
     private fun initialize(gattServer: BluetoothGattServer): ServerResult.Failure? {
         check(this.gattServer == null) {
             gattServer.close()
-            "[server] Please create a new instance of ProteGoGattServer for a new GATT server handle"
+            "[server] Please create a new instance of ProteGOGattServer for a new GATT server handle"
         }
         this.gattServer = gattServer
 
         val gattCharacteristic = BluetoothGattCharacteristic(
-            UUID.fromString(ProteGoCharacteristicUUIDString),
+            UUID.fromString(ProteGOCharacteristicUUIDString),
             BluetoothGattCharacteristic.PROPERTY_READ or BluetoothGattCharacteristic.PROPERTY_WRITE,
             BluetoothGattCharacteristic.PERMISSION_READ or BluetoothGattCharacteristic.PERMISSION_WRITE
         )
 
         val gattService = BluetoothGattService(
-            UUID.fromString(ProteGoServiceUUIDString),
+            UUID.fromString(ProteGOServiceUUIDString),
             BluetoothGattService.SERVICE_TYPE_PRIMARY
         )
 
@@ -162,7 +162,7 @@ class ProteGoGattServer private constructor(
                 status = BluetoothGatt.GATT_SUCCESS
                 value = pendingWrite
                 val beaconIdRemote = BeaconIdRemote(
-                    BeaconId(value, ProteGoManufacturerDataVersion),
+                    BeaconId(value, ProteGOManufacturerDataVersion),
                     device.getLatchedRssi(),
                     BeaconIdSource.CONNECTION_INCOMING
                 )
@@ -216,7 +216,7 @@ class ProteGoGattServer private constructor(
             // Got simple write.
             status = BluetoothGatt.GATT_SUCCESS
             val beaconIdRemote =
-                BeaconIdRemote(BeaconId(value, ProteGoManufacturerDataVersion), device.getLatchedRssi(), BeaconIdSource.CONNECTION_INCOMING)
+                BeaconIdRemote(BeaconId(value, ProteGOManufacturerDataVersion), device.getLatchedRssi(), BeaconIdSource.CONNECTION_INCOMING)
             this.beaconIdAgent.synchronizedBeaconId(beaconIdRemote)
         }
 

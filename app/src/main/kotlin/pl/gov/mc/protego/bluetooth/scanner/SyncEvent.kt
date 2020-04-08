@@ -32,7 +32,7 @@ sealed class SyncEvent {
         }
 
         sealed class End : Process() {
-            object NoProteGoAttributes : End()
+            object NoProteGOAttributes : End()
             object Finished : End()
         }
     }
@@ -51,7 +51,7 @@ sealed class SyncEvent {
         Process.WrittenBeaconId.Success -> "Process.WrittenBeaconId.Success"
         Process.WrittenBeaconId.Invalid -> "Process.WrittenBeaconId.Invalid"
         is Process.WrittenBeaconId.Failure -> "Process.WrittenBeaconId.Failure(${this.status})"
-        Process.End.NoProteGoAttributes -> "Process.End.NoProteGoAttributes"
+        Process.End.NoProteGOAttributes -> "Process.End.NoProteGOAttributes"
         Process.End.Finished -> "Process.End.Finished"
     }
 }
