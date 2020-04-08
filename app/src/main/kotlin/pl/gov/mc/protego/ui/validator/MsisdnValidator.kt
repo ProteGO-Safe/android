@@ -14,7 +14,7 @@ class MsisdnValidator {
     fun validate(msisdn: String) =
         when {
             msisdn.length < 9 -> MsisdnIncomplete
-            msisdn.length == 9 ->MsisdnOk
+            msisdn.length == 9 -> MsisdnOk
             else -> MsisdnInvalid
         }
     fun validateWithCountryCode(msisdn: String) = msisdn.length == 12
