@@ -6,6 +6,9 @@ import retrofit2.http.POST
 
 interface RegistrationAPI {
 
+    @POST("register_no_msisdn")
+    fun registerAnonymously(@Body anonymousRegistrationRequest: AnonymousRegistrationRequest): Single<AnonymousRegistrationResponse>
+
     @POST("register")
     fun register(@Body registrationRequest: RegistrationRequest): Single<RegistrationResponse>
 

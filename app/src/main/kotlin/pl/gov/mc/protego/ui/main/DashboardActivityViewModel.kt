@@ -9,11 +9,12 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protego.backend.domain.ProtegoServer
+import pl.gov.mc.protego.ui.base.BaseViewModel
 import timber.log.Timber
 
 class DashboardActivityViewModel(
     private val protegoServer: ProtegoServer
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _dashboardPage = MutableLiveData<DashboardPage>().apply {
         value = DashboardPage.MainPage()

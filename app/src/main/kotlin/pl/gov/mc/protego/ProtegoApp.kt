@@ -34,7 +34,8 @@ class ProtegoApp : Application() {
                         networkingModule,
                         bluetoothModule,
                         securityModule,
-                        utilModule
+                        utilModule,
+                        intentCreatorModule
                     )
                 )
         )
