@@ -10,6 +10,9 @@ import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protego.backend.domain.ProtegoServer
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.information.SessionData
+import pl.gov.mc.protego.ui.validator.MsisdnInvalid
+import pl.gov.mc.protego.ui.validator.MsisdnOk
+import pl.gov.mc.protego.ui.validator.MsisdnValidationResult
 import pl.gov.mc.protego.ui.validator.MsisdnValidator
 import timber.log.Timber
 
@@ -19,7 +22,7 @@ class RegistrationViewModel(
     private val session: Session
 )  : ViewModel() {
 
-    val msisdnError = MutableLiveData<String?>()
+    val msisdnError = MutableLiveData<MsisdnValidationResult>()
     val sessionData = MutableLiveData<SessionData>()
 
     private var disposables = CompositeDisposable()
@@ -30,11 +33,7 @@ class RegistrationViewModel(
     }
 
     fun onNewMsisdn(msisdn: String) {
-        if (!msisdnValidator.validate(msisdn)) {
-            msisdnError.value = "Niepoprawny numer telefonu"
-        } else {
-            msisdnError.value = null
-        }
+        msisdnError.value = msisdnValidator.validate(msisdn.replace(" ", ""))
     }
 
     fun onStartRegistration(msisdn: String) {
