@@ -111,8 +111,8 @@
             android:layout_marginHorizontal="@dimen/huge_margin"
             android:layout_marginTop="@dimen/small_margin"
             android:text="@string/registration_without_phone_number_btn"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/register_button" />
 
         <TextView
@@ -124,8 +124,8 @@
             android:layout_marginTop="@dimen/small_margin"
             android:layout_marginBottom="@dimen/x_small_margin"
             android:text="@string/registration_terms_of_use_btn_regular_part"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/skip_registration_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
