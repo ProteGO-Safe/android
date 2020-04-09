@@ -23,8 +23,11 @@ class DashboardActivityViewModel(
     val dashboardPage: LiveData<DashboardPage>
         get() = _dashboardPage
 
+    private val _hasInternetConnection = MutableLiveData<Boolean>()
+    val hasInternetConnection: LiveData<Boolean>
+        get() = _hasInternetConnection
+
     private var disposables = CompositeDisposable()
-    val noInternetConnection = MutableLiveData<Boolean>()
 
     fun onResume() {
         protegoServer
@@ -37,7 +40,7 @@ class DashboardActivityViewModel(
             )
             .addTo(disposables)
 
-        noInternetConnection.value = phoneInformation.hasActiveInternetConnection
+        _hasInternetConnection.value = phoneInformation.hasActiveInternetConnection
     }
 
     fun menuButtonPressed() {

@@ -20,7 +20,7 @@ class DashboardActivity : BaseActivity() {
 
         observeLiveData(viewModel.dashboardPage) { changePage(it) }
 
-        observeLiveData(viewModel.noInternetConnection) { hasInternetConnection ->
+        observeLiveData(viewModel.hasInternetConnection) { hasInternetConnection ->
             if (!hasInternetConnection)
                 showNoInternetConnectionDialog()
             else
