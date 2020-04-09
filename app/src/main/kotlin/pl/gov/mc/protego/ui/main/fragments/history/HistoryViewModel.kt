@@ -6,15 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.AppInformation
 import pl.gov.mc.protego.ui.Event
+import pl.gov.mc.protego.ui.IntentToLaunch
+import pl.gov.mc.protego.ui.TermsAndConditionsIntentCreator
 import pl.gov.mc.protego.ui.base.BaseViewModel
-import pl.gov.mc.protego.ui.base.IntentToLaunch
+import pl.gov.mc.protego.ui.put
 import pl.gov.mc.protego.util.EmailClientAdapter
 
 
 class HistoryViewModel(
     private val appInformation: AppInformation,
     private val resources: Resources,
-    private val emailClientAdapter: EmailClientAdapter
+    private val emailClientAdapter: EmailClientAdapter,
+    private val termsAndConditionsIntentCreator: TermsAndConditionsIntentCreator
 ) : BaseViewModel() {
 
     private val _versionLiveData = MutableLiveData<String>()
@@ -35,5 +38,6 @@ class HistoryViewModel(
             )
     }
 
-    fun onTermsAndConditionsClicked() = navigateToTermsAndConditions()
+    fun onTermsAndConditionsClicked() =
+        _intentToStart put termsAndConditionsIntentCreator.intentToLaunch.wrapInEvent()
 }

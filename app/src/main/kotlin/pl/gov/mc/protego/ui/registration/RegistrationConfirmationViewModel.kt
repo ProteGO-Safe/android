@@ -9,11 +9,14 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protego.backend.domain.ProtegoServer
+import pl.gov.mc.protego.ui.TermsAndConditionsIntentCreator
 import pl.gov.mc.protego.ui.base.BaseViewModel
+import pl.gov.mc.protego.ui.put
 import timber.log.Timber
 
 class RegistrationConfirmationViewModel(
-    private val protegoServer: ProtegoServer
+    private val protegoServer: ProtegoServer,
+    private val termsAndConditionsIntentCreator: TermsAndConditionsIntentCreator
 ) : BaseViewModel() {
 
     private var disposables = CompositeDisposable()
@@ -52,5 +55,6 @@ class RegistrationConfirmationViewModel(
         _confirmationEnabled.value = code.length == Cockpit.getSmsCodeLength()
     }
 
-    fun onTermsAndConditionsClicked() = navigateToTermsAndConditions()
+    fun onTermsAndConditionsClicked() =
+        _intentToStart put termsAndConditionsIntentCreator.intentToLaunch.wrapInEvent()
 }

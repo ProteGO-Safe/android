@@ -28,6 +28,7 @@ import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.realm.RealmEncryption
 import pl.gov.mc.protego.realm.RealmInitializer
 import pl.gov.mc.protego.repository.SessionRepository
+import pl.gov.mc.protego.ui.TermsAndConditionsIntentCreator
 import pl.gov.mc.protego.ui.main.DashboardActivityViewModel
 import pl.gov.mc.protego.ui.main.fragments.dashboard.DashboardMainViewModel
 import pl.gov.mc.protego.ui.main.fragments.history.HistoryViewModel
@@ -44,14 +45,18 @@ import timber.log.Timber
 import java.security.SecureRandom
 
 val viewModule: Module = module {
-    viewModel { RegistrationViewModel(get(), get(), get()) }
-    viewModel { RegistrationConfirmationViewModel(get()) }
+    viewModel { RegistrationViewModel(get(), get(), get(), get()) }
+    viewModel { RegistrationConfirmationViewModel(get(), get()) }
     viewModel { DashboardActivityViewModel(get()) }
     viewModel { DashboardMainViewModel() }
     viewModel { SplashScreenViewModel(get()) }
     viewModel { OnboardingViewModel() }
-    viewModel { HistoryViewModel(get(), get(), get()) }
+    viewModel { HistoryViewModel(get(), get(), get(), get()) }
     single { MsisdnValidator() }
+}
+
+val intentCreatorModule: Module = module {
+    single { TermsAndConditionsIntentCreator() }
 }
 
 val gcsModule: Module = module {

@@ -10,7 +10,9 @@ import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protego.backend.domain.ProtegoServer
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.information.SessionData
+import pl.gov.mc.protego.ui.TermsAndConditionsIntentCreator
 import pl.gov.mc.protego.ui.base.BaseViewModel
+import pl.gov.mc.protego.ui.put
 import pl.gov.mc.protego.ui.validator.MsisdnValidationResult
 import pl.gov.mc.protego.ui.validator.MsisdnValidator
 import timber.log.Timber
@@ -18,7 +20,8 @@ import timber.log.Timber
 class RegistrationViewModel(
     private val msisdnValidator: MsisdnValidator,
     private val protegoServer: ProtegoServer,
-    private val session: Session
+    private val session: Session,
+    private val termsAndConditionsIntentCreator: TermsAndConditionsIntentCreator
 )  : BaseViewModel() {
 
     private val _msisdnError = MutableLiveData<MsisdnValidationResult>()
@@ -58,7 +61,8 @@ class RegistrationViewModel(
         disposables.clear()
     }
 
-    fun onTermsAndConditionsClicked() = navigateToTermsAndConditions()
+    fun onTermsAndConditionsClicked() =
+        _intentToStart put termsAndConditionsIntentCreator.intentToLaunch.wrapInEvent()
 
     fun onSkipRegistrationClicked() {
         protegoServer
