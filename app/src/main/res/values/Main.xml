@@ -135,7 +135,7 @@
   <!--Dashboard - ekran informacyjny - do usunięcia-->
   <string name="dashboard_info_contact_us_description">Need to send us an email?</string>
   <!--Dashboard - ekran informacyjny-->
-  <string name="dashboard_info_history_overview">Devices detected since %@: %@</string>
+  <string name="dashboard_info_history_overview">Devices detected since %1$s: %2$s</string>
   <!--Dashboard - ekran informacyjny-->
   <string name="dashboard_info_contact_us_email">protego@mc.gov.pl</string>
   <!--Dashboard - ekran informacyjny-->
