@@ -8,11 +8,15 @@ import pl.gov.mc.protego.information.Session
 class RegistrationRequestComposer(
     private val requestComposer: RequestComposer
 ) {
+    fun anonymousRegistration() =
+        AnonymousRegistrationRequest(requestComposer.standardRequestData)
+
     fun init(msisdn: String) = RegistrationRequest(
         msisdn = msisdn,
         sendSms = Cockpit.isSendSmsDuringRegistration(),
         standardRequestData = requestComposer.standardRequestData
     )
+
     fun confirm(code: String, registrationId: String) =
         ConfirmRegistrationRequest(
             confirmationCode = code,

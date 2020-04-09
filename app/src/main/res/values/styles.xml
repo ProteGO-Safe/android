@@ -31,6 +31,7 @@
 
     <style name="AppText.Input">
         <item name="font">@font/poppins_medium</item>
+        <item name="boxBackgroundColor">@color/white</item>
     </style>
 
     <style name="AppText.Input.Special">

@@ -12,17 +12,19 @@ class ProtegoServer(
     private val statusService: StatusService,
     private val session: Session
 ) {
+    fun registerAnonymously(): Single<SessionData> =
+        registrationService.registerAnonymously().flatMap { session.registered(it) }
 
-    fun initRegistration(msisdn: String): Single<SessionData> =
+    fun registerWithPhoneNumber(msisdn: String): Single<SessionData> =
         registrationService
-        .initRegistration(msisdn)
-        .doOnSubscribe { session.initRegistration(msisdn) }
-        .flatMap { session.save(it) }
+            .initRegistration(msisdn)
+            .doOnSubscribe { session.initRegistration(msisdn) }
+            .flatMap { session.save(it) }
 
     fun confirmRegistration(code: String) =
         Single.just(session.isActiveRegistrationProcess)
-        .flatMap { registrationService.confirmRegistration(code, session.registrationId) }
-        .flatMap { session.registered(it) }
+            .flatMap { registrationService.confirmRegistration(code, session.registrationId) }
+            .flatMap { session.registered(it) }
 
     fun fetchState(): Single<EmergencyState> =
         Single.just("SampleData")
