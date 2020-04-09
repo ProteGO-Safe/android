@@ -17,7 +17,6 @@ class NoInternetConnectionDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        isCancelable = true
         return inflater.inflate(R.layout.no_internet_connection_dialog, container, false)
     }
 
