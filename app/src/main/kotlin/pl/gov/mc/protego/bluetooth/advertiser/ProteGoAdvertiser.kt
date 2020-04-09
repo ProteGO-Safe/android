@@ -14,16 +14,16 @@ import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.util.*
 
-class ProteGOAdvertiser(
+class ProteGoAdvertiser(
     private val context: Context,
     private val bluetoothManager: BluetoothManager,
     private val beaconIdAgent: BeaconIdAgent
-) : AdvertiserInterface, ProteGOGattServerCallback {
+) : AdvertiserInterface, ProteGoGattServerCallback {
 
     private val beaconIdAgentListener = object : BeaconIdAgent.Listener {
         override fun useBeaconId(beaconIdLocal: BeaconIdLocal?) {
-            this@ProteGOAdvertiser.currentBeaconIdLocal = beaconIdLocal
-            this@ProteGOAdvertiser.updatedBeaconIdLocal(beaconIdLocal)
+            this@ProteGoAdvertiser.currentBeaconIdLocal = beaconIdLocal
+            this@ProteGoAdvertiser.updatedBeaconIdLocal(beaconIdLocal)
         }
     }
 
@@ -93,7 +93,7 @@ class ProteGOAdvertiser(
             super.onStartFailure(errorCode)
             timberWithLocalTag().d("advertisement failed, error=${errorCode}")
             disable()
-            advertiserListener?.error(this@ProteGOAdvertiser, AdvertiserListener.AdvertiserError.Advertiser(errorCode))
+            advertiserListener?.error(this@ProteGoAdvertiser, AdvertiserListener.AdvertiserError.Advertiser(errorCode))
         }
     }
 
@@ -135,7 +135,7 @@ class ProteGOAdvertiser(
         // - 2 + X bytes for UUID, where X can be 2,4,16
         // - 2 + 2 + 1 + X bytes for manufacturer data,
         //     where 2 bytes are for company ID, 1 byte for version, X for payload
-        val proteGoUUID = UUID.fromString(ProteGOServiceUUIDString)
+        val proteGoUUID = UUID.fromString(ProteGoServiceUUIDString)
         val remainingAdvertisementData = 21 - proteGoUUID.advertisementByteLength()
 
         val beaconIdByteArray = beaconId.id.byteArray
@@ -144,12 +144,12 @@ class ProteGOAdvertiser(
             if (beaconIdByteArray.size > remainingAdvertisementData) {
                 timberWithLocalTag().w("Token data too long, truncating...")
                 val stream = ByteArrayOutputStream(remainingAdvertisementData + 1)
-                stream.write(ProteGOManufacturerDataVersion)
+                stream.write(ProteGoManufacturerDataVersion)
                 stream.write(beaconIdByteArray, 0, remainingAdvertisementData)
                 stream.toByteArray()
             } else {
                 val stream = ByteArrayOutputStream(beaconIdByteArray.size + 1)
-                stream.write(ProteGOManufacturerDataVersion)
+                stream.write(ProteGoManufacturerDataVersion)
                 stream.write(beaconIdByteArray, 0, beaconIdByteArray.size)
                 stream.toByteArray()
             }
@@ -157,8 +157,8 @@ class ProteGOAdvertiser(
         val advertiseData = AdvertiseData.Builder()
             .setIncludeDeviceName(false)
             .setIncludeTxPowerLevel(false)
-            .addManufacturerData(ProteGOManufacturerId, data)
-            .addServiceUuid(ParcelUuid(UUID.fromString(ProteGOServiceUUIDString)))
+            .addManufacturerData(ProteGoManufacturerId, data)
+            .addServiceUuid(ParcelUuid(UUID.fromString(ProteGoServiceUUIDString)))
             .build()
 
         leAdvertiser.startAdvertising(advertiseSettings, advertiseData, advertiseCallback)
@@ -194,13 +194,13 @@ class ProteGOAdvertiser(
 
     // region GATT Server ---------------------------------------------------------------------------------
 
-    private var gattServer: ProteGOGattServer? = null
+    private var gattServer: ProteGoGattServer? = null
 
     private fun startGattServer(): ServerResult {
         timberWithLocalTag().d("starting GATT server...")
         check(gattServer == null) { "[advertiser] GATT server already started" }
 
-        return ProteGOGattServer.startGattServer(context, beaconIdAgent, this) { bluetoothManager.openGattServer(context, it) }
+        return ProteGoGattServer.startGattServer(context, beaconIdAgent, this) { bluetoothManager.openGattServer(context, it) }
             .also {
                 when (it) {
                     is ServerResult.Success -> {
@@ -208,8 +208,8 @@ class ProteGOAdvertiser(
                         this.gattServer = it.proteGoGattServer
                     }
                     ServerResult.Failure.CannotObtainGattServer -> timberWithLocalTag().w("failed to open GATT server")
-                    ServerResult.Failure.CannotAddService -> timberWithLocalTag().w("failed to initialize ProteGOGattServer")
-                    ServerResult.Failure.CannotAddCharacteristic -> timberWithLocalTag().w("failed to initialize ProteGOGattServer")
+                    ServerResult.Failure.CannotAddService -> timberWithLocalTag().w("failed to initialize ProteGoGattServer")
+                    ServerResult.Failure.CannotAddCharacteristic -> timberWithLocalTag().w("failed to initialize ProteGoGattServer")
                 }
             }
     }
@@ -225,13 +225,13 @@ class ProteGOAdvertiser(
         }
     }
 
-    override fun gattServerStarted(gattServer: ProteGOGattServer) {
+    override fun gattServerStarted(gattServer: ProteGoGattServer) {
         timberWithLocalTag().i("GATT server started")
         // TODO: Maybe start advertisement here? On the other hand we could fail to
         // start gatt server but managed to start advertisement alone, which is also beneficial.
     }
 
-    override fun gattServerFailed(gattServer: ProteGOGattServer, status: Int) {
+    override fun gattServerFailed(gattServer: ProteGoGattServer, status: Int) {
         timberWithLocalTag().e("GATT server failed with status: $status")
         disable()
         advertiserListener?.error(this, AdvertiserListener.AdvertiserError.Server(status))

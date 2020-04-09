@@ -43,7 +43,7 @@ class BeaconIdManager : BeaconIdAgent {
                     0x0d,
                     0x0e,
                     beaconIdPart.getAndIncrement().toByte()
-                ), ProteGOManufacturerDataVersion
+                ), ProteGoManufacturerDataVersion
             ), Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3))
         )
         handler.postDelayed({ currentBeaconId = createNewBeaconId() }, newBeaconId.expirationDate.time - System.currentTimeMillis())

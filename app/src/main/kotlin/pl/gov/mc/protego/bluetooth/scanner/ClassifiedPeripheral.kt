@@ -5,20 +5,20 @@ import pl.gov.mc.protego.bluetooth.beacon.BeaconId
 
 
 sealed class ClassifiedPeripheral {
-    sealed class ProteGO(val bleDevice: RxBleDevice) : ClassifiedPeripheral() {
-        class FullAdvertisement(bleDevice: RxBleDevice, val beaconId: BeaconId, val rssi: Int) : ProteGO(bleDevice)
+    sealed class ProteGo(val bleDevice: RxBleDevice) : ClassifiedPeripheral() {
+        class FullAdvertisement(bleDevice: RxBleDevice, val beaconId: BeaconId, val rssi: Int) : ProteGo(bleDevice)
 
         // possibly PartialAdvertisement with partial beaconId
-        class MinimalAdvertisement(bleDevice: RxBleDevice) : ProteGO(bleDevice)
-        class PotentialAdvertisement(bleDevice: RxBleDevice) : ProteGO(bleDevice)
+        class MinimalAdvertisement(bleDevice: RxBleDevice) : ProteGo(bleDevice)
+        class PotentialAdvertisement(bleDevice: RxBleDevice) : ProteGo(bleDevice)
     }
 
-    object NonProteGO : ClassifiedPeripheral()
+    object NonProteGo : ClassifiedPeripheral()
 
     fun className(): String = when (this) {
-        is ProteGO.FullAdvertisement -> "ProteGO.FullAdvertisement"
-        is ProteGO.MinimalAdvertisement -> "ProteGO.MinimalAdvertisement"
-        is ProteGO.PotentialAdvertisement -> "ProteGO.PotentialAdvertisement"
-        NonProteGO -> "NonProteGO"
+        is ProteGo.FullAdvertisement -> "ProteGo.FullAdvertisement"
+        is ProteGo.MinimalAdvertisement -> "ProteGo.MinimalAdvertisement"
+        is ProteGo.PotentialAdvertisement -> "ProteGo.PotentialAdvertisement"
+        NonProteGo -> "NonProteGo"
     }
 }

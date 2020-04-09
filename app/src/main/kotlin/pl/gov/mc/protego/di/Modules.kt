@@ -15,9 +15,9 @@ import pl.gov.mc.protego.backend.domain.ProtegoServer
 import pl.gov.mc.protego.bluetooth.BeaconIdManager
 import pl.gov.mc.protego.bluetooth.BluetoothBeaconIdExchangeManager
 import pl.gov.mc.protego.bluetooth.advertiser.AdvertiserInterface
-import pl.gov.mc.protego.bluetooth.advertiser.ProteGOAdvertiser
+import pl.gov.mc.protego.bluetooth.advertiser.ProteGoAdvertiser
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
-import pl.gov.mc.protego.bluetooth.scanner.ProteGOScanner
+import pl.gov.mc.protego.bluetooth.scanner.ProteGoScanner
 import pl.gov.mc.protego.bluetooth.scanner.ScannerInterface
 import pl.gov.mc.protego.encryption.EncryptionKeyStore
 import pl.gov.mc.protego.encryption.RandomKey
@@ -136,7 +136,7 @@ val networkingModule = module {
 val bluetoothModule = module {
     single<BeaconIdAgent> { BeaconIdManager() }
     single { androidApplication().getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager }
-    single<AdvertiserInterface> { ProteGOAdvertiser(androidApplication(), get(), get()) }
-    single<ScannerInterface> { ProteGOScanner(androidApplication(), get()) }
+    single<AdvertiserInterface> { ProteGoAdvertiser(androidApplication(), get(), get()) }
+    single<ScannerInterface> { ProteGoScanner(androidApplication(), get()) }
     single { BluetoothBeaconIdExchangeManager(get(), get()) }
 }

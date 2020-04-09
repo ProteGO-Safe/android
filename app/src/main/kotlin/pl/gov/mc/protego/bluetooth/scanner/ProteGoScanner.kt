@@ -12,7 +12,7 @@ import io.reactivex.functions.Function
 import io.reactivex.observables.GroupedObservable
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.subjects.BehaviorSubject
-import pl.gov.mc.protego.bluetooth.PeripheralIgnoredGracePeriodIfNoProteGOCharacteristicInMin
+import pl.gov.mc.protego.bluetooth.PeripheralIgnoredGracePeriodIfNoProteGoCharacteristicInMin
 import pl.gov.mc.protego.bluetooth.PeripheralIgnoredTimeoutInSec
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdAgent
 import pl.gov.mc.protego.bluetooth.beacon.BeaconIdRemote
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 
-class ProteGOScanner(context: Context, private val beaconIdAgent: BeaconIdAgent) : ScannerInterface {
+class ProteGoScanner(context: Context, private val beaconIdAgent: BeaconIdAgent) : ScannerInterface {
 
     private val client = RxBleClient.create(context)
     private val serialDisposable = SerialDisposable()
@@ -48,13 +48,13 @@ class ProteGOScanner(context: Context, private val beaconIdAgent: BeaconIdAgent)
             ScannerInterface.Mode.SCAN_AND_EXCHANGE_BEACON_IDS -> ScanSettings.SCAN_MODE_BALANCED
         }
         val scanSettings = ScanSettings.Builder().setScanMode(scanMode).build()
-        val transformer: ObservableTransformer<ClassifiedPeripheral.ProteGO, BeaconIdRemote> = when (inMode) {
+        val transformer: ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> = when (inMode) {
             ScannerInterface.Mode.SCAN_ONLY -> scanOnlyBeaconId()
-            ScannerInterface.Mode.SCAN_AND_EXCHANGE_BEACON_IDS -> exchangeBeaconId(ProteGOConnector(beaconIdAgent))
+            ScannerInterface.Mode.SCAN_AND_EXCHANGE_BEACON_IDS -> exchangeBeaconId(ProteGoConnector(beaconIdAgent))
         }
         client.scanBleDevices(scanSettings)
             .map(ScanResultClassification)
-            .ofType(ClassifiedPeripheral.ProteGO::class.java)
+            .ofType(ClassifiedPeripheral.ProteGo::class.java)
             .compose(transformer)
             .subscribe(
                 { beaconIdAgent.synchronizedBeaconId(it) },
@@ -76,27 +76,27 @@ class ProteGOScanner(context: Context, private val beaconIdAgent: BeaconIdAgent)
 
     // region Private functions ----------------------------------------------------------
 
-    private fun scanOnlyBeaconId(): ObservableTransformer<ClassifiedPeripheral.ProteGO, BeaconIdRemote> =
+    private fun scanOnlyBeaconId(): ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> =
         ObservableTransformer { proteGoScannedDevices ->
-            proteGoScannedDevices.ofType(ClassifiedPeripheral.ProteGO.FullAdvertisement::class.java)
+            proteGoScannedDevices.ofType(ClassifiedPeripheral.ProteGo.FullAdvertisement::class.java)
                 .groupBy { fa -> fa.beaconId }
                 .flatMap { it.throttleFirstPeripheralAutoCleanUp() }
                 .map { BeaconIdRemote(it.beaconId, it.rssi, BeaconIdSource.SCANNER) }
         }
 
-    private fun exchangeBeaconId(proteGoConnector: ProteGOConnector): ObservableTransformer<ClassifiedPeripheral.ProteGO, BeaconIdRemote> =
+    private fun exchangeBeaconId(proteGoConnector: ProteGoConnector): ObservableTransformer<ClassifiedPeripheral.ProteGo, BeaconIdRemote> =
         ObservableTransformer { classifiedScannedDevices ->
             classifiedScannedDevices.publish { csd ->
                 Observable.merge(
-                    csd.ofType(ClassifiedPeripheral.ProteGO.FullAdvertisement::class.java)
+                    csd.ofType(ClassifiedPeripheral.ProteGo.FullAdvertisement::class.java)
                         .groupBy { fa -> fa.beaconId }
                         .flatMap { it.syncAtMostOnceEveryMinute(proteGoConnector) },
-                    csd.ofType(ClassifiedPeripheral.ProteGO.MinimalAdvertisement::class.java)
+                    csd.ofType(ClassifiedPeripheral.ProteGo.MinimalAdvertisement::class.java)
                         .groupBy { ma -> ma.bleDevice.macAddress }
                         .flatMap { it.syncAtMostOnceEveryMinute(proteGoConnector) },
-                    csd.ofType(ClassifiedPeripheral.ProteGO.PotentialAdvertisement::class.java)
+                    csd.ofType(ClassifiedPeripheral.ProteGo.PotentialAdvertisement::class.java)
                         .groupBy { pa -> pa.bleDevice.macAddress }
-                        .flatMap({ it.syncAtMostOnceEveryMinuteIfValidProteGOElseIgnore(proteGoConnector) }, 2)
+                        .flatMap({ it.syncAtMostOnceEveryMinuteIfValidProteGoElseIgnore(proteGoConnector) }, 2)
                 )
                     .takeOnlyValidReadBeacons()
             }
@@ -106,8 +106,8 @@ class ProteGOScanner(context: Context, private val beaconIdAgent: BeaconIdAgent)
      * This function sync emissions from a grouped observable at most once every minute. If syncs will fail due to peripheral not being
      * a valid ProteGO peripheral no more syncs will happen for time specified in Constants file
      */
-    private fun GroupedObservable<*, ClassifiedPeripheral.ProteGO.PotentialAdvertisement>.syncAtMostOnceEveryMinuteIfValidProteGOElseIgnore(
-        proteGoConnector: ProteGOConnector
+    private fun GroupedObservable<*, ClassifiedPeripheral.ProteGo.PotentialAdvertisement>.syncAtMostOnceEveryMinuteIfValidProteGoElseIgnore(
+        proteGoConnector: ProteGoConnector
     ): Observable<SyncEvent> {
         val enterGracePeriod = BehaviorSubject.create<Unit>()
         fun isInGracePeriod() = enterGracePeriod.value?.let { true } ?: false
@@ -115,7 +115,7 @@ class ProteGOScanner(context: Context, private val beaconIdAgent: BeaconIdAgent)
             .share()
             .let { shared ->
                 val disposable = shared
-                    .take(PeripheralIgnoredGracePeriodIfNoProteGOCharacteristicInMin, TimeUnit.MINUTES)
+                    .take(PeripheralIgnoredGracePeriodIfNoProteGoCharacteristicInMin, TimeUnit.MINUTES)
                     .delaySubscription(enterGracePeriod)
                     .ignoreElements()
                     .onErrorComplete()
@@ -126,10 +126,10 @@ class ProteGOScanner(context: Context, private val beaconIdAgent: BeaconIdAgent)
             }
             .filter { !isInGracePeriod() }
             .syncAtMostOnceEveryMinute(proteGoConnector)
-            .doOnNext { if (it is SyncEvent.Process.End.NoProteGOAttributes) enterGracePeriod.onNext(Unit) }
+            .doOnNext { if (it is SyncEvent.Process.End.NoProteGoAttributes) enterGracePeriod.onNext(Unit) }
     }
 
-    private fun <T : ClassifiedPeripheral.ProteGO> Observable<T>.syncAtMostOnceEveryMinute(proteGoConnector: ProteGOConnector) =
+    private fun <T : ClassifiedPeripheral.ProteGo> Observable<T>.syncAtMostOnceEveryMinute(proteGoConnector: ProteGoConnector) =
         this.throttleFirstPeripheralAutoCleanUp()
             .flatMap { proteGoPeripheral ->
                 val macAddress = proteGoPeripheral.bleDevice.macAddress

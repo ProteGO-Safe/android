@@ -22,7 +22,7 @@ sealed class AdvertiserResult {
 }
 
 sealed class ServerResult {
-    data class Success(val proteGoGattServer: ProteGOGattServer) : ServerResult()
+    data class Success(val proteGoGattServer: ProteGoGattServer) : ServerResult()
     sealed class Failure : ServerResult() {
         object CannotObtainGattServer : Failure()
         object CannotAddService : Failure()

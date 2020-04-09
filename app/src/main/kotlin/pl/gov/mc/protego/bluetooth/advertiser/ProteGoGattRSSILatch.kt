@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference
  * Note: Apparently when a [BluetoothGatt] is opened [android.bluetooth.BluetoothGattServer.cancelConnection] does not disconnect
  * the [BluetoothDevice] – [BluetoothGatt.disconnect] needs to be called in order to actually disconnect
  */
-class ProteGOGattRSSILatch(context: Context, bluetoothDevice: BluetoothDevice, private val bluetoothHandler: Handler) {
+class ProteGoGattRSSILatch(context: Context, bluetoothDevice: BluetoothDevice, private val bluetoothHandler: Handler) {
 
     var rssi: Int? = null
         private set
@@ -32,7 +32,7 @@ class ProteGOGattRSSILatch(context: Context, bluetoothDevice: BluetoothDevice, p
                 super.onReadRemoteRssi(gatt, rssi, status)
                 Timber.i("${gatt.device} RSSI: $rssi")
                 if (status == BluetoothGatt.GATT_SUCCESS) {
-                    this@ProteGOGattRSSILatch.rssi = rssi
+                    this@ProteGoGattRSSILatch.rssi = rssi
                 }
             }
 
