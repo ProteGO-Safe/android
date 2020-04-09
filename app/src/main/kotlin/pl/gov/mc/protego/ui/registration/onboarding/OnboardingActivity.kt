@@ -19,7 +19,7 @@ import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.observeLiveData
 import pl.gov.mc.protego.ui.registration.RegistrationActivity
 
-class OnboardingActivity : BaseActivity() {
+class OnboardingActivity : BaseActivity<Unit>() {
 
     override val viewModel: OnboardingViewModel by viewModel()
 

@@ -2,6 +2,7 @@ package pl.gov.mc.protego.ui.registration
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -11,6 +12,7 @@ import pl.gov.mc.protego.backend.domain.ProtegoServer
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.information.SessionData
 import pl.gov.mc.protego.ui.TermsAndConditionsIntentCreator
+import pl.gov.mc.protego.ui.UiLock
 import pl.gov.mc.protego.ui.base.BaseViewModel
 import pl.gov.mc.protego.ui.put
 import pl.gov.mc.protego.ui.validator.MsisdnValidationResult
@@ -22,11 +24,11 @@ class RegistrationViewModel(
     private val protegoServer: ProtegoServer,
     private val session: Session,
     private val termsAndConditionsIntentCreator: TermsAndConditionsIntentCreator
-)  : BaseViewModel() {
+) : BaseViewModel<UiLock>() {
 
     private val _msisdnError = MutableLiveData<MsisdnValidationResult>()
     val msisdnError: LiveData<MsisdnValidationResult>
-            get() = _msisdnError
+        get() = _msisdnError
     private val _sessionData = MutableLiveData<SessionData>()
     val sessionData: LiveData<SessionData>
         get() = _sessionData
@@ -47,8 +49,7 @@ class RegistrationViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess { _sessionData.value = it }
-            .doFinally { _isInProgress.value = false }
-            .doOnSubscribe { _isInProgress.value = true }
+            .handleUiLock()
             .subscribeBy(
                 onError = { Timber.e(it, "Registration Error") },
                 onSuccess = { Timber.d("Registration request succeed") }
@@ -70,11 +71,15 @@ class RegistrationViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess { _sessionData.value = it }
-            .doFinally { _isInProgress.value = false }
-            .doOnSubscribe { _isInProgress.value = true }
+            .handleUiLock()
             .subscribeBy(
                 onError = { Timber.e(it, "Anonymous registration Error") },
                 onSuccess = { Timber.d("Anonymous registration request succeed") }
             ).addTo(disposables)
     }
+
+    private fun <T> Single<T>.handleUiLock() =
+        this
+            .doFinally { _isInProgress put UiLock.NO_LOCK }
+            .doOnSubscribe { _isInProgress put UiLock.DISABLE_INPUTS }
 }

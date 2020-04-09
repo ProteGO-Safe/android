@@ -12,12 +12,13 @@ import androidx.core.widget.doOnTextChanged
 import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
+import pl.gov.mc.protego.ui.UiLock
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
 import pl.gov.mc.protego.ui.scrollWhenFocusObtained
 
-class RegistrationConfirmationActivity : BaseActivity() {
+class RegistrationConfirmationActivity : BaseActivity<UiLock>() {
 
     override val viewModel: RegistrationConfirmationViewModel by viewModel()
 
@@ -55,8 +56,8 @@ class RegistrationConfirmationActivity : BaseActivity() {
 
     override fun observeIsInProgress() {
         observeLiveData(viewModel.isInProgress) {
-            sms_code.isEnabled = !it
-            confirm_registration_button.isEnabled = !it
+            sms_code.isEnabled = it == UiLock.NO_LOCK
+            confirm_registration_button.isEnabled = it == UiLock.NO_LOCK
         }
     }
 

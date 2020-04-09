@@ -13,7 +13,7 @@ import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.ui.base.BaseFragment
 import pl.gov.mc.protego.ui.registration.onboarding.OnboardingActivity
 
-class DashboardMainFragment : BaseFragment() {
+class DashboardMainFragment : BaseFragment<Unit>() {
 
     override val viewModel: DashboardMainViewModel by viewModel()
     private val session: Session by inject()

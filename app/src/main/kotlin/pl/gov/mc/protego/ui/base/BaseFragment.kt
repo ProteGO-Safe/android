@@ -5,8 +5,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import pl.gov.mc.protego.ui.observeLiveData
 
-abstract class BaseFragment : Fragment() {
-    abstract val viewModel: BaseViewModel
+abstract class BaseFragment<T> : Fragment() {
+    abstract val viewModel: BaseViewModel<T>
 
     protected fun observeIntents() {
         observeLiveData(viewModel.intentToStart) {

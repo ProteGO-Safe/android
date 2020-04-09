@@ -32,3 +32,7 @@ open class Event<out T>(private val content: T) {
         }
     }
 }
+
+enum class UiLock {
+    NO_LOCK, DISABLE_INPUTS, SHOW_ONLY_SPINNER
+}

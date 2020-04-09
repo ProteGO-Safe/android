@@ -10,7 +10,7 @@ import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.observeLiveData
 
 
-class DashboardActivity : BaseActivity() {
+class DashboardActivity : BaseActivity<Unit>() {
 
     override val viewModel: DashboardActivityViewModel by viewModel()
 

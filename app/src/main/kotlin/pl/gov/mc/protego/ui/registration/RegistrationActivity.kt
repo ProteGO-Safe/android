@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.registration_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.SessionState
+import pl.gov.mc.protego.ui.UiLock
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
@@ -25,7 +26,7 @@ import pl.gov.mc.protego.ui.validator.MsisdnInvalid
 import pl.gov.mc.protego.ui.validator.MsisdnOk
 
 
-class RegistrationActivity : BaseActivity() {
+class RegistrationActivity : BaseActivity<UiLock>() {
 
     override val viewModel: RegistrationViewModel by viewModel()
 
@@ -71,9 +72,9 @@ class RegistrationActivity : BaseActivity() {
 
     override fun observeIsInProgress() {
         observeLiveData(viewModel.isInProgress) {
-            msisdn_edit_text_layout.isEnabled = !it
-            skip_registration_button.isEnabled = !it
-            register_button.isEnabled = !it
+            msisdn_edit_text_layout.isEnabled = it == UiLock.NO_LOCK
+            skip_registration_button.isEnabled = it == UiLock.NO_LOCK
+            register_button.isEnabled = it == UiLock.NO_LOCK
         }
     }
 

@@ -3,6 +3,7 @@ package pl.gov.mc.protego.ui.registration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.polidea.cockpit.cockpit.Cockpit
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -10,14 +11,17 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protego.backend.domain.ProtegoServer
 import pl.gov.mc.protego.ui.TermsAndConditionsIntentCreator
+import pl.gov.mc.protego.ui.UiLock
 import pl.gov.mc.protego.ui.base.BaseViewModel
 import pl.gov.mc.protego.ui.put
 import timber.log.Timber
 
+
+
 class RegistrationConfirmationViewModel(
     private val protegoServer: ProtegoServer,
     private val termsAndConditionsIntentCreator: TermsAndConditionsIntentCreator
-) : BaseViewModel() {
+) : BaseViewModel<UiLock>() {
 
     private var disposables = CompositeDisposable()
 
@@ -38,6 +42,7 @@ class RegistrationConfirmationViewModel(
             .confirmRegistration(code)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .handleUiLock()
             .subscribeBy(
                 onError = {
                     Timber.e(it, "Confirmation error: ${it.message}")
@@ -57,4 +62,8 @@ class RegistrationConfirmationViewModel(
 
     fun onTermsAndConditionsClicked() =
         _intentToStart put termsAndConditionsIntentCreator.intentToLaunch.wrapInEvent()
+    private fun <T> Single<T>.handleUiLock() =
+        this
+            .doFinally { _isInProgress put UiLock.NO_LOCK }
+            .doOnSubscribe { _isInProgress put UiLock.DISABLE_INPUTS }
 }

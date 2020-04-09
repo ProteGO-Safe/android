@@ -9,7 +9,7 @@ import pl.gov.mc.protego.R
 import pl.gov.mc.protego.ui.Event
 import pl.gov.mc.protego.ui.base.BaseViewModel
 
-class OnboardingViewModel : BaseViewModel() {
+class OnboardingViewModel : BaseViewModel<Unit>() {
 
     private val pages = listOf(
         PageInfo(

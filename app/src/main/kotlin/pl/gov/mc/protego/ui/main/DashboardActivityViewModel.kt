@@ -14,7 +14,7 @@ import timber.log.Timber
 
 class DashboardActivityViewModel(
     private val protegoServer: ProtegoServer
-) : BaseViewModel() {
+) : BaseViewModel<Unit>() {
 
     private val _dashboardPage = MutableLiveData<DashboardPage>().apply {
         value = DashboardPage.MainPage()

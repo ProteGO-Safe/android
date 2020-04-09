@@ -5,9 +5,9 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.toolbar.*
 import pl.gov.mc.protego.ui.observeLiveData
 
-abstract class BaseActivity : BaseVariantActivity() {
+abstract class BaseActivity<T> : BaseVariantActivity() {
 
-    protected abstract val viewModel: BaseViewModel
+    protected abstract val viewModel: BaseViewModel<T>
 
     override fun setContentView(layoutResID: Int) {
         super.setContentView(layoutResID)

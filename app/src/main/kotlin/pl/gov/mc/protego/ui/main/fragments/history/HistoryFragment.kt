@@ -12,7 +12,7 @@ import pl.gov.mc.protego.ui.base.BaseFragment
 import pl.gov.mc.protego.ui.observeLiveData
 
 
-class HistoryFragment : BaseFragment() {
+class HistoryFragment : BaseFragment<Unit>() {
 
     override val viewModel: HistoryViewModel by viewModel()
 

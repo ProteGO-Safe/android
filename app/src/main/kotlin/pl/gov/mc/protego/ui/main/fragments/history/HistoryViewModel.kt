@@ -18,7 +18,7 @@ class HistoryViewModel(
     private val resources: Resources,
     private val emailClientAdapter: EmailClientAdapter,
     private val termsAndConditionsIntentCreator: TermsAndConditionsIntentCreator
-) : BaseViewModel() {
+) : BaseViewModel<Unit>() {
 
     private val _versionLiveData = MutableLiveData<String>()
     val versionLiveData: LiveData<String>
