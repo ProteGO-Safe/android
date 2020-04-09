@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/huge_margin"
             android:layout_marginTop="@dimen/small_margin"
-            android:text="Pomiń rejestrację"
+            android:text="@string/registration_without_phone_number_btn"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/register_button" />
