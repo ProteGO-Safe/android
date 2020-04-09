@@ -33,7 +33,9 @@
   <!--Rejestracja-->
   <string name="registration_send_description_optional">It\'s optional</string>
   <!--Rejestracja-->
-  <string name="registration_phone_number_validation_failed">Invalid phone number</string>
+  <string name="registration_phone_number_invalid">Invalid phone number</string>
+  <!--Rejestracja-->
+  <string name="registration_phone_number_incomplete">Incomplete phone number</string>
   <!--Rejestracja-->
   <string name="registration_phone_placeholder">xxx xxx xxx</string>
   <!--Rejestracja-->

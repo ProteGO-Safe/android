@@ -20,8 +20,6 @@ import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
 import pl.gov.mc.protego.ui.scrollWhenFocusObtained
-import pl.gov.mc.protego.ui.validator.MsisdnInvalid
-import pl.gov.mc.protego.ui.validator.MsisdnOk
 import timber.log.Timber
 
 
@@ -108,12 +106,9 @@ class RegistrationActivity : BaseActivity() {
 
     private fun observeMsisdnValidation() {
         observeLiveData(viewModel.msisdnError) {
-            register_button.isEnabled = it == MsisdnOk
-            msisdn_edit_text_layout.error = if (it == MsisdnInvalid) {
-                getString(R.string.registration_phone_number_validation_failed)
-            } else {
-                null
-            }
+            register_button.isEnabled = it.success
+            msisdn_edit_text_layout.error =
+                if (it.errorMessage != null) getString(it.errorMessage) else null
         }
     }
 
