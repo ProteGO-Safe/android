@@ -21,7 +21,7 @@ import pl.gov.mc.protego.ui.registration.RegistrationActivity
 
 class OnboardingActivity : BaseActivity() {
 
-    private val viewModel: OnboardingViewModel by viewModel()
+    override val viewModel: OnboardingViewModel by viewModel()
 
     private var pageAnimatorSet = AnimatorSet()
 
@@ -134,6 +134,8 @@ class OnboardingActivity : BaseActivity() {
             playTogether(oldPageTranslation, newPageTranslation)
         }.start()
     }
+
+    override fun observeIsInProgress() = Unit
 
     private fun navigateToRegistration() =
         startActivity(Intent(this, RegistrationActivity::class.java))

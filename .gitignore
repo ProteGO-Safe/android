@@ -9,3 +9,5 @@
 .cxx
 scripts/localization_credentials.json
 venv
+.project
+.settings/

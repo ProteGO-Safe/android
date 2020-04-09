@@ -7,4 +7,6 @@
 
     <!--TODO: Dashboard - wyloguj-->
     <string name="dashboard_logout">Logout</string>
+
+    <string name="cannot_start_wireless_config">Can not open settings. Turn on Internet to be able to use the application.</string>
 </resources>

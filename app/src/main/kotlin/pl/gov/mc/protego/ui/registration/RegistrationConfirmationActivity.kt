@@ -19,7 +19,7 @@ import pl.gov.mc.protego.ui.scrollWhenFocusObtained
 
 class RegistrationConfirmationActivity : BaseActivity() {
 
-    private val viewModel: RegistrationConfirmationViewModel by viewModel()
+    override val viewModel: RegistrationConfirmationViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,15 @@ class RegistrationConfirmationActivity : BaseActivity() {
                 navigateToMain()
             }
         }
+        observeIntents()
+        observeIsInProgress()
+    }
 
+    override fun observeIsInProgress() {
+        observeLiveData(viewModel.isInProgress) {
+            sms_code.isEnabled = !it
+            confirm_registration_button.isEnabled = !it
+        }
     }
 
     override fun onDestroy() {
@@ -67,12 +75,7 @@ class RegistrationConfirmationActivity : BaseActivity() {
                 setSpan(
                     object : ClickableSpan() {
                         override fun onClick(widget: View) {
-                            //TODO link to terms of use
-                            Toast.makeText(
-                                this@RegistrationConfirmationActivity,
-                                "Nie ma jeszcze regulaminu",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            viewModel.onTermsAndConditionsClicked()
                         }
                     },
                     nonClickablePart.length,

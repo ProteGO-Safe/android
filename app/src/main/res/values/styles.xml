@@ -31,6 +31,7 @@
 
     <style name="AppText.Input">
         <item name="font">@font/poppins_medium</item>
+        <item name="boxBackgroundColor">@color/white</item>
     </style>
 
     <style name="AppText.Input.Special">
@@ -78,6 +79,12 @@
     <style name="SplashScreenTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
         <item name="android:statusBarColor">@color/transparent</item>
+    </style>
+
+    <style name="FullScreenDialogTheme" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
     </style>
 
 </resources>

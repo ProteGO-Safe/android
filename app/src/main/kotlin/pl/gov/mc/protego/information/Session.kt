@@ -1,6 +1,7 @@
 package pl.gov.mc.protego.information
 
 import io.reactivex.Single
+import pl.gov.mc.protego.backend.api.AnonymousRegistrationResponse
 import pl.gov.mc.protego.backend.api.ConfirmationRegistrationResponse
 import pl.gov.mc.protego.backend.api.RegistrationResponse
 import pl.gov.mc.protego.repository.SessionRepository
@@ -13,14 +14,15 @@ enum class SessionState {
     LOGGED_IN;
 
     val checkpoint: SessionState
-        get() = when(this){
+        get() = when (this) {
             UNREGISTERED -> UNREGISTERED
             REGISTRATION -> UNREGISTERED
             LOGGED_IN -> LOGGED_IN
         }
 
     companion object {
-        fun byName(stateName: String?) = SessionState.values().firstOrNull { it.name == stateName } ?: UNREGISTERED
+        fun byName(stateName: String?) =
+            SessionState.values().firstOrNull { it.name == stateName } ?: UNREGISTERED
     }
 }
 
@@ -32,7 +34,7 @@ data class SessionData(
     val registrationId: String? = null,
     val msisdn: String? = null,
     val emergencyState: EmergencyState = EmergencyState.ORANGE,
-    val debugCode : String? = null
+    val debugCode: String? = null
 )
 
 class Session(
@@ -59,7 +61,10 @@ class Session(
 
     fun registered(confirmationRegistrationResponse: ConfirmationRegistrationResponse): Single<SessionData> {
         return Single.create<SessionData> {
-            sessionData = sessionData.copy(state = SessionState.LOGGED_IN, userId = confirmationRegistrationResponse.userId)
+            sessionData = sessionData.copy(
+                state = SessionState.LOGGED_IN,
+                userId = confirmationRegistrationResponse.userId
+            )
             sessionRepository.store(sessionData)
             it.onSuccess(sessionData)
         }
@@ -67,10 +72,19 @@ class Session(
 
     fun save(registrationResponse: RegistrationResponse): Single<SessionData> {
         return Single.create<SessionData> {
-            sessionData = sessionData.copy(registrationId = registrationResponse.registrationId, debugCode = registrationResponse.code)
+            sessionData = sessionData.copy(
+                registrationId = registrationResponse.registrationId,
+                debugCode = registrationResponse.code
+            )
             sessionRepository.store(sessionData)
             it.onSuccess(sessionData)
         }
+    }
+
+    fun registered(response: AnonymousRegistrationResponse): Single<SessionData> = Single.create {
+        sessionData = sessionData.copy(state = SessionState.LOGGED_IN, userId = response.userId)
+        sessionRepository.store(sessionData)
+        it.onSuccess(sessionData)
     }
 
     fun logout() {
@@ -80,8 +94,9 @@ class Session(
     }
 
     val registrationId: String
-        get() = sessionData.registrationId ?: throw IllegalStateException("RegistrationId is not defined.")
+        get() = sessionData.registrationId
+            ?: throw IllegalStateException("RegistrationId is not defined.")
 
     val isActiveRegistrationProcess: Boolean
-        get()= sessionData.state == SessionState.REGISTRATION
+        get() = sessionData.state == SessionState.REGISTRATION
 }
