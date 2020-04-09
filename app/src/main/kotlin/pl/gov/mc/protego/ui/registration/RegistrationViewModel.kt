@@ -1,5 +1,6 @@
 package pl.gov.mc.protego.ui.registration
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,6 +12,9 @@ import pl.gov.mc.protego.backend.domain.ProtegoServer
 import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.information.SessionData
+import pl.gov.mc.protego.ui.validator.MsisdnInvalid
+import pl.gov.mc.protego.ui.validator.MsisdnOk
+import pl.gov.mc.protego.ui.validator.MsisdnValidationResult
 import pl.gov.mc.protego.ui.validator.MsisdnValidator
 import timber.log.Timber
 
@@ -21,7 +25,7 @@ class RegistrationViewModel(
     private val phoneInformation: PhoneInformation
 )  : ViewModel() {
 
-    val msisdnError = MutableLiveData<String?>()
+    val msisdnError = MutableLiveData<MsisdnValidationResult>()
     val sessionData = MutableLiveData<SessionData>()
     val _hasInternetConnection = MutableLiveData<Boolean>()
     val hasInternetConnection: LiveData<Boolean>
@@ -32,7 +36,7 @@ class RegistrationViewModel(
     fun onResume() {
         fetchSession()
         val hasActiveInternetConnection = phoneInformation.hasActiveInternetConnection
-        noInternetConnection.value = hasActiveInternetConnection
+        _hasInternetConnection.value = hasActiveInternetConnection
     }
 
     private fun fetchSession() {
@@ -40,11 +44,7 @@ class RegistrationViewModel(
     }
 
     fun onNewMsisdn(msisdn: String) {
-        if (!msisdnValidator.validate(msisdn)) {
-            msisdnError.value = "Niepoprawny numer telefonu"
-        } else {
-            msisdnError.value = null
-        }
+        msisdnError.value = msisdnValidator.validate(msisdn.replace(" ", ""))
     }
 
     fun onStartRegistration(msisdn: String) {

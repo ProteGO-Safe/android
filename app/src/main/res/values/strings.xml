@@ -1,13 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="registration_title">Dołącz do aplikacji!</string>
-    <string name="registration_content">Żeby potwierdzić Twoje konto podaj swój numer telefonu. Prześlemy Ci kod weryfikujący. Nie będziemy łączyć Twoich danych z numerem telefonu.</string>
-    <string name="registration_confirmation_title">Wpisz swój kod</string>
-    <string name="registration_confirmation_rules">Dołączając do aplikacji akceptujesz regulamin</string>
-    <string name="registration_confirmation_content">Wpisz swój kod, który otrzymałeś w SMSie wysłanym na numer xxx-xxx-xxx.</string>
-    <string name="register_button">Prześlij kod</string>
-    <string name="confirm_register_button">Dołącz do</string>
-    <string name="orange_status_title">Uważaj na siebie</string>
-    <string name="orange_status_content">Prawdopodobnie przebywałeś w miejscach, w których znajdowały się osoby zarażone. Zachowaj ostrożość i ogranicz wyjścia do minimum. Po więcej informacji kliknij [tutaj].</string>
-    <string name="placeholder_content">- Ograniczenia w przemieszczaniu się z wyjatkiem drogi do pracy, wolontariatu, załatwiania spraw niezbędnych do życia codziennego.\n- W autobusie może być tyle osób ile wynosi połowa liczby miejsc siedzących.\n- Całkowity zakaz zgromadzeń - chyba, że z najbliższymi. Więcej informacji [tuta].</string>
+    <!--MUST be consulted with someone responsible for copy-->
+    <string name="missing_email_client">Can not open e-mail client.</string>
+    <string name="missing_web_browser">Can not open web browser</string>
+    <string name="send_email_window_title">Send e-mail</string>
+
+    <!--TODO: Dashboard - wyloguj-->
+    <string name="dashboard_logout">Logout</string>
+
     <string name="cannot_start_wireless_config">Can not open settings. Turn on Internet to be able to use the application.</string>
 </resources>

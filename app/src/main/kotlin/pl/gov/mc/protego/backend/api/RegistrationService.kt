@@ -15,7 +15,7 @@ class RegistrationService (
     ) {
 
     fun initRegistration(msisdn: String): Single<RegistrationResponse> =
-        Single.just(msisdn.withCountyCode(MsisdnCountryCode.PL))
+        Single.just(msisdn.withCountryCode(MsisdnCountryCode.PL))
         .doOnSuccess { if(!msisdnValidator.validateWithCountryCode(it)) {
             throw InvalidMsisdnException("$it is not a valid MSISDN")
         } }
@@ -28,5 +28,5 @@ class RegistrationService (
             .flatMap { registrationAPI.confirmRegistration(it) }
 }
 
-private fun String.withCountyCode(countryCode: MsisdnCountryCode): String
+private fun String.withCountryCode(countryCode: MsisdnCountryCode): String
     = "${countryCode.code}$this"

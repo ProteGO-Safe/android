@@ -9,7 +9,7 @@
   <!--Onboarding informacje o statusie-->
   <string name="onboarding_status_title">We will keep you informed about a possible threat</string>
   <!--Onboarding informacje o statusie-->
-  <string name="onboarding_status_description">The application will presnet one of three statuses. You will learn in could be exposed to infected people within last 2 weeks.</string>
+  <string name="onboarding_status_description">The application will present one of three statuses. You will learn if you could be exposed to infected people within last 2 weeks.</string>
   <!--Onboarding informacje o statusie-->
   <string name="onboarding_green_description">We didn\'t dectect any threat</string>
   <!--Onboarding informacje o statusie-->
@@ -39,7 +39,7 @@
   <!--Rejestracja-->
   <string name="registration_verify_description">Enter the code you received on </string>
   <!--Rejestracja-->
-  <string name="registration_verify_code_placeholder">xxxxx</string>
+  <string name="registration_verify_code_placeholder">xxxxxx</string>
   <!--Rejestracja-->
   <string name="registration_verify_btn">Verify code</string>
   <!--Rejestracja-->

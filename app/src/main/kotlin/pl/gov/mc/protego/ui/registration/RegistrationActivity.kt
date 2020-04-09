@@ -14,6 +14,9 @@ import pl.gov.mc.protego.information.SessionState
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
+import pl.gov.mc.protego.ui.scrollWhenFocusObtained
+import pl.gov.mc.protego.ui.validator.MsisdnInvalid
+import pl.gov.mc.protego.ui.validator.MsisdnOk
 import timber.log.Timber
 
 
@@ -25,11 +28,13 @@ class RegistrationActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration_view)
 
+        register_button.isEnabled = false
         register_button.setOnClickListener {
-            registrationViewModel.onStartRegistration(msisdn_edit_text.text.toString())
+            registrationViewModel.onStartRegistration(msisdn_edit_text.text.toString().replace(" ", ""))
         }
 
         msisdn_edit_text.onTextChanged(registrationViewModel::onNewMsisdn)
+        msisdn_edit_text.scrollWhenFocusObtained(scroll_view)
 
         supportActionBar?.apply {
             setHomeButtonEnabled(true)
@@ -39,7 +44,7 @@ class RegistrationActivity : BaseActivity() {
         observeMsisdnValidation()
         observeRegistrationStatus()
 
-        observeLiveData(registrationViewModel.noInternetConnection) { hasInternetConnection ->
+        observeLiveData(registrationViewModel._hasInternetConnection) { hasInternetConnection ->
             if (!hasInternetConnection) {
                 Timber.d("Show no internet dialog")
                 showNoInternetConnectionDialog()
@@ -53,6 +58,11 @@ class RegistrationActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         registrationViewModel.onResume()
+    }
+
+    override fun onDestroy() {
+        msisdn_edit_text.onFocusChangeListener = null
+        super.onDestroy()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -78,7 +88,9 @@ class RegistrationActivity : BaseActivity() {
 
     private fun observeMsisdnValidation() {
         observeLiveData(registrationViewModel.msisdnError) {
-            msisdn_edit_text_layout.error = it
+            register_button.isEnabled = it == MsisdnOk
+            msisdn_edit_text_layout.error =
+                if (it == MsisdnInvalid) "Niepoprawny numer telefonu" else null
         }
     }
 

@@ -1,5 +1,6 @@
 package pl.gov.mc.protego.ui.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,6 +17,12 @@ class DashboardActivityViewModel(
     private val phoneInformation: PhoneInformation
 ) : ViewModel() {
 
+    private val _dashboardPage = MutableLiveData<DashboardPage>().apply {
+        value = DashboardPage.MainPage()
+    }
+    val dashboardPage: LiveData<DashboardPage>
+        get() = _dashboardPage
+
     private var disposables = CompositeDisposable()
     val noInternetConnection = MutableLiveData<Boolean>()
 
@@ -31,6 +38,13 @@ class DashboardActivityViewModel(
             .addTo(disposables)
 
         noInternetConnection.value = phoneInformation.hasActiveInternetConnection
+    }
+
+    fun menuButtonPressed() {
+        _dashboardPage.value = when (_dashboardPage.value) {
+            is DashboardPage.MainPage -> DashboardPage.HistoryPage()
+            else -> DashboardPage.MainPage()
+        }
     }
 
     override fun onCleared() {
