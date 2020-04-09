@@ -17,8 +17,12 @@ abstract class BaseActivity : BaseVariantActivity() {
         }
     }
 
+    private val noInternetConnectionDialog: DialogFragment
+        get() = supportFragmentManager.findFragmentByTag(NO_INTERNET_DIALOG) as DialogFragment?
+            ?: NoInternetConnectionDialog()
+
     fun showNoInternetConnectionDialog() {
-        supportFragmentManager.findFragmentByTag(NO_INTERNET_DIALOG) ?: NoInternetConnectionDialog().apply {
+        noInternetConnectionDialog.apply {
             show(supportFragmentManager, NO_INTERNET_DIALOG)
         }
     }
