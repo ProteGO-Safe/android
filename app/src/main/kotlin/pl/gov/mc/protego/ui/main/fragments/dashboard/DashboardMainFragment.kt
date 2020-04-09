@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
-import pl.gov.mc.protego.information.Session
+import pl.gov.mc.protego.ui.base.BaseFragment
 
-class DashboardMainFragment : Fragment() {
+class DashboardMainFragment : BaseFragment() {
+
+    override val viewModel: DashboardMainViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,3 +20,4 @@ class DashboardMainFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 }
+

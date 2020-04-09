@@ -8,19 +8,24 @@ enum class MsisdnCountryCode(val code: String) {
     PL("+48")
 }
 
-class RegistrationService (
+class RegistrationService(
     private val registrationAPI: RegistrationAPI,
     private val msisdnValidator: MsisdnValidator,
     private val requestComposer: RegistrationRequestComposer
-    ) {
+) {
+    fun registerAnonymously(): Single<AnonymousRegistrationResponse> =
+        Single.just(requestComposer.anonymousRegistration())
+            .flatMap { registrationAPI.registerAnonymously(it) }
 
     fun initRegistration(msisdn: String): Single<RegistrationResponse> =
-        Single.just(msisdn.withCountyCode(MsisdnCountryCode.PL))
-        .doOnSuccess { if(!msisdnValidator.validateWithCountryCode(it)) {
-            throw InvalidMsisdnException("$it is not a valid MSISDN")
-        } }
-        .map { requestComposer.init(it) }
-        .flatMap { registrationAPI.register(it) }
+        Single.just(msisdn.withCountryCode(MsisdnCountryCode.PL))
+            .doOnSuccess {
+                if (!msisdnValidator.validateWithCountryCode(it)) {
+                    throw InvalidMsisdnException("$it is not a valid MSISDN")
+                }
+            }
+            .map { requestComposer.init(it) }
+            .flatMap { registrationAPI.register(it) }
 
     fun confirmRegistration(code: String, registrationId: String) =
         Single.just(code)
@@ -28,5 +33,5 @@ class RegistrationService (
             .flatMap { registrationAPI.confirmRegistration(it) }
 }
 
-private fun String.withCountyCode(countryCode: MsisdnCountryCode): String
-    = "${countryCode.code}$this"
+private fun String.withCountryCode(countryCode: MsisdnCountryCode): String =
+    "${countryCode.code}$this"

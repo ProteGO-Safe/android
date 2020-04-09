@@ -1,48 +1,65 @@
 package pl.gov.mc.protego.ui.registration
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protego.backend.domain.ProtegoServer
+import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.information.SessionData
+import pl.gov.mc.protego.ui.TermsAndConditionsIntentCreator
+import pl.gov.mc.protego.ui.base.BaseViewModel
+import pl.gov.mc.protego.ui.put
+import pl.gov.mc.protego.ui.validator.MsisdnValidationResult
 import pl.gov.mc.protego.ui.validator.MsisdnValidator
 import timber.log.Timber
 
 class RegistrationViewModel(
     private val msisdnValidator: MsisdnValidator,
     private val protegoServer: ProtegoServer,
-    private val session: Session
-)  : ViewModel() {
+    private val session: Session,
+    private val termsAndConditionsIntentCreator: TermsAndConditionsIntentCreator,
+    private val phoneInformation: PhoneInformation
+) : BaseViewModel() {
 
-    val msisdnError = MutableLiveData<String?>()
-    val sessionData = MutableLiveData<SessionData>()
+    private val _msisdnError = MutableLiveData<MsisdnValidationResult>()
+    val msisdnError: LiveData<MsisdnValidationResult>
+        get() = _msisdnError
+    private val _sessionData = MutableLiveData<SessionData>()
+    val sessionData: LiveData<SessionData>
+        get() = _sessionData
+    val _hasInternetConnection = MutableLiveData<Boolean>()
+    val hasInternetConnection: LiveData<Boolean>
+        get() = _hasInternetConnection
 
-    private var disposables = CompositeDisposable()
+    private val disposables = CompositeDisposable()
 
+    fun onResume() {
+        fetchSession()
+        val hasActiveInternetConnection = phoneInformation.hasActiveInternetConnection
+        _hasInternetConnection.value = hasActiveInternetConnection
+    }
 
     fun fetchSession() {
-        sessionData.value = session.sessionData
+        _sessionData.value = session.sessionData
     }
 
     fun onNewMsisdn(msisdn: String) {
-        if (!msisdnValidator.validate(msisdn)) {
-            msisdnError.value = "Niepoprawny numer telefonu"
-        } else {
-            msisdnError.value = null
-        }
+        _msisdnError.value = msisdnValidator.validate(msisdn.replace(" ", ""))
     }
 
     fun onStartRegistration(msisdn: String) {
         protegoServer
-            .initRegistration(msisdn)
+            .registerWithPhoneNumber(msisdn)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess { sessionData.value = it }
+            .doOnSuccess { _sessionData.value = it }
+            .doFinally { _isInProgress.value = false }
+            .doOnSubscribe { _isInProgress.value = true }
             .subscribeBy(
                 onError = { Timber.e(it, "Registration Error") },
                 onSuccess = { Timber.d("Registration request succeed") }
@@ -53,5 +70,22 @@ class RegistrationViewModel(
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
+    }
+
+    fun onTermsAndConditionsClicked() =
+        _intentToStart put termsAndConditionsIntentCreator.intentToLaunch.wrapInEvent()
+
+    fun onSkipRegistrationClicked() {
+        protegoServer
+            .registerAnonymously()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess { _sessionData.value = it }
+            .doFinally { _isInProgress.value = false }
+            .doOnSubscribe { _isInProgress.value = true }
+            .subscribeBy(
+                onError = { Timber.e(it, "Anonymous registration Error") },
+                onSuccess = { Timber.d("Anonymous registration request succeed") }
+            ).addTo(disposables)
     }
 }
