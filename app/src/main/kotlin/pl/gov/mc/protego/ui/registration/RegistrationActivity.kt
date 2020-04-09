@@ -20,9 +20,9 @@ import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
 import pl.gov.mc.protego.ui.scrollWhenFocusObtained
-import pl.gov.mc.protego.ui.validator.MsisdnIncomplete
 import pl.gov.mc.protego.ui.validator.MsisdnInvalid
 import pl.gov.mc.protego.ui.validator.MsisdnOk
+import timber.log.Timber
 
 
 class RegistrationActivity : BaseActivity() {
@@ -56,7 +56,20 @@ class RegistrationActivity : BaseActivity() {
         observeIntents()
         observeIsInProgress()
 
-        viewModel.fetchSession()
+        observeLiveData(viewModel._hasInternetConnection) { hasInternetConnection ->
+            if (!hasInternetConnection) {
+                Timber.d("Show no internet dialog")
+                showNoInternetConnectionDialog()
+            } else {
+                Timber.d("Hide no internet dialog")
+                hideNoInternetConnectionDialog()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
     }
 
     override fun onDestroy() {

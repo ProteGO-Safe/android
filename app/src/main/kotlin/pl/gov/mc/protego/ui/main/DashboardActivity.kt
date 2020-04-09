@@ -19,6 +19,13 @@ class DashboardActivity : BaseActivity() {
         setContentView(R.layout.activity_dashboard)
 
         observeLiveData(viewModel.dashboardPage) { changePage(it) }
+
+        observeLiveData(viewModel.hasInternetConnection) { hasInternetConnection ->
+            if (!hasInternetConnection)
+                showNoInternetConnectionDialog()
+            else
+                hideNoInternetConnectionDialog()
+        }
     }
 
     override fun onResume() {

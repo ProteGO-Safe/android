@@ -8,6 +8,7 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protego.backend.domain.ProtegoServer
+import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.information.SessionData
 import pl.gov.mc.protego.ui.TermsAndConditionsIntentCreator
@@ -21,17 +22,27 @@ class RegistrationViewModel(
     private val msisdnValidator: MsisdnValidator,
     private val protegoServer: ProtegoServer,
     private val session: Session,
-    private val termsAndConditionsIntentCreator: TermsAndConditionsIntentCreator
-)  : BaseViewModel() {
+    private val termsAndConditionsIntentCreator: TermsAndConditionsIntentCreator,
+    private val phoneInformation: PhoneInformation
+) : BaseViewModel() {
 
     private val _msisdnError = MutableLiveData<MsisdnValidationResult>()
     val msisdnError: LiveData<MsisdnValidationResult>
-            get() = _msisdnError
+        get() = _msisdnError
     private val _sessionData = MutableLiveData<SessionData>()
     val sessionData: LiveData<SessionData>
         get() = _sessionData
+    val _hasInternetConnection = MutableLiveData<Boolean>()
+    val hasInternetConnection: LiveData<Boolean>
+        get() = _hasInternetConnection
 
     private val disposables = CompositeDisposable()
+
+    fun onResume() {
+        fetchSession()
+        val hasActiveInternetConnection = phoneInformation.hasActiveInternetConnection
+        _hasInternetConnection.value = hasActiveInternetConnection
+    }
 
     fun fetchSession() {
         _sessionData.value = session.sessionData

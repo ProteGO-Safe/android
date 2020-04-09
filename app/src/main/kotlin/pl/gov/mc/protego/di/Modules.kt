@@ -45,9 +45,9 @@ import timber.log.Timber
 import java.security.SecureRandom
 
 val viewModule: Module = module {
-    viewModel { RegistrationViewModel(get(), get(), get(), get()) }
+    viewModel { RegistrationViewModel(get(), get(), get(), get(), get()) }
     viewModel { RegistrationConfirmationViewModel(get(), get()) }
-    viewModel { DashboardActivityViewModel(get()) }
+    viewModel { DashboardActivityViewModel(get(), get()) }
     viewModel { DashboardMainViewModel() }
     viewModel { SplashScreenViewModel(get()) }
     viewModel { OnboardingViewModel() }
@@ -67,7 +67,7 @@ val filesModule: Module = module {
 }
 
 val appModule = module {
-    single { PhoneInformation() }
+    single { PhoneInformation(get()) }
     single { AppInformation() }
     single{
         androidApplication().getSharedPreferences("ProteGo",  Context.MODE_PRIVATE)

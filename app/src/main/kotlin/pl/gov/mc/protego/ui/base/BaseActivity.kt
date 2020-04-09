@@ -2,8 +2,11 @@ package pl.gov.mc.protego.ui.base
 
 import android.content.ActivityNotFoundException
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.toolbar.*
 import pl.gov.mc.protego.ui.observeLiveData
+import pl.gov.mc.protego.ui.dialog.NoInternetConnectionDialog
+
 
 abstract class BaseActivity : BaseVariantActivity() {
 
@@ -39,4 +42,24 @@ abstract class BaseActivity : BaseVariantActivity() {
     }
 
     protected abstract fun observeIsInProgress()
+
+    private val noInternetConnectionDialog: DialogFragment
+        get() = supportFragmentManager.findFragmentByTag(NO_INTERNET_DIALOG) as DialogFragment?
+            ?: NoInternetConnectionDialog()
+
+    fun showNoInternetConnectionDialog() {
+        noInternetConnectionDialog.apply {
+            show(supportFragmentManager, NO_INTERNET_DIALOG)
+        }
+    }
+
+    fun hideNoInternetConnectionDialog() {
+        supportFragmentManager.findFragmentByTag(NO_INTERNET_DIALOG)?.also {
+            (it as DialogFragment).dismiss()
+        }
+    }
+
+    companion object {
+        private const val NO_INTERNET_DIALOG = "NO_INTERNET_DIALOG"
+    }
 }
