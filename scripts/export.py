@@ -1,4 +1,3 @@
-# from https://github.com/jakublipinski/export-gsheet-to-app-resources
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import argparse
@@ -39,7 +38,8 @@ for s, sheet in enumerate(doc.worksheets()):
             for j in range(1,len(texts)):
                 resources.append(etree.Comment(comments[j]))
                 elem = etree.SubElement(resources, "string", name=ids[j])
-                elem.text = texts[j]
+                text = texts[j].replace("''","\\'")
+                elem.text = text
 
             tree = etree.ElementTree(resources)
             res_filename = res_path.joinpath(f"{sheet.title}.xml")
@@ -54,9 +54,8 @@ for s, sheet in enumerate(doc.worksheets()):
 
             with open(res_filename, 'w' if s == 0 else 'a') as strings:
                 for j in range(1,len(texts)):
+                    text = texts[j].replace("\"","\\\"")
                     strings.write(f'/* {comments[j]} */\n')
-                    strings.write(f'"{ids[j]}" = "{texts[j]}";\n')
+                    strings.write(f'"{ids[j]}" = "{text}";\n')
                     strings.write("\n")
-
-
 

@@ -2,6 +2,7 @@ cache:
   key: "$CI_BUILD_REF_NAME"
 
 before_script:
+  - export ANDROID_NDK_HOME="$ANDROID_HOME"
   - export GRADLE_USER_HOME="/cache/.gradle"
 
 "test:debug":

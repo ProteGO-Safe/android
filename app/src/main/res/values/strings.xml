@@ -4,4 +4,21 @@
     <string name="missing_email_client">Can not open e-mail client.</string>
     <string name="missing_web_browser">Can not open web browser</string>
     <string name="send_email_window_title">Send e-mail</string>
+
+    <!--TODO: Dashboard - wyloguj-->
+    <string name="dashboard_logout">Logout</string>
+
+    <string name="cannot_start_wireless_config">Can not open settings. Turn on Internet to be able to use the application.</string>
+
+    <!--TODO: do przeniesienia do pliku Main-->
+    <!--Nazwa kanału powiadomienia wskazującego na działanie usługi w tle-->
+    <string name="channel_name">Usługa bluetooth</string>
+    <!--Opis kanału powiadomienia wskazującego na działanie usługi w tle-->
+    <string name="channel_description">Usługa wysyłająca i odbierająca pakiety bluetooth</string>
+    <!--Tytuł powiadomienia wskazującego na działanie usługi w tle-->
+    <string name="bluetooth_service_running_title">Usługa Bluetooth jest włączona.</string>
+    <!--Opis powiadomienia wskazującego na działanie usługi w tle-->
+    <string name="bluetooth_service_running_description">Wysyłanie i odbieranie danych w toku</string>
+    <!--Opis przełącznika usługi w tle-->
+    <string name="service_switch_label">Usługa Bluetooth</string>
 </resources>

@@ -3,77 +3,81 @@
   <!--Onboarding powitanie-->
   <string name="onboarding_hello_title">Welcome to ProteGO!</string>
   <!--Onboarding powitanie-->
-  <string name="onboarding_hello_description">Thank you for installing ProteGO.\n\nThe app will allow you you learn if there is risk you were close to people infected with coronavirus SARS-CoV-2.</string>
+  <string name="onboarding_hello_description">Let\'s fight the coronavirus together!\n\nThis application will help you take care of your and your loved ones\' health.</string>
   <!--Onboarding przycisk-->
   <string name="onboarding_next_btn">Next</string>
   <!--Onboarding informacje o statusie-->
-  <string name="onboarding_status_title">We will keep you informed about a possible threat</string>
+  <string name="onboarding_status_title">We want you to be safe</string>
   <!--Onboarding informacje o statusie-->
-  <string name="onboarding_status_description">The application will presnet one of three statuses. You will learn in could be exposed to infected people within last 2 weeks.</string>
+  <string name="onboarding_status_description">Do you want to be sure you\'re safe? Pay attention to information in the application. We will help you avoid a potential threat.</string>
   <!--Onboarding informacje o statusie-->
-  <string name="onboarding_green_description">We didn\'t dectect any threat</string>
+  <string name="onboarding_green_description">GO! You are not at risk. Please keep in mind the basic principles of safety and hygiene.</string>
   <!--Onboarding informacje o statusie-->
-  <string name="onboarding_yellow_description">You could have been close to infected people</string>
+  <string name="onboarding_yellow_description">We will determine your status 14 days after you instlled the application. Wait patiently</string>
   <!--Onboarding informacje o statusie-->
-  <string name="onboarding_red_description">Call the nearest GIS</string>
+  <string name="onboarding_red_description">Call the nearest health authority. If necessary - quarantine yourself</string>
   <!--Onboarding przycisk-->
   <string name="onboarding_back_btn">Back</string>
   <!--Onboarding informacje o bluetooth-->
   <string name="onboarding_bluetooth_title">Turn on Bluetooth</string>
   <!--Onboarding informacje o bluetooth-->
-  <string name="onboarding_bluetooth_description">The application requires Bluetooth to be turned on all the time\n\nProteGO scans your surrounding for other app users via Bluetooth.\n\nThe app stores the 2 weeks history of all your encounters encrypted on your device and doesn\'t send it anywhere.</string>
+  <string name="onboarding_bluetooth_description">The applicatioin requires Bluetooth to be turned on all the time\n\nProteGO scans your surrounding for other app users via Bluetooth.\n\nThe app stores the 2 weeks history of all your encounters encrypted on your device and doesn\'t send it anywhere.</string>
   <!--Onboarding informacje o dzieleniu się danymi-->
-  <string name="onboarding_sharing_title">Sharing the data in case of threat</string>
+  <string name="onboarding_sharing_title">Infected? Let others know</string>
   <!--Onboarding informacje o dzieleniu się danymi-->
-  <string name="onboarding_sharing_description">If you are diagnosed with SARS-CoV-2 we will ask you to send the data from your phone. We will use it to alert some of the people who were close to you within last 2 weeks. They may be infected too. They will not learn about your condition.</string>
+  <string name="onboarding_sharing_description">If it turns out that you are infected with coronavirus, we will ask you to anonymously inform other users of the application. You do it for the good and health of people you have had contact with in the last 14 days. This information will help them. Think about your loved ones and friends.</string>
   <!--Rejestracja-->
   <string name="registration_send_title">Join the application!</string>
   <!--Rejestracja-->
-  <string name="registration_send_description">Enter your phone number so that we can contact you if you were closed to people with SARS-CoV-2.\n\nWe will confirm your phone number by sending you an SMS code.</string>
+  <string name="registration_send_description">We can also text you information about the change of your status. \nIf you want to be up to date without need to constantly check the status in the application, enter your phone number. %@\n\nWe will ask you to confirm the number with an SMS code.</string>
+  <!--Rejestracja-->
+  <string name="registration_send_description_optional">It\'s optional</string>
   <!--Rejestracja-->
   <string name="registration_phone_placeholder">xxx xxx xxx</string>
   <!--Rejestracja-->
   <string name="registration_send_code_btn">Send code</string>
   <!--Rejestracja-->
+  <string name="registration_without_phone_number_btn">Join without phone number</string>
+  <!--Rejestracja-->
   <string name="registration_verify_title">Enter your SMS code</string>
   <!--Rejestracja-->
   <string name="registration_verify_description">Enter the code you received on </string>
   <!--Rejestracja-->
-  <string name="registration_verify_code_placeholder">xxxxxx</string>
+  <string name="registration_verify_code_placeholder">xxxxx</string>
   <!--Rejestracja-->
   <string name="registration_verify_btn">Verify code</string>
   <!--Rejestracja-->
-  <string name="registration_terms_of_use_btn_regular_part">By joing the app you accept %s.</string>
+  <string name="registration_terms_of_use_btn_regular_part">By joing the app you accept %@.</string>
   <!--Rejestracja-->
   <string name="registration_terms_of_use_btn_underlined_part">Term of Use</string>
   <!--Ekran błedu - brak internetu-->
   <string name="error_no_internet_title">Turn on the Internet</string>
   <!--Ekran błedu - brak internetu-->
-  <string name="error_no_internet_description">Do korzystania z aplikacji niezbędne jest połączenie z internetem. Włącz wi-fi lub transmisję danych, żeby kontynuować. </string>
+  <string name="error_no_internet_description">You need to be connected to the Internet to use the application. Turn on the WiFi or data connection to continue.</string>
   <!--Ekran błedu - brak internetu-->
-  <string name="error_no_internet_go_to_seetings_btn">Przejdź do ustawień</string>
+  <string name="error_no_internet_go_to_seetings_btn">Open Settings</string>
   <!--Ekran błędu - nowa wersja aplikacji-->
-  <string name="error_udate_title">Zaktualizuj aplikację</string>
+  <string name="error_udate_title">Upgrade the application</string>
   <!--Ekran błędu - nowa wersja aplikacji-->
-  <string name="error_update_description">Do poprawnego funkcjonowania aplikacji niezbędna jest najnowsza wersja. Przejdź do App Store lub Google Play, żeby zaktualizować ProteGO.</string>
+  <string name="error_update_description">You need to upgrade the application to the latest version. Press "Upgrade" and follow the further instructions.</string>
   <!--Ekran błędu - nowa wersja aplikacji-->
-  <string name="error_update_update_btn">Zaktualizuj aplikację</string>
+  <string name="error_update_update_btn">Upgrade</string>
   <!--Dashboard - status żółty-->
-  <string name="dashboard_yellow_status_title">Uważaj na siebie!</string>
+  <string name="dashboard_yellow_status_title">Be careful!</string>
   <!--Dashboard - status żółty-->
-  <string name="dashboard_yellow_status_description">Będziemy w stanie określić Twoje ryzyko zarażenia po 14 dniach korzystania z aplikacji. Zachowaj ostrożność i ogranicz wyjścia do minimum.</string>
+  <string name="dashboard_yellow_status_description">We need 14 days to determine your status. The application does not yet have enough data to inform you about any risk or lack thereof. Please be patient.</string>
   <!--Dashboard - status żółty-->
-  <string name="dashboard_yellow_more_info_btn">Po więcej informacji kliknij %@.</string>
+  <string name="dashboard_yellow_more_info_btn">More information %@.</string>
   <!--Dashboard - status żółty-->
-  <string name="dashboard_yellow_more_info_btn_here">tutaj</string>
+  <string name="dashboard_yellow_more_info_btn_here">here</string>
   <!--Dashboard - status żółty-->
-  <string name="dashboard_yellow_recommend_title">Current govermental recommendations</string>
+  <string name="dashboard_yellow_recommend_title">Current health recommendations</string>
   <!--Dashboard - status żółty-->
   <string name="dashboard_yellow_recommend_1">Restrictions on movement except for travel to work, volunteering, and arranging matters necessary for everyday life.</string>
   <!--Dashboard - status żółty-->
-  <string name="dashboard_yellow_recommend_2">There can be as many people on the bus as half the number of seats.</string>
+  <string name="dashboard_yellow_recommend_2">When traveling by public transport - remember that only half of the seats should be occupied on a bus or tram.</string>
   <!--Dashboard - status żółty-->
-  <string name="dashboard_yellow_recommend_3">Total ban on gatherings, except with the closest ones.</string>
+  <string name="dashboard_yellow_recommend_3">Total ban on gatherings.</string>
   <!--Dashboard - status żółty-->
   <string name="dashboard_yellow_recommend_more_info_btn">More information %@.</string>
   <!--Dashboard - status żółty-->
@@ -81,17 +85,17 @@
   <!--Dashboard - status czerwony-->
   <string name="dashboard_red_status_title">You were close to infected people.</string>
   <!--Dashboard - status czerwony-->
-  <string name="dashboard_red_status_description">You were close to people infected with SARS-CoV-2. Call the nearest GIS. Stay at home quarantine.</string>
+  <string name="dashboard_red_status_description">You were close to infected people. Call the nearest health authority. Stay at home quarantine.</string>
   <!--Dashboard - status czerwony-->
   <string name="dashboard_red_status_contact_btn">Contact an expert</string>
   <!--Dashboard - status czerwony-->
-  <string name="dashboard_red_recommend_title">Current govermental recommendations</string>
+  <string name="dashboard_red_recommend_title">Current health recommendations</string>
   <!--Dashboard - status czerwony-->
   <string name="dashboard_red_recommend_1">Restrictions on movement except for travel to work, volunteering, and arranging matters necessary for everyday life.</string>
   <!--Dashboard - status czerwony-->
-  <string name="dashboard_red_recommend_2">There can be as many people on the bus as half the number of seats.</string>
+  <string name="dashboard_red_recommend_2">When traveling by public transport - remember that only half of the seats should be occupied on a bus or tram.</string>
   <!--Dashboard - status czerwony-->
-  <string name="dashboard_red_recommend_3">Total ban on gatherings, except with the closest ones.</string>
+  <string name="dashboard_red_recommend_3">Total ban on gatherings.</string>
   <!--Dashboard - status czerwony-->
   <string name="dashboard_red_recommend_more_info_btn">More information %@.</string>
   <!--Dashboard - status czerwony-->
@@ -99,19 +103,19 @@
   <!--Dashboard - status zielony-->
   <string name="dashboard_green_status_title">We didn\'t dectect any threat</string>
   <!--Dashboard - status zielony-->
-  <string name="dashboard_green_status_description">It seems you weren\'t close to infected people</string>
+  <string name="dashboard_green_status_description">You are OK but remember the basic principles of safety and hygiene.</string>
   <!--Dashboard - status zielony-->
   <string name="dashboard_green_status_more_info_btn">Learn more on about the precautions, click %@</string>
   <!--Dashboard - status zielony-->
   <string name="dashboard_green_status_more_info_btn_here">here</string>
   <!--Dashboard - status zielony-->
-  <string name="dashboard_green_recommend_title">Current govermental recommendations</string>
+  <string name="dashboard_green_recommend_title">Current health recommendations</string>
   <!--Dashboard - status zielony-->
   <string name="dashboard_green_recommend_1">Restrictions on movement except for travel to work, volunteering, and arranging matters necessary for everyday life.</string>
   <!--Dashboard - status zielony-->
-  <string name="dashboard_green_recommend_2">There can be as many people on the bus as half the number of seats.</string>
+  <string name="dashboard_green_recommend_2">When traveling by public transport - remember that only half of the seats should be occupied on a bus or tram.</string>
   <!--Dashboard - status zielony-->
-  <string name="dashboard_green_recommend_3">Total ban on gatherings, except with the closest ones.</string>
+  <string name="dashboard_green_recommend_3">Total ban on gatherings.</string>
   <!--Dashboard - status zielony-->
   <string name="dashboard_green_recommend_more_info_btn">More information %@.</string>
   <!--Dashboard - status zielony-->
@@ -131,7 +135,7 @@
   <!--Dashboard - ekran informacyjny - do usunięcia-->
   <string name="dashboard_info_contact_us_description">Need to send us an email?</string>
   <!--Dashboard - ekran informacyjny-->
-  <string name="dashboard_info_history_overview">Devices detected since %1$s: %2$d</string>
+  <string name="dashboard_info_history_overview">Devices detected since %1$s: %2$s</string>
   <!--Dashboard - ekran informacyjny-->
   <string name="dashboard_info_contact_us_email">protego@mc.gov.pl</string>
   <!--Dashboard - ekran informacyjny-->
@@ -141,25 +145,31 @@
   <!--Ekran wysyłania danych-->
   <string name="send_data_title">Send encounters list</string>
   <!--Ekran wysyłania danych-->
-  <string name="send_data_description">Share the list of users you encounteres nearby within last 2 weeks. Our experts will alert those who might be infected.\n\nNobody will learn about your condition.</string>
+  <string name="send_data_description">Share information about devices that have been around you in the last two weeks. Do it for the safety of their owners. \n\n You are anonymous to them, nobody will know about your condition.</string>
   <!--Ekran wysyłania danych-->
   <string name="send_data_your_id">Your ID:</string>
   <!--Ekran wysyłania danych-->
   <string name="send_data_id_placeholder">xxx xxx xxx</string>
   <!--Ekran wysyłania danych-->
   <string name="send_data_send_button">Send</string>
+  <!--Alert po wysłaniu danych - sukces-->
+  <string name="send_data_alert_success_title">Thank you!</string>
+  <!--Alert po wysłaniu danych - sukces-->
+  <string name="send_data_alert_success_description">Thank you. Take care of yourself and don\'t worry - your data if safe.</string>
+  <!--Alert po wysłaniu danych - błąd-->
+  <string name="send_data_alert_failure_title">Ups. Something is wrong. Try again.</string>
+  <!--Alert po wysłaniu danych - błąd-->
+  <string name="send_data_alert_failure_description">Please retry.</string>
   <!--Alert po wysłaniu danych-->
-  <string name="send_data_alert_title">Thank you!</string>
+  <string name="send_data_alert_footer">If you have any questions please email as at %@</string>
   <!--Alert po wysłaniu danych-->
-  <string name="send_data_alert_description">Your data was sent to GIS.\nWe guarantee nobody will use your personal data while contacting with other people.\n\nIf you have any questions please email as at %@\nor call %@</string>
-  <!--Nazwa kanału powiadomienia wskazującego na działanie usługi w tle-->
-  <string name="channel_name">Bluetooth service</string>
-  <!--Opis kanału powiadomienia wskazującego na działanie usługi w tle-->
-  <string name="channel_description">Sending and receiving bluetooth data</string>
-  <!--Tytuł powiadomienia wskazującego na działanie usługi w tle-->
-  <string name="bluetooth_service_running_title">Bluetooth service running</string>
-  <!--Opis powiadomienia wskazującego na działanie usługi w tle-->
-  <string name="bluetooth_service_running_description">Sending and receiving bluetooth data</string>
-  <!--Opis przełącznika usługi w tle-->
-  <string name="service_switch_label">Bluetooth service</string>
+  <string name="send_data_alert_footer_email">protego@mc.gov.pl</string>
+  <!--Ekran wysyłania danych - alert potwierdzający-->
+  <string name="send_data_confirmation_alert_title">Confirm</string>
+  <!--Ekran wysyłania danych - alert potwierdzający-->
+  <string name="send_data_confirmation_alert_message">Are you infected? Send the information, to protect others.</string>
+  <!--Ekran wysyłania danych - alert potwierdzający-->
+  <string name="send_data_confirmation_alert_cancel_btn">Cancel</string>
+  <!--Ekran wysyłania danych - alert potwierdzający-->
+  <string name="send_data_confirmation_alert_send_btn">Send</string>
 </resources>

@@ -8,6 +8,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
@@ -18,29 +19,44 @@ import pl.gov.mc.protego.ui.scrollWhenFocusObtained
 
 class RegistrationConfirmationActivity : BaseActivity() {
 
-    private val viewModel: RegistrationConfirmationViewModel by viewModel()
+    override val viewModel: RegistrationConfirmationViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration_confirmation_view)
 
+        sms_code.doOnTextChanged { text, _, _, _ -> viewModel.onCodeChanged(text.toString()) }
+
         confirm_registration_button.setOnClickListener {
-            if (sms_code.text.toString().isNotEmpty()) {
-                viewModel.confirm(sms_code.text.toString())
-            } else {
-                sms_code_layout.error = "Wpisz kod"
-            }
+            viewModel.confirm(sms_code.text.toString())
         }
         sms_code.scrollWhenFocusObtained(scroll_view)
 
         setupLinkToTermsOfUse()
 
-        observeLiveData(viewModel.confirmationError) {
-            Toast.makeText(this, "Problem z rejestracją: $it", Toast.LENGTH_LONG).show()
-        }
+        with(viewModel) {
+            observeLiveData(confirmationEnabled) { confirm_registration_button.isEnabled = it }
 
-        observeLiveData(viewModel.confirmationSuccess) {
-            navigateToMain()
+            observeLiveData(confirmationError) {
+                Toast.makeText(
+                    this@RegistrationConfirmationActivity,
+                    "Problem z rejestracją: $it",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            observeLiveData(confirmationSuccess) {
+                navigateToMain()
+            }
+        }
+        observeIntents()
+        observeIsInProgress()
+    }
+
+    override fun observeIsInProgress() {
+        observeLiveData(viewModel.isInProgress) {
+            sms_code.isEnabled = !it
+            confirm_registration_button.isEnabled = !it
         }
     }
 
@@ -59,12 +75,7 @@ class RegistrationConfirmationActivity : BaseActivity() {
                 setSpan(
                     object : ClickableSpan() {
                         override fun onClick(widget: View) {
-                            //TODO link to terms of use
-                            Toast.makeText(
-                                this@RegistrationConfirmationActivity,
-                                "Nie ma jeszcze regulaminu",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            viewModel.onTermsAndConditionsClicked()
                         }
                     },
                     nonClickablePart.length,

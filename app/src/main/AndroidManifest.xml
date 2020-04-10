@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pl.gov.mc.protego">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="pl.gov.mc.protego"
+    tools:ignore="LockedOrientationActivity">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -20,9 +23,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.splash.SplashScreenActivity"
-            android:theme="@style/SplashScreenTheme"
-            android:noHistory="true">
+        <activity
+            android:name=".ui.splash.SplashScreenActivity"
+            android:noHistory="true"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,21 +36,25 @@
 
         <activity
             android:name=".ui.registration.onboarding.OnboardingActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorPortrait" />
 
         <activity
             android:name=".ui.registration.RegistrationActivity"
             android:parentActivityName=".ui.registration.onboarding.OnboardingActivity"
+            android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".ui.registration.RegistrationConfirmationActivity"
             android:parentActivityName=".ui.registration.RegistrationActivity"
+            android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".ui.main.DashboardActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorPortrait" />
 
         <service android:name=".service.BluetoothService"
             android:enabled="true"

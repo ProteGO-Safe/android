@@ -1,49 +1,48 @@
 package pl.gov.mc.protego.ui.main
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.activity_dashboard.*
+import android.view.Menu
+import android.view.MenuItem
+import androidx.fragment.app.Fragment
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.service.BluetoothServiceConnection
 import pl.gov.mc.protego.ui.base.BaseActivity
-import pl.gov.mc.protego.ui.registration.onboarding.OnboardingActivity
-import android.view.Menu
-import android.view.MenuItem
+import pl.gov.mc.protego.ui.observeLiveData
 
 
 class DashboardActivity : BaseActivity() {
 
-    private val viewModel: DashboardActivityViewModel by viewModel()
     private val session: Session by inject()
     private val serviceConn: BluetoothServiceConnection by inject()
+    override val viewModel: DashboardActivityViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        logout_button.setOnClickListener {
-            serviceConn.stopService()
-            session.logout()
-            startActivity(Intent(this, OnboardingActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            })
-            finish()
+
+        observeLiveData(viewModel.dashboardPage) { changePage(it) }
+
+        observeLiveData(viewModel.hasInternetConnection) { hasInternetConnection ->
+            if (!hasInternetConnection)
+                showNoInternetConnectionDialog()
+            else
+                hideNoInternetConnectionDialog()
         }
 
-        serviceConn.serviceConnectedData.observe(this, Observer { serviceConnected ->
-            service_toggle.isChecked = serviceConnected
-        })
-        service_toggle.setOnClickListener {
-            if (service_toggle.isChecked) {
-                serviceConn.startService()
-            } else {
-                serviceConn.stopService()
-            }
-        }
-
+//        todo: kod do przeniesienia lub usunięcia
+//        serviceConn.serviceConnectedData.observe(this, Observer { serviceConnected ->
+//            service_toggle.isChecked = serviceConnected
+//        })
+//        service_toggle.setOnClickListener {
+//            if (service_toggle.isChecked) {
+//                serviceConn.startService()
+//            } else {
+//                serviceConn.stopService()
+//            }
+//        }
     }
 
     override fun onStart() {
@@ -70,25 +69,26 @@ class DashboardActivity : BaseActivity() {
         val id = item.itemId
 
         if (id == R.id.action_menu) {
-            val fragment = supportFragmentManager.findFragmentByTag(HISTORY_PANEL_TAG)
-            if (fragment != null  && fragment is HistoryFragment) {
-                supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right)
-                    .remove(fragment)
-                    .commit()
-            } else {
-                supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_right)
-                    .add(R.id.container, HistoryFragment(), HISTORY_PANEL_TAG)
-                    .commit()
-            }
+            viewModel.menuButtonPressed()
             return true
         }
 
         return super.onOptionsItemSelected(item)
     }
 
-    companion object {
-        private const val HISTORY_PANEL_TAG = "histPanel"
+    override fun onBackPressed() {
+        if (viewModel.dashboardPage.value is DashboardPage.HistoryPage) {
+            viewModel.menuButtonPressed()
+        } else {
+            super.onBackPressed()
+        }
     }
+
+    private fun changePage(page: DashboardPage) {
+        val fragmentToAdd: Fragment =
+            supportFragmentManager.findFragmentByTag(page.pageFragmentTag) ?: page.createFragment()
+        page.showFragment(supportFragmentManager, fragmentToAdd)
+    }
+
+    override fun observeIsInProgress() = Unit
 }
