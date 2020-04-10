@@ -2,10 +2,19 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
     <item android:drawable="@drawable/launcher_background" />
-    <item android:drawable="@drawable/launcher_foreground"
-        android:height="800dp"
-        android:width="800dp"
+    <item android:drawable="@drawable/ic_splash_logo"
         android:gravity="center"
         />
+    <item
+        android:drawable="@drawable/ic_splash_bottom"
+        android:gravity="bottom"/>
+    <item android:drawable="@drawable/ic_mc"
+        android:gravity="bottom|right"
+        android:right="24dp"
+        android:bottom="16dp"/>
+    <item android:drawable="@drawable/ic_splash_text"
+        android:gravity="bottom|left"
+        android:left="16dp"
+        android:bottom="24dp"/>
 
 </layer-list>

@@ -77,7 +77,7 @@
     </style>
 
     <style name="SplashScreenTheme" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen_background</item>
+        <item name="android:background">@drawable/splash_screen_background</item>
         <item name="android:statusBarColor">@color/transparent</item>
     </style>
 
