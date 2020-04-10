@@ -151,6 +151,10 @@
   <!--Ekran wysyłania danych-->
   <string name="send_data_id_placeholder">xxx xxx xxx</string>
   <!--Ekran wysyłania danych-->
+  <string name="send_data_confirm_code_description">Enter the code you received with your lab results.</string>
+  <!--Ekran wysyłania danych-->
+  <string name="send_data_confirm_code_placeholder">xxx xxx</string>
+  <!--Ekran wysyłania danych-->
   <string name="send_data_send_button">Send</string>
   <!--Alert po wysłaniu danych - sukces-->
   <string name="send_data_alert_success_title">Thank you!</string>
@@ -172,4 +176,6 @@
   <string name="send_data_confirmation_alert_cancel_btn">Cancel</string>
   <!--Ekran wysyłania danych - alert potwierdzający-->
   <string name="send_data_confirmation_alert_send_btn">Send</string>
+  <!--Splash - notka na dole-->
+  <string name="splash_screen_open_source_lbl">ProteGO is an open source software created for Minstry of Digital Affairs</string>
 </resources>

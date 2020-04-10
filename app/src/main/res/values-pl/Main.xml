@@ -151,6 +151,10 @@
   <!--Ekran wysyłania danych-->
   <string name="send_data_id_placeholder">xxx xxx xxx</string>
   <!--Ekran wysyłania danych-->
+  <string name="send_data_confirm_code_description">Wprowadź kod weryfikujący, który otrzymałeś w wiadomości SMS wraz z wynikami badań.</string>
+  <!--Ekran wysyłania danych-->
+  <string name="send_data_confirm_code_placeholder">xxx xxx</string>
+  <!--Ekran wysyłania danych-->
   <string name="send_data_send_button">Wyślij</string>
   <!--Alert po wysłaniu danych - sukces-->
   <string name="send_data_alert_success_title">Dziękujemy!</string>
@@ -172,4 +176,6 @@
   <string name="send_data_confirmation_alert_cancel_btn">Anuluj</string>
   <!--Ekran wysyłania danych - alert potwierdzający-->
   <string name="send_data_confirmation_alert_send_btn">Prześlij</string>
+  <!--Splash - notka na dole-->
+  <string name="splash_screen_open_source_lbl">ProteGO to otwarte oprogramowanie stworzone dla Ministerstwa Cyfryzacji</string>
 </resources>
