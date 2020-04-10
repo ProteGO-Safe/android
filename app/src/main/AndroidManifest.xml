@@ -20,6 +20,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <receiver
+            android:name=".receivers.SMSBroadcastReceiver"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".ui.splash.SplashScreenActivity"
             android:noHistory="true"

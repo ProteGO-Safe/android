@@ -9,6 +9,7 @@ import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
+import com.google.android.gms.auth.api.phone.SmsRetriever
 import kotlinx.android.synthetic.main.registration_confirmation_view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
@@ -51,6 +52,11 @@ class RegistrationConfirmationActivity : BaseActivity() {
         }
         observeIntents()
         observeIsInProgress()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        SmsRetriever.getClient(this).startSmsRetriever()
     }
 
     override fun observeIsInProgress() {
