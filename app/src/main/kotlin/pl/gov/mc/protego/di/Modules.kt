@@ -70,7 +70,7 @@ val appModule = module {
     single { PhoneInformation(get()) }
     single { AppInformation() }
     single{
-        androidApplication().getSharedPreferences("ProteGo",  Context.MODE_PRIVATE)
+        androidApplication().getSharedPreferences("ProteGO",  Context.MODE_PRIVATE)
     }
     single { androidContext().resources }
 }

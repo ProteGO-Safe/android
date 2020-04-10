@@ -1,4 +1,4 @@
-# ProteGo
+# ProteGO
 
 [Informacje o założeniach projektu](https://github.com/ProteGO-app/specs)
 
