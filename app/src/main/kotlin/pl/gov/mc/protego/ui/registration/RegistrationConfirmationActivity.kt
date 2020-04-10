@@ -1,6 +1,7 @@
 package pl.gov.mc.protego.ui.registration
 
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -9,10 +10,13 @@ import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.Observer
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import kotlinx.android.synthetic.main.registration_confirmation_view.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protego.R
+import pl.gov.mc.protego.receivers.SMSBroadcastReceiver
 import pl.gov.mc.protego.ui.base.BaseActivity
 import pl.gov.mc.protego.ui.main.DashboardActivity
 import pl.gov.mc.protego.ui.observeLiveData
@@ -21,6 +25,7 @@ import pl.gov.mc.protego.ui.scrollWhenFocusObtained
 class RegistrationConfirmationActivity : BaseActivity() {
 
     override val viewModel: RegistrationConfirmationViewModel by viewModel()
+    private val smsBroadcastReceiver: SMSBroadcastReceiver by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +57,27 @@ class RegistrationConfirmationActivity : BaseActivity() {
         }
         observeIntents()
         observeIsInProgress()
+        SmsRetriever.getClient(this).startSmsRetriever()
+        smsBroadcastReceiver.smsContent.observe(this, Observer {
+            if (it == null) return@Observer
+            sms_code.setText(it)
+            viewModel.confirm(sms_code.text.toString())
+        })
     }
 
     override fun onResume() {
         super.onResume()
-        SmsRetriever.getClient(this).startSmsRetriever()
+        registerReceiver(
+            smsBroadcastReceiver,
+            IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
+            SmsRetriever.SEND_PERMISSION,
+            null
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(smsBroadcastReceiver)
     }
 
     override fun observeIsInProgress() {

@@ -27,6 +27,7 @@ import pl.gov.mc.protego.information.PhoneInformation
 import pl.gov.mc.protego.information.Session
 import pl.gov.mc.protego.realm.RealmEncryption
 import pl.gov.mc.protego.realm.RealmInitializer
+import pl.gov.mc.protego.receivers.SMSBroadcastReceiver
 import pl.gov.mc.protego.repository.SessionRepository
 import pl.gov.mc.protego.ui.TermsAndConditionsIntentCreator
 import pl.gov.mc.protego.ui.main.DashboardActivityViewModel
@@ -53,6 +54,7 @@ val viewModule: Module = module {
     viewModel { OnboardingViewModel() }
     viewModel { HistoryViewModel(get(), get(), get(), get()) }
     single { MsisdnValidator() }
+    single { SMSBroadcastReceiver() }
 }
 
 val intentCreatorModule: Module = module {
@@ -69,8 +71,8 @@ val filesModule: Module = module {
 val appModule = module {
     single { PhoneInformation(get()) }
     single { AppInformation() }
-    single{
-        androidApplication().getSharedPreferences("ProteGo",  Context.MODE_PRIVATE)
+    single {
+        androidApplication().getSharedPreferences("ProteGo", Context.MODE_PRIVATE)
     }
     single { androidContext().resources }
 }
