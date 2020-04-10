@@ -61,7 +61,6 @@ class RegistrationConfirmationActivity : BaseActivity() {
         smsBroadcastReceiver.smsContent.observe(this, Observer {
             if (it == null) return@Observer
             sms_code.setText(it)
-            viewModel.confirm(sms_code.text.toString())
         })
     }
 
