@@ -2,6 +2,7 @@ package pl.gov.mc.protego.di
 
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
@@ -10,6 +11,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import pl.gov.mc.protego.BuildConfig
+import pl.gov.mc.protego.appupdater.AppUpdater
 import pl.gov.mc.protego.backend.api.*
 import pl.gov.mc.protego.backend.domain.ProtegoServer
 import pl.gov.mc.protego.bluetooth.BeaconIdManager
@@ -69,10 +71,11 @@ val filesModule: Module = module {
 val appModule = module {
     single { PhoneInformation(get()) }
     single { AppInformation() }
-    single{
-        androidApplication().getSharedPreferences("ProteGO",  Context.MODE_PRIVATE)
+    single {
+        androidApplication().getSharedPreferences("ProteGO", Context.MODE_PRIVATE)
     }
     single { androidContext().resources }
+    single { AppUpdater(AppUpdateManagerFactory.create(get())) }
 }
 
 val utilModule = module {

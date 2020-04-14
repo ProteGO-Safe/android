@@ -138,14 +138,17 @@ dependencies {
     testImplementation "org.spekframework.spek2:spek-runner-junit5:$spek_version"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-    //retrofit
+    // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.3.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
 
-    //ble
+    // ble
     implementation 'com.polidea.rxandroidble2:rxandroidble:1.11.0'
+
+    // in-app updates
+    implementation 'com.google.android.play:core:1.7.2'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
