@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ProteGO Safe"</string>
+    <string name="notification_channel_name">ProteGO Safe" notifications</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur
+adipiscing elit. Ut vehicula, diam vel
+dignissim porttitor, urna nulla consectetur
+tortor, quis vestibulum dui magna eget
+velit. Sed pellentesque massa non ante
+interdum, in commodo risus vehicula.
+Aenean volutpat neque et tincidunt
+sodales. Praesent sit amet nulla hendrerit,
+faucibus nisl nec, elementum lacus.</string>
+    <string name="ok">OK</string>
+</resources>
