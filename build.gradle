@@ -1,123 +1,32 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
-  repositories {
-    google()
-    jcenter()
-  }
+    ext.kotlin_version = '1.3.71'
+    repositories {
+        google()
+        jcenter()
 
-  dependencies {
-    classpath "com.android.tools.build:gradle:3.6.1"
-  }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.3'
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.2.1"
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.0.0-beta03'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
 }
 
-apply plugin: "com.android.application"
-
-repositories {
-  google()
-  jcenter()
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
 }
 
-android {
-  compileSdkVersion 29
-
-  defaultConfig {
-    applicationId "app.safesafe"
-    minSdkVersion 21
-    targetSdkVersion 29
-    versionCode headCommitCount()
-    versionName "1.0"
-
-    proguardFiles "shrink-rules.pro"
-  }
-
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-
-  def uploadKeystore = file("upload.keystore")
-  def keystoreProperties = file("upload-keystore.properties")
-  def useUploadKeystore = uploadKeystore.exists() && keystoreProperties.exists()
-
-  signingConfigs {
-    debug {
-      keyAlias "safe_safe"
-      keyPassword "safesafe"
-      storeFile file("debug.keystore")
-      storePassword "safesafe"
-    }
-    if (useUploadKeystore) {
-      final signingProps = new Properties()
-      keystoreProperties.withInputStream {
-        signingProps.load(it)
-      }
-      upload {
-        keyAlias "safe_safe"
-        keyPassword signingProps["keyPassword"]
-        storeFile uploadKeystore
-        storePassword signingProps["storePassword"]
-      }
-    }
-  }
-
-  buildTypes {
-    debug {
-      applicationIdSuffix ".debug"
-      buildConfigField "String", "appUrl", "\"https://safesafe.thecoders.io/\""
-
-      signingConfig signingConfigs.debug
-    }
-
-    dev {
-      applicationIdSuffix ".dev"
-      buildConfigField "String", "appUrl", "\"https://safesafe.thecoders.io/\""
-
-      signingConfig signingConfigs.debug
-
-      debuggable false
-
-      minifyEnabled true
-      shrinkResources true
-    }
-
-    release {
-      buildConfigField "String", "appUrl", "\"https://safesafe.app/\""
-
-      if (useUploadKeystore) {
-        signingConfig signingConfigs.upload
-      } else {
-        signingConfig signingConfigs.debug
-      }
-
-      minifyEnabled true
-      shrinkResources true
-    }
-  }
-
-  packagingOptions {
-    exclude "**/*.properties"
-    exclude "*.properties"
-    exclude "META-INF/*.version"
-    exclude "META-INF/proguard/*"
-    exclude "META-INF/*.properties"
-    exclude "META-INF/androidx.*"
-    exclude "META-INF/CHANGES"
-    exclude "META-INF/CHANGES.md"
-    exclude "META-INF/CHANGES.txt"
-    exclude "META-INF/README"
-    exclude "META-INF/README.md"
-    exclude "META-INF/README.txt"
-  }
-}
-
-dependencies {
-  compileOnly "androidx.annotation:annotation:1.1.0"
-}
-
-private def headCommitCount() {
-  def stdOut = new ByteArrayOutputStream()
-  exec {
-    commandLine 'git', 'rev-list', '--count', 'HEAD'
-    standardOutput = stdOut
-  }
-  return "$stdOut".trim().toInteger()
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

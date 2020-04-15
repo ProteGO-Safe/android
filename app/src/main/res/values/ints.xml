@@ -1,0 +1,3 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <integer name="tmb_log_buffer" tools:override="true">9000</integer>
+</resources>
