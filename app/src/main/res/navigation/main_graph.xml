@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="se.sigmaconnectivity.blescanner.ui.home.HomeFragment"
+        android:name="pl.gov.mc.protegosafe.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home" />
 
     <action
@@ -16,7 +16,7 @@
 
     <dialog
         android:id="@+id/infoDialogFragment"
-        android:name="se.sigmaconnectivity.blescanner.ui.dialog.InfoDialogFragment">
+        android:name="pl.gov.mc.protegosafe.ui.dialog.InfoDialogFragment">
 
         <argument
             android:name="messageTextRes"

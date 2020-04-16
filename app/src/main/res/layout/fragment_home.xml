@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="se.sigmaconnectivity.blescanner.ui.home.HomeViewModel" />
+            type="pl.gov.mc.protegosafe.ui.home.HomeViewModel" />
     </data>
 
     <WebView
@@ -15,6 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background"
-        tools:context=".ui.MainActivity"/>
+        tools:context="pl.gov.mc.protegosafe.ui.MainActivity"/>
 
 </layout>

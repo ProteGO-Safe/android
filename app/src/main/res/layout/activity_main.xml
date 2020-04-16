@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.MainActivity">
+        tools:context="pl.gov.mc.protegosafe.ui.MainActivity">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/navHostFragment"
