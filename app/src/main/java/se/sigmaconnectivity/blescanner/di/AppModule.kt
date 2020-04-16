@@ -17,7 +17,7 @@ val appModule = module {
 
     factory { OnGetBridgeDataUseCase(get()) }
     factory { OnSetBridgeDataUseCase(get()) }
-    factory { OnPushNotificationUseCase(get(), get()) }
+    factory { OnPushNotificationUseCase(get(), get(), get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
 
     factory<PostExecutionThread> { se.sigmaconnectivity.blescanner.executor.PostExecutionThread() }

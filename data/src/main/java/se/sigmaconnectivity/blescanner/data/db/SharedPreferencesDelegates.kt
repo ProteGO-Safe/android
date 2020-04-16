@@ -19,6 +19,8 @@ class SharedPreferencesDelegates(context: Context) {
 
     fun intPref(prefKey: String, defaultValue: Int) = IntStorageDelegate(prefKey, defaultValue)
 
+    fun longPref(prefKey: String, defaultValue: Long = 0) = LongStorageDelegate(prefKey, defaultValue)
+
     fun stringSetPref(prefKey: String, defaultValue: Set<String> = emptySet()) = StringSetStorageDelegate(prefKey, defaultValue)
 
     fun remove(prefKey: String) {
@@ -43,6 +45,13 @@ class SharedPreferencesDelegates(context: Context) {
             sharedPreferences.getInt(key, defaultValue)
 
         operator fun setValue(thisRef: Any?, property: KProperty<*>, value: Int) = sharedPreferences.edit { putInt(key, value) }
+    }
+
+    inner class LongStorageDelegate(private val key: String, private val defaultValue: Long) {
+        operator fun getValue(thisRef: Any?, property: KProperty<*>): Long =
+            sharedPreferences.getLong(key, defaultValue)
+
+        operator fun setValue(thisRef: Any?, property: KProperty<*>, value: Long) = sharedPreferences.edit { putLong(key, value) }
     }
 
     inner class StringSetStorageDelegate(private val key: String, private val defaultValue: Set<String>) {

@@ -11,7 +11,6 @@ class NotificationRepositoryImpl(
         return notificationDataStore.notifData
     }
 
-
     override fun saveNotificationData(notificationData: String) {
         notificationDataStore.notifData = notificationData
     }

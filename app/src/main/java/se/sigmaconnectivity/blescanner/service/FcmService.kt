@@ -25,12 +25,8 @@ class FcmService : FirebaseMessagingService() {
 
     private fun handleNotification(remoteMessage: RemoteMessage) {
         if (remoteMessage.data.hasNotification()) {
-            remoteMessage.data.toNotificationDataItem().let {
-                onPushNotificationUseCase.execute(
-                    it.title,
-                    it.content,
-                    Gson().toJson(remoteMessage.data)
-                )
+            remoteMessage.data.toNotificationDataItem(remoteMessage.from).let {
+                onPushNotificationUseCase.execute(it, Gson().toJson(remoteMessage.data))
             }
         }
     }
