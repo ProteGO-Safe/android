@@ -48,10 +48,54 @@
               "client_type": 3
             },
             {
-              "client_id": "466787798978-gvin10gt39bueaf4m3ddkggtkhqilpu3.apps.googleusercontent.com",
+              "client_id": "466787798978-qmbbm2lo4gau5v2adjc19gdj68ktuvtr.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.holdapp.opentrace.app"
+                "bundle_id": "se.sigmaconnectivity.protegosafe"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466787798978:android:c66d313d8b28e8dc1a105b",
+        "android_client_info": {
+          "package_name": "pl.gov.mc.protegosafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "466787798978-ts49b2mtg4dk9egp991cp6m9kc8ci5ea.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.gov.mc.protegosafe",
+            "certificate_hash": "1dff5244f2c8c286973fe0f96f2b344c5b6c6a24"
+          }
+        },
+        {
+          "client_id": "466787798978-25noev6sgqhccru2eb8s2flebhc6r2ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhQUQDNpxXZ4dOMjZh4GLTtyB62Fi3U8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "466787798978-25noev6sgqhccru2eb8s2flebhc6r2ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "466787798978-qmbbm2lo4gau5v2adjc19gdj68ktuvtr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "se.sigmaconnectivity.protegosafe"
               }
             }
           ]
@@ -84,10 +128,10 @@
               "client_type": 3
             },
             {
-              "client_id": "466787798978-gvin10gt39bueaf4m3ddkggtkhqilpu3.apps.googleusercontent.com",
+              "client_id": "466787798978-qmbbm2lo4gau5v2adjc19gdj68ktuvtr.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.holdapp.opentrace.app"
+                "bundle_id": "se.sigmaconnectivity.protegosafe"
               }
             }
           ]
