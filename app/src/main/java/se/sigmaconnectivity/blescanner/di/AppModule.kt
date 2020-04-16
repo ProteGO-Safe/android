@@ -16,7 +16,7 @@ val appModule = module {
     factory<PushNotifier> { PushNotifierImpl(get()) }
 
     factory { OnGetBridgeDataUseCase(get()) }
-    factory { OnSetBridgeDataUseCase(get()) }
+    factory { OnSetBridgeDataUseCase(get(), get()) }
     factory { OnPushNotificationUseCase(get(), get(), get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
 
