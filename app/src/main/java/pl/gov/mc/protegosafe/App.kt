@@ -41,11 +41,11 @@ class App: Application() {
                 Timber.d("FCM token $token")
             })
 
-        FirebaseMessaging.getInstance().subscribeToTopic("general")
+        FirebaseMessaging.getInstance().subscribeToTopic("main")
             .addOnCompleteListener { task ->
                 Timber.d(
-                    if (!task.isSuccessful) "FCM GENERAL topic subscribe success"
-                    else "FCM GENERAL topic subscribe failed"
+                    if (!task.isSuccessful) "FCM MAIN topic subscribe success"
+                    else "FCM MAIN topic subscribe failed"
                 )
             }
 

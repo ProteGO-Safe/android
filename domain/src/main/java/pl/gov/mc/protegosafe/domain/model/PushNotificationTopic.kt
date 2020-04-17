@@ -2,7 +2,7 @@ package pl.gov.mc.protegosafe.domain.model
 
 enum class PushNotificationTopic(val topicName: String) {
     UNKNOWN(""),
-    GENERAL("/topics/general"),
+    MAIN("/topics/main"),
     DAILY("/topics/daily");
 
     companion object {

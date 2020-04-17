@@ -18,16 +18,20 @@ class PushNotifierImpl(private val context: Context): PushNotifier {
         context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
     }
 
-    override fun showNotification(title: String, content: String) {
-        val notification = createNotification(title, content)
+    override fun showNotificationWithData(title: String, content: String, data: String) {
+        val notification = createNotification(title, content, data)
         notificationManager?.let {
             it.notify(Consts.NOTIFICATION_PUSH_ID, notification)
             Timber.d("Show notification: $title, $content")
         } ?: Timber.d("Show notification failed")
     }
 
-    private fun createNotification(title: String, content: String): Notification {
-        val notificationIntent = Intent(context, MainActivity::class.java)
+    private fun createNotification(title: String, content: String, data: String): Notification {
+        val notificationIntent = Intent(context, MainActivity::class.java).apply {
+            putExtra(Consts.NOTIFICATION_EXTRA_DATA, data)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+
         val pendingIntent = PendingIntent.getActivity(
             context,
             0,

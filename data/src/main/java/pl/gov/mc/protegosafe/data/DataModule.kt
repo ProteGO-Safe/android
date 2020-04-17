@@ -19,7 +19,7 @@ val dataModule = module {
     single<NotificationRepository> { NotificationRepositoryImpl(get()) }
     single<TriageRepository> { TriageRepositoryImpl(get()) }
     single { UserIdStore(get()) }
-    single { NotificationDataStore(get()) }
+    single { NotificationDataStore() }
     single { TriageDataStore(get()) }
     single { SharedPreferencesDelegates(androidApplication()) }
 
