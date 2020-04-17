@@ -1,5 +1,5 @@
 package pl.gov.mc.protegosafe.domain
 
 interface PushNotifier {
-    fun showNotification(title: String, content: String)
+    fun showNotificationWithData(title: String, content: String, data: String)
 }

@@ -1,6 +1,5 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
-import pl.gov.mc.protegosafe.domain.NotificationRepository
 import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.TriageRepository
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
@@ -8,19 +7,18 @@ import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import java.util.*
 
 class OnPushNotificationUseCase(
-    private val notificationRepository: NotificationRepository,
     private val triageRepository: TriageRepository,
     private val pushNotifier: PushNotifier
 ) {
 
     fun execute(notificationData: PushNotificationData, data: String) {
         when (notificationData.topic) {
-            PushNotificationTopic.GENERAL -> {
-                saveDataAndShowNotification(notificationData, data)
+            PushNotificationTopic.MAIN -> {
+                showNotificationWithData(notificationData, data)
             }
             PushNotificationTopic.DAILY -> {
                 if (!checkIfToday(triageRepository.getLastTriageCompletedTimestamp())) {
-                    saveDataAndShowNotification(notificationData, data)
+                    showNotificationWithData(notificationData, data)
                 }
             }
             PushNotificationTopic.UNKNOWN -> {
@@ -29,15 +27,14 @@ class OnPushNotificationUseCase(
         }
     }
 
-    private fun saveDataAndShowNotification(notificationData: PushNotificationData, data: String) {
-        notificationRepository.saveNotificationData(data)
-        pushNotifier.showNotification(notificationData.title, notificationData.content)
+    private fun showNotificationWithData(notificationData: PushNotificationData, data: String) {
+        pushNotifier.showNotificationWithData(notificationData.title, notificationData.content, data)
     }
 
     private fun checkIfToday(timestamp: Long): Boolean {
         val now: Calendar = Calendar.getInstance()
         val timeToCheck: Calendar = Calendar.getInstance()
-        timeToCheck.timeInMillis = timestamp
+        timeToCheck.timeInMillis = timestamp * 1000
         return ((now.get(Calendar.YEAR) == timeToCheck.get(Calendar.YEAR))
                 && (now.get(Calendar.DAY_OF_YEAR) == timeToCheck.get(Calendar.DAY_OF_YEAR)))
     }
