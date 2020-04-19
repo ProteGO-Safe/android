@@ -1,5 +1,6 @@
 package pl.gov.mc.protegosafe.data.mapper
 
+import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 
@@ -12,5 +13,9 @@ fun Map<String, String>.toNotificationDataItem(topic: String?) = PushNotificatio
     title = get(FCM_NOTIFICATION_TITLE_KEY)
         ?: throw IllegalArgumentException("Hash id has no value"),
     content = get(FCM_NOTIFICATION_CONTENT_KEY) ?: "",
-    topic = PushNotificationTopic.of(topic ?: "")
+    topic = when (topic) {
+        "/topics/${BuildConfig.MAIN_TOPIC}" -> PushNotificationTopic.MAIN
+        "/topics/${BuildConfig.DAILY_TOPIC}" -> PushNotificationTopic.DAILY
+        else -> PushNotificationTopic.UNKNOWN
+    }
 )

@@ -30,7 +30,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
+    flavorDimensions "mode"
+    productFlavors {
+        dev {
+            dimension "mode"
+            buildConfigField "String", "MAIN_TOPIC", "\"main-dev\""
+            buildConfigField "String", "DAILY_TOPIC", "\"daily-dev\""
+        }
+        prod {
+            dimension "mode"
+            buildConfigField "String", "MAIN_TOPIC", "\"main\""
+            buildConfigField "String", "DAILY_TOPIC", "\"daily\""
+        }
+    }
 }
 
 dependencies {

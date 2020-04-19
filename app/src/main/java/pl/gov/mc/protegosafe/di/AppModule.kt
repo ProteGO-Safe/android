@@ -12,6 +12,7 @@ import pl.gov.mc.protegosafe.domain.usecase.SaveNotificationDataUseCase
 import pl.gov.mc.protegosafe.ui.MainViewModel
 import pl.gov.mc.protegosafe.ui.common.PushNotifierImpl
 import pl.gov.mc.protegosafe.ui.home.HomeViewModel
+import pl.gov.mc.protegosafe.ui.home.WebUrlProvider
 
 val appModule = module {
     factory<PushNotifier> { PushNotifierImpl(get()) }
@@ -21,6 +22,7 @@ val appModule = module {
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
+    factory { WebUrlProvider(get()) }
 
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
 }

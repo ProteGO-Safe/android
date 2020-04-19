@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.R
@@ -18,6 +19,7 @@ import pl.gov.mc.protegosafe.ui.common.BaseFragment
 class HomeFragment : BaseFragment() {
 
     private val vm: HomeViewModel by viewModel()
+    private val urlProvider by inject<WebUrlProvider>()
     private lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
@@ -50,7 +52,7 @@ class HomeFragment : BaseFragment() {
                     vm::getBridgeData
                 ), NativeBridgeInterface.NATIVE_BRIDGE_NAME
             )
-            loadUrl(BuildConfig.WEB)
+            loadUrl(urlProvider.getWebUrl())
         }
         binding.webView.setOnLongClickListener {
             false
