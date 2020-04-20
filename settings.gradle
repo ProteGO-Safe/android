@@ -1,0 +1,5 @@
+rootProject.name='ProteGoSafe'
+include ':app'
+include ':data'
+include ':domain'
+include ':device'
