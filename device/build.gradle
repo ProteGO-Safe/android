@@ -50,4 +50,5 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 
     implementation project(path: ":domain")
+    implementation project(path: ':opentrace')
 }

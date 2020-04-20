@@ -120,6 +120,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.1.5'
     // Recommended: Add the Firebase SDK for Google Analytics.
     implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    implementation 'com.google.firebase:firebase-functions:19.0.2'
+
     // Add the Firebase SDK for Crashlytics.
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
 
@@ -146,4 +148,5 @@ dependencies {
     implementation project(path: ':data')
     implementation project(path: ":domain")
     implementation project(path: ":device")
+    implementation project(path: ':opentrace')
 }

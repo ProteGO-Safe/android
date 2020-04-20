@@ -10,15 +10,19 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
+import pl.gov.mc.protegosafe.data.OpenTraceWrapperImpl
 import pl.gov.mc.protegosafe.databinding.ActivityMainBinding
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val vm: MainViewModel by inject()
+    private val vm: MainViewModel by viewModel()
+    //shouldn't be used directly
+    private val openTraceWrapper: OpenTraceWrapperImpl by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +31,11 @@ class MainActivity : AppCompatActivity() {
 
         saveNotificationData(intent)
         createNotificationChannel()
+
+        //TODO: below code is just to test starting OpenTrace service, we should used in right place through use case
+        Timber.d("Starting OpenTrace")
+
+        openTraceWrapper.startService().subscribe()
     }
 
     override fun onNewIntent(intent: Intent?) {
