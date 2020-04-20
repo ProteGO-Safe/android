@@ -19,11 +19,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.functions.FirebaseFunctions
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import pub.devrel.easypermissions.EasyPermissions
 import io.bluetrace.opentrace.BuildConfig
 import io.bluetrace.opentrace.Preference
 import io.bluetrace.opentrace.Utils
@@ -46,6 +41,11 @@ import io.bluetrace.opentrace.streetpass.StreetPassServer
 import io.bluetrace.opentrace.streetpass.StreetPassWorker
 import io.bluetrace.opentrace.streetpass.persistence.StreetPassRecord
 import io.bluetrace.opentrace.streetpass.persistence.StreetPassRecordStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import pub.devrel.easypermissions.EasyPermissions
 import java.lang.ref.WeakReference
 import kotlin.coroutines.CoroutineContext
 
@@ -336,9 +336,10 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
 
         TempIDManager.getTemporaryIDs(this, functions)
             .addOnCompleteListener {
-                CentralLog.d(TAG, "Get TemporaryIDs completed")
+                CentralLog.d(TAG, "Get  completed")
                 //this will run whether it starts or fails.
                 var fetch = TempIDManager.retrieveTemporaryID(this.applicationContext)
+
                 fetch?.let {
                     broadcastMessage = it
                     setupCycles()
