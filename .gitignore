@@ -1,13 +1,19 @@
+# IDEA
 *.iml
-.gradle
-/local.properties
 /.idea
-.DS_Store
+
+# Gradle
+/.gradle
 /build
+/reports
+
+# Gradle Android
+/local.properties
 /captures
-.externalNativeBuild
-.cxx
-scripts/localization_credentials.json
-venv
-.project
-.settings/
+
+# Release app signing
+/upload.keystore
+/upload-keystore.properties
+
+# OSX
+.DS_Store

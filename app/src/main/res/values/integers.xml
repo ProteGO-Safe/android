@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="max_sms_confirmation_code_chars">6</integer>
-</resources>

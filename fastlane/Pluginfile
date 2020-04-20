@@ -1,2 +1,0 @@
-gem 'fastlane-plugin-polidea', '~> 1.0.0'
-gem "rest-client"

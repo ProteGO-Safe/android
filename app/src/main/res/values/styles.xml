@@ -1,90 +1,42 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="materialButtonStyle">@style/Button</item>
-        <item name="android:textViewStyle">@style/AppText</item>
+    </style>
+    
+    <style name="Info" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:lineSpacingExtra">4dp</item>
     </style>
 
-    <style name="AppText" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="fontFamily">@font/poppins</item>
-        <item name="android:textSize">@dimen/regular_text_size</item>
-        <item name="android:textColor">@color/black</item>
+    <style name="Info.Black" parent="Info">
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="AppText.Title">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/title_text_size</item>
-        <item name="lineHeight">@dimen/title_line_height</item>
-    </style>
-
-    <style name="AppText.Header">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/header_text_size</item>
-        <item name="lineHeight">@dimen/header_line_height</item>
-    </style>
-
-    <style name="AppText.Input">
-        <item name="font">@font/poppins_medium</item>
-        <item name="boxBackgroundColor">@color/white</item>
-    </style>
-
-    <style name="AppText.Input.Special">
-        <item name="android:textColor">@color/colorPrimary</item>
-    </style>
-
-    <style name="AppText.Description">
-        <item name="android:textSize">@dimen/description_text_size</item>
-        <item name="android:textColor">@color/greyishBrown</item>
-    </style>
-
-    <style name="AppText.StatusHeader">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/status_header_text_size</item>
-    </style>
-
-    <style name="AppText.StatusDescription">
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="AppText.StatusLegend">
+    <style name="Subtitle" parent="Info.Black">
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Button" parent="Widget.MaterialComponents.Button">
-        <item name="fontFamily">@font/poppins_medium</item>
-        <item name="android:paddingLeft">@dimen/large_margin</item>
-        <item name="android:paddingRight">@dimen/large_margin</item>
-        <item name="android:paddingTop">@dimen/small_margin</item>
-        <item name="android:paddingBottom">@dimen/x_small_margin</item>
-        <item name="backgroundTint">@color/button_primary_color</item>
-        <item name="android:textColor">@color/white</item>
+    <style name="Index" parent="Info">
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Button.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="fontFamily">@font/poppins_medium</item>
-        <item name="android:paddingLeft">@dimen/large_margin</item>
-        <item name="android:paddingRight">@dimen/large_margin</item>
-        <item name="android:paddingTop">@dimen/small_margin</item>
-        <item name="android:paddingBottom">@dimen/x_small_margin</item>
-        <item name="android:textColor">@color/button_primary_color</item>
-        <item name="strokeColor">@color/button_primary_color</item>
+    <style name="ColorBody" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/colored_text</item>
     </style>
 
-    <style name="SplashScreenTheme" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen_background</item>
-        <item name="android:statusBarColor">@color/transparent</item>
+    <style name="ColorBody.Bold" parent="ColorBody">
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="FullScreenDialogTheme" parent="AppTheme">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowIsFloating">false</item>
+    <style name="ColorBody.Bold.Big" parent="ColorBody.Bold">
+        <item name="android:textSize">28sp</item>
+        <item name="android:lineSpacingExtra">8dp</item>
     </style>
 
 </resources>

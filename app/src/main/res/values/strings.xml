@@ -1,12 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--MUST be consulted with someone responsible for copy-->
-    <string name="missing_email_client">Can not open e-mail client.</string>
-    <string name="missing_web_browser">Can not open web browser</string>
-    <string name="send_email_window_title">Send e-mail</string>
-
-    <!--TODO: Dashboard - wyloguj-->
-    <string name="dashboard_logout">Logout</string>
-
-    <string name="cannot_start_wireless_config">Can not open settings. Turn on Internet to be able to use the application.</string>
+    <string name="app_name">ProteGO Safe"</string>
+    <string name="notification_channel_name">ProteGO Safe" notifications</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur
+adipiscing elit. Ut vehicula, diam vel
+dignissim porttitor, urna nulla consectetur
+tortor, quis vestibulum dui magna eget
+velit. Sed pellentesque massa non ante
+interdum, in commodo risus vehicula.
+Aenean volutpat neque et tincidunt
+sodales. Praesent sit amet nulla hendrerit,
+faucibus nisl nec, elementum lacus.</string>
+    <string name="ok">OK</string>
 </resources>

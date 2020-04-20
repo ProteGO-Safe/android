@@ -1,6 +1,0 @@
-app_identifier "pl.gov.mc.protego" # The bundle identifier of your app
-
-package_name "pl.gov.mc.protego"
-
-# you can even provide different app identifiers, Apple IDs and team names per lane:
-# More information: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Appfile.md

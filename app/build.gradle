@@ -1,153 +1,149 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'io.fabric'
-apply plugin: 'com.polidea.cockpit'
-apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: 'kotlin-kapt'
-apply plugin: 'realm-android'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
+    dataBinding {
+        enabled = true
+    }
     compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
     defaultConfig {
-        applicationId "pl.gov.mc.protego"
-        minSdkVersion 23
+        applicationId "pl.gov.mc.protegosafe"
+        minSdkVersion 21
         targetSdkVersion 29
-        versionCode System.env.CI_JOB_ID ? System.env.CI_JOB_ID.toInteger() : 1
-        versionName System.env.CI_COMMIT_TAG ? System.env.CI_COMMIT_TAG : "0.0.1"
+        versionCode 5
+        versionName "2.0.1"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        release {
-            storeFile file("../keystore.jks")
-            storePassword System.env.STORE_PASSWORD
-            keyAlias System.env.KEY_ALIAS
-            keyPassword System.env.KEY_PASSWORD
-        }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
+
+    kotlinOptions { jvmTarget = "1.8" }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
-            debuggable true
         }
     }
-
-    flavorDimensions "version"
+    flavorDimensions "mode"
     productFlavors {
         dev {
-            applicationIdSuffix ".dev"
-            versionNameSuffix "-dev"
-            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-dev.cloudfunctions.net/\""
-            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
+            dimension "mode"
+            buildConfigField "String", "WEB", "DEV_WEB_URL"
         }
         prod {
-            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-stag.cloudfunctions.net/\""
-            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
-        }
-        stg {
-            applicationIdSuffix ".stg"
-            versionNameSuffix "-stg"
-            buildConfigField "String", "BASE_API_URL", "\"https://europe-west3-protego-stag.cloudfunctions.net/\""
-            buildConfigField "int", "SUPPORTED_API_VERSION", "1"
-        }
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
-    }
-
-    compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-
-    lintOptions {
-        lintConfig file("lint.xml")
-    }
-
-    testOptions {
-        unitTests.returnDefaultValues = true
-        junitPlatform {
-            filters {
-                engines {
-                    include 'spek2'
-                }
-            }
-
-        }
-        unitTests.all {
-            testLogging {
-                events = ["passed", "skipped", "failed"]
-                showStackTraces = true
-                exceptionFormat = 'full'
-            }
+            dimension "mode"
+            buildConfigField "String", "WEB", "PROD_WEB_URL"
         }
     }
 }
 
+ext {
+    kotlin_version = '1.3.70'
+    lifecycle_version = "2.2.0"
+    multidex_version = '2.0.1'
+    appcompat_version = '1.1.0'
+    ktx_version = '1.2.0'
+    cardview_version = '1.0.0'
+    constraintlayout_version = '1.1.3'
+    navigation_version = '2.2.1'
+    koinVersion = '2.1.5'
+    material_version = '1.2.0-alpha05'
+}
+
 dependencies {
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core:1.2.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    // Crashlytics for dev build
+    // Multidex
+    implementation "androidx.multidex:multidex:$multidex_version"
+
+    // Appcompat
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.core:core-ktx:$ktx_version"
+    implementation "androidx.recyclerview:recyclerview:$appcompat_version"
+    implementation "androidx.cardview:cardview:$cardview_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+
+    //livedata extensions
+    implementation "com.snakydesign.livedataextensions:lives:1.3.0"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    // Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    // Annotation processor
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
-    debugImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    // optional - ReactiveStreams support for LiveData
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
 
-    // Leak Canary for dev build
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+    // Material
+    implementation "com.google.android.material:material:$material_version"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    //rx
+    implementation "io.reactivex.rxjava2:rxjava:2.2.17"
+    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 
-    // Koin
-    implementation 'org.koin:koin-android:2.1.5'
+    //koin
+    implementation "org.koin:koin-android:$koinVersion"
+    // or Koin for Lifecycle scoping
+    implementation "org.koin:koin-androidx-scope:$koinVersion"
+    // or Koin for Android Architecture ViewModel
+    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:2.1.5"
 
-    // Cockpit, the debug menu
-    debugImplementation 'com.polidea.cockpit:cockpit:3.1.2'
-    debugImplementation 'com.squareup:seismic:1.0.2'
-    stgImplementation 'com.polidea.cockpit:cockpit:3.1.2'
-    stgImplementation 'com.squareup:seismic:1.0.2'
-
-    // Rx
-    implementation "io.reactivex.rxjava2:rxkotlin:2.3.0"
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
-
-    // Timber
+    //Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    // spek
-    testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spek_version"
-    testImplementation "org.spekframework.spek2:spek-runner-junit5:$spek_version"
-    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    //Firebase
+    implementation 'com.google.firebase:firebase-core:17.3.0'
+    implementation 'com.google.firebase:firebase-messaging:20.1.5'
+    // Recommended: Add the Firebase SDK for Google Analytics.
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    // Add the Firebase SDK for Crashlytics.
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
 
-    //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.3.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
-
-    //ble
-    implementation 'com.polidea.rxandroidble2:rxandroidble:1.11.0'
-
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    //Hyperion debug tool
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-core:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-attr:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-build-config:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-crash:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-disk:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-geiger-counter:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-measurement:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-phoenix:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-recorder:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-shared-preferences:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-timber:0.9.27'
+
+    implementation project(path: ':data')
+    implementation project(path: ":domain")
+    implementation project(path: ":device")
 }
