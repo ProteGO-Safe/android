@@ -19,6 +19,10 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="io.bluetrace.opentrace.services.BluetoothMonitoringService"
+            android:foregroundServiceType="location" />
+
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

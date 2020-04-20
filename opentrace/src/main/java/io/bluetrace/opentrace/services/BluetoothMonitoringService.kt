@@ -90,6 +90,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
     }
 
     fun setup() {
+
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
 
         CentralLog.setPowerManager(pm)
@@ -97,6 +98,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
         commandHandler = CommandHandler(WeakReference(this))
 
         CentralLog.d(TAG, "Creating service - BluetoothMonitoringService")
+
         serviceUUID = BuildConfig.BLE_SSID
 
         worker = StreetPassWorker(this.applicationContext)
@@ -127,7 +129,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
     }
 
     private fun setupNotifications() {
-
         mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Android O requires a Notification Channel.
@@ -174,6 +175,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
         val perms = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         return EasyPermissions.hasPermissions(this.applicationContext, *perms)
     }
+
 
     private fun acquireWritePermission() {
         val intent = Intent(this.applicationContext, RequestFileWritePermission::class.java)
@@ -237,7 +239,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
     }
 
     fun runService(cmd: Command?) {
-
         var doWork = true
         CentralLog.i(TAG, "Command is:${cmd?.string}")
 

@@ -9,7 +9,7 @@ import io.bluetrace.opentrace.services.BluetoothMonitoringService
 import io.bluetrace.opentrace.streetpass.CentralDevice
 import io.bluetrace.opentrace.streetpass.PeripheralDevice
 
-class TracerApp : Application() {
+open class TracerApp : Application() {
 
     override fun onCreate() {
         super.onCreate()

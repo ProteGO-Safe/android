@@ -85,7 +85,6 @@ object Utils {
             BluetoothMonitoringService.COMMAND_KEY,
             BluetoothMonitoringService.Command.ACTION_START.index
         )
-
         context.startService(intent)
     }
 
