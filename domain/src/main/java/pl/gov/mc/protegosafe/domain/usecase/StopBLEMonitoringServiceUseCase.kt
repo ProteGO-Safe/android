@@ -2,11 +2,10 @@ package pl.gov.mc.protegosafe.domain.usecase
 
 import pl.gov.mc.protegosafe.domain.OpenTraceRepository
 
-class StartBLEMonitoringServiceUseCase(
+class StopBLEMonitoringServiceUseCase(
     private val openTraceRepository: OpenTraceRepository
 ) {
-
-    fun execute(delay: Long = 0) {
-        openTraceRepository.startBLEMonitoringService(delay)
+    fun execute() {
+        openTraceRepository.stopBLEMonitoringService()
     }
 }

@@ -56,4 +56,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    //TODO add permissions and battery optimizations and check ble support
 }

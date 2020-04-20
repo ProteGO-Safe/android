@@ -1,7 +1,11 @@
-package pl.gov.mc.protegosafe.data
+package pl.gov.mc.protegosafe.data.di
 
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
+import pl.gov.mc.protegosafe.data.BuildConfig
+import pl.gov.mc.protegosafe.data.NotificationRepositoryImpl
+import pl.gov.mc.protegosafe.data.TriageRepositoryImpl
+import pl.gov.mc.protegosafe.data.UserRepositoryImpl
 import pl.gov.mc.protegosafe.data.db.NotificationDataStore
 import pl.gov.mc.protegosafe.data.db.SharedPreferencesDelegates
 import pl.gov.mc.protegosafe.data.db.TriageDataStore

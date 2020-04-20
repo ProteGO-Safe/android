@@ -16,16 +16,12 @@ class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
     override fun onReceive(context: Context?, intent: Intent) {
         if (Intent.ACTION_BOOT_COMPLETED == intent.action) {
             Timber.d("Boot completed received")
-
             try {
-                //can i try a scheduled service start here?
                 Timber.d("Attempting to start service")
                 startBLEMonitoringServiceUseCase.execute(START_BLE_MONITOR_SERVICE_DELAY)
             } catch (e: Throwable) {
-                Timber.e("StartOnBootReceiver: ${e.localizedMessage}")
-                e.printStackTrace()
+                Timber.e(e, "StartOnBootReceiver")
             }
-
         }
     }
 

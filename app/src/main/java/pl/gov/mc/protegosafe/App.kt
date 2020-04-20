@@ -8,7 +8,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import pl.gov.mc.protegosafe.data.dataModule
+import pl.gov.mc.protegosafe.data.di.dataModule
 import pl.gov.mc.protegosafe.di.appModule
 import pl.gov.mc.protegosafe.di.viewModelModule
 import timber.log.Timber
@@ -25,7 +25,8 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(appModule, viewModelModule, useCaseModule, dataModule, deviceModule)
+            modules(appModule, viewModelModule, useCaseModule,
+                dataModule, deviceModule)
         }
 
         initializeFcm()
