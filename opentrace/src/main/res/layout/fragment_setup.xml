@@ -9,12 +9,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/footer"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/footer">
 
         <ImageView
-            android:id="@+id/on_boarding_banner"
             style="@style/OnboardingImage"
+            android:id="@+id/on_boarding_banner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_opentrace_blue_transparent"
@@ -23,8 +23,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_title"
             style="@style/OnboardingTitle"
+            android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -49,8 +49,8 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_desc_sub_1"
             style="@style/OnboardingSubDesc"
+            android:id="@+id/tv_desc_sub_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -63,8 +63,8 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_desc_sub_2"
             style="@style/OnboardingSubDesc"
+            android:id="@+id/tv_desc_sub_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -77,15 +77,15 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_desc_sub_1" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_note_1"
             style="@style/OnboardingSubDesc"
+            android:id="@+id/tv_note_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
 
             android:gravity="left"
-            android:paddingTop="16dp"
             android:text="@string/notes"
             android:textColor="@color/grey_3"
+            android:paddingTop="16dp"
             android:visibility="visible"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

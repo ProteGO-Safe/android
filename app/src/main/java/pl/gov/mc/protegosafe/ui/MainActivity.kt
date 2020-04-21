@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import io.bluetrace.opentrace.Preference
 import org.koin.android.ext.android.inject
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
@@ -27,6 +28,16 @@ class MainActivity : AppCompatActivity() {
 
         saveNotificationData(intent)
         createNotificationChannel()
+
+        //Temporary onboarding: TODO: get rid of it when whe have own onboarding
+        if (!Preference.isOnBoarded(this)) {
+            val myIntent = Intent(
+                this,
+                Class.forName("io.bluetrace.opentrace.onboarding.OnboardingActivity")
+            )
+            startActivity(myIntent)
+        }
+
     }
 
     override fun onNewIntent(intent: Intent?) {

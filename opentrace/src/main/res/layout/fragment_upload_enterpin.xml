@@ -48,8 +48,8 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="STEP 2"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:text="STEP 2" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
@@ -93,11 +93,11 @@
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:textSize="13sp"
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/upload_agreement"
-                    android:textSize="13sp" />
+                    android:text="@string/upload_agreement" />
             </LinearLayout>
 
         </LinearLayout>
@@ -113,17 +113,17 @@
 
         <Button
             android:id="@+id/enterPinActionButton"
+            android:fontFamily="@font/font"
+            android:textFontWeight="600"
+            android:textSize="18sp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:background="@drawable/gradient"
-            android:fontFamily="@font/font"
             android:text="Upload data"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textFontWeight="600"
-            android:textSize="18sp"
             android:textStyle="normal" />
     </LinearLayout>
 

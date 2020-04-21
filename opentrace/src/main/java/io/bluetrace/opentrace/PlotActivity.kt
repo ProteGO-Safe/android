@@ -44,12 +44,7 @@ class PlotActivity : AppCompatActivity() {
         }
 
         val zipResult = Observable.zip(observableStreetRecords, observableStatusRecords,
-            BiFunction<List<StreetPassRecord>, List<StatusRecord>, ExportData> { records, status ->
-                ExportData(
-                    records,
-                    status
-                )
-            }
+            BiFunction<List<StreetPassRecord>, List<StatusRecord>, ExportData> { records, status -> ExportData(records, status) }
         )
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
