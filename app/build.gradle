@@ -18,7 +18,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 5
-        versionName "2.0.1"
+        versionName "3.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,6 +41,7 @@ android {
         dev {
             dimension "mode"
             buildConfigField "String", "WEB", "\"https://safesafe.thecoders.io\""
+            applicationIdSuffix ".debug"
         }
         prod {
             dimension "mode"
