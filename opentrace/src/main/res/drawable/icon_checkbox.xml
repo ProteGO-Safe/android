@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:exitFadeDuration="@android:integer/config_mediumAnimTime">
+    <item android:drawable="@drawable/small_red_cross" android:state_enabled="false" />
+    <item android:drawable="@drawable/small_green_tick" android:state_activated="true" />
+    <item android:drawable="@drawable/small_green_tick" android:state_selected="true" />
+    <item android:drawable="@drawable/small_red_cross" android:state_selected="false" />
+    <item android:drawable="@drawable/small_green_tick" android:state_checked="true" />
+    <item android:drawable="@drawable/small_green_tick" android:state_pressed="true" />
+    <item android:drawable="@drawable/small_green_tick" android:state_focused="true" />
+    <item android:drawable="@drawable/small_green_tick" />
+</selector>
