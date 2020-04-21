@@ -6,6 +6,7 @@ import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.usecase.*
 import pl.gov.mc.protegosafe.domain.usecase.auth.SignInUseCase
+import pl.gov.mc.protegosafe.domain.usecase.*
 import pl.gov.mc.protegosafe.ui.MainViewModel
 import pl.gov.mc.protegosafe.ui.common.PushNotifierImpl
 import pl.gov.mc.protegosafe.ui.home.HomeViewModel
@@ -29,6 +30,7 @@ val useCaseModule = module {
     factory { GetTemporaryIDUseCase(get(), get()) }
     factory { SignInUseCase(get(), get(), get()) }
     factory { SignInAndStartBLEMonitoringServiceUseCase(get(), get(), get()) }
+    factory { GetSafetyNetNonceDataUseCase(get())}
 }
 
 val viewModelModule = module {

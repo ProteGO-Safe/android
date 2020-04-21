@@ -10,4 +10,9 @@ Aenean volutpat neque et tincidunt
 sodales. Praesent sit amet nulla hendrerit,
 faucibus nisl nec, elementum lacus.</string>
     <string name="ok">OK</string>
+
+    <string name="safetynet_verification_loading_message">Proszę czekać ...</string>
+    <string name="safetynet_verification_error">Wystąpił błąd podczas weryfikacji Twojego urzączenia.</string>
+    <string name="safetynet_verification_error_internet_connection">Potrzebujemy połączenia internetowego, proszę włącz je.</string>
+    <string name="safetynet_verification_error_play_services">Aby zweryfikować Twój telegon potrzebujemy najnowższej wersji Google Play Services, proszę go zaktualizkować.</string>
 </resources>

@@ -11,12 +11,9 @@ import io.bluetrace.opentrace.TracerApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import pl.gov.mc.protegosafe.data.di.dataModule
-import pl.gov.mc.protegosafe.di.appModule
-import pl.gov.mc.protegosafe.di.viewModelModule
 import timber.log.Timber
 import pl.gov.mc.protegosafe.data.BuildConfig
-import pl.gov.mc.protegosafe.di.deviceModule
-import pl.gov.mc.protegosafe.di.useCaseModule
+import pl.gov.mc.protegosafe.di.*
 
 class App : TracerApp() {
 
@@ -27,8 +24,8 @@ class App : TracerApp() {
 
         startKoin {
             androidContext(this@App)
-            modules(appModule, viewModelModule, useCaseModule,
-                dataModule, deviceModule)
+            modules(appModule, deviceModule, useCaseModule, dataModule, viewModelModule,
+                safetyNetModule)
         }
 
         initializeFcm()
