@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
             )
             startActivity(myIntent)
         }
-
     }
 
     override fun onNewIntent(intent: Intent?) {
