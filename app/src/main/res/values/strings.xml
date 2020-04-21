@@ -11,8 +11,13 @@ sodales. Praesent sit amet nulla hendrerit,
 faucibus nisl nec, elementum lacus.</string>
     <string name="ok">OK</string>
 
-    <string name="safetynet_verification_loading_message">Proszę czekać ...</string>
-    <string name="safetynet_verification_error">Wystąpił błąd podczas weryfikacji Twojego urzączenia.</string>
-    <string name="safetynet_verification_error_internet_connection">Potrzebujemy połączenia internetowego, proszę włącz je.</string>
-    <string name="safetynet_verification_error_play_services">Aby zweryfikować Twój telegon potrzebujemy najnowższej wersji Google Play Services, proszę go zaktualizkować.</string>
+    <string name="please_wait">Proszę czekać…</string>
+    <string name="no_internet_connection_title">Brak Internetu</string>
+    <string name="no_internet_connection_msg">Sprawdź połączenie z Internetem</string>
+    <string name="try_again">Spróbuj ponowanie</string>
+    <string name="safetynet_dialog_title">Wystąpił problem</string>
+    <string name="safetynet_dialog_verification_error">Twoje urządzenie nie mogło zostać pozytywnie zweryfikowane</string>
+    <string name="safetynet_dialog_verification_unknown_error">Nieznany błąd</string>
+    <string name="safetynet_dialog_verification_error_internet_connection">Sprawdź połączenie z Internetem</string>
+    <string name="safetynet_dialog_verification_error_play_services">Aplikacja wymaga najnowższej wersji aplikacji Google Play Services, zaktualizuj ją</string>
 </resources>

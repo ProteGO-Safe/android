@@ -11,6 +11,7 @@ import com.google.android.gms.safetynet.SafetyNetClient
 import com.google.gson.Gson
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.domain.model.safetynet.AttestationData
 import pl.gov.mc.protegosafe.domain.usecase.GetSafetyNetNonceDataUseCase
 import pl.gov.mc.protegosafe.mapper.safetynet.SafetyNetMapper
@@ -26,7 +27,7 @@ class SafetyNetManager(
     private val googleApiAvailability: GoogleApiAvailability
 ) : KoinComponent {
     companion object {
-        private const val SAFETYNET_API_KEY = "AIzaSyDhQUQDNpxXZ4dOMjZh4GLTtyB62Fi3U8o"
+        private const val SAFETYNET_API_KEY = BuildConfig.SAFETYNET_API_KEY
     }
 
     private val getSafetyNetNonceDataUseCase: GetSafetyNetNonceDataUseCase by inject()
