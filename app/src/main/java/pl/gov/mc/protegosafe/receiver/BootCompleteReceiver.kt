@@ -3,12 +3,10 @@ package pl.gov.mc.protegosafe.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import io.bluetrace.opentrace.logging.CentralLog
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import pl.gov.mc.protegosafe.domain.usecase.StartBLEMonitoringServiceUseCase
 import timber.log.Timber
-
 
 class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
 
