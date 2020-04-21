@@ -42,6 +42,7 @@ android {
             dimension "mode"
             buildConfigField "String", "WEB", "\"https://safesafe.thecoders.io\""
             applicationIdSuffix ".debug"
+            versionNameSuffix '-DEBUG'
         }
         prod {
             dimension "mode"
