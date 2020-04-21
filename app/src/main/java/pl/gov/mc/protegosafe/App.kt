@@ -17,7 +17,6 @@ import timber.log.Timber
 import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.di.deviceModule
 import pl.gov.mc.protegosafe.di.useCaseModule
-import pl.gov.mc.protegosafe.data.deviceModule
 
 class App : TracerApp() {
 
@@ -25,7 +24,6 @@ class App : TracerApp() {
         super.onCreate()
 
         Timber.plant(Timber.DebugTree())
-        TracerApp.AppContext = applicationContext
 
         startKoin {
             androidContext(this@App)
