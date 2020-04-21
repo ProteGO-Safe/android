@@ -2,7 +2,7 @@ package pl.gov.mc.protegosafe.domain.usecase
 
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import pl.gov.mc.protegosafe.domain.TriageRepository
+import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType

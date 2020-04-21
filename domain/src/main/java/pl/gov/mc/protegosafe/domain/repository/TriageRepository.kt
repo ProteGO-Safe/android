@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.domain
+package pl.gov.mc.protegosafe.domain.repository
 
 import pl.gov.mc.protegosafe.domain.model.TriageData
 
