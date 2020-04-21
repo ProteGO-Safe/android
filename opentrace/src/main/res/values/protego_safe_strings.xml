@@ -1,0 +1,8 @@
+<resources>
+    <string name="ps_service_ok_title">ProteGo Safe skanuje otoczenie</string>
+    <string name="ps_service_ok_body">Zrestartuj telefon, gdy ta wiadomość zniknie</string>
+
+    <string name="ps_service_not_ok_title">Uwaga!</string>
+    <string name="ps_service_not_ok_body">Aplikacja nie skanuje. Sprawdź czy włączyłeś bluetooth i przydzieliłeś wymagane uprawnienia.</string>
+    <string name="ps_service_not_ok_action">Sprawdź aplikację</string>
+</resources>
