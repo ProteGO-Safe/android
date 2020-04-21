@@ -10,9 +10,9 @@ class OpenTraceWrapper(private val context: Context) : OpenTraceRepository {
     override fun startBLEMonitoringService(delay: Long) {
         //Impl
         if (delay == 0L) {
-            //Utils.startBluetoothMonitoringService(context)
+            Utils.startBluetoothMonitoringService(context)
         } else {
-            //Utils.scheduleStartMonitoringService(context, delay)
+            Utils.scheduleStartMonitoringService(context, delay)
         }
     }
 
