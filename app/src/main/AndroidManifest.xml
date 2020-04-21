@@ -41,6 +41,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name="io.bluetrace.opentrace.boot.StartOnBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name="io.bluetrace.opentrace.services.BluetoothMonitoringService"
             android:foregroundServiceType="location" />

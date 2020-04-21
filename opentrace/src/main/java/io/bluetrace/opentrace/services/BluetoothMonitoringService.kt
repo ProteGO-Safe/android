@@ -164,7 +164,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             startForeground(NOTIFICATION_ID, notif)
             notificationShown = NOTIFICATION_STATE.RUNNING
         }
-        notifyLackingThings(true)//WNASILOWSKILOG
     }
 
     private fun hasLocationPermissions(): Boolean {
