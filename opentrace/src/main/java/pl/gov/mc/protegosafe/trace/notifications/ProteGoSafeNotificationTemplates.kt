@@ -12,6 +12,8 @@ import io.bluetrace.opentrace.onboarding.OnboardingActivity
 import io.bluetrace.opentrace.services.BluetoothMonitoringService.Companion.PENDING_ACTIVITY
 import io.bluetrace.opentrace.services.BluetoothMonitoringService.Companion.PENDING_WIZARD_REQ_CODE
 
+const val ACTIVITY_FOR_INTENT_CLASS = "pl.gov.mc.protegosafe.ui.MainActivity"
+
 class ProteGoSafeNotificationTemplates {
 
     companion object {
@@ -34,8 +36,10 @@ class ProteGoSafeNotificationTemplates {
 
         fun getRunningNotification(context: Context, channel: String): Notification {
 
-            var intent = Intent(context, MainActivity::class.java)
-
+            val intent = Intent(
+                context,
+                Class.forName(ACTIVITY_FOR_INTENT_CLASS)
+            )
             val activityPendingIntent = PendingIntent.getActivity(
                 context, PENDING_ACTIVITY,
                 intent, 0
@@ -59,8 +63,11 @@ class ProteGoSafeNotificationTemplates {
         }
 
         fun lackingThingsNotification(context: Context, channel: String): Notification {
-            var intent = Intent(context, OnboardingActivity::class.java)
-            intent.putExtra("page", 3)
+            val intent = Intent(
+                context,
+                Class.forName(ACTIVITY_FOR_INTENT_CLASS)
+            )
+            intent.putExtra("lacking_things", true)
 
             val activityPendingIntent = PendingIntent.getActivity(
                 context, PENDING_WIZARD_REQ_CODE,
