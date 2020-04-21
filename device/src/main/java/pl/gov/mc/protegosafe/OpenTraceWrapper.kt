@@ -1,14 +1,19 @@
 package pl.gov.mc.protegosafe
 
 import android.content.Context
+import com.google.firebase.functions.FirebaseFunctions
+import io.bluetrace.opentrace.BuildConfig
+import io.bluetrace.opentrace.Utils
+import io.bluetrace.opentrace.idmanager.TempIDManager
+import io.bluetrace.opentrace.services.BluetoothMonitoringService
 import io.reactivex.Completable
 import pl.gov.mc.protegosafe.domain.OpenTraceRepository
-import pl.gov.mc.protegosafe.domain.model.TemporaryID
+import pl.gov.mc.protegosafe.domain.model.TemporaryIDItem
+import pl.gov.mc.protegosafe.mapper.toDeviceModel
+import pl.gov.mc.protegosafe.mapper.toDomainModel
 
 class OpenTraceWrapper(private val context: Context) : OpenTraceRepository {
-    //TODO-OpenTrace impl
     override fun startBLEMonitoringService(delay: Long) {
-        //Impl
         if (delay == 0L) {
             Utils.startBluetoothMonitoringService(context)
         } else {
@@ -17,27 +22,25 @@ class OpenTraceWrapper(private val context: Context) : OpenTraceRepository {
     }
 
     override fun stopBLEMonitoringService() {
-        //Utils.stopBluetoothMonitoringService(context: Context)
+        Utils.stopBluetoothMonitoringService(context)
     }
 
-    override fun getTemporaryIDs(): Completable {
-//        private val functions = FirebaseFunctions.getInstance(BuildConfig.FIREBASE_REGION)
-//        TempIDManager.getTemporaryIDs(context, functions)
-        return Completable.complete()
+    override fun getTemporaryIDs() = Completable.fromAction() {
+        val functions = FirebaseFunctions.getInstance(BuildConfig.FIREBASE_REGION)
+        TempIDManager.getTemporaryIDs(context, functions) }
+
+    override fun getHandShakePin() = Completable.fromAction {
+        val functions = FirebaseFunctions.getInstance(BuildConfig.FIREBASE_REGION)
+        Utils.getHandShakePin(context, functions)
     }
 
-    override fun getHandShakePin(): Completable {
-//        private val functions = FirebaseFunctions.getInstance(BuildConfig.FIREBASE_REGION)
-//        Utils.getHandShakePin(context, functions)
-        return Completable.complete()
+    override fun retrieveTemporaryID(): TemporaryIDItem {
+        val tempId = TempIDManager.retrieveTemporaryID(context)
+        checkNotNull(tempId)
+        return tempId.toDomainModel()
     }
 
-    override fun retrieveTemporaryID(): TemporaryID {
-        //TempIDManager.retrieveTemporaryID(context)
-        return TemporaryID(0, "DUMMY", 0L)
-    }
-
-    override fun setBLEBroadcastMessage(temporaryID: TemporaryID) {
-//        BluetoothMonitoringService.broadcastMessage = temporaryID.toData()
+    override fun setBLEBroadcastMessage(temporaryID: TemporaryIDItem) {
+        BluetoothMonitoringService.broadcastMessage = temporaryID.toDeviceModel()
     }
 }
