@@ -44,7 +44,8 @@
                         android:padding="16dp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_opentrace_blue_transparent" />
+                        app:srcCompat="@drawable/ic_opentrace_blue_transparent"
+                      />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_last_update"
@@ -433,9 +434,9 @@
         android:id="@+id/view_announcement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_purple_gradient"
         android:orientation="vertical"
         android:visibility="gone"
+        android:background="@drawable/background_purple_gradient"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -443,28 +444,28 @@
             android:id="@+id/tv_announcement"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:text="No news"
+            android:textColor="@color/white"
+            android:textSize="14sp"
             android:clickable="true"
             android:linksClickable="true"
+            android:textColorLink="@color/white"
             android:paddingLeft="16dp"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:text="No news"
-            android:textColor="@color/white"
-            android:textColorLink="@color/white"
-            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/btn_announcement_close"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintRight_toLeftOf="@id/btn_announcement_close" />
 
         <ImageButton
             android:id="@+id/btn_announcement_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00000000"
-            android:paddingLeft="8dp"
-            android:paddingTop="16dp"
-            android:paddingRight="16dp"
             android:src="@drawable/ic_cross"
+            android:paddingLeft="8dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -24,8 +24,7 @@ import java.util.concurrent.PriorityBlockingQueue
 
 class StreetPassWorker(val context: Context) {
 
-    private val workQueue: PriorityBlockingQueue<Work> =
-        PriorityBlockingQueue(5, Collections.reverseOrder<Work>())
+    private val workQueue: PriorityBlockingQueue<Work> = PriorityBlockingQueue(5, Collections.reverseOrder<Work>())
     private val blacklist: MutableList<BlacklistEntry> = Collections.synchronizedList(ArrayList())
 
     private val scannedDeviceReceiver = ScannedDeviceReceiver()

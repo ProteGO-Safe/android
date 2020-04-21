@@ -14,9 +14,9 @@
         android:indeterminate="false"
         android:progress="33"
         android:scaleY="1.5"
-        app:layout_constraintBottom_toTopOf="@id/onboardingStartHolder"
         app:layout_constraintLeft_toLeftOf="@id/onboardingStartHolder"
-        app:layout_constraintRight_toRightOf="@id/onboardingStartHolder" />
+        app:layout_constraintRight_toRightOf="@id/onboardingStartHolder"
+        app:layout_constraintBottom_toTopOf="@id/onboardingStartHolder" />
 
     <FrameLayout
         android:id="@+id/onboardingStartHolder"

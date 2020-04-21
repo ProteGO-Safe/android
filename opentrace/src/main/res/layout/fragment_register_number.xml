@@ -66,17 +66,17 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
 
-            app:ccp_countryPreference="PL"
             app:ccp_defaultNameCode="PL"
-            app:ccp_flagBorderColor="#505050"
-            app:ccp_rememberLastSelection="true"
-            app:ccp_showFullName="false"
+            app:ccp_countryPreference="PL"
             app:ccp_showNameCode="false"
+            app:ccp_showFullName="false"
             app:ccp_textSize="20sp"
+            app:ccp_rememberLastSelection="true"
+            app:ccp_flagBorderColor="#505050"
 
-            app:layout_constraintBottom_toBottomOf="@id/phone_number"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/phone_number" />
+            app:layout_constraintTop_toTopOf="@id/phone_number"
+            app:layout_constraintBottom_toBottomOf="@id/phone_number" />
 
         <EditText
             android:id="@+id/phone_number"
@@ -97,11 +97,11 @@
             android:id="@+id/phone_number_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
             android:text="Phone number invalid"
             android:textAlignment="textStart"
             android:textColor="@color/error"
             android:visibility="invisible"
+            android:layout_marginLeft="2dp"
             app:layout_constraintLeft_toRightOf="@id/country_code"
             app:layout_constraintTop_toBottomOf="@id/phone_number" />
 
@@ -109,11 +109,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="@string/send_otp"
             android:textAlignment="textStart"
+            android:text="@string/send_otp"
+            app:layout_constraintTop_toBottomOf="@+id/country_code"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/country_code" />
+            app:layout_constraintRight_toRightOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
