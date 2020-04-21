@@ -10,7 +10,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.FragmentHomeBinding
 import pl.gov.mc.protegosafe.ui.common.BaseFragment

@@ -1,6 +1,6 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
-import pl.gov.mc.protegosafe.domain.NotificationRepository
+import pl.gov.mc.protegosafe.domain.repository.NotificationRepository
 
 class GetNotificationDataAndClearUseCase(
     private val notificationRepository: NotificationRepository

@@ -2,7 +2,7 @@ package pl.gov.mc.protegosafe.data
 
 import com.google.gson.Gson
 import pl.gov.mc.protegosafe.data.db.TriageDataStore
-import pl.gov.mc.protegosafe.domain.TriageRepository
+import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 import pl.gov.mc.protegosafe.domain.model.TriageData
 import timber.log.Timber
 
