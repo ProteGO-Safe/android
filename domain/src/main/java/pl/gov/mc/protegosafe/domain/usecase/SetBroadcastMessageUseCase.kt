@@ -1,8 +1,8 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
-import pl.gov.mc.protegosafe.domain.OpenTraceRepository
+import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
 
-class SetBroadcastMessage(
+class SetBroadcastMessageUseCase(
     private val openTraceRepository: OpenTraceRepository
 ) {
     fun execute(){

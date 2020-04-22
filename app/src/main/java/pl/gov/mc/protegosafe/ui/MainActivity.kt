@@ -8,8 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import io.bluetrace.opentrace.Preference
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
@@ -19,28 +17,17 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
     private val vm: MainViewModel by viewModel()
-    private val startBLEMonitoringServiceUseCase: StartBLEMonitoringServiceUseCase by inject()
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.vm = vm
         binding.lifecycleOwner = this
 
         saveNotificationData(intent)
         createNotificationChannel()
-
-        //Temporary onboarding: TODO: get rid of it when whe have own onboarding
-        if (!Preference.isOnBoarded(this)) {
-            val myIntent = Intent(
-                this,
-                Class.forName("io.bluetrace.opentrace.onboarding.OnboardingActivity")
-            )
-            startActivity(myIntent)
-        } else {
-            startBLEMonitoringServiceUseCase.execute()
-        }
     }
 
     override fun onNewIntent(intent: Intent?) {
