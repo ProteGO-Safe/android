@@ -29,9 +29,11 @@ val useCaseModule = module {
     factory { GetTemporaryIDUseCase(get(), get()) }
     factory { SignInUseCase(get(), get(), get()) }
     factory { SignInAndStartBLEMonitoringServiceUseCase(get(), get(), get()) }
+    factory { GetSafetyNetNonceDataUseCase(get())}
+    factory { GetInternetConnectionStatusUseCase(get()) }
 }
 
 val viewModelModule = module {
-    viewModel { MainViewModel(get(), get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get()) }
 }
