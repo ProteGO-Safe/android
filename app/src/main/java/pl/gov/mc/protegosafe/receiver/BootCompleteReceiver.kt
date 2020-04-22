@@ -17,7 +17,7 @@ class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
             Timber.d("Boot completed received")
             try {
                 Timber.d("Attempting to start service")
-                startBLEMonitoringServiceUseCase.execute(START_BLE_MONITOR_SERVICE_DELAY)
+                startBLEMonitoringServiceUseCase.execute(0L)
             } catch (e: Throwable) {
                 Timber.e(e, "StartOnBootReceiver")
             }
