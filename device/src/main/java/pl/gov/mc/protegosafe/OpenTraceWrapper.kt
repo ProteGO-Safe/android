@@ -10,6 +10,7 @@ import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
 import pl.gov.mc.protegosafe.mapper.toCompletable
 import pl.gov.mc.protegosafe.mapper.toDeviceModel
 import pl.gov.mc.protegosafe.mapper.toDomainModel
+import pl.gov.mc.protegosafe.trace.notifications.ServiceStatusDataStore
 
 class OpenTraceWrapper(
     private val context: Context,
@@ -41,5 +42,9 @@ class OpenTraceWrapper(
 
     override fun setBLEBroadcastMessage(temporaryID: TemporaryIDItem) {
         BluetoothMonitoringService.broadcastMessage = temporaryID.toDeviceModel()
+    }
+
+    override fun getBLEServiceStatus(): Boolean {
+        return ServiceStatusDataStore.isWorking
     }
 }
