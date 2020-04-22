@@ -4,15 +4,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
-import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetTemporaryIDUseCase
-import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
-import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.SaveNotificationDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.SetBroadcastMessageUseCase
-import pl.gov.mc.protegosafe.domain.usecase.StartBLEMonitoringServiceUseCase
-import pl.gov.mc.protegosafe.domain.usecase.StopBLEMonitoringServiceUseCase
+import pl.gov.mc.protegosafe.domain.usecase.*
 import pl.gov.mc.protegosafe.domain.usecase.auth.SignInUseCase
 import pl.gov.mc.protegosafe.ui.MainViewModel
 import pl.gov.mc.protegosafe.ui.common.PushNotifierImpl
@@ -36,6 +28,7 @@ val useCaseModule = module {
     factory { SetBroadcastMessageUseCase(get()) }
     factory { GetTemporaryIDUseCase(get(), get()) }
     factory { SignInUseCase(get(), get(), get()) }
+    factory { SignInAndStartBLEMonitoringServiceUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {
