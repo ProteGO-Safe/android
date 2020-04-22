@@ -20,7 +20,7 @@ android {
         versionCode 5
         versionName "3.0.0"
 
-        buildConfigField "String", "SAFETYNET_API_KEY", SAFETYNET_API_KEY
+        buildConfigField "String", "SAFETYNET_API_KEY", "\"AIzaSyDhQUQDNpxXZ4dOMjZh4GLTtyB62Fi3U8o\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -123,6 +123,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.3.0'
     implementation 'com.google.firebase:firebase-messaging:20.1.5'
     implementation 'com.google.firebase:firebase-functions:19.0.2'
+
+    //RxPermission
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 
     // Add the Firebase SDK for Crashlytics.
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
