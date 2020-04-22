@@ -35,6 +35,12 @@ class HomeViewModel(
     private val _changeBatteryOptimization = SingleLiveEvent<Unit>()
     val changeBatteryOptimization: LiveData<Unit> = _changeBatteryOptimization
 
+    init {
+        //TODO: remove, just for diagnostics
+        val res = servicesStatusUseCase.execute()
+        Timber.d("Services status: $res")
+    }
+
     fun setBridgeData(dataType: Int, dataJson: String) {
         when(IncomingBridgeDataType.valueOf(dataType)) {
             IncomingBridgeDataType.REQUEST_PERMISSION -> {

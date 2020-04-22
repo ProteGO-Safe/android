@@ -1,17 +1,10 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
-import pl.gov.mc.protegosafe.domain.model.ServicesStatusItem
+import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 
 class GetServicesStatusUseCase(
+    private val deviceRepository: DeviceRepository
 ) {
 
-    fun execute(): String {
-        return """{
-		"isBtSupported” = true/false,
-		"isLocationEnabled” = true/false,  //only Android
-		"isBtOn” = true/false,
-		"isBatteryOptimizationOn” = true/false, //only Android
-		"isBtServiceOn” = true/false //OpenTrace status
-        """.trimIndent()
-    }
+    fun execute(): String = deviceRepository.getServicesStatusJson()
 }
