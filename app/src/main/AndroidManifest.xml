@@ -26,6 +26,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="true" />
+
         <service
             android:name=".service.FcmService"
             android:exported="false">
@@ -54,11 +58,7 @@
         </activity>
 
         <activity
-            android:name="io.bluetrace.opentrace.onboarding.OnboardingActivity" />
-
-        <activity
             android:name="io.bluetrace.opentrace.permissions.RequestFileWritePermission" />
-
     </application>
 
 </manifest>

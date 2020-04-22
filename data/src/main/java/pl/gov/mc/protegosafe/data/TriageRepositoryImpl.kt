@@ -2,8 +2,10 @@ package pl.gov.mc.protegosafe.data
 
 import com.google.gson.Gson
 import pl.gov.mc.protegosafe.data.db.TriageDataStore
+import pl.gov.mc.protegosafe.data.mapper.toEntity
+import pl.gov.mc.protegosafe.data.model.TriageData
+import pl.gov.mc.protegosafe.domain.model.TriageItem
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
-import pl.gov.mc.protegosafe.domain.model.TriageData
 import timber.log.Timber
 
 class TriageRepositoryImpl(
@@ -18,8 +20,8 @@ class TriageRepositoryImpl(
         triageDataStore.lastTriageCompletedTimestamp = timestamp
     }
 
-    override fun parseBridgePayload(payload: String): TriageData {
+    override fun parseBridgePayload(payload: String): TriageItem {
         Timber.d("Parsing payload: $payload")
-        return Gson().fromJson(payload, TriageData::class.java)
+        return Gson().fromJson(payload, TriageData::class.java).toEntity()
     }
 }
