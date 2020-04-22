@@ -622,6 +622,7 @@ class StreetPassWorker(val context: Context) {
             status: Int
         ) {
 
+
             when (status) {
                 BluetoothGatt.GATT_SUCCESS -> {
                     CentralLog.i(TAG, "Characteristic wrote successfully")

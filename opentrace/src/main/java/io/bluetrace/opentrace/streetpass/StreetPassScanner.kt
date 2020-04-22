@@ -5,6 +5,7 @@ import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.os.Build
 import android.os.Handler
+import android.util.Log
 import io.bluetrace.opentrace.Utils
 import io.bluetrace.opentrace.bluetooth.BLEScanner
 import io.bluetrace.opentrace.logging.CentralLog
@@ -84,15 +85,22 @@ class StreetPassScanner constructor(
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     txPower = result.txPower
-                    if (txPower == 127) {
+                    if (txPower == ScanResult.TX_POWER_NOT_PRESENT) {
                         txPower = null
+                    }
+                }
+                //Fallback for tx power level
+                if(txPower == null) {
+                    val txPowerLevel = result.scanRecord?.txPowerLevel
+
+                    if (txPowerLevel != Integer.MIN_VALUE) {
+                        txPower = txPowerLevel
                     }
                 }
 
                 var manuData: ByteArray =
                     scanResult.scanRecord?.getManufacturerSpecificData(1023) ?: "N.A".toByteArray()
                 var manuString = String(manuData, Charsets.UTF_8)
-
                 var connectable = ConnectablePeripheral(manuString, txPower, rssi)
 
                 CentralLog.i(TAG, "Scanned: ${manuString} - ${device.address}")
