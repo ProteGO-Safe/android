@@ -2,5 +2,6 @@
     package="pl.gov.mc.protegosafe.device">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
 </manifest>
