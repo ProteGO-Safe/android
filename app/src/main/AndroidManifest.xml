@@ -56,6 +56,9 @@
         <activity
             android:name="io.bluetrace.opentrace.onboarding.OnboardingActivity" />
 
+        <activity
+            android:name="io.bluetrace.opentrace.permissions.RequestFileWritePermission" />
+
     </application>
 
 </manifest>
