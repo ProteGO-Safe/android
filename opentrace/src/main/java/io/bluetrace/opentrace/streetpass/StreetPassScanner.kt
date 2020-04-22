@@ -101,6 +101,7 @@ class StreetPassScanner constructor(
                 var manuData: ByteArray =
                     scanResult.scanRecord?.getManufacturerSpecificData(1023) ?: "N.A".toByteArray()
                 var manuString = String(manuData, Charsets.UTF_8)
+
                 var connectable = ConnectablePeripheral(manuString, txPower, rssi)
 
                 CentralLog.i(TAG, "Scanned: ${manuString} - ${device.address}")
