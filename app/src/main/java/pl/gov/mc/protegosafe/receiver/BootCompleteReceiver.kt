@@ -17,7 +17,7 @@ class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
             Timber.d("Boot completed received")
             try {
                 Timber.d("Attempting to start service")
-                startBLEMonitoringServiceUseCase.execute(0L)
+                startBLEMonitoringServiceUseCase.execute(START_BLE_MONITOR_SERVICE_DELAY)
             } catch (e: Throwable) {
                 Timber.e(e, "StartOnBootReceiver")
             }
@@ -25,6 +25,6 @@ class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
     }
 
     companion object {
-        private const val START_BLE_MONITOR_SERVICE_DELAY = 500L
+        private const val START_BLE_MONITOR_SERVICE_DELAY = 0L
     }
 }
