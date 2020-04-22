@@ -1,10 +1,13 @@
 package pl.gov.mc.protegosafe.ui.home
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
@@ -44,7 +47,7 @@ class HomeFragment : BaseFragment() {
         binding.webView.apply {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
-            webViewClient = WebViewClient()
+            webViewClient = ProteGoWebViewClient()
             addJavascriptInterface(
                 NativeBridgeInterface(
                     vm::setBridgeData,
@@ -67,5 +70,15 @@ class HomeFragment : BaseFragment() {
                     }
                 }
             })
+    }
+
+    private inner class ProteGoWebViewClient : WebViewClient() {
+        override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+            return if (url.startsWith("tel:") || url.startsWith("mailto:") || !url.contains(urlProvider.getWebUrl())) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+                true
+            } else false
+        }
     }
 }
