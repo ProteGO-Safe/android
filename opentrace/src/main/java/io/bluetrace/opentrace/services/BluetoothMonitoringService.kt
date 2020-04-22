@@ -30,7 +30,7 @@ import io.bluetrace.opentrace.bluetooth.gatt.STREET_PASS
 import io.bluetrace.opentrace.idmanager.TempIDManager
 import io.bluetrace.opentrace.idmanager.TemporaryID
 import io.bluetrace.opentrace.logging.CentralLog
-import io.bluetrace.opentrace.notifications.NotificationTemplates
+import pl.gov.mc.protegosafe.trace.notifications.ProteGoSafeNotificationTemplates as NotificationTemplates
 import io.bluetrace.opentrace.permissions.RequestFileWritePermission
 import io.bluetrace.opentrace.status.Status
 import io.bluetrace.opentrace.status.persistence.StatusRecord
@@ -211,7 +211,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
 
         //check for write permissions  - not required for now. SDLog maybe?
         //only required for debug builds - for now
-        if (BuildConfig.DEBUG) {
+        /*if (BuildConfig.DEBUG) {
             if (!hasWritePermissions()) {
                 CentralLog.i(TAG, "no write permission")
                 //start write permission activity
@@ -219,7 +219,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
                 stopSelf()
                 return START_STICKY
             }
-        }
+        }*/
 
         intent?.let {
             val cmd = intent.getIntExtra(COMMAND_KEY, Command.INVALID.index)
@@ -254,7 +254,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
 
         //check for write permissions  - not required for now. SDLog maybe?
         //only required for debug builds - for now
-        if (BuildConfig.DEBUG) {
+        /*if (BuildConfig.DEBUG) {
             if (!hasWritePermissions()) {
                 CentralLog.i(TAG, "no write permission")
                 //start write permission activity
@@ -262,7 +262,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
                 stopSelf()
                 return
             }
-        }
+        }*/
 
         //show running foreground notification if its not showing that
         notifyRunning()

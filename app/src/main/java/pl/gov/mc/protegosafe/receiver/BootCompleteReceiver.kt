@@ -8,7 +8,6 @@ import org.koin.core.inject
 import pl.gov.mc.protegosafe.domain.usecase.StartBLEMonitoringServiceUseCase
 import timber.log.Timber
 
-
 class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
 
     private val startBLEMonitoringServiceUseCase: StartBLEMonitoringServiceUseCase by inject()
@@ -18,7 +17,7 @@ class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
             Timber.d("Boot completed received")
             try {
                 Timber.d("Attempting to start service")
-                startBLEMonitoringServiceUseCase.execute(START_BLE_MONITOR_SERVICE_DELAY)
+                startBLEMonitoringServiceUseCase.execute(0L)
             } catch (e: Throwable) {
                 Timber.e(e, "StartOnBootReceiver")
             }

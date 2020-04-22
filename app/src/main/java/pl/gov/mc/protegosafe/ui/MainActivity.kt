@@ -1,6 +1,5 @@
 package pl.gov.mc.protegosafe.ui
 
-
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -13,6 +12,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.ActivityMainBinding
+import pl.gov.mc.protegosafe.domain.usecase.StartBLEMonitoringServiceUseCase
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
