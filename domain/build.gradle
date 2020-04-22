@@ -13,9 +13,6 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     //Time
     implementation "com.jakewharton.threetenabp:threetenabp:1.2.1"
-
-    // Gson
-    implementation "com.google.code.gson:gson:2.8.6"
 }
 
 sourceCompatibility = "7"

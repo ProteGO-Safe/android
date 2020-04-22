@@ -12,7 +12,7 @@ import com.google.gson.Gson
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import pl.gov.mc.protegosafe.BuildConfig
-import pl.gov.mc.protegosafe.domain.model.safetynet.AttestationData
+import pl.gov.mc.protegosafe.data.model.safetynet.AttestationData
 import pl.gov.mc.protegosafe.domain.usecase.GetSafetyNetNonceDataUseCase
 import pl.gov.mc.protegosafe.mapper.safetynet.SafetyNetMapper
 import timber.log.Timber

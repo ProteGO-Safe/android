@@ -5,15 +5,15 @@ import io.bluetrace.opentrace.BuildConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.OpenTraceWrapper
+import pl.gov.mc.protegosafe.domain.manager.IInternetConnectionManager
 import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
-import pl.gov.mc.protegosafe.domain.usecase.IGetInternetConnectionStatusUseCase
-import pl.gov.mc.protegosafe.usecase.GetInternetConnectionStatusUseCase
+import pl.gov.mc.protegosafe.manager.InternetConnectionManager
 
 val deviceModule = module {
     single<OpenTraceRepository> { OpenTraceWrapper(androidContext(), get()) }
     single { FirebaseFunctions.getInstance(BuildConfig.FIREBASE_REGION) }
-    factory<IGetInternetConnectionStatusUseCase> {
-        GetInternetConnectionStatusUseCase(
+    single<IInternetConnectionManager> {
+        InternetConnectionManager(
             context = androidContext()
         )
     }

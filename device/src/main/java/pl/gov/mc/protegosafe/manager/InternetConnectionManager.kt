@@ -1,17 +1,15 @@
-package pl.gov.mc.protegosafe.usecase
+package pl.gov.mc.protegosafe.manager
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import pl.gov.mc.protegosafe.domain.usecase.IGetInternetConnectionStatusUseCase
-import pl.gov.mc.protegosafe.domain.usecase.IGetInternetConnectionStatusUseCase.InternetConnectionStatus
+import pl.gov.mc.protegosafe.domain.manager.IInternetConnectionManager
+import pl.gov.mc.protegosafe.domain.manager.IInternetConnectionManager.InternetConnectionStatus
 
+class InternetConnectionManager(private val context: Context) : IInternetConnectionManager {
 
-class GetInternetConnectionStatusUseCase(private val context: Context) :
-    IGetInternetConnectionStatusUseCase {
-
-    override fun execute(): InternetConnectionStatus {
+    override fun getInternetConnectionStatus(): InternetConnectionStatus {
         var result = InternetConnectionStatus.NONE
 
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
@@ -39,4 +37,5 @@ class GetInternetConnectionStatusUseCase(private val context: Context) :
         }
         return result
     }
+
 }

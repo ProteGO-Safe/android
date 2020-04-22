@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.domain.model.safetynet
+package pl.gov.mc.protegosafe.data.model.safetynet
 
 import com.google.gson.annotations.SerializedName
 
