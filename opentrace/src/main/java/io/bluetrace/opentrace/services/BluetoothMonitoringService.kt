@@ -30,7 +30,6 @@ import io.bluetrace.opentrace.bluetooth.gatt.STREET_PASS
 import io.bluetrace.opentrace.idmanager.TempIDManager
 import io.bluetrace.opentrace.idmanager.TemporaryID
 import io.bluetrace.opentrace.logging.CentralLog
-import pl.gov.mc.protegosafe.trace.notifications.ProteGoSafeNotificationTemplates as NotificationTemplates
 import io.bluetrace.opentrace.permissions.RequestFileWritePermission
 import io.bluetrace.opentrace.status.Status
 import io.bluetrace.opentrace.status.persistence.StatusRecord
@@ -45,9 +44,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import pl.gov.mc.protegosafe.trace.notifications.ServiceStatusDataStore
 import pub.devrel.easypermissions.EasyPermissions
 import java.lang.ref.WeakReference
 import kotlin.coroutines.CoroutineContext
+import pl.gov.mc.protegosafe.trace.notifications.ProteGoSafeNotificationTemplates as NotificationTemplates
 
 class BluetoothMonitoringService : Service(), CoroutineScope {
 
@@ -153,6 +154,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             var notif =
                 NotificationTemplates.lackingThingsNotification(this.applicationContext, CHANNEL_ID)
             startForeground(NOTIFICATION_ID, notif)
+            ServiceStatusDataStore.isWorking = false
             notificationShown = NOTIFICATION_STATE.LACKING_THINGS
         }
     }
@@ -162,6 +164,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             var notif =
                 NotificationTemplates.getRunningNotification(this.applicationContext, CHANNEL_ID)
             startForeground(NOTIFICATION_ID, notif)
+            ServiceStatusDataStore.isWorking = true
             notificationShown = NOTIFICATION_STATE.RUNNING
         }
     }
