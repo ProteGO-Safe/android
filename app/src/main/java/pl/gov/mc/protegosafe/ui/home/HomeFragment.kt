@@ -26,8 +26,8 @@ import pl.gov.mc.protegosafe.databinding.FragmentHomeBinding
 import pl.gov.mc.protegosafe.ui.common.BaseFragment
 import pl.gov.mc.protegosafe.ui.common.livedata.observe
 import timber.log.Timber
-import androidx.core.app.ActivityCompat.startActivityForResult
 import android.app.Activity.RESULT_OK
+import android.provider.Settings
 
 
 class HomeFragment : BaseFragment() {
@@ -63,8 +63,11 @@ class HomeFragment : BaseFragment() {
         when (requestCode) {
             REQUEST_ENABLE_BT -> {
                 if (resultCode == RESULT_OK) {
-                    vm.onBluetoothEnabled()
+                    vm.onBluetoothEnable()
                 }
+            }
+            REQUEST_POWER_SETTINGS -> {
+                vm.onPowerSettingsResult()
             }
             else -> Unit
         }
@@ -73,6 +76,7 @@ class HomeFragment : BaseFragment() {
     private fun setupRequests() {
         vm.requestPermissions.observe(viewLifecycleOwner, ::openRequestPermissions)
         vm.requestBluetooth.observe(viewLifecycleOwner, ::requestBluetooth)
+        vm.changeBatteryOptimization.observe(viewLifecycleOwner, ::openPowerSettings)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -152,6 +156,14 @@ class HomeFragment : BaseFragment() {
         val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
     }
+
+    private fun openPowerSettings() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val openPowerSettings = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+            startActivityForResult(openPowerSettings, REQUEST_POWER_SETTINGS)
+        }
+    }
 }
 
 const val REQUEST_ENABLE_BT = 1
+const val REQUEST_POWER_SETTINGS = 2

@@ -5,6 +5,7 @@ enum class OutgoingBridgeDataType(val code: Int) {
     SERVICES_STATUS(31),
     PERMISSIONS_ACCEPTED(32),
     BLUETOOTH_ENABLED(33),
+    BATTERY_OPTIMIZATION_SET(34),
     ;
     companion object {
         fun valueOf(value: Int): OutgoingBridgeDataType = values().find { it.code == value } ?: throw IllegalAccessException()

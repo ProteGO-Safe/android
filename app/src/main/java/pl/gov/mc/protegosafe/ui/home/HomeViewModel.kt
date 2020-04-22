@@ -32,16 +32,8 @@ class HomeViewModel(
     private val _requestBluetooth = SingleLiveEvent<Unit>()
     val requestBluetooth: LiveData<Unit> = _requestBluetooth
 
-    init{
-        Observable.interval(10, 15, TimeUnit.SECONDS)
-            .take(1)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Timber.d("WNASILOWSKILOG sub")
-            setBridgeData(IncomingBridgeDataType.REQUEST_BLUETOOTH.code, "")
-        }, { Timber.e(it, "WNASILOWSKILOG")})
-
-    }
+    private val _changeBatteryOptimization = SingleLiveEvent<Unit>()
+    val changeBatteryOptimization: LiveData<Unit> = _changeBatteryOptimization
 
     fun setBridgeData(dataType: Int, dataJson: String) {
         when(IncomingBridgeDataType.valueOf(dataType)) {
@@ -50,6 +42,9 @@ class HomeViewModel(
             }
             IncomingBridgeDataType.REQUEST_BLUETOOTH -> {
                 _requestBluetooth.setValue(Unit)
+            }
+            IncomingBridgeDataType.REQUEST_CHANGE_BATTERY_OPTIMIZATION -> {
+                _changeBatteryOptimization.setValue(Unit)
             }
             else -> {
                 onSetBridgeDataUseCase.execute(
@@ -72,10 +67,16 @@ class HomeViewModel(
         onBridgeData(OutgoingBridgeDataType.PERMISSIONS_ACCEPTED.code, servicesStatus)
     }
 
-    fun onBluetoothEnabled() {
+    fun onBluetoothEnable() {
         val servicesStatus = servicesStatusUseCase.execute()
         Timber.d("onPermissionsAccepted")
         onBridgeData(OutgoingBridgeDataType.BLUETOOTH_ENABLED.code, servicesStatus)
+    }
+
+    fun onPowerSettingsResult() {
+        val servicesStatus = servicesStatusUseCase.execute()
+        Timber.d("onPermissionsAccepted")
+        onBridgeData(OutgoingBridgeDataType.BATTERY_OPTIMIZATION_SET.code, servicesStatus)
     }
 
     private fun onBridgeData(dataType: Int, dataJson: String) {
