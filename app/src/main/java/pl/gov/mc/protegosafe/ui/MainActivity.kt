@@ -1,5 +1,6 @@
 package pl.gov.mc.protegosafe.ui
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -11,7 +12,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import io.bluetrace.opentrace.Preference
+import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
@@ -25,6 +28,10 @@ class MainActivity : AppCompatActivity() {
 
     private val vm: MainViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
+    private val compositeDisposable = CompositeDisposable()
+    private val rxperm by lazy {
+        RxPermissions(this)
+    }
     private val loadingDialog by lazy {
         LoadingDialog.newInstance(getString(R.string.please_wait))
     }
@@ -39,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         saveNotificationData(intent)
         createNotificationChannel()
         observerSafetyNetResult()
+        requestPermissions()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -71,9 +79,6 @@ class MainActivity : AppCompatActivity() {
     private fun handleSafetyNetUi(result: SafetyNetResult) {
         // TODO: Handle SafetyNet UI with PWA.
         when (result) {
-            SafetyNetResult.Success -> {
-                showOnBoardingActivityIfOnBoarded()
-            }
             is SafetyNetResult.Failure.ConnectionError -> {
                 safetyNetAlertDialog = if (vm.isInternetConnectionAvailable()) {
                     getSafetyNetAlertDialog(result)
@@ -109,17 +114,6 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun showOnBoardingActivityIfOnBoarded() {
-        //TODO: Temporary onboarding, get rid of it when whe have own onboarding
-        if (!Preference.isOnBoarded(this)) {
-            val myIntent = Intent(
-                this,
-                Class.forName("io.bluetrace.opentrace.onboarding.OnboardingActivity")
-            )
-            startActivity(myIntent)
-        }
-    }
-
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
@@ -140,6 +134,24 @@ class MainActivity : AppCompatActivity() {
     private fun startSafetyNetVerification() {
         loadingDialog.show(supportFragmentManager, LoadingDialog.TAG)
         vm.startSafetyNetVerification()
+    }
+
+    private fun requestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            rxperm.request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                .subscribe({
+                    Timber.d("Perm accepted")
+                }, {
+                    Timber.d("Perm rejected")
+                }).addTo(compositeDisposable)
+        } else {
+            rxperm.request(Manifest.permission.ACCESS_FINE_LOCATION)
+                .subscribe({
+                    Timber.d("Perm accepted")
+                }, {
+                    Timber.d("Perm rejected")
+                }).addTo(compositeDisposable)
+        }
     }
 
     //TODO add permissions and battery optimizations and check ble support
