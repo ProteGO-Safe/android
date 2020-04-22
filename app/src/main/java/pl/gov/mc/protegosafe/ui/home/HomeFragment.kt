@@ -1,21 +1,30 @@
 package pl.gov.mc.protegosafe.ui.home
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.ConsoleMessage
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
+import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.FragmentHomeBinding
 import pl.gov.mc.protegosafe.ui.common.BaseFragment
+import pl.gov.mc.protegosafe.ui.common.livedata.observe
+import timber.log.Timber
 
 
 class HomeFragment : BaseFragment() {
@@ -23,6 +32,10 @@ class HomeFragment : BaseFragment() {
     private val vm: HomeViewModel by viewModel()
     private val urlProvider by inject<WebUrlProvider>()
     private lateinit var binding: FragmentHomeBinding
+    private val rxperm by lazy {
+        RxPermissions(this)
+    }
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +51,12 @@ class HomeFragment : BaseFragment() {
         binding.lifecycleOwner = this
 
         setUpWebView()
-
+        setupPermissionRequests()
         return binding.root
+    }
+
+    private fun setupPermissionRequests() {
+        vm.requestPermissions.observe(viewLifecycleOwner, ::openRequestPermissions)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -55,6 +72,12 @@ class HomeFragment : BaseFragment() {
                 ), NativeBridgeInterface.NATIVE_BRIDGE_NAME
             )
             loadUrl(urlProvider.getWebUrl())
+            webChromeClient = object : WebChromeClient() {
+                override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+                    Timber.d("webView console ${consoleMessage.message()}")
+                    return true
+                }
+            }
         }
         binding.webView.setOnLongClickListener {
             false
@@ -70,6 +93,8 @@ class HomeFragment : BaseFragment() {
                     }
                 }
             })
+
+        vm.javascriptCode.observe(viewLifecycleOwner, ::runJavascript)
     }
 
     private inner class ProteGoWebViewClient : WebViewClient() {
@@ -79,6 +104,31 @@ class HomeFragment : BaseFragment() {
                 startActivity(intent)
                 true
             } else false
+        }
+    }
+
+    private fun runJavascript(script: String) {
+        Timber.d("run javascript: $script")
+        binding.webView.evaluateJavascript(script, null);
+    }
+
+    private fun openRequestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            rxperm.request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                .subscribe({
+                    Timber.d("Perm accepted")
+                    vm.onPermissionsAccepted()
+                }, {
+                    Timber.d("Perm rejected")
+                }).addTo(compositeDisposable)
+        } else {
+            rxperm.request(Manifest.permission.ACCESS_FINE_LOCATION)
+                .subscribe({
+                    Timber.d("Perm accepted")
+                    vm.onPermissionsAccepted()
+                }, {
+                    Timber.d("Perm rejected")
+                }).addTo(compositeDisposable)
         }
     }
 }

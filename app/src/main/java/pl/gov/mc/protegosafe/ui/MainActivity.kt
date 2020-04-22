@@ -28,10 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private val vm: MainViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
-    private val compositeDisposable = CompositeDisposable()
-    private val rxperm by lazy {
-        RxPermissions(this)
-    }
+
     private val loadingDialog by lazy {
         LoadingDialog.newInstance(getString(R.string.please_wait))
     }
@@ -46,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         saveNotificationData(intent)
         createNotificationChannel()
         observerSafetyNetResult()
-        requestPermissions()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -135,24 +131,4 @@ class MainActivity : AppCompatActivity() {
         loadingDialog.show(supportFragmentManager, LoadingDialog.TAG)
         vm.startSafetyNetVerification()
     }
-
-    private fun requestPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            rxperm.request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                .subscribe({
-                    Timber.d("Perm accepted")
-                }, {
-                    Timber.d("Perm rejected")
-                }).addTo(compositeDisposable)
-        } else {
-            rxperm.request(Manifest.permission.ACCESS_FINE_LOCATION)
-                .subscribe({
-                    Timber.d("Perm accepted")
-                }, {
-                    Timber.d("Perm rejected")
-                }).addTo(compositeDisposable)
-        }
-    }
-
-    //TODO add permissions and battery optimizations and check ble support
 }
