@@ -2,6 +2,7 @@ package pl.gov.mc.protegosafe.ui.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -25,6 +26,8 @@ import pl.gov.mc.protegosafe.databinding.FragmentHomeBinding
 import pl.gov.mc.protegosafe.ui.common.BaseFragment
 import pl.gov.mc.protegosafe.ui.common.livedata.observe
 import timber.log.Timber
+import androidx.core.app.ActivityCompat.startActivityForResult
+import android.app.Activity.RESULT_OK
 
 
 class HomeFragment : BaseFragment() {
@@ -51,12 +54,25 @@ class HomeFragment : BaseFragment() {
         binding.lifecycleOwner = this
 
         setUpWebView()
-        setupPermissionRequests()
+        setupRequests()
         return binding.root
     }
 
-    private fun setupPermissionRequests() {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_ENABLE_BT -> {
+                if (resultCode == RESULT_OK) {
+                    vm.onBluetoothEnabled()
+                }
+            }
+            else -> Unit
+        }
+    }
+
+    private fun setupRequests() {
         vm.requestPermissions.observe(viewLifecycleOwner, ::openRequestPermissions)
+        vm.requestBluetooth.observe(viewLifecycleOwner, ::requestBluetooth)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -131,4 +147,11 @@ class HomeFragment : BaseFragment() {
                 }).addTo(compositeDisposable)
         }
     }
+
+    private fun requestBluetooth() {
+        val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+        startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+    }
 }
+
+const val REQUEST_ENABLE_BT = 1

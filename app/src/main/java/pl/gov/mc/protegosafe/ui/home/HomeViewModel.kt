@@ -29,13 +29,16 @@ class HomeViewModel(
     private val _requestPermissions = SingleLiveEvent<Unit>()
     val requestPermissions: LiveData<Unit> = _requestPermissions
 
+    private val _requestBluetooth = SingleLiveEvent<Unit>()
+    val requestBluetooth: LiveData<Unit> = _requestBluetooth
+
     init{
         Observable.interval(10, 15, TimeUnit.SECONDS)
             .take(1)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 Timber.d("WNASILOWSKILOG sub")
-            setBridgeData(IncomingBridgeDataType.REQUEST_PERMISSION.code, "")
+            setBridgeData(IncomingBridgeDataType.REQUEST_BLUETOOTH.code, "")
         }, { Timber.e(it, "WNASILOWSKILOG")})
 
     }
@@ -44,6 +47,9 @@ class HomeViewModel(
         when(IncomingBridgeDataType.valueOf(dataType)) {
             IncomingBridgeDataType.REQUEST_PERMISSION -> {
                 _requestPermissions.setValue(Unit)
+            }
+            IncomingBridgeDataType.REQUEST_BLUETOOTH -> {
+                _requestBluetooth.setValue(Unit)
             }
             else -> {
                 onSetBridgeDataUseCase.execute(
@@ -64,6 +70,12 @@ class HomeViewModel(
         val servicesStatus = servicesStatusUseCase.execute()
         Timber.d("onPermissionsAccepted")
         onBridgeData(OutgoingBridgeDataType.PERMISSIONS_ACCEPTED.code, servicesStatus)
+    }
+
+    fun onBluetoothEnabled() {
+        val servicesStatus = servicesStatusUseCase.execute()
+        Timber.d("onPermissionsAccepted")
+        onBridgeData(OutgoingBridgeDataType.BLUETOOTH_ENABLED.code, servicesStatus)
     }
 
     private fun onBridgeData(dataType: Int, dataJson: String) {
