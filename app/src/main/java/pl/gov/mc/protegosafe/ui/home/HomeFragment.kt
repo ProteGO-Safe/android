@@ -72,9 +72,9 @@ class HomeFragment : BaseFragment() {
             })
     }
 
-    private inner class ProteGoWebViewClient(): WebViewClient() {
+    private inner class ProteGoWebViewClient : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            return if (url.startsWith("tel:") || url.startsWith("mailto:")) {
+            return if (url.startsWith("tel:") || url.startsWith("mailto:") || !url.contains(urlProvider.getWebUrl())) {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 startActivity(intent)
                 true
