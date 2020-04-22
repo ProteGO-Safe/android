@@ -176,7 +176,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
         return EasyPermissions.hasPermissions(this.applicationContext, *perms)
     }
 
-
     private fun acquireWritePermission() {
         val intent = Intent(this.applicationContext, RequestFileWritePermission::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -211,7 +210,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
 
         //check for write permissions  - not required for now. SDLog maybe?
         //only required for debug builds - for now
-        /*if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             if (!hasWritePermissions()) {
                 CentralLog.i(TAG, "no write permission")
                 //start write permission activity
@@ -219,7 +218,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
                 stopSelf()
                 return START_STICKY
             }
-        }*/
+        }
 
         intent?.let {
             val cmd = intent.getIntExtra(COMMAND_KEY, Command.INVALID.index)
@@ -254,7 +253,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
 
         //check for write permissions  - not required for now. SDLog maybe?
         //only required for debug builds - for now
-        /*if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             if (!hasWritePermissions()) {
                 CentralLog.i(TAG, "no write permission")
                 //start write permission activity
@@ -262,7 +261,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
                 stopSelf()
                 return
             }
-        }*/
+        }
 
         //show running foreground notification if its not showing that
         notifyRunning()

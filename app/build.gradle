@@ -20,6 +20,8 @@ android {
         versionCode 5
         versionName "3.0.0"
 
+        buildConfigField "String", "SAFETYNET_API_KEY", SAFETYNET_API_KEY
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -148,6 +150,10 @@ dependencies {
     implementation project(path: ':data')
     implementation project(path: ":domain")
     implementation project(path: ":device")
+
+    // SafetyNet
+    implementation "com.google.android.gms:play-services-safetynet:17.0.0"
+
     //TODO: remove bluetrace dependency, added temporarly for some shortcuts in testing features:
     implementation project(path: ':opentrace')
 
