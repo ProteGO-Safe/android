@@ -4,6 +4,7 @@ import io.reactivex.rxkotlin.addTo
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetTrackingAgreementStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveNotificationDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SignInAndStartBLEMonitoringServiceUseCase
 import pl.gov.mc.protegosafe.manager.SafetyNetManager
@@ -13,19 +14,22 @@ import timber.log.Timber
 class MainViewModel(
     private val saveNotificationDataUseCase: SaveNotificationDataUseCase,
     signInAndStartBLEMonitoringServiceUseCase: SignInAndStartBLEMonitoringServiceUseCase,
-    private val getInternetConnectionStatusUseCase: GetInternetConnectionStatusUseCase
+    private val getInternetConnectionStatusUseCase: GetInternetConnectionStatusUseCase,
+    getTrackingAgreementStatusUseCase: GetTrackingAgreementStatusUseCase
 ): BaseViewModel(), KoinComponent {
 
     private val safetyNetManager: SafetyNetManager by inject()
 
     init {
-        signInAndStartBLEMonitoringServiceUseCase.execute()
-            .subscribe({
-                Timber.d("Service init completed")
-            }, {
-                Timber.e(it, "Service init failed")
-            })
-            .addTo(disposables)
+        if (getTrackingAgreementStatusUseCase.execute()) {
+            signInAndStartBLEMonitoringServiceUseCase.execute()
+                .subscribe({
+                    Timber.d("Service init completed")
+                }, {
+                    Timber.e(it, "Service init failed")
+                })
+                .addTo(disposables)
+        }
     }
 
     fun onNotificationDataReceived(data: String) {

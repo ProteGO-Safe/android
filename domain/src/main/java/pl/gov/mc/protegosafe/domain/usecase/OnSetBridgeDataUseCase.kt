@@ -2,18 +2,16 @@ package pl.gov.mc.protegosafe.domain.usecase
 
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.TraceStatusMapper
-import java.lang.IllegalStateException
+import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 
 class OnSetBridgeDataUseCase(
     private val postExecutionThread: PostExecutionThread,
     private val triageRepository: TriageRepository,
-    private val startBLEMonitoringServiceUseCase: StartBLEMonitoringServiceUseCase,
-    private val stopBLEMonitoringServiceUseCase: StopBLEMonitoringServiceUseCase,
+    private val enableEnableBTServiceUseCase: EnableBTServiceUseCase,
     private val mapper: TraceStatusMapper
     ) {
 
@@ -23,13 +21,9 @@ class OnSetBridgeDataUseCase(
                 val data = triageRepository.parseBridgePayload(input.payload)
                 triageRepository.saveTriageCompletedTimestamp(data.timestamp)
             }
-            IncomingBridgeDataType.REQUEST_TRACE_SERVICE_CHANGE -> {
+            IncomingBridgeDataType.REQUEST_ENABLE_BT_SERVICE -> {
                 val data = mapper.toDomainItem(input.payload)
-                if (data.enableBtService) {
-                    startBLEMonitoringServiceUseCase.execute()
-                } else {
-                    stopBLEMonitoringServiceUseCase.execute()
-                }
+                enableEnableBTServiceUseCase.execute(data.enableBtService)
             }
             else -> throw IllegalStateException("Illegal input type")
         }
