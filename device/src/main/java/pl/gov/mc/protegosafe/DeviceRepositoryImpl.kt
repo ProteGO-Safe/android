@@ -4,31 +4,21 @@ import android.Manifest
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.os.Build
 import android.os.PowerManager
-import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
-import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
+import pl.gov.mc.protegosafe.domain.repository.TrackingRepository
 import pl.gov.mc.protegosafe.model.ServicesStatus
 import pl.gov.mc.protegosafe.model.ServicesStatusRoot
 import pub.devrel.easypermissions.EasyPermissions
 
 class DeviceRepositoryImpl(
     private val context: Context,
-    private val openTraceRepository: OpenTraceRepository
+    private val trackingRepository: TrackingRepository
 ) : DeviceRepository {
-
-    //TODO: prepare broadcast receiver to track service status changes
-    private  val traceServiceEnabledSubject: BehaviorSubject<Boolean> =
-        BehaviorSubject.createDefault(false)
-
-    override val traceServiceEnabled: Observable<Boolean> = traceServiceEnabledSubject.hide()
 
     override fun isBtSupported(): Boolean {
         return context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)
@@ -58,7 +48,7 @@ class DeviceRepositoryImpl(
     }
 
     override fun isBtServiceOn(): Boolean {
-        return openTraceRepository.getBLEServiceStatus()
+        return trackingRepository.isTrackingAccepted()
     }
 
     override fun getServicesStatusJson(): String {

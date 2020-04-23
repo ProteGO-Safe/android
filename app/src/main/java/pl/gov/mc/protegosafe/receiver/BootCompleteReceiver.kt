@@ -5,15 +5,17 @@ import android.content.Context
 import android.content.Intent
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import pl.gov.mc.protegosafe.domain.usecase.GetTrackingAgreementStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StartBLEMonitoringServiceUseCase
 import timber.log.Timber
 
 class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
 
     private val startBLEMonitoringServiceUseCase: StartBLEMonitoringServiceUseCase by inject()
+    private val getTrackingAgreementStatusUseCase: GetTrackingAgreementStatusUseCase by inject()
 
     override fun onReceive(context: Context?, intent: Intent) {
-        if (Intent.ACTION_BOOT_COMPLETED == intent.action) {
+        if (Intent.ACTION_BOOT_COMPLETED == intent.action && getTrackingAgreementStatusUseCase.execute()) {
             Timber.d("Boot completed received")
             try {
                 Timber.d("Attempting to start service")

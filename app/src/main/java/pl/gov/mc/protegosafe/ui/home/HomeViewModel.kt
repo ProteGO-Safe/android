@@ -3,12 +3,14 @@ package pl.gov.mc.protegosafe.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
-import org.json.JSONObject
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
-import pl.gov.mc.protegosafe.domain.usecase.*
+import pl.gov.mc.protegosafe.domain.usecase.EnableBTServiceUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
 import pl.gov.mc.protegosafe.ui.common.BaseViewModel
 import pl.gov.mc.protegosafe.ui.common.livedata.SingleLiveEvent
 import timber.log.Timber
@@ -16,9 +18,9 @@ import timber.log.Timber
 class HomeViewModel(
     private val onSetBridgeDataUseCase: OnSetBridgeDataUseCase,
     private val servicesStatusUseCase: GetServicesStatusUseCase,
-    trackServiceEnabledUseCase: TrackServiceEnabledUseCase,
     private val onGetBridgeDataUseCase: OnGetBridgeDataUseCase,
-    private val internetConnectionStatusUseCase: GetInternetConnectionStatusUseCase
+    private val internetConnectionStatusUseCase: GetInternetConnectionStatusUseCase,
+    private val enableBTServiceUseCase: EnableBTServiceUseCase
 ) : BaseViewModel() {
 
     private val _javascriptCode = MutableLiveData<String>()
@@ -33,22 +35,9 @@ class HomeViewModel(
     private val _changeBatteryOptimization = SingleLiveEvent<Unit>()
     val changeBatteryOptimization: LiveData<Unit> = _changeBatteryOptimization
 
-    init {
-        //TODO: remove, just for diagnostics
-        val res = servicesStatusUseCase.execute()
-        Timber.d("Services status: $res")
-
-        trackServiceEnabledUseCase.execute().subscribeBy (
-            onComplete = {
-                val servicesStatus = servicesStatusUseCase.execute()
-                onBridgeData(OutgoingBridgeDataType.SERVICE_STATUS_CHANGE.code, servicesStatus)
-            },
-            onError = {Timber.e(it)}
-        ).addTo(disposables)
-    }
-
+    //TODO: extract logic not directly related to view to outside Classes/functions
     fun setBridgeData(dataType: Int, dataJson: String) {
-        when(IncomingBridgeDataType.valueOf(dataType)) {
+        when (val incomingData = IncomingBridgeDataType.valueOf(dataType)) {
             IncomingBridgeDataType.REQUEST_PERMISSION -> {
                 _requestPermissions.postValue(Unit)
             }
@@ -64,7 +53,14 @@ class HomeViewModel(
                         type = IncomingBridgeDataType.valueOf(dataType),
                         payload = dataJson
                     )
-                ).subscribe().addTo(disposables)
+                ).subscribe {
+                    if (incomingData == IncomingBridgeDataType.REQUEST_ENABLE_BT_SERVICE) {
+                        onBridgeData(
+                            OutgoingBridgeDataType.SERVICE_STATUS_CHANGE.code,
+                            servicesStatusUseCase.execute()
+                        )
+                    }
+                }.addTo(disposables)
             }
         }
     }
@@ -79,6 +75,8 @@ class HomeViewModel(
             OutgoingBridgeDataType.PERMISSIONS_ACCEPTED.code,
             servicesStatusUseCase.execute()
         )
+        //TODO [PSAFE-416] redesign UX tracking agreement during setup
+        enableBTServiceUseCase.execute(true).subscribe()
     }
 
     fun onBluetoothEnable() {
@@ -95,9 +93,7 @@ class HomeViewModel(
     }
 
     private fun onBridgeData(dataType: Int, dataJson: String) {
-        val codeToExecute = """
-            onBridgeData($dataType, '$dataJson');
-        """.trimIndent()
+        val codeToExecute = "onBridgeData($dataType, '$dataJson')"
         Timber.d("run Javascript: -$codeToExecute-")
         _javascriptCode.value = codeToExecute
     }
