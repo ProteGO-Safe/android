@@ -14,6 +14,7 @@ faucibus nisl nec, elementum lacus.</string>
     <string name="please_wait">Proszę czekać…</string>
     <string name="no_internet_connection_title">Brak Internetu</string>
     <string name="no_internet_connection_msg">Sprawdź połączenie z Internetem</string>
+    <string name="no_internet_connection_refresh">Odśwież</string>
     <string name="try_again">Spróbuj ponowanie</string>
     <string name="safetynet_dialog_title">Wystąpił problem</string>
     <string name="safetynet_dialog_verification_error">Twoje urządzenie nie mogło zostać pozytywnie zweryfikowane</string>

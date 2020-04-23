@@ -10,6 +10,7 @@ import org.json.JSONObject
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
+import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
@@ -24,6 +25,8 @@ class HomeViewModel(
     private val onGetBridgeDataUseCase: OnGetBridgeDataUseCase,
     private val servicesStatusUseCase: GetServicesStatusUseCase,
     private val trackServiceEnabledUseCase: TrackServiceEnabledUseCase
+    private val onGetBridgeDataUseCase: OnGetBridgeDataUseCase,
+    private val internetConnectionStatusUseCase: GetInternetConnectionStatusUseCase
 ) : BaseViewModel() {
 
     private val _javascriptCode = MutableLiveData<String>()
@@ -106,4 +109,6 @@ class HomeViewModel(
         Timber.d("run Javascript: -$codeToExecute-")
         _javascriptCode.value = codeToExecute
     }
+
+    fun isInternetConnectionAvailable() = internetConnectionStatusUseCase.execute().isConnected()
 }

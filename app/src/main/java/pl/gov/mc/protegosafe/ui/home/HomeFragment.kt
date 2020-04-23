@@ -10,12 +10,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
 import android.webkit.ConsoleMessage
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
+import kotlinx.android.synthetic.main.missing_connection.view.button_check_internet_connection
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -53,9 +56,16 @@ class HomeFragment : BaseFragment() {
         binding.vm = vm
         binding.lifecycleOwner = this
 
+        setListeners()
         setUpWebView()
         observeRequests()
         return binding.root
+    }
+
+    private fun setListeners() {
+        binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
+            updateWebViewVisibility()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -119,12 +129,29 @@ class HomeFragment : BaseFragment() {
 
     private inner class ProteGoWebViewClient : WebViewClient() {
         override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-            return if (url.startsWith("tel:") || url.startsWith("mailto:") || !url.contains(urlProvider.getWebUrl())) {
+            return if (url.startsWith("tel:") ||
+                url.startsWith("mailto:") ||
+                !url.contains(urlProvider.getWebUrl())
+            ) {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 startActivity(intent)
                 true
             } else false
         }
+
+        override fun onReceivedError(
+            view: WebView?,
+            request: WebResourceRequest?,
+            error: WebResourceError?
+        ) {
+            updateWebViewVisibility()
+            super.onReceivedError(view, request, error)
+        }
+    }
+
+    private fun updateWebViewVisibility() {
+        binding.webView.visibility =
+            if (vm.isInternetConnectionAvailable()) View.VISIBLE else View.GONE
     }
 
     private fun runJavascript(script: String) {
