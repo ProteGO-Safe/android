@@ -1,6 +1,6 @@
 package pl.gov.mc.protegosafe.domain.manager
 
-interface IInternetConnectionManager {
+interface InternetConnectionManager {
     enum class InternetConnectionStatus {
         NONE,
         MOBILE_DATA,

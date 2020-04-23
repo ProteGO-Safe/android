@@ -6,16 +6,16 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.DeviceRepositoryImpl
 import pl.gov.mc.protegosafe.OpenTraceWrapper
-import pl.gov.mc.protegosafe.domain.manager.IInternetConnectionManager
+import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
 import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
-import pl.gov.mc.protegosafe.manager.InternetConnectionManager
+import pl.gov.mc.protegosafe.manager.InternetConnectionManagerImpl
 
 val deviceModule = module {
     single<OpenTraceRepository> { OpenTraceWrapper(androidContext(), get()) }
     single { FirebaseFunctions.getInstance(BuildConfig.FIREBASE_REGION) }
-    single<IInternetConnectionManager> {
-        InternetConnectionManager(
+    single<InternetConnectionManager> {
+        InternetConnectionManagerImpl(
             context = androidContext()
         )
     }
