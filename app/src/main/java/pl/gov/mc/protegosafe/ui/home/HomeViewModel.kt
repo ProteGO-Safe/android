@@ -50,13 +50,13 @@ class HomeViewModel(
     fun setBridgeData(dataType: Int, dataJson: String) {
         when(IncomingBridgeDataType.valueOf(dataType)) {
             IncomingBridgeDataType.REQUEST_PERMISSION -> {
-                _requestPermissions.setValue(Unit)
+                _requestPermissions.postValue(Unit)
             }
             IncomingBridgeDataType.REQUEST_BLUETOOTH -> {
-                _requestBluetooth.setValue(Unit)
+                _requestBluetooth.postValue(Unit)
             }
             IncomingBridgeDataType.REQUEST_CHANGE_BATTERY_OPTIMIZATION -> {
-                _changeBatteryOptimization.setValue(Unit)
+                _changeBatteryOptimization.postValue(Unit)
             }
             else -> {
                 onSetBridgeDataUseCase.execute(
@@ -75,7 +75,8 @@ class HomeViewModel(
 
     fun onPermissionsAccepted() {
         Timber.d("onPermissionsAccepted")
-        onBridgeData(OutgoingBridgeDataType.PERMISSIONS_ACCEPTED.code,
+        onBridgeData(
+            OutgoingBridgeDataType.PERMISSIONS_ACCEPTED.code,
             servicesStatusUseCase.execute()
         )
     }
@@ -87,16 +88,15 @@ class HomeViewModel(
 
     fun onPowerSettingsResult() {
         Timber.d("onPowerSettingsResult")
-        val servicesStatus =
-            onBridgeData(OutgoingBridgeDataType.BATTERY_OPTIMIZATION_SET.code,
-                servicesStatusUseCase.execute()
-            )
+        onBridgeData(
+            OutgoingBridgeDataType.BATTERY_OPTIMIZATION_SET.code,
+            servicesStatusUseCase.execute()
+        )
     }
 
     private fun onBridgeData(dataType: Int, dataJson: String) {
-        val escapedJson = JSONObject.quote(dataJson)
         val codeToExecute = """
-            onBridgeData($dataType, $escapedJson);
+            onBridgeData($dataType, '$dataJson');
         """.trimIndent()
         Timber.d("run Javascript: -$codeToExecute-")
         _javascriptCode.value = codeToExecute

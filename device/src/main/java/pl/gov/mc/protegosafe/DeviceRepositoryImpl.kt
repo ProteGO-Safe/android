@@ -15,6 +15,7 @@ import io.reactivex.subjects.BehaviorSubject
 import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
 import pl.gov.mc.protegosafe.model.ServicesStatus
+import pl.gov.mc.protegosafe.model.ServicesStatusRoot
 
 class DeviceRepositoryImpl(
     private val context: Context,
@@ -68,13 +69,15 @@ class DeviceRepositoryImpl(
     }
 
     override fun getServicesStatusJson(): String {
-        val servicesStatus = ServicesStatus(
-            isBtSupported = isBtSupported(),
-            isLocationEnabled = isLocationEnabled(),
-            isBtOn = isBtOn(),
-            isBatteryOptimizationOn = isBatteryOptimizationOn(),
-            isNotificationEnabled = isNotificationEnabled(),
-            isBtServiceOn = isBtServiceOn()
+        val servicesStatus = ServicesStatusRoot(
+            ServicesStatus(
+                isBtSupported = isBtSupported(),
+                isLocationEnabled = isLocationEnabled(),
+                isBtOn = isBtOn(),
+                isBatteryOptimizationOn = isBatteryOptimizationOn(),
+                isNotificationEnabled = isNotificationEnabled(),
+                isBtServiceOn = isBtServiceOn()
+            )
         )
         return Gson().toJson(servicesStatus)
     }

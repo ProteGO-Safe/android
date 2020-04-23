@@ -16,6 +16,12 @@ class NativeBridgeInterface(
     }
 
     @JavascriptInterface
+    fun setBridgeData(dataType: Int) {
+        Timber.d("setBridgeData: $dataType")
+        setBridgeDataCallback(dataType, "")
+    }
+
+    @JavascriptInterface
     fun getBridgeData(dataType: Int): String {
         Timber.d("getBridgeData called: $dataType")
         return getBridgeDataCallback(dataType)

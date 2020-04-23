@@ -2,6 +2,11 @@ package pl.gov.mc.protegosafe.model
 
 import com.google.gson.annotations.SerializedName
 
+data class ServicesStatusRoot (
+    @SerializedName("servicesStatus")
+    val servicesStatus: ServicesStatus
+)
+
 data class ServicesStatus (
     @SerializedName("isBtSupported")
     val isBtSupported: Boolean,

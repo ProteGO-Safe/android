@@ -26,10 +26,8 @@ class OnSetBridgeDataUseCase(
             IncomingBridgeDataType.REQUEST_TRACE_SERVICE_CHANGE -> {
                 val data = mapper.toDomainItem(input.payload)
                 if (data.enableBtService) {
-                    println("WNASILOWSKILOG enable")
                     startBLEMonitoringServiceUseCase.execute()
                 } else {
-                    println("WNASILOWSKILOG disable")
                     stopBLEMonitoringServiceUseCase.execute()
                 }
             }
