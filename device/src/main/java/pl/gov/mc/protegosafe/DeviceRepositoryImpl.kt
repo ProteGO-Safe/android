@@ -10,6 +10,8 @@ import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
 import pl.gov.mc.protegosafe.model.ServicesStatus
@@ -18,6 +20,13 @@ class DeviceRepositoryImpl(
     private val context: Context,
     private val openTraceRepository: OpenTraceRepository
 ) : DeviceRepository {
+
+    //TODO: prepare broadcast receiver to track service status changes
+    private  val traceServiceEnabledSubject: BehaviorSubject<Boolean> =
+        BehaviorSubject.createDefault(false)
+
+    override val traceServiceEnabled: Observable<Boolean> = traceServiceEnabledSubject.hide()
+
     override fun isBtSupported(): Boolean {
         return context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)
     }
