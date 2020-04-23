@@ -1,10 +1,10 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
-import pl.gov.mc.protegosafe.domain.manager.IInternetConnectionManager
+import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
 
 class GetInternetConnectionStatusUseCase(
-    private val internetConnectionManager: IInternetConnectionManager
+    private val internetConnectionManager: InternetConnectionManager
 ) {
-    fun execute(): IInternetConnectionManager.InternetConnectionStatus =
+    fun execute(): InternetConnectionManager.InternetConnectionStatus =
         internetConnectionManager.getInternetConnectionStatus()
 }
