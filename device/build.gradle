@@ -66,6 +66,9 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
 
+    //permissions
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
     implementation project(path: ":domain")
     implementation project(path: ':opentrace')
 }

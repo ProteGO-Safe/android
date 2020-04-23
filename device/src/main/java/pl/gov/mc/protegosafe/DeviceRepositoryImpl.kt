@@ -1,5 +1,6 @@
 package pl.gov.mc.protegosafe
 
+import android.Manifest
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.pm.PackageManager
@@ -16,6 +17,7 @@ import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
 import pl.gov.mc.protegosafe.model.ServicesStatus
 import pl.gov.mc.protegosafe.model.ServicesStatusRoot
+import pub.devrel.easypermissions.EasyPermissions
 
 class DeviceRepositoryImpl(
     private val context: Context,
@@ -33,16 +35,7 @@ class DeviceRepositoryImpl(
     }
 
     override fun isLocationEnabled(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            (context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager)
-                ?.isLocationEnabled == true
-        } else {
-            @Suppress("DEPRECATION")
-            Settings.Secure.getInt(
-                context.contentResolver,
-                Settings.Secure.LOCATION_MODE
-            ) != Settings.Secure.LOCATION_MODE_OFF
-        }
+        return EasyPermissions.hasPermissions(context, Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     override fun isBtOn(): Boolean {
