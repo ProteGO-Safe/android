@@ -50,14 +50,6 @@ class HomeViewModel(
             },
             onError = {Timber.e(it)}
         ).addTo(disposables)
-
-        Observable.interval(80, 15, TimeUnit.SECONDS)
-            .take(1)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Timber.d("WNASILOWSKILOG sub")
-                setBridgeData(IncomingBridgeDataType.REQUEST_TRACE_SERVICE_CHANGE.code, "{\"enableBtService\" = false}")
-            }, { Timber.e(it, "WNASILOWSKILOG")})
     }
 
     fun setBridgeData(dataType: Int, dataJson: String) {
