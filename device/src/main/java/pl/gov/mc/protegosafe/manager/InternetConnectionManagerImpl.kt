@@ -4,10 +4,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import pl.gov.mc.protegosafe.domain.manager.IInternetConnectionManager
-import pl.gov.mc.protegosafe.domain.manager.IInternetConnectionManager.InternetConnectionStatus
+import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
+import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager.InternetConnectionStatus
 
-class InternetConnectionManager(private val context: Context) : IInternetConnectionManager {
+class InternetConnectionManagerImpl(private val context: Context) : InternetConnectionManager {
 
     override fun getInternetConnectionStatus(): InternetConnectionStatus {
         var result = InternetConnectionStatus.NONE
