@@ -32,6 +32,7 @@ val useCaseModule = module {
     factory { GetSafetyNetNonceDataUseCase(get())}
     factory { GetInternetConnectionStatusUseCase(get()) }
     factory { GetServicesStatusUseCase(get()) }
+    factory { TrackServiceEnabledUseCase(get(), get()) }
 }
 
 val viewModelModule = module {
