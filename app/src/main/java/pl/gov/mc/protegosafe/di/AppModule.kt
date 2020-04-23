@@ -18,8 +18,8 @@ val appModule = module {
 }
 
 val useCaseModule = module {
-    factory { OnGetBridgeDataUseCase(get()) }
-    factory { OnSetBridgeDataUseCase(get(), get()) }
+    factory { OnGetBridgeDataUseCase(get(), get()) }
+    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
@@ -31,9 +31,11 @@ val useCaseModule = module {
     factory { SignInAndStartBLEMonitoringServiceUseCase(get(), get(), get()) }
     factory { GetSafetyNetNonceDataUseCase(get())}
     factory { GetInternetConnectionStatusUseCase(get()) }
+    factory { GetServicesStatusUseCase(get()) }
+    factory { TrackServiceEnabledUseCase(get(), get()) }
 }
 
 val viewModelModule = module {
     viewModel { MainViewModel(get(), get(), get()) }
-    viewModel { HomeViewModel(get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get()) }
 }

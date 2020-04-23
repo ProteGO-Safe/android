@@ -1,5 +1,7 @@
 package pl.gov.mc.protegosafe.domain.repository
 
+import io.reactivex.Observable
+
 interface DeviceRepository {
     fun isBtSupported(): Boolean
     fun isLocationEnabled(): Boolean
@@ -8,4 +10,5 @@ interface DeviceRepository {
     fun isNotificationEnabled(): Boolean
     fun isBtServiceOn(): Boolean
     fun getServicesStatusJson(): String
+    val traceServiceEnabled: Observable<Boolean>
 }

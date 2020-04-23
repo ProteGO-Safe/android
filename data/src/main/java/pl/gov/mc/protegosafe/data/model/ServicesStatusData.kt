@@ -1,13 +1,8 @@
-package pl.gov.mc.protegosafe.model
+package pl.gov.mc.protegosafe.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class ServicesStatusRoot (
-    @SerializedName("servicesStatus")
-    val servicesStatus: ServicesStatus
-)
-
-data class ServicesStatus (
+class ServicesStatusData (
     @SerializedName("isBtSupported")
     val isBtSupported: Boolean,
     @SerializedName("isLocationEnabled")
@@ -16,8 +11,6 @@ data class ServicesStatus (
     val isBtOn: Boolean,
     @SerializedName("isBatteryOptimizationOn")
     val isBatteryOptimizationOn: Boolean,
-    @SerializedName("isNotificationEnabled")
-    val isNotificationEnabled: Boolean,
     @SerializedName("isBtServiceOn")
     val isBtServiceOn: Boolean
 )
