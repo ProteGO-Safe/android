@@ -24,5 +24,4 @@ val deviceModule = module {
     single<DeviceRepository> { DeviceRepositoryImpl(androidContext(), get()) }
 
     factory<TraceStatusMapper> { TraceStatusMapperImpl() }
-
 }
