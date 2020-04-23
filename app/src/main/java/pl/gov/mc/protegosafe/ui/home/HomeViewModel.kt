@@ -69,29 +69,27 @@ class HomeViewModel(
 
     fun onPermissionsAccepted() {
         Timber.d("onPermissionsAccepted")
-        servicesStatusUseCase.execute().let{
-            onBridgeData(OutgoingBridgeDataType.PERMISSIONS_ACCEPTED.code, it)
-        }
+        onBridgeData(OutgoingBridgeDataType.PERMISSIONS_ACCEPTED.code,
+            servicesStatusUseCase.execute()
+        )
     }
 
     fun onBluetoothEnable() {
         Timber.d("onBluetoothEnable")
-        servicesStatusUseCase.execute().let {
-            onBridgeData(OutgoingBridgeDataType.BLUETOOTH_ENABLED.code, it)
-        }
+        onBridgeData(OutgoingBridgeDataType.BLUETOOTH_ENABLED.code, servicesStatusUseCase.execute())
     }
 
     fun onPowerSettingsResult() {
         Timber.d("onPowerSettingsResult")
-        val servicesStatus = servicesStatusUseCase.execute().let{
-            onBridgeData(OutgoingBridgeDataType.BATTERY_OPTIMIZATION_SET.code, it)
-        }
+        val servicesStatus =
+            onBridgeData(OutgoingBridgeDataType.BATTERY_OPTIMIZATION_SET.code,
+                servicesStatusUseCase.execute()
+            )
     }
 
     private fun onBridgeData(dataType: Int, dataJson: String) {
         val escapedJson = JSONObject.quote(dataJson)
         val codeToExecute = """
-            alert('onBridgeData - ${dataType}');
             onBridgeData($dataType, $escapedJson);
         """.trimIndent()
         Timber.d("run Javascript: -$codeToExecute-")
