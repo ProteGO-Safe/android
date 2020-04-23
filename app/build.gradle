@@ -46,6 +46,12 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix '-DEBUG'
         }
+        stage {
+            dimension "mode"
+            buildConfigField "String", "WEB", "\"https://safesafe-stage.thecoders.io/\""
+            applicationIdSuffix ".stage"
+            versionNameSuffix '-STAGE'
+        }
         prod {
             dimension "mode"
             buildConfigField "String", "WEB", "\"https://safesafe.app\""

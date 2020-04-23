@@ -56,11 +56,10 @@
               "client_type": 3
             },
             {
-              "client_id": "466787798978-rfltn8kcgp0itk1brgf036r200sk2sd4.apps.googleusercontent.com",
+              "client_id": "466787798978-msor17pls0oremdd7m7m1fk7a4jnbqr1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "pl.gov.mc.protegosafe",
-                "app_store_id": "1508481566"
+                "bundle_id": "pl.gov.mc.protegosafe-staging"
               }
             }
           ]
@@ -117,11 +116,10 @@
               "client_type": 3
             },
             {
-              "client_id": "466787798978-rfltn8kcgp0itk1brgf036r200sk2sd4.apps.googleusercontent.com",
+              "client_id": "466787798978-msor17pls0oremdd7m7m1fk7a4jnbqr1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "pl.gov.mc.protegosafe",
-                "app_store_id": "1508481566"
+                "bundle_id": "pl.gov.mc.protegosafe-staging"
               }
             }
           ]
@@ -133,6 +131,58 @@
         "mobilesdk_app_id": "1:466787798978:android:b4a015800b1838fd1a105b",
         "android_client_info": {
           "package_name": "pl.gov.mc.protegosafe.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "466787798978-q09sppg0di1ctb6ovtq6535pqlmro2kb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.gov.mc.protegosafe.debug",
+            "certificate_hash": "2d584b2b3812069a84259b12bf76a29f45270e01"
+          }
+        },
+        {
+          "client_id": "466787798978-m12he2am777k7h876mi6gubra7iabes4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.gov.mc.protegosafe.debug",
+            "certificate_hash": "1dff5244f2c8c286973fe0f96f2b344c5b6c6a24"
+          }
+        },
+        {
+          "client_id": "466787798978-25noev6sgqhccru2eb8s2flebhc6r2ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhQUQDNpxXZ4dOMjZh4GLTtyB62Fi3U8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "466787798978-25noev6sgqhccru2eb8s2flebhc6r2ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "466787798978-msor17pls0oremdd7m7m1fk7a4jnbqr1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "pl.gov.mc.protegosafe-staging"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:466787798978:android:f8075c716d6293371a105b",
+        "android_client_info": {
+          "package_name": "pl.gov.mc.protegosafe.stage"
         }
       },
       "oauth_client": [
@@ -154,11 +204,10 @@
               "client_type": 3
             },
             {
-              "client_id": "466787798978-rfltn8kcgp0itk1brgf036r200sk2sd4.apps.googleusercontent.com",
+              "client_id": "466787798978-msor17pls0oremdd7m7m1fk7a4jnbqr1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "pl.gov.mc.protegosafe",
-                "app_store_id": "1508481566"
+                "bundle_id": "pl.gov.mc.protegosafe-staging"
               }
             }
           ]
@@ -191,11 +240,10 @@
               "client_type": 3
             },
             {
-              "client_id": "466787798978-rfltn8kcgp0itk1brgf036r200sk2sd4.apps.googleusercontent.com",
+              "client_id": "466787798978-msor17pls0oremdd7m7m1fk7a4jnbqr1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "pl.gov.mc.protegosafe",
-                "app_store_id": "1508481566"
+                "bundle_id": "pl.gov.mc.protegosafe-staging"
               }
             }
           ]
