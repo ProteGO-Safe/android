@@ -54,7 +54,7 @@ class HomeFragment : BaseFragment() {
         binding.lifecycleOwner = this
 
         setUpWebView()
-        setupRequests()
+        observeRequests()
         return binding.root
     }
 
@@ -73,7 +73,7 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun setupRequests() {
+    private fun observeRequests() {
         vm.requestPermissions.observe(viewLifecycleOwner, ::openRequestPermissions)
         vm.requestBluetooth.observe(viewLifecycleOwner, ::requestBluetooth)
         vm.changeBatteryOptimization.observe(viewLifecycleOwner, ::openPowerSettings)
@@ -136,18 +136,18 @@ class HomeFragment : BaseFragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             rxperm.request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
                 .subscribe({
-                    Timber.d("Perm accepted")
+                    Timber.d("Permissions accepted")
                     vm.onPermissionsAccepted()
                 }, {
-                    Timber.d("Perm rejected")
+                    Timber.d("Permissions rejected")
                 }).addTo(compositeDisposable)
         } else {
             rxperm.request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .subscribe({
-                    Timber.d("Perm accepted")
+                    Timber.d("Permissions accepted")
                     vm.onPermissionsAccepted()
                 }, {
-                    Timber.d("Perm rejected")
+                    Timber.d("Permissions rejected")
                 }).addTo(compositeDisposable)
         }
     }
@@ -165,5 +165,5 @@ class HomeFragment : BaseFragment() {
     }
 }
 
-const val REQUEST_ENABLE_BT = 1
-const val REQUEST_POWER_SETTINGS = 2
+private const val REQUEST_ENABLE_BT = 1
+private const val REQUEST_POWER_SETTINGS = 2

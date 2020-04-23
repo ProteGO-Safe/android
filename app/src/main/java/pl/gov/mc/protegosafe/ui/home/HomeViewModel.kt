@@ -68,21 +68,24 @@ class HomeViewModel(
     }
 
     fun onPermissionsAccepted() {
-        val servicesStatus = servicesStatusUseCase.execute()
         Timber.d("onPermissionsAccepted")
-        onBridgeData(OutgoingBridgeDataType.PERMISSIONS_ACCEPTED.code, servicesStatus)
+        servicesStatusUseCase.execute().let{
+            onBridgeData(OutgoingBridgeDataType.PERMISSIONS_ACCEPTED.code, it)
+        }
     }
 
     fun onBluetoothEnable() {
-        val servicesStatus = servicesStatusUseCase.execute()
-        Timber.d("onPermissionsAccepted")
-        onBridgeData(OutgoingBridgeDataType.BLUETOOTH_ENABLED.code, servicesStatus)
+        Timber.d("onBluetoothEnable")
+        servicesStatusUseCase.execute().let {
+            onBridgeData(OutgoingBridgeDataType.BLUETOOTH_ENABLED.code, it)
+        }
     }
 
     fun onPowerSettingsResult() {
-        val servicesStatus = servicesStatusUseCase.execute()
-        Timber.d("onPermissionsAccepted")
-        onBridgeData(OutgoingBridgeDataType.BATTERY_OPTIMIZATION_SET.code, servicesStatus)
+        Timber.d("onPowerSettingsResult")
+        val servicesStatus = servicesStatusUseCase.execute().let{
+            onBridgeData(OutgoingBridgeDataType.BATTERY_OPTIMIZATION_SET.code, it)
+        }
     }
 
     private fun onBridgeData(dataType: Int, dataJson: String) {
