@@ -18,7 +18,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 5
-        versionName "3.0.0"
+        versionName "3.0.0-2"
 
         buildConfigField "String", "SAFETYNET_API_KEY", "\"AIzaSyDhQUQDNpxXZ4dOMjZh4GLTtyB62Fi3U8o\""
 
