@@ -12,13 +12,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.ActivityMainBinding
-import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.manager.SafetyNetManager.SafetyNetResult
 import pl.gov.mc.protegosafe.ui.dialog.AlertDialogBuilder
 import pl.gov.mc.protegosafe.ui.dialog.LoadingDialog
@@ -58,18 +56,6 @@ class MainActivity : AppCompatActivity() {
         intent?.getStringExtra(Consts.NOTIFICATION_EXTRA_DATA)?.let {
             vm.onNotificationDataReceived(it)
         }
-    }
-
-    private val deviceRepository: DeviceRepository by inject()
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("DeviceRepository: isBtSupported ${deviceRepository.isBtSupported()}")
-        Timber.d("DeviceRepository: isLocationEnabled ${deviceRepository.isLocationEnabled()}")
-        Timber.d("DeviceRepository: isBtOn ${deviceRepository.isBtOn()}")
-        Timber.d("DeviceRepository: isBatteryOptimizationOn ${deviceRepository.isBatteryOptimizationOn()}")
-        Timber.d("DeviceRepository: isNotificationEnabled ${deviceRepository.isNotificationEnabled()}")
-        Timber.d("DeviceRepository: isBtServiceOn ${deviceRepository.isBtServiceOn()}")
     }
 
     private fun observerSafetyNetResult() {
