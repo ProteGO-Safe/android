@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.ActivityMainBinding
@@ -20,6 +21,7 @@ import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.manager.SafetyNetManager.SafetyNetResult
 import pl.gov.mc.protegosafe.ui.dialog.AlertDialogBuilder
 import pl.gov.mc.protegosafe.ui.dialog.LoadingDialog
+import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +43,9 @@ class MainActivity : AppCompatActivity() {
         saveNotificationData(intent)
         createNotificationChannel()
         observerSafetyNetResult()
+        if (BuildConfig.DEBUG) {
+            requestDebugModePermissions()
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -141,4 +146,15 @@ class MainActivity : AppCompatActivity() {
         loadingDialog.show(supportFragmentManager, LoadingDialog.TAG)
         vm.startSafetyNetVerification()
     }
+
+    private fun requestDebugModePermissions() {
+        EasyPermissions.requestPermissions(
+            this,
+            getString(R.string.debug_write_store_rationale),
+            REQUEST_STORE_PERMISSION_CODE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
 }
+
+private const val REQUEST_STORE_PERMISSION_CODE = 1233

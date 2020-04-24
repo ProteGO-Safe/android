@@ -143,6 +143,9 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    //permissions
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
     //Hyperion debug tool
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-core:0.9.27'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-attr:0.9.27'

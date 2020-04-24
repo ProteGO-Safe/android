@@ -21,4 +21,5 @@ faucibus nisl nec, elementum lacus.</string>
     <string name="safetynet_dialog_verification_unknown_error">Nieznany błąd</string>
     <string name="safetynet_dialog_verification_error_internet_connection">Sprawdź połączenie z Internetem</string>
     <string name="safetynet_dialog_verification_error_play_services">Aplikacja wymaga najnowższej wersji aplikacji Google Play Services, zaktualizuj ją</string>
+    <string name="debug_write_store_rationale">Testowa wersja aplikacji potrzebuje uprawnienia do zapisu logów śledzenia urządzeń.</string>
 </resources>

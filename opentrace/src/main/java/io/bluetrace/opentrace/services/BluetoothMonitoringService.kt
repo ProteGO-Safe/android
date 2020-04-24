@@ -211,18 +211,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             return START_STICKY
         }
 
-        //check for write permissions  - not required for now. SDLog maybe?
-        //only required for debug builds - for now
-        if (BuildConfig.DEBUG) {
-            if (!hasWritePermissions()) {
-                CentralLog.i(TAG, "no write permission")
-                //start write permission activity
-                acquireWritePermission()
-                stopSelf()
-                return START_STICKY
-            }
-        }
-
         intent?.let {
             val cmd = intent.getIntExtra(COMMAND_KEY, Command.INVALID.index)
             runService(Command.findByValue(cmd))
@@ -252,18 +240,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             )
             notifyLackingThings()
             return
-        }
-
-        //check for write permissions  - not required for now. SDLog maybe?
-        //only required for debug builds - for now
-        if (BuildConfig.DEBUG) {
-            if (!hasWritePermissions()) {
-                CentralLog.i(TAG, "no write permission")
-                //start write permission activity
-                acquireWritePermission()
-                stopSelf()
-                return
-            }
         }
 
         //show running foreground notification if its not showing that
