@@ -12,15 +12,13 @@ class EnableBTServiceUseCase(
     private val stopBLEMonitoringServiceUseCase: StopBLEMonitoringServiceUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
-    fun execute(isTrackingEnabled: Boolean): Completable {
-        trackingRepository.saveTrackingAgreement(isTrackingEnabled)
-        return if (isTrackingEnabled) {
+
+        fun execute(isTrackingEnabled: Boolean): Completable = if (isTrackingEnabled) {
             singInAndStartBLEMonitoringServiceUseCase.execute()
-                .subscribeOn(Schedulers.io())
-                .observeOn(postExecutionThread.scheduler)
         } else {
             Completable.fromAction { stopBLEMonitoringServiceUseCase.execute() }
         }
-
-    }
+            .andThen ( trackingRepository.saveTrackingAgreement(isTrackingEnabled) )
+            .subscribeOn(Schedulers.io())
+            .observeOn(postExecutionThread.scheduler)
 }
