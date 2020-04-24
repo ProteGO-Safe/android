@@ -9,7 +9,7 @@ class GetSafetyNetNonceDataUseCase (
         // TODO: Fix retrieveTemporaryID crash at application start.
         val temporaryId = try {
             openTraceRepository.retrieveTemporaryID().tempID
-        } catch (ex: IllegalStateException) {
+        } catch (ex: Exception) {
             "ProteGo Nonce: ${System.currentTimeMillis()}"
         }
         return temporaryId + System.currentTimeMillis()
