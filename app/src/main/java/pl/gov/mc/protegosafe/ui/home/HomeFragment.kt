@@ -192,10 +192,19 @@ class HomeFragment : BaseFragment() {
         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
     }
 
+    /*
+     * "BatteryLife" needs to be suppressed because of OpenTrace that need to deeply control their
+     * own execution, at the potential expense of the user's battery life.
+     */
+    @SuppressLint("BatteryLife")
     private fun openPowerSettings() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val openPowerSettings = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
-            startActivityForResult(openPowerSettings, REQUEST_POWER_SETTINGS)
+            context?.packageName?.let { packageName ->
+                Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).let { intent ->
+                    intent.data = Uri.parse("package:$packageName")
+                    startActivityForResult(intent, REQUEST_POWER_SETTINGS)
+                }
+            }
         }
     }
 }
