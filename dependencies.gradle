@@ -1,0 +1,8 @@
+def versions = [:]
+versions.androidx_appcompat = "1.2.0-beta01"
+versions.androidx_recyclerview = "1.1.0"
+
+def deps = [:]
+deps.androidx_appcompat_appcompat = "androidx.appcompat:appcompat:$versions.androidx_appcompat"
+deps.androidx_recyclerview = "androidx.recyclerview:recyclerview:$versions.androidx_recyclerview"
+ext.deps = deps
