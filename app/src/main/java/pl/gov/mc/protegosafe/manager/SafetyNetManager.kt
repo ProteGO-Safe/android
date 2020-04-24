@@ -96,15 +96,18 @@ class SafetyNetManager(
                     SafetyNetResult.Failure.SafetyError(attestationStatement.advice)
             }
         } catch (ex: IllegalArgumentException) {
+            Timber.e("Exception: $ex")
             safetyNetResultValue.value = SafetyNetResult.Failure.UnknownError(ex)
         }
     }
 
     private fun isNonceSame(nonceFromResponse: String?): Boolean {
-        return nonceFromResponse != null && Base64.encodeToString(
+        return (nonceFromResponse != null && Base64.encodeToString(
             generatedNonce,
             Base64.NO_WRAP
-        ) == nonceFromResponse
+        ) == nonceFromResponse).also { result ->
+            Timber.d("isNonceSame result: $result")
+        }
     }
 
     private fun isPlayServicesAvailable() =

@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
     private fun observerSafetyNetResult() {
         loadingDialog.show(supportFragmentManager, LoadingDialog.TAG)
         vm.getSafetyNetResultData().observe(this, Observer { result ->
+            Timber.d("safetyNetResult: $result")
             dismissDialogs()
             handleSafetyNetUi(result)
         })
