@@ -31,7 +31,6 @@ class HomeViewModel(
     private val _changeBatteryOptimization = SingleLiveEvent<Unit>()
     val changeBatteryOptimization: LiveData<Unit> = _changeBatteryOptimization
 
-    //TODO: extract logic not directly related to view to outside Classes/functions
     fun setBridgeData(dataType: Int, dataJson: String) {
         when (IncomingBridgeDataType.valueOf(dataType)) {
             IncomingBridgeDataType.REQUEST_PERMISSION -> {
