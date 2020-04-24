@@ -1,5 +1,9 @@
 package pl.gov.mc.protegosafe.ui.home
 
+import android.os.Build
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebViewClient
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxkotlin.addTo
@@ -19,6 +23,14 @@ class HomeViewModel(
     private val enableBTServiceUseCase: EnableBTServiceUseCase
 ) : BaseViewModel() {
 
+    companion object {
+        private val ERROR_CODES_TREATED_AS_CONNECTION_ERROR = arrayOf(
+            WebViewClient.ERROR_HOST_LOOKUP,
+            WebViewClient.ERROR_CONNECT,
+            WebViewClient.ERROR_TIMEOUT
+        )
+    }
+
     private val _javascriptCode = MutableLiveData<String>()
     val javascriptCode: LiveData<String> = _javascriptCode
 
@@ -31,6 +43,10 @@ class HomeViewModel(
     private val _changeBatteryOptimization = SingleLiveEvent<Unit>()
     val changeBatteryOptimization: LiveData<Unit> = _changeBatteryOptimization
 
+    private val _webViewVisibilityChanged = MutableLiveData<Boolean>()
+    val webViewVisibilityChanged: LiveData<Boolean> = _webViewVisibilityChanged
+
+    //TODO: extract logic not directly related to view to outside Classes/functions
     fun setBridgeData(dataType: Int, dataJson: String) {
         when (IncomingBridgeDataType.valueOf(dataType)) {
             IncomingBridgeDataType.REQUEST_PERMISSION -> {
@@ -82,11 +98,37 @@ class HomeViewModel(
         )
     }
 
+    fun onWebViewReceivedError(
+        request: WebResourceRequest?,
+        error: WebResourceError?
+    ) {
+        Timber.e("onWebViewReceivedError, error: $error")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (error?.errorCode in ERROR_CODES_TREATED_AS_CONNECTION_ERROR) {
+                _webViewVisibilityChanged.postValue(false)
+            } else {
+                updateWebViewVisibility()
+            }
+        } else {
+            updateWebViewVisibility()
+        }
+    }
+
+    fun onWebViewPageFinished(url: String?) {
+        Timber.i("onWebViewPageFinished, url: $url")
+        updateWebViewVisibility()
+    }
+
+    private fun updateWebViewVisibility() {
+        val showWebView = internetConnectionStatusUseCase.execute().isConnected()
+        if (showWebView != _webViewVisibilityChanged.value) {
+            _webViewVisibilityChanged.postValue(showWebView)
+        }
+    }
+
     private fun onBridgeData(dataType: Int, dataJson: String) {
         val codeToExecute = "onBridgeData($dataType, '$dataJson')"
         Timber.d("run Javascript: -$codeToExecute-")
         _javascriptCode.postValue(codeToExecute)
     }
-
-    fun isInternetConnectionAvailable() = internetConnectionStatusUseCase.execute().isConnected()
 }

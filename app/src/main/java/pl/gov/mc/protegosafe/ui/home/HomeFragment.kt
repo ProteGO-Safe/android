@@ -31,6 +31,7 @@ import pl.gov.mc.protegosafe.ui.common.livedata.observe
 import timber.log.Timber
 import android.app.Activity.RESULT_OK
 import android.provider.Settings
+import androidx.core.view.isVisible
 
 
 class HomeFragment : BaseFragment() {
@@ -64,7 +65,7 @@ class HomeFragment : BaseFragment() {
 
     private fun setListeners() {
         binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
-            updateWebViewVisibility()
+            binding.webView.reload()
         }
     }
 
@@ -125,6 +126,7 @@ class HomeFragment : BaseFragment() {
             })
 
         vm.javascriptCode.observe(viewLifecycleOwner, ::runJavascript)
+        vm.webViewVisibilityChanged.observe(viewLifecycleOwner, ::setWebViewVisible)
     }
 
     private inner class ProteGoWebViewClient : WebViewClient() {
@@ -144,14 +146,20 @@ class HomeFragment : BaseFragment() {
             request: WebResourceRequest?,
             error: WebResourceError?
         ) {
-            updateWebViewVisibility()
+            vm.onWebViewReceivedError(request, error)
             super.onReceivedError(view, request, error)
+        }
+
+        override fun onPageFinished(view: WebView?, url: String?) {
+            vm.onWebViewPageFinished(url)
+            super.onPageFinished(view, url)
         }
     }
 
-    private fun updateWebViewVisibility() {
-        binding.webView.visibility =
-            if (vm.isInternetConnectionAvailable()) View.VISIBLE else View.GONE
+    private fun setWebViewVisible(visible: Boolean) {
+        if (binding.webView.isVisible != visible) {
+            binding.webView.isVisible = visible
+        }
     }
 
     private fun runJavascript(script: String) {
