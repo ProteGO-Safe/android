@@ -6,11 +6,7 @@ import io.reactivex.rxkotlin.addTo
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
-import pl.gov.mc.protegosafe.domain.usecase.EnableBTServiceUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
-import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.*
 import pl.gov.mc.protegosafe.ui.common.BaseViewModel
 import pl.gov.mc.protegosafe.ui.common.livedata.SingleLiveEvent
 import timber.log.Timber
@@ -37,7 +33,7 @@ class HomeViewModel(
 
     //TODO: extract logic not directly related to view to outside Classes/functions
     fun setBridgeData(dataType: Int, dataJson: String) {
-        when (val incomingData = IncomingBridgeDataType.valueOf(dataType)) {
+        when (IncomingBridgeDataType.valueOf(dataType)) {
             IncomingBridgeDataType.REQUEST_PERMISSION -> {
                 _requestPermissions.postValue(Unit)
             }
@@ -52,14 +48,9 @@ class HomeViewModel(
                     IncomingBridgeDataItem(
                         type = IncomingBridgeDataType.valueOf(dataType),
                         payload = dataJson
-                    )
+                    ), ::onBridgeData
                 ).subscribe {
-                    if (incomingData == IncomingBridgeDataType.REQUEST_ENABLE_BT_SERVICE) {
-                        onBridgeData(
-                            OutgoingBridgeDataType.SERVICE_STATUS_CHANGE.code,
-                            servicesStatusUseCase.execute()
-                        )
-                    }
+                    Timber.d("OnSetBridgeData executed")
                 }.addTo(disposables)
             }
         }
