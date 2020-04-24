@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="pl.gov.mc.protegosafe">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -49,7 +50,10 @@
             android:name="io.bluetrace.opentrace.services.BluetoothMonitoringService"
             android:foregroundServiceType="location" />
 
-        <activity android:name=".ui.MainActivity">
+        <activity
+            android:name=".ui.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,8 +61,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="io.bluetrace.opentrace.permissions.RequestFileWritePermission" />
+        <activity android:name="io.bluetrace.opentrace.permissions.RequestFileWritePermission" />
     </application>
 
 </manifest>
