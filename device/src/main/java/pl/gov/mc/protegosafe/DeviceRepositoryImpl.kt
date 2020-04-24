@@ -37,7 +37,7 @@ class DeviceRepositoryImpl(
     override fun isBatteryOptimizationOn(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             (context.getSystemService(AppCompatActivity.POWER_SERVICE) as? PowerManager)
-                ?.isIgnoringBatteryOptimizations(context.packageName) == true
+                ?.isIgnoringBatteryOptimizations(context.packageName) == false
         } else {
             true
         }
