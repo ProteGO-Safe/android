@@ -11,7 +11,11 @@ import io.reactivex.rxkotlin.subscribeBy
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
-import pl.gov.mc.protegosafe.domain.usecase.*
+import pl.gov.mc.protegosafe.domain.usecase.EnableBTServiceUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
 import pl.gov.mc.protegosafe.ui.common.BaseViewModel
 import pl.gov.mc.protegosafe.ui.common.livedata.SingleLiveEvent
 import timber.log.Timber
@@ -83,10 +87,6 @@ class HomeViewModel(
             OutgoingBridgeDataType.PERMISSIONS_ACCEPTED.code,
             servicesStatusUseCase.execute()
         )
-        //TODO [PSAFE-416] redesign UX tracking agreement during setup
-        enableBTServiceUseCase.execute(true).subscribeBy(
-            onError = {Timber.e(it, "Problem running enableBTServiceUseCase")}
-        ).addTo(disposables)
     }
 
     fun onBluetoothEnable() {
