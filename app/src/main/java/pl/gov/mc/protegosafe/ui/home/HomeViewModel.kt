@@ -3,6 +3,7 @@ package pl.gov.mc.protegosafe.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
@@ -48,9 +49,10 @@ class HomeViewModel(
                         type = IncomingBridgeDataType.valueOf(dataType),
                         payload = dataJson
                     ), ::onBridgeData
-                ).subscribe {
-                    Timber.d("OnSetBridgeData executed")
-                }.addTo(disposables)
+                ).subscribeBy (
+                    onComplete = { Timber.d("OnSetBridgeData executed") },
+                    onError = {Timber.e(it, "Problem running onSetBridgeDataUseCase")}
+                ).addTo(disposables)
             }
         }
     }
@@ -66,7 +68,9 @@ class HomeViewModel(
             servicesStatusUseCase.execute()
         )
         //TODO [PSAFE-416] redesign UX tracking agreement during setup
-        enableBTServiceUseCase.execute(true).subscribe()
+        enableBTServiceUseCase.execute(true).subscribeBy(
+            onError = {Timber.e(it, "Problem running enableBTServiceUseCase")}
+        ).addTo(disposables)
     }
 
     fun onBluetoothEnable() {

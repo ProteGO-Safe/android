@@ -13,7 +13,6 @@ class SignInUseCase(
 ) {
     fun execute(): Completable {
         return authRepository.signIn()
-            .andThen(getTemporaryIDUseCase.execute())
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
     }
