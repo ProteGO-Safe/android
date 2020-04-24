@@ -15,25 +15,31 @@ class OnSetBridgeDataUseCase(
     private val enableEnableBTServiceUseCase: EnableBTServiceUseCase,
     private val servicesStatusUseCase: GetServicesStatusUseCase,
     private val mapper: TraceStatusMapper
-    ) {
+) {
 
-    fun execute(input: IncomingBridgeDataItem, onBridgeData: (Int, String) -> Unit): Completable = Completable.fromAction {
+    fun execute(input: IncomingBridgeDataItem, onBridgeData: (Int, String) -> Unit): Completable =
         when (input.type) {
             IncomingBridgeDataType.TRIAGE -> {
-                val data = triageRepository.parseBridgePayload(input.payload)
-                triageRepository.saveTriageCompletedTimestamp(data.timestamp)
+                Completable.fromAction {
+                    triageRepository.saveTriageCompletedTimestamp(
+                        triageRepository.parseBridgePayload(
+                            input.payload
+                        ).timestamp
+                    )
+                }
             }
             IncomingBridgeDataType.REQUEST_ENABLE_BT_SERVICE -> {
-                val data = mapper.toDomainItem(input.payload)
-                enableEnableBTServiceUseCase.execute(data.enableBtService)
-                onBridgeData(
-                    OutgoingBridgeDataType.SERVICE_STATUS_CHANGE.code,
-                    servicesStatusUseCase.execute()
-                )
+                enableEnableBTServiceUseCase.execute(
+                    mapper.toDomainItem(input.payload).enableBtService
+                ).andThen {
+                    onBridgeData(
+                        OutgoingBridgeDataType.SERVICE_STATUS_CHANGE.code,
+                        servicesStatusUseCase.execute()
+                    )
+                }
             }
             else -> throw IllegalStateException("Illegal input type")
         }
-    }
-        .subscribeOn(Schedulers.io())
-        .observeOn(postExecutionThread.scheduler)
+            .subscribeOn(Schedulers.io())
+            .observeOn(postExecutionThread.scheduler)
 }

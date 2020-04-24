@@ -1,5 +1,6 @@
 package pl.gov.mc.protegosafe.data
 
+import io.reactivex.Completable
 import pl.gov.mc.protegosafe.data.db.TrackingDataStore
 import pl.gov.mc.protegosafe.domain.repository.TrackingRepository
 
@@ -10,7 +11,7 @@ class TrackingRepositoryImpl(
         return trackingDataStore.isTrackingAccepted
     }
 
-    override fun saveTrackingAgreement(isAccepted: Boolean) {
+    override fun saveTrackingAgreement(isAccepted: Boolean) = Completable.fromAction{
         trackingDataStore.isTrackingAccepted = isAccepted
     }
 }
