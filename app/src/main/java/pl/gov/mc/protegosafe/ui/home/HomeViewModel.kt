@@ -86,7 +86,7 @@ class HomeViewModel(
     private fun onBridgeData(dataType: Int, dataJson: String) {
         val codeToExecute = "onBridgeData($dataType, '$dataJson')"
         Timber.d("run Javascript: -$codeToExecute-")
-        _javascriptCode.value = codeToExecute
+        _javascriptCode.postValue(codeToExecute)
     }
 
     fun isInternetConnectionAvailable() = internetConnectionStatusUseCase.execute().isConnected()
