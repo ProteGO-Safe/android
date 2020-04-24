@@ -199,7 +199,7 @@ class HomeFragment : BaseFragment() {
     @SuppressLint("BatteryLife")
     private fun openPowerSettings() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context?.packageName.let { packageName ->
+            context?.packageName?.let { packageName ->
                 Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).let { intent ->
                     intent.data = Uri.parse("package:$packageName")
                     startActivityForResult(intent, REQUEST_POWER_SETTINGS)
