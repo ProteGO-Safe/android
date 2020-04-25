@@ -1,8 +1,10 @@
 package pl.gov.mc.protegosafe.data.mapper
 
 import pl.gov.mc.protegosafe.data.BuildConfig
+import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
+import pl.gov.mc.protegosafe.domain.model.TriageItem
 
 private const val FCM_NOTIFICATION_TITLE_KEY = "title"
 private const val FCM_NOTIFICATION_CONTENT_KEY = "content"
@@ -19,3 +21,5 @@ fun Map<String, String>.toNotificationDataItem(topic: String?) = PushNotificatio
         else -> PushNotificationTopic.UNKNOWN
     }
 )
+
+fun TriageData.toEntity() = TriageItem(timestamp = timestamp)

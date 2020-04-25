@@ -22,7 +22,7 @@ class InfoDialogFragment : DialogFragment() {
 
     private fun setupOkButton() {
         okButton.setOnClickListener {
-            dismiss()
+            dismissAllowingStateLoss()
         }
     }
 }

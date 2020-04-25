@@ -37,6 +37,11 @@ android {
             buildConfigField "String", "MAIN_TOPIC", "\"main-dev\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily-dev\""
         }
+        stage {
+            dimension "mode"
+            buildConfigField "String", "MAIN_TOPIC", "\"main-stage\""
+            buildConfigField "String", "DAILY_TOPIC", "\"daily-stage\""
+        }
         prod {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main\""
@@ -66,6 +71,9 @@ dependencies {
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    //Firebase
+    implementation 'com.google.firebase:firebase-auth:19.3.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
