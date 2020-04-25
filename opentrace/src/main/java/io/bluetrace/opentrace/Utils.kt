@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -85,7 +86,11 @@ object Utils {
             BluetoothMonitoringService.COMMAND_KEY,
             BluetoothMonitoringService.Command.ACTION_START.index
         )
-        context.startService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
     }
 
     fun scheduleStartMonitoringService(context: Context, timeInMillis: Long) {

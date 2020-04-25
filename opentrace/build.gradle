@@ -5,9 +5,9 @@ apply plugin: 'kotlin-kapt'
 //apply plugin: 'com.google.gms.google-services'
 //apply plugin: 'io.fabric'
 //apply plugin: 'com.google.firebase.appdistribution'
-apply plugin: "com.cookpad.android.plugin.license-tools"
+//apply plugin: "com.cookpad.android.plugin.license-tools"
 
-apply plugin: 'com.jaredsburrows.license'
+//apply plugin: 'com.jaredsburrows.license'
 buildscript {
     repositories {
         google()

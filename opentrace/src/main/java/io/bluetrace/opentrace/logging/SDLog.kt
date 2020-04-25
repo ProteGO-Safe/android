@@ -10,7 +10,7 @@ import java.util.*
 
 object SDLog {
 
-    private const val APP_NAME = "OpenTrace"
+    private const val APP_NAME = "ProtegoSafe"
     private const val FOLDER = "SDLogging"
     private val dateFormat = SimpleDateFormat("yyyyMMdd")
     private val timestampFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
