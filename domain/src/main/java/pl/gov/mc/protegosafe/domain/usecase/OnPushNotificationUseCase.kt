@@ -1,7 +1,7 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
 import pl.gov.mc.protegosafe.domain.PushNotifier
-import pl.gov.mc.protegosafe.domain.TriageRepository
+import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import java.util.*

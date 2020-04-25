@@ -1,41 +1,50 @@
 package pl.gov.mc.protegosafe.ui
 
-
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import org.koin.android.ext.android.inject
+import androidx.lifecycle.Observer
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
-import pl.gov.mc.protegosafe.data.OpenTraceWrapperImpl
 import pl.gov.mc.protegosafe.databinding.ActivityMainBinding
+import pl.gov.mc.protegosafe.manager.SafetyNetManager.SafetyNetResult
+import pl.gov.mc.protegosafe.ui.dialog.AlertDialogBuilder
+import pl.gov.mc.protegosafe.ui.dialog.LoadingDialog
+import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
     private val vm: MainViewModel by viewModel()
-    //shouldn't be used directly
-    private val openTraceWrapper: OpenTraceWrapperImpl by inject()
+    private lateinit var binding: ActivityMainBinding
+
+    private val loadingDialog by lazy {
+        LoadingDialog.newInstance(getString(R.string.please_wait))
+    }
+    private var safetyNetAlertDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.vm = vm
         binding.lifecycleOwner = this
 
         saveNotificationData(intent)
         createNotificationChannel()
-
-        //TODO: below code is just to test starting OpenTrace service, we should used in right place through use case
-        Timber.d("Starting OpenTrace")
-
-        openTraceWrapper.startService().subscribe()
+        observerSafetyNetResult()
+        if (BuildConfig.DEBUG) {
+            requestDebugModePermissions()
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -47,6 +56,61 @@ class MainActivity : AppCompatActivity() {
         intent?.getStringExtra(Consts.NOTIFICATION_EXTRA_DATA)?.let {
             vm.onNotificationDataReceived(it)
         }
+    }
+
+    private fun observerSafetyNetResult() {
+        loadingDialog.show(supportFragmentManager, LoadingDialog.TAG)
+        vm.getSafetyNetResultData().observe(this, Observer { result ->
+            Timber.d("safetyNetResult: $result")
+            dismissDialogs()
+            handleSafetyNetUi(result)
+        })
+    }
+
+    private fun dismissDialogs() {
+        loadingDialog.dismissAllowingStateLoss()
+        safetyNetAlertDialog?.let { dialog ->
+            dialog.dismiss()
+            safetyNetAlertDialog = null
+        }
+    }
+
+    private fun handleSafetyNetUi(result: SafetyNetResult) {
+        // TODO: Handle SafetyNet UI with PWA.
+        when (result) {
+            is SafetyNetResult.Failure.ConnectionError -> {
+                safetyNetAlertDialog = if (vm.isInternetConnectionAvailable()) {
+                    getSafetyNetAlertDialog(result)
+                } else {
+                    getInternetConnectionDialog()
+                }
+            }
+            is SafetyNetResult.Failure.UpdatePlayServicesError,
+            is SafetyNetResult.Failure.SafetyError,
+            is SafetyNetResult.Failure.UnknownError ->
+                safetyNetAlertDialog = getSafetyNetAlertDialog(result)
+        }
+
+        safetyNetAlertDialog?.show()
+    }
+
+    private fun getSafetyNetAlertDialog(result: SafetyNetResult): AlertDialog? {
+        return AlertDialogBuilder.getSafetyNetErrorAlertDialog(
+            context = this,
+            result = result,
+            onClickListener = DialogInterface.OnClickListener { _, _ ->
+                startSafetyNetVerification()
+            }
+        )
+    }
+
+    private fun getInternetConnectionDialog(): AlertDialog {
+        return AlertDialogBuilder.getInternetConnectionAlertDialog(
+            context = this,
+            onClickListener = DialogInterface.OnClickListener { _, _ ->
+                startSafetyNetVerification()
+            }
+        )
     }
 
     private fun createNotificationChannel() {
@@ -65,4 +129,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun startSafetyNetVerification() {
+        loadingDialog.show(supportFragmentManager, LoadingDialog.TAG)
+        vm.startSafetyNetVerification()
+    }
+
+    private fun requestDebugModePermissions() {
+        EasyPermissions.requestPermissions(
+            this,
+            getString(R.string.debug_write_store_rationale),
+            REQUEST_STORE_PERMISSION_CODE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
 }
+
+private const val REQUEST_STORE_PERMISSION_CODE = 1233

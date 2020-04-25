@@ -17,8 +17,10 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 5
-        versionName "2.0.1"
+        versionCode 7
+        versionName "3.0.0"
+
+        buildConfigField "String", "SAFETYNET_API_KEY", "\"SAFETYNET_API_KEY\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,11 +42,19 @@ android {
     productFlavors {
         dev {
             dimension "mode"
-            buildConfigField "String", "WEB", "\"https://safesafe.thecoders.io\""
+            buildConfigField "String", "WEB", "\"WEB_URL\""
+            applicationIdSuffix ".debug"
+            versionNameSuffix '-DEBUG'
+        }
+        stage {
+            dimension "mode"
+            buildConfigField "String", "WEB", "\"WEB_URL\""
+            applicationIdSuffix ".stage"
+            versionNameSuffix '-STAGE'
         }
         prod {
             dimension "mode"
-            buildConfigField "String", "WEB", "\"https://safesafe.app\""
+            buildConfigField "String", "WEB", "\"WEB_URL\""
         }
     }
 }
@@ -118,9 +128,10 @@ dependencies {
     //Firebase
     implementation 'com.google.firebase:firebase-core:17.3.0'
     implementation 'com.google.firebase:firebase-messaging:20.1.5'
-    // Recommended: Add the Firebase SDK for Google Analytics.
-    implementation 'com.google.firebase:firebase-analytics:17.3.0'
     implementation 'com.google.firebase:firebase-functions:19.0.2'
+
+    //RxPermission
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 
     // Add the Firebase SDK for Crashlytics.
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
@@ -131,6 +142,9 @@ dependencies {
 
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    //permissions
+    implementation 'pub.devrel:easypermissions:3.0.0'
 
     //Hyperion debug tool
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-core:0.9.27'
@@ -148,5 +162,11 @@ dependencies {
     implementation project(path: ':data')
     implementation project(path: ":domain")
     implementation project(path: ":device")
+
+    // SafetyNet
+    implementation "com.google.android.gms:play-services-safetynet:17.0.0"
+
+    //TODO: remove bluetrace dependency, added temporarly for some shortcuts in testing features:
     implementation project(path: ':opentrace')
+
 }

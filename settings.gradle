@@ -1,5 +1,6 @@
 rootProject.name='ProteGoSafe'
-include ':app', ':opentrace'
+include ':app'
+include ':opentrace'
 include ':data'
 include ':domain'
 include ':device'

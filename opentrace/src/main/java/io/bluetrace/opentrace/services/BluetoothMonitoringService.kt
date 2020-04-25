@@ -30,7 +30,6 @@ import io.bluetrace.opentrace.bluetooth.gatt.STREET_PASS
 import io.bluetrace.opentrace.idmanager.TempIDManager
 import io.bluetrace.opentrace.idmanager.TemporaryID
 import io.bluetrace.opentrace.logging.CentralLog
-import io.bluetrace.opentrace.notifications.NotificationTemplates
 import io.bluetrace.opentrace.permissions.RequestFileWritePermission
 import io.bluetrace.opentrace.status.Status
 import io.bluetrace.opentrace.status.persistence.StatusRecord
@@ -45,9 +44,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import pl.gov.mc.protegosafe.trace.notifications.ServiceStatusDataStore
 import pub.devrel.easypermissions.EasyPermissions
 import java.lang.ref.WeakReference
 import kotlin.coroutines.CoroutineContext
+import pl.gov.mc.protegosafe.trace.notifications.ProteGoSafeNotificationTemplates as NotificationTemplates
 
 class BluetoothMonitoringService : Service(), CoroutineScope {
 
@@ -153,6 +154,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             var notif =
                 NotificationTemplates.lackingThingsNotification(this.applicationContext, CHANNEL_ID)
             startForeground(NOTIFICATION_ID, notif)
+            ServiceStatusDataStore.isWorking = false
             notificationShown = NOTIFICATION_STATE.LACKING_THINGS
         }
     }
@@ -162,6 +164,7 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             var notif =
                 NotificationTemplates.getRunningNotification(this.applicationContext, CHANNEL_ID)
             startForeground(NOTIFICATION_ID, notif)
+            ServiceStatusDataStore.isWorking = true
             notificationShown = NOTIFICATION_STATE.RUNNING
         }
     }
@@ -175,7 +178,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
         val perms = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         return EasyPermissions.hasPermissions(this.applicationContext, *perms)
     }
-
 
     private fun acquireWritePermission() {
         val intent = Intent(this.applicationContext, RequestFileWritePermission::class.java)
@@ -209,18 +211,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             return START_STICKY
         }
 
-        //check for write permissions  - not required for now. SDLog maybe?
-        //only required for debug builds - for now
-        if (BuildConfig.DEBUG) {
-            if (!hasWritePermissions()) {
-                CentralLog.i(TAG, "no write permission")
-                //start write permission activity
-                acquireWritePermission()
-                stopSelf()
-                return START_STICKY
-            }
-        }
-
         intent?.let {
             val cmd = intent.getIntExtra(COMMAND_KEY, Command.INVALID.index)
             runService(Command.findByValue(cmd))
@@ -250,18 +240,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             )
             notifyLackingThings()
             return
-        }
-
-        //check for write permissions  - not required for now. SDLog maybe?
-        //only required for debug builds - for now
-        if (BuildConfig.DEBUG) {
-            if (!hasWritePermissions()) {
-                CentralLog.i(TAG, "no write permission")
-                //start write permission activity
-                acquireWritePermission()
-                stopSelf()
-                return
-            }
         }
 
         //show running foreground notification if its not showing that
