@@ -1,7 +1,9 @@
 package pl.gov.mc.protegosafe.domain.repository
 
 import io.reactivex.Completable
+import io.reactivex.Single
 import pl.gov.mc.protegosafe.domain.model.TemporaryIDItem
+import java.io.File
 
 interface OpenTraceRepository {
     fun startBLEMonitoringService(delay: Long)
@@ -11,4 +13,5 @@ interface OpenTraceRepository {
     fun getHandShakePin(): Completable
     fun retrieveTemporaryID(): TemporaryIDItem
     fun setBLEBroadcastMessage(temporaryID: TemporaryIDItem)
+    fun dumpTraceData(uploadToken: String): Single<File>
 }

@@ -1,21 +1,27 @@
 package pl.gov.mc.protegosafe
 
-import android.app.Application
-import android.os.Trace
 import com.facebook.stetho.Stetho
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import io.bluetrace.opentrace.TracerApp
+import io.reactivex.disposables.CompositeDisposable
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import pl.gov.mc.protegosafe.data.di.dataModule
-import timber.log.Timber
 import pl.gov.mc.protegosafe.data.BuildConfig
+import pl.gov.mc.protegosafe.data.di.dataModule
 import pl.gov.mc.protegosafe.di.*
+import pl.gov.mc.protegosafe.domain.DumpTraceDataUseCase
+import timber.log.Timber
+
 
 class App : TracerApp() {
+
+    private val disposables = CompositeDisposable()
+
+    private val dumpTraceDataUseCase by inject<DumpTraceDataUseCase>()
 
     override fun onCreate() {
         super.onCreate()
@@ -30,6 +36,12 @@ class App : TracerApp() {
 
         initializeFcm()
         initializeStetho()
+        initializeHyperionDebugMenu(dumpTraceDataUseCase)
+    }
+
+    override fun onTerminate() {
+        disposables.clear()
+        super.onTerminate()
     }
 
     private fun initializeFcm() {
