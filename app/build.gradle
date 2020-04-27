@@ -26,7 +26,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 8
-        versionName "Develop-3.1.0.0"
+        versionName "Develop-3.1.0.1"
 
         buildConfigField "String", "SAFETYNET_API_KEY", SAFETYNET_API_KEY
 
@@ -170,6 +170,7 @@ dependencies {
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-recorder:0.9.27'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-shared-preferences:0.9.27'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-timber:0.9.27'
+    debugImplementation 'com.github.takahirom:Hyperion-Simple-Item:0.1.0'
 
     implementation project(path: ':data')
     implementation project(path: ":domain")

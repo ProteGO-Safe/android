@@ -3,6 +3,7 @@ package pl.gov.mc.protegosafe.di
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import pl.gov.mc.protegosafe.domain.DumpTraceDataUseCase
 import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.repository.ToastRepository
@@ -52,6 +53,7 @@ val useCaseModule = module {
     factory { GetServicesStatusUseCase(get()) }
     factory { GetTrackingAgreementStatusUseCase(get()) }
     factory { EnableBTServiceUseCase(get(), get(), get(), get(), get()) }
+    factory { DumpTraceDataUseCase(get(), get()) }
 }
 
 val viewModelModule = module {
