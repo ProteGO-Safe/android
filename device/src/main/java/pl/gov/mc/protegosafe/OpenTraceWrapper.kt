@@ -62,7 +62,7 @@ class OpenTraceWrapper(
     }
 
     override fun dumpTraceData(uploadToken: String): Single<File> {
-
+        //OpenTrace code to fetch data from database and store in json file
         val observableStreetRecords = Observable.create<List<StreetPassRecord>> {
             val result = StreetPassRecordStorage(TracerApp.AppContext).getAllRecords()
             it.onNext(result)
