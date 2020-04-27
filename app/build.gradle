@@ -7,6 +7,14 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file(new File(getRootDir(), KEYSTORE_DEBUG_FILE))
+            storePassword KEYSTORE_DEBUG_PASSWORD
+            keyPassword KEYSTORE_DEBUG_PASSWORD
+            keyAlias = KEYSTORE_DEBUG_ALIAS
+        }
+    }
     dataBinding {
         enabled = true
     }
@@ -35,6 +43,7 @@ android {
     buildTypes {
         debug {
             versionNameSuffix ".debug"
+            signingConfig signingConfigs.debug
         }
         release {
             minifyEnabled true
