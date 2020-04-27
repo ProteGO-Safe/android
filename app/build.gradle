@@ -17,10 +17,10 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 7
-        versionName "3.0.0"
+        versionCode 8
+        versionName "3.0.1"
 
-        buildConfigField "String", "SAFETYNET_API_KEY", "\"SAFETYNET_API_KEY\""
+        buildConfigField "String", "SAFETYNET_API_KEY", SAFETYNET_API_KEY
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,6 +33,9 @@ android {
     kotlinOptions { jvmTarget = "1.8" }
 
     buildTypes {
+        debug {
+            versionNameSuffix ".debug"
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -42,19 +45,19 @@ android {
     productFlavors {
         dev {
             dimension "mode"
-            buildConfigField "String", "WEB", "\"WEB_URL\""
-            applicationIdSuffix ".debug"
-            versionNameSuffix '-DEBUG'
+            buildConfigField "String", "WEB", DEV_WEB_URL
+            applicationIdSuffix ".dev"
+            versionNameSuffix '-DEV'
         }
         stage {
             dimension "mode"
-            buildConfigField "String", "WEB", "\"WEB_URL\""
+            buildConfigField "String", "WEB", STAGE_WEB_URL
             applicationIdSuffix ".stage"
             versionNameSuffix '-STAGE'
         }
         prod {
             dimension "mode"
-            buildConfigField "String", "WEB", "\"WEB_URL\""
+            buildConfigField "String", "WEB", PROD_WEB_URL
         }
     }
 }

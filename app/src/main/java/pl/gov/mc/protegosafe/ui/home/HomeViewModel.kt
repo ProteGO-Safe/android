@@ -11,7 +11,6 @@ import io.reactivex.rxkotlin.subscribeBy
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
-import pl.gov.mc.protegosafe.domain.usecase.EnableBTServiceUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
@@ -24,8 +23,7 @@ class HomeViewModel(
     private val onSetBridgeDataUseCase: OnSetBridgeDataUseCase,
     private val servicesStatusUseCase: GetServicesStatusUseCase,
     private val onGetBridgeDataUseCase: OnGetBridgeDataUseCase,
-    private val internetConnectionStatusUseCase: GetInternetConnectionStatusUseCase,
-    private val enableBTServiceUseCase: EnableBTServiceUseCase
+    private val internetConnectionStatusUseCase: GetInternetConnectionStatusUseCase
 ) : BaseViewModel() {
 
     companion object {

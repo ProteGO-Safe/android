@@ -3,6 +3,7 @@ package pl.gov.mc.protegosafe.domain.usecase
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
+import pl.gov.mc.protegosafe.domain.repository.ToastRepository
 import pl.gov.mc.protegosafe.domain.repository.TrackingRepository
 
 class EnableBTServiceUseCase(
@@ -10,7 +11,8 @@ class EnableBTServiceUseCase(
     private val singInAndStartBLEMonitoringServiceUseCase:
     SignInAndStartBLEMonitoringServiceUseCase,
     private val stopBLEMonitoringServiceUseCase: StopBLEMonitoringServiceUseCase,
-    private val postExecutionThread: PostExecutionThread
+    private val postExecutionThread: PostExecutionThread,
+    private val toastRepository: ToastRepository
 ) {
 
         fun execute(isTrackingEnabled: Boolean): Completable = if (isTrackingEnabled) {
@@ -21,4 +23,7 @@ class EnableBTServiceUseCase(
             .andThen ( trackingRepository.saveTrackingAgreement(isTrackingEnabled) )
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
+            .also {
+                toastRepository.showIsBtServiceEnabledInfo(isTrackingEnabled)
+            }
 }

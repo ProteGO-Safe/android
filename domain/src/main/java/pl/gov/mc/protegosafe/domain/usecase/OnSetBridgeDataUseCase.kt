@@ -12,7 +12,7 @@ import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 class OnSetBridgeDataUseCase(
     private val postExecutionThread: PostExecutionThread,
     private val triageRepository: TriageRepository,
-    private val enableEnableBTServiceUseCase: EnableBTServiceUseCase,
+    private val enableBTServiceUseCase: EnableBTServiceUseCase,
     private val servicesStatusUseCase: GetServicesStatusUseCase,
     private val mapper: TraceStatusMapper
 ) {
@@ -29,7 +29,7 @@ class OnSetBridgeDataUseCase(
                 }
             }
             IncomingBridgeDataType.REQUEST_ENABLE_BT_SERVICE -> {
-                enableEnableBTServiceUseCase.execute(
+                enableBTServiceUseCase.execute(
                     mapper.toDomainItem(input.payload).enableBtService
                 ).andThen {
                     onBridgeData(
