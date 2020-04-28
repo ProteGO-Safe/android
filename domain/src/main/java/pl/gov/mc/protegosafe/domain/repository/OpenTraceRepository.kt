@@ -11,4 +11,5 @@ interface OpenTraceRepository {
     fun getHandShakePin(): Completable
     fun retrieveTemporaryID(): TemporaryIDItem
     fun setBLEBroadcastMessage(temporaryID: TemporaryIDItem)
+    fun clearTracingData()
 }

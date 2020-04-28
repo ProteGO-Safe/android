@@ -13,6 +13,8 @@ import pl.gov.mc.protegosafe.data.db.SharedPreferencesDelegates
 import pl.gov.mc.protegosafe.data.db.TrackingDataStore
 import pl.gov.mc.protegosafe.data.db.TriageDataStore
 import pl.gov.mc.protegosafe.data.db.UserIdStore
+import pl.gov.mc.protegosafe.data.mapper.ClearMapperImpl
+import pl.gov.mc.protegosafe.domain.model.ClearMapper
 import pl.gov.mc.protegosafe.domain.repository.AuthRepository
 import pl.gov.mc.protegosafe.domain.repository.NotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.TrackingRepository
@@ -31,5 +33,6 @@ val dataModule = module {
     single { SharedPreferencesDelegates(androidApplication()) }
     single { FirebaseAuth.getInstance() }
     single<AuthRepository> { AuthRepositoryImpl(get()) }
+    factory<ClearMapper> { ClearMapperImpl() }
 
 }

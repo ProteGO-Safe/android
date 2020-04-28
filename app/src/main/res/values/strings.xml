@@ -15,13 +15,13 @@ faucibus nisl nec, elementum lacus.</string>
     <string name="no_internet_connection_title">Brak Internetu</string>
     <string name="no_internet_connection_msg">Sprawdź połączenie z Internetem</string>
     <string name="no_internet_connection_refresh">Odśwież</string>
-    <string name="try_again">Spróbuj ponowanie</string>
+    <string name="try_again">Spróbuj ponownie</string>
     <string name="safetynet_dialog_title">Wystąpił problem</string>
     <string name="safetynet_dialog_verification_error">Twoje urządzenie nie mogło zostać pozytywnie zweryfikowane</string>
     <string name="safetynet_dialog_verification_unknown_error">Nieznany błąd</string>
     <string name="safetynet_dialog_verification_error_internet_connection">Sprawdź połączenie z Internetem</string>
     <string name="safetynet_dialog_verification_error_play_services">Aplikacja wymaga najnowższej wersji aplikacji Google Play Services, zaktualizuj ją</string>
     <string name="debug_write_store_rationale">Testowa wersja aplikacji potrzebuje uprawnienia do zapisu logów śledzenia urządzeń.</string>
-    <string name="bluetooth_module_enabled">Moduł Bluetooh już działa!</string>
+    <string name="bluetooth_module_enabled">Moduł Bluetooth już działa!</string>
     <string name="bluetooth_module_disabled">Moduł Bluetooth został wyłączony</string>
 </resources>

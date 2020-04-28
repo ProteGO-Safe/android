@@ -67,9 +67,9 @@ class HomeViewModel(
                         type = IncomingBridgeDataType.valueOf(dataType),
                         payload = dataJson
                     ), ::onBridgeData
-                ).subscribeBy (
+                ).subscribeBy(
                     onComplete = { Timber.d("OnSetBridgeData executed") },
-                    onError = {Timber.e(it, "Problem running onSetBridgeDataUseCase")}
+                    onError = { Timber.e(it, "Problem running onSetBridgeDataUseCase") }
                 ).addTo(disposables)
             }
         }

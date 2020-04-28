@@ -5,6 +5,8 @@ import com.google.firebase.functions.FirebaseFunctions
 import io.bluetrace.opentrace.Utils
 import io.bluetrace.opentrace.idmanager.TempIDManager
 import io.bluetrace.opentrace.services.BluetoothMonitoringService
+import io.bluetrace.opentrace.status.persistence.StatusRecordStorage
+import io.bluetrace.opentrace.streetpass.persistence.StreetPassRecordStorage
 import pl.gov.mc.protegosafe.domain.model.TemporaryIDItem
 import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
 import pl.gov.mc.protegosafe.mapper.toCompletable
@@ -46,5 +48,10 @@ class OpenTraceWrapper(
 
     override fun getBLEServiceStatus(): Boolean {
         return ServiceStatusDataStore.isWorking
+    }
+
+    override fun clearTracingData() {
+        StreetPassRecordStorage(context).nukeDb()
+        StatusRecordStorage(context).nukeDb()
     }
 }
