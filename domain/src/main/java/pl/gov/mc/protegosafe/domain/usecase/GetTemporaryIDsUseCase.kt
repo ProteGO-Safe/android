@@ -2,10 +2,10 @@ package pl.gov.mc.protegosafe.domain.usecase
 
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
+import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
 
-class GetTemporaryIDUseCase(
+class GetTemporaryIDsUseCase(
     private val openTraceRepository: OpenTraceRepository,
     private val postExecutionThread: PostExecutionThread
 ) {

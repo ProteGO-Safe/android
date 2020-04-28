@@ -40,7 +40,7 @@ class HomeViewModel(
                 onNext = {
                     Timber.d("New temp id: $it")
                     onBridgeData(
-                        OutgoingBridgeDataType.TEMP_ID_CHANGE.code,
+                        OutgoingBridgeDataType.TEMP_ID.code,
                         tempIdJsonSerializer.toJson(it)
                     )
                 },

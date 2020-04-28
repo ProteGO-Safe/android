@@ -19,6 +19,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 import pl.gov.mc.protegosafe.domain.model.TemporaryIDItem
 import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
+import pl.gov.mc.protegosafe.mapper.TempIdJsonSerializer
 import pl.gov.mc.protegosafe.mapper.toCompletable
 import pl.gov.mc.protegosafe.mapper.toDeviceModel
 import pl.gov.mc.protegosafe.mapper.toDomainModel
@@ -28,7 +29,8 @@ import java.io.FileOutputStream
 
 class OpenTraceWrapper(
     private val context: Context,
-    private val functions: FirebaseFunctions
+    private val functions: FirebaseFunctions,
+    private val jsonSerializer: TempIdJsonSerializer
 ) : OpenTraceRepository {
     init {
         TempIDManager.setOntTempIdUpdate { tempIdSubject.onNext(it) }
@@ -62,6 +64,9 @@ class OpenTraceWrapper(
         checkNotNull(tempId)
         return tempId.toDomainModel()
     }
+
+    override fun retrieveTemporaryIDJson(): String =
+        jsonSerializer.toJson(retrieveTemporaryID().tempID)
 
     override fun setBLEBroadcastMessage(temporaryID: TemporaryIDItem) {
         BluetoothMonitoringService.broadcastMessage = temporaryID.toDeviceModel()
