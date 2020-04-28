@@ -36,7 +36,9 @@ class App : TracerApp() {
 
         initializeFcm()
         initializeStetho()
-        initializeHyperionDebugMenu(dumpTraceDataUseCase)
+        if (BuildConfig.DEBUG) {
+            initializeHyperionDebugMenu(dumpTraceDataUseCase)
+        }
     }
 
     override fun onTerminate() {
