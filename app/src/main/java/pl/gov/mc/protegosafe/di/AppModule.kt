@@ -6,6 +6,7 @@ import org.koin.dsl.module
 import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.repository.ToastRepository
+import pl.gov.mc.protegosafe.domain.usecase.ClearBtDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.EnableBTServiceUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
@@ -37,7 +38,7 @@ val appModule = module {
 
 val useCaseModule = module {
     factory { OnGetBridgeDataUseCase(get(), get()) }
-    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get()) }
+    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
@@ -45,13 +46,14 @@ val useCaseModule = module {
     factory { StopBLEMonitoringServiceUseCase(get()) }
     factory { SetBroadcastMessageUseCase(get()) }
     factory { GetTemporaryIDUseCase(get(), get()) }
-    factory { SignInUseCase(get(), get(), get()) }
-    factory { SignInAndStartBLEMonitoringServiceUseCase(get(), get(), get()) }
+    factory { SignInUseCase(get(), get()) }
+    factory { SignInAndStartBLEMonitoringServiceUseCase(get(), get()) }
     factory { GetSafetyNetNonceDataUseCase(get())}
     factory { GetInternetConnectionStatusUseCase(get()) }
     factory { GetServicesStatusUseCase(get()) }
     factory { GetTrackingAgreementStatusUseCase(get()) }
-    factory { EnableBTServiceUseCase(get(), get(), get(), get(), get()) }
+    factory { EnableBTServiceUseCase(get(), get(), get(), get()) }
+    factory { ClearBtDataUseCase(get(), get()) }
 }
 
 val viewModelModule = module {
