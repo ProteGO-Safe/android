@@ -169,7 +169,6 @@ dependencies {
     // SafetyNet
     implementation "com.google.android.gms:play-services-safetynet:17.0.0"
 
-    //TODO: remove bluetrace dependency, added temporarly for some shortcuts in testing features:
     implementation project(path: ':opentrace')
 
 }
