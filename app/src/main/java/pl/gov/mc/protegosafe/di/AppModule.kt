@@ -54,9 +54,11 @@ val useCaseModule = module {
     factory { GetTrackingAgreementStatusUseCase(get()) }
     factory { EnableBTServiceUseCase(get(), get(), get(), get(), get()) }
     factory { DumpTraceDataUseCase(get(), get()) }
+    factory { TrackTempIdUseCase(get(), get()) }
+
 }
 
 val viewModelModule = module {
     viewModel { MainViewModel(get(), get(), get(), get()) }
-    viewModel { HomeViewModel(get(), get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get(), get(), get(), get()) }
 }

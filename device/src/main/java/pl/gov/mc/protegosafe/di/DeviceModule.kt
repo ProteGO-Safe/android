@@ -6,12 +6,13 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.DeviceRepositoryImpl
 import pl.gov.mc.protegosafe.OpenTraceWrapper
-import pl.gov.mc.protegosafe.domain.model.TraceStatusMapper
 import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
+import pl.gov.mc.protegosafe.domain.model.TraceStatusMapper
 import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
-import pl.gov.mc.protegosafe.mapper.TraceStatusMapperImpl
 import pl.gov.mc.protegosafe.manager.InternetConnectionManagerImpl
+import pl.gov.mc.protegosafe.mapper.TempIdJsonSerializer
+import pl.gov.mc.protegosafe.mapper.TraceStatusMapperImpl
 
 val deviceModule = module {
     single<OpenTraceRepository> { OpenTraceWrapper(androidContext(), get()) }
@@ -24,4 +25,6 @@ val deviceModule = module {
     single<DeviceRepository> { DeviceRepositoryImpl(androidContext(), get()) }
 
     factory<TraceStatusMapper> { TraceStatusMapperImpl() }
+    factory { TempIdJsonSerializer() }
+
 }

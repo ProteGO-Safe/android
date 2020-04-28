@@ -16,6 +16,14 @@ object TempIDManager {
 
     private const val TAG = "TempIDManager"
 
+    //ProtegoSafe additional code start
+    private var ontTempIdUpdate: ((String) -> Unit)? = null
+
+    fun setOntTempIdUpdate(value: (String) -> Unit) {
+        ontTempIdUpdate = value
+    }
+    //ProtegoSafe additional code end
+
     fun storeTemporaryIDs(context: Context, packet: String) {
         CentralLog.d(TAG, "[TempID] Storing temporary IDs into internal storage...")
         val file = File(context.filesDir, "tempIDs")
@@ -35,10 +43,15 @@ object TempIDManager {
                 convertToQueue(
                     tempIDArrayList
                 )
-            return getValidOrLastTemporaryID(
+            val temporaryId = getValidOrLastTemporaryID(
                 context,
                 tempIDQueue
             )
+            //ProtegoSafe additional code start
+            ontTempIdUpdate?.invoke(temporaryId.tempID)
+            //ProtegoSafe additional code end
+            return temporaryId
+
         }
         return null
     }
