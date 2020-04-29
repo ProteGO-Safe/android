@@ -7,21 +7,7 @@ import pl.gov.mc.protegosafe.domain.DumpTraceDataUseCase
 import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.repository.ToastRepository
-import pl.gov.mc.protegosafe.domain.usecase.EnableBTServiceUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetSafetyNetNonceDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetTemporaryIDUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetTrackingAgreementStatusUseCase
-import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
-import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.SaveNotificationDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.SetBroadcastMessageUseCase
-import pl.gov.mc.protegosafe.domain.usecase.SignInAndStartBLEMonitoringServiceUseCase
-import pl.gov.mc.protegosafe.domain.usecase.StartBLEMonitoringServiceUseCase
-import pl.gov.mc.protegosafe.domain.usecase.StopBLEMonitoringServiceUseCase
+import pl.gov.mc.protegosafe.domain.usecase.*
 import pl.gov.mc.protegosafe.domain.usecase.auth.SignInUseCase
 import pl.gov.mc.protegosafe.repository.ToastRepositoryImpl
 import pl.gov.mc.protegosafe.ui.MainViewModel
@@ -37,7 +23,7 @@ val appModule = module {
 }
 
 val useCaseModule = module {
-    factory { OnGetBridgeDataUseCase(get(), get()) }
+    factory { OnGetBridgeDataUseCase(get(), get(), get()) }
     factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
@@ -45,7 +31,7 @@ val useCaseModule = module {
     factory { StartBLEMonitoringServiceUseCase(get()) }
     factory { StopBLEMonitoringServiceUseCase(get()) }
     factory { SetBroadcastMessageUseCase(get()) }
-    factory { GetTemporaryIDUseCase(get(), get()) }
+    factory { GetTemporaryIDsUseCase(get(), get()) }
     factory { SignInUseCase(get(), get(), get()) }
     factory { SignInAndStartBLEMonitoringServiceUseCase(get(), get(), get()) }
     factory { GetSafetyNetNonceDataUseCase(get())}
@@ -55,7 +41,7 @@ val useCaseModule = module {
     factory { EnableBTServiceUseCase(get(), get(), get(), get(), get()) }
     factory { DumpTraceDataUseCase(get(), get()) }
     factory { TrackTempIdUseCase(get(), get()) }
-
+    factory { GetCurrentTemporaryIDUseCase(get()) }
 }
 
 val viewModelModule = module {

@@ -16,4 +16,5 @@ interface OpenTraceRepository {
     fun setBLEBroadcastMessage(temporaryID: TemporaryIDItem)
     fun dumpTraceData(uploadToken: String): Single<File>
     val trackTempId: Observable<String>
+    fun retrieveTemporaryIDJson(): String
 }
