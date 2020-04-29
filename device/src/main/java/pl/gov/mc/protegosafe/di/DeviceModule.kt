@@ -15,7 +15,7 @@ import pl.gov.mc.protegosafe.mapper.TempIdJsonSerializer
 import pl.gov.mc.protegosafe.mapper.TraceStatusMapperImpl
 
 val deviceModule = module {
-    single<OpenTraceRepository> { OpenTraceWrapper(androidContext(), get()) }
+    single<OpenTraceRepository> { OpenTraceWrapper(androidContext(), get(), get()) }
     single { FirebaseFunctions.getInstance(BuildConfig.FIREBASE_REGION) }
     single<InternetConnectionManager> {
         InternetConnectionManagerImpl(
