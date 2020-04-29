@@ -9,10 +9,10 @@ apply plugin: 'com.google.firebase.crashlytics'
 android {
     signingConfigs {
         debug {
-            storeFile file(new File(getRootDir(), KEYSTORE_DEBUG_FILE))
-            storePassword KEYSTORE_DEBUG_PASSWORD
-            keyPassword KEYSTORE_DEBUG_PASSWORD
-            keyAlias = KEYSTORE_DEBUG_ALIAS
+            storeFile file(new File(getRootDir(), PROTEGO_KEYSTORE_DEBUG_FILE))
+            storePassword PROTEGO_KEYSTORE_DEBUG_PASSWORD
+            keyPassword PROTEGO_KEYSTORE_DEBUG_PASSWORD
+            keyAlias = PROTEGO_KEYSTORE_DEBUG_ALIAS
         }
     }
     dataBinding {

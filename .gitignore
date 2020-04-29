@@ -15,5 +15,8 @@
 /upload.keystore
 /upload-keystore.properties
 
+# Java KeyStore
+*.jks
+
 # OSX
 .DS_Store
