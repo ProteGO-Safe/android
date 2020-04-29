@@ -17,10 +17,10 @@ object TempIDManager {
     private const val TAG = "TempIDManager"
 
     //ProtegoSafe additional code start
-    private var ontTempIdUpdate: ((String) -> Unit)? = null
+    private var onTempIdUpdate: ((String) -> Unit)? = null
 
-    fun setOntTempIdUpdate(value: (String) -> Unit) {
-        ontTempIdUpdate = value
+    fun setOnTempIdUpdate(value: (String) -> Unit) {
+        onTempIdUpdate = value
     }
     //ProtegoSafe additional code end
 
@@ -48,7 +48,7 @@ object TempIDManager {
                 tempIDQueue
             )
             //ProtegoSafe additional code start
-            ontTempIdUpdate?.invoke(temporaryId.tempID)
+            onTempIdUpdate?.invoke(temporaryId.tempID)
             //ProtegoSafe additional code end
             return temporaryId
 

@@ -31,7 +31,7 @@ class OpenTraceWrapper(
     private val functions: FirebaseFunctions
 ) : OpenTraceRepository {
     init {
-        TempIDManager.setOntTempIdUpdate { tempIdSubject.onNext(it) }
+        TempIDManager.setOnTempIdUpdate { tempIdSubject.onNext(it) }
     }
 
     private val tempIdSubject: BehaviorSubject<String> = BehaviorSubject.create()
