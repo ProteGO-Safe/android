@@ -29,7 +29,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val loadingDialog by lazy {
-        LoadingDialog.newInstance(getString(R.string.please_wait))
+        LoadingDialog.newInstance(getString(R.string.please_wait)).apply {
+            isCancelable = false
+        }
     }
     private var safetyNetAlertDialog: AlertDialog? = null
 
