@@ -94,7 +94,7 @@ class OpenTraceWrapper(
                     status
                 )
             }
-        ).map {exportData ->
+        ).map { exportData ->
             val date = Utils.getDateFromUnix(System.currentTimeMillis())
             val gson = Gson()
 
@@ -134,6 +134,10 @@ class OpenTraceWrapper(
             fileOutputStream.close()
             fileToUpload
         }.firstOrError()
+    }
 
+    override fun clearTracingData() {
+        StreetPassRecordStorage(context).nukeDb()
+        StatusRecordStorage(context).nukeDb()
     }
 }

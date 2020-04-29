@@ -12,10 +12,13 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.di.dataModule
-import pl.gov.mc.protegosafe.di.*
+import pl.gov.mc.protegosafe.di.appModule
+import pl.gov.mc.protegosafe.di.deviceModule
+import pl.gov.mc.protegosafe.di.safetyNetModule
+import pl.gov.mc.protegosafe.di.useCaseModule
+import pl.gov.mc.protegosafe.di.viewModelModule
 import pl.gov.mc.protegosafe.domain.DumpTraceDataUseCase
 import timber.log.Timber
-
 
 class App : TracerApp() {
 

@@ -1,7 +1,9 @@
 package pl.gov.mc.protegosafe.data.mapper
 
 import pl.gov.mc.protegosafe.data.BuildConfig
+import pl.gov.mc.protegosafe.data.model.ClearData
 import pl.gov.mc.protegosafe.data.model.TriageData
+import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import pl.gov.mc.protegosafe.domain.model.TriageItem
@@ -23,3 +25,5 @@ fun Map<String, String>.toNotificationDataItem(topic: String?) = PushNotificatio
 )
 
 fun TriageData.toEntity() = TriageItem(timestamp = timestamp)
+
+fun ClearData.toEntity() = ClearItem(clearBtData = clearBtData)

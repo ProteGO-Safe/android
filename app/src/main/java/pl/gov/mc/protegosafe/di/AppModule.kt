@@ -24,7 +24,7 @@ val appModule = module {
 
 val useCaseModule = module {
     factory { OnGetBridgeDataUseCase(get(), get(), get()) }
-    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get()) }
+    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
@@ -32,13 +32,14 @@ val useCaseModule = module {
     factory { StopBLEMonitoringServiceUseCase(get()) }
     factory { SetBroadcastMessageUseCase(get()) }
     factory { GetTemporaryIDsUseCase(get(), get()) }
-    factory { SignInUseCase(get(), get(), get()) }
-    factory { SignInAndStartBLEMonitoringServiceUseCase(get(), get(), get()) }
+    factory { SignInUseCase(get(), get()) }
+    factory { SignInAndStartBLEMonitoringServiceUseCase(get(), get()) }
     factory { GetSafetyNetNonceDataUseCase(get())}
     factory { GetInternetConnectionStatusUseCase(get()) }
     factory { GetServicesStatusUseCase(get()) }
     factory { GetTrackingAgreementStatusUseCase(get()) }
-    factory { EnableBTServiceUseCase(get(), get(), get(), get(), get()) }
+    factory { EnableBTServiceUseCase(get(), get(), get(), get()) }
+    factory { ClearBtDataUseCase(get(), get()) }
     factory { DumpTraceDataUseCase(get(), get()) }
     factory { TrackTempIdUseCase(get(), get()) }
     factory { GetCurrentTemporaryIDUseCase(get()) }

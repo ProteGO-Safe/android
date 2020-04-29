@@ -25,8 +25,8 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 8
-        versionName "Develop-3.1.0.1"
+        versionCode 10
+        versionName "Develop-3.1.0-1"
 
         buildConfigField "String", "SAFETYNET_API_KEY", SAFETYNET_API_KEY
 
@@ -181,7 +181,6 @@ dependencies {
     // SafetyNet
     implementation "com.google.android.gms:play-services-safetynet:17.0.0"
 
-    //TODO: remove bluetrace dependency, added temporarly for some shortcuts in testing features:
     implementation project(path: ':opentrace')
 
 }
