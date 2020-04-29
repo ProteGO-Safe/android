@@ -11,10 +11,8 @@ import io.reactivex.rxkotlin.subscribeBy
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
-import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
-import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.*
+import pl.gov.mc.protegosafe.mapper.TempIdJsonSerializer
 import pl.gov.mc.protegosafe.ui.common.BaseViewModel
 import pl.gov.mc.protegosafe.ui.common.livedata.SingleLiveEvent
 import timber.log.Timber
@@ -23,7 +21,9 @@ class HomeViewModel(
     private val onSetBridgeDataUseCase: OnSetBridgeDataUseCase,
     private val servicesStatusUseCase: GetServicesStatusUseCase,
     private val onGetBridgeDataUseCase: OnGetBridgeDataUseCase,
-    private val internetConnectionStatusUseCase: GetInternetConnectionStatusUseCase
+    private val internetConnectionStatusUseCase: GetInternetConnectionStatusUseCase,
+    trackTempIdUseCase: TrackTempIdUseCase,
+    private val tempIdJsonSerializer: TempIdJsonSerializer
 ) : BaseViewModel() {
 
     companion object {
@@ -32,6 +32,20 @@ class HomeViewModel(
             WebViewClient.ERROR_CONNECT,
             WebViewClient.ERROR_TIMEOUT
         )
+    }
+
+    init {
+        trackTempIdUseCase.execute()
+            .subscribeBy(
+                onNext = {
+                    Timber.d("New temp id: $it")
+                    onBridgeData(
+                        OutgoingBridgeDataType.TEMP_ID_CHANGE.code,
+                        tempIdJsonSerializer.toJson(it)
+                    )
+                },
+                onError = { Timber.e(it, "Problems with tracking tempId") }
+            ).addTo(disposables)
     }
 
     private val _javascriptCode = MutableLiveData<String>()

@@ -16,6 +16,7 @@ import io.bluetrace.opentrace.streetpass.persistence.StreetPassRecordStorage
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import io.reactivex.subjects.BehaviorSubject
 import pl.gov.mc.protegosafe.domain.model.TemporaryIDItem
 import pl.gov.mc.protegosafe.domain.repository.OpenTraceRepository
 import pl.gov.mc.protegosafe.mapper.toCompletable
@@ -29,6 +30,15 @@ class OpenTraceWrapper(
     private val context: Context,
     private val functions: FirebaseFunctions
 ) : OpenTraceRepository {
+    init {
+        TempIDManager.setOnTempIdUpdate { tempIdSubject.onNext(it) }
+    }
+
+    private val tempIdSubject: BehaviorSubject<String> = BehaviorSubject.create()
+
+    override val trackTempId: Observable<String>
+        get() = tempIdSubject.hide().distinctUntilChanged()
+
     override fun startBLEMonitoringService(delay: Long) {
         if (delay == 0L) {
             Utils.startBluetoothMonitoringService(context)
