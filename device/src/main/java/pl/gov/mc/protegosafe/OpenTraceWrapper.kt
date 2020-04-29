@@ -23,7 +23,6 @@ import pl.gov.mc.protegosafe.mapper.TempIdJsonSerializer
 import pl.gov.mc.protegosafe.mapper.toCompletable
 import pl.gov.mc.protegosafe.mapper.toDeviceModel
 import pl.gov.mc.protegosafe.mapper.toDomainModel
-import pl.gov.mc.protegosafe.trace.notifications.ServiceStatusDataStore
 import java.io.File
 import java.io.FileOutputStream
 
@@ -70,10 +69,6 @@ class OpenTraceWrapper(
 
     override fun setBLEBroadcastMessage(temporaryID: TemporaryIDItem) {
         BluetoothMonitoringService.broadcastMessage = temporaryID.toDeviceModel()
-    }
-
-    override fun getBLEServiceStatus(): Boolean {
-        return ServiceStatusDataStore.isWorking
     }
 
     override fun dumpTraceData(uploadToken: String): Single<File> {

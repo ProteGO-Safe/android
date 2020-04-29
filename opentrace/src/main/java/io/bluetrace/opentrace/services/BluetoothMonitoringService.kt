@@ -44,7 +44,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import pl.gov.mc.protegosafe.trace.notifications.ServiceStatusDataStore
 import pub.devrel.easypermissions.EasyPermissions
 import java.lang.ref.WeakReference
 import kotlin.coroutines.CoroutineContext
@@ -154,7 +153,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             var notif =
                 NotificationTemplates.lackingThingsNotification(this.applicationContext, CHANNEL_ID)
             startForeground(NOTIFICATION_ID, notif)
-            ServiceStatusDataStore.isWorking = false
             notificationShown = NOTIFICATION_STATE.LACKING_THINGS
         }
     }
@@ -164,7 +162,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
             var notif =
                 NotificationTemplates.getRunningNotification(this.applicationContext, CHANNEL_ID)
             startForeground(NOTIFICATION_ID, notif)
-            ServiceStatusDataStore.isWorking = true
             notificationShown = NOTIFICATION_STATE.RUNNING
         }
     }
