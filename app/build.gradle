@@ -57,16 +57,19 @@ android {
             buildConfigField "String", "WEB", DEV_WEB_URL
             applicationIdSuffix ".dev"
             versionNameSuffix '-DEV'
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
         }
         stage {
             dimension "mode"
             buildConfigField "String", "WEB", STAGE_WEB_URL
             applicationIdSuffix ".stage"
             versionNameSuffix '-STAGE'
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
         }
         prod {
             dimension "mode"
             buildConfigField "String", "WEB", PROD_WEB_URL
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"false"]
         }
     }
 }
