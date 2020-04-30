@@ -45,11 +45,6 @@ class MainActivity : AppCompatActivity() {
         createNotificationChannel()
         if (BuildConfig.DEBUG) {
             requestDebugModePermissions()
-        } else {
-            // Enable SafetyNet only for Production Release build
-            if (BuildConfig.FLAVOR == "prod") {
-                observerSafetyNetResult()
-            }
         }
     }
 
