@@ -39,7 +39,7 @@ class DeviceRepositoryImpl(
             (context.getSystemService(AppCompatActivity.POWER_SERVICE) as? PowerManager)
                 ?.isIgnoringBatteryOptimizations(context.packageName) == false
         } else {
-            true
+            false
         }
     }
 
