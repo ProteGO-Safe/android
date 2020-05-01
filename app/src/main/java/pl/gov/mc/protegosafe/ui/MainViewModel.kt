@@ -2,12 +2,10 @@ package pl.gov.mc.protegosafe.ui
 
 import io.reactivex.rxkotlin.addTo
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetTrackingAgreementStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveNotificationDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SignInAndStartBLEMonitoringServiceUseCase
-import pl.gov.mc.protegosafe.manager.SafetyNetManager
 import pl.gov.mc.protegosafe.ui.common.BaseViewModel
 import timber.log.Timber
 
@@ -16,9 +14,7 @@ class MainViewModel(
     signInAndStartBLEMonitoringServiceUseCase: SignInAndStartBLEMonitoringServiceUseCase,
     private val getInternetConnectionStatusUseCase: GetInternetConnectionStatusUseCase,
     getTrackingAgreementStatusUseCase: GetTrackingAgreementStatusUseCase
-): BaseViewModel(), KoinComponent {
-
-    private val safetyNetManager: SafetyNetManager by inject()
+) : BaseViewModel(), KoinComponent {
 
     init {
         if (getTrackingAgreementStatusUseCase.execute()) {
@@ -37,8 +33,4 @@ class MainViewModel(
     }
 
     fun isInternetConnectionAvailable() = getInternetConnectionStatusUseCase.execute().isConnected()
-
-    fun getSafetyNetResultData() = safetyNetManager.safetyNetResult
-
-    fun startSafetyNetVerification() = safetyNetManager.startDeviceVerification()
 }

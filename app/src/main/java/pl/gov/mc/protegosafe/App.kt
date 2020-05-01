@@ -14,7 +14,6 @@ import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.di.dataModule
 import pl.gov.mc.protegosafe.di.appModule
 import pl.gov.mc.protegosafe.di.deviceModule
-import pl.gov.mc.protegosafe.di.safetyNetModule
 import pl.gov.mc.protegosafe.di.useCaseModule
 import pl.gov.mc.protegosafe.di.viewModelModule
 import pl.gov.mc.protegosafe.domain.DumpTraceDataUseCase
@@ -33,8 +32,7 @@ class App : TracerApp() {
 
         startKoin {
             androidContext(this@App)
-            modules(appModule, deviceModule, useCaseModule, dataModule, viewModelModule,
-                safetyNetModule)
+            modules(appModule, deviceModule, useCaseModule, dataModule, viewModelModule)
         }
 
         initializeFcm()
