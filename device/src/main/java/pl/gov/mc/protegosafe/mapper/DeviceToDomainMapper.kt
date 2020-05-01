@@ -16,7 +16,9 @@ fun TemporaryID.toDomainModel() = TemporaryIDItem(
 
 fun Task<HttpsCallableResult>.toCompletable() = Completable.create { emitter ->
     this.addOnCompleteListener {
-        if (it.isSuccessful) emitter.onComplete() else emitter.onError(it.exception as Throwable)
+        if (!emitter.isDisposed) {
+            if (it.isSuccessful) emitter.onComplete() else emitter.onError(it.exception as Throwable)
+        }
     }
 }
 

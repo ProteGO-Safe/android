@@ -40,16 +40,20 @@ import io.bluetrace.opentrace.streetpass.StreetPassServer
 import io.bluetrace.opentrace.streetpass.StreetPassWorker
 import io.bluetrace.opentrace.streetpass.persistence.StreetPassRecord
 import io.bluetrace.opentrace.streetpass.persistence.StreetPassRecordStorage
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import pl.gov.mc.protegosafe.trace.extension.toCompletable
 import pub.devrel.easypermissions.EasyPermissions
 import java.lang.ref.WeakReference
 import kotlin.coroutines.CoroutineContext
 import pl.gov.mc.protegosafe.trace.notifications.ProteGoSafeNotificationTemplates as NotificationTemplates
 
 class BluetoothMonitoringService : Service(), CoroutineScope {
+
+    private val compositeDisposable = CompositeDisposable()
 
     private var mNotificationManager: NotificationManager? = null
 
@@ -309,17 +313,22 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
     private fun actionStart() {
         CentralLog.d(TAG, "Action Start")
 
-        TempIDManager.getTemporaryIDs(this, functions)
-            .addOnCompleteListener {
-                CentralLog.d(TAG, "Get  completed")
-                //this will run whether it starts or fails.
-                var fetch = TempIDManager.retrieveTemporaryID(this.applicationContext)
+        compositeDisposable.add(
+            TempIDManager.getTemporaryIDs(this, functions).toCompletable()
+                .subscribe({
+                    //Code from  original addOnCompleteListener
+                    CentralLog.d(TAG, "Get  completed")
+                    //this will run whether it starts or fails.
+                    var fetch = TempIDManager.retrieveTemporaryID(this.applicationContext)
 
-                fetch?.let {
-                    broadcastMessage = it
-                    setupCycles()
-                }
-            }
+                    fetch?.let {
+                        broadcastMessage = it
+                        setupCycles()
+                    }
+                }, {
+                    CentralLog.d(TAG, it.message.toString())
+                })
+        )
     }
 
     fun actionUpdateBm() {
@@ -522,10 +531,11 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        compositeDisposable.clear()
         CentralLog.i(TAG, "BluetoothMonitoringService destroyed - tearing down")
         stopService()
         CentralLog.i(TAG, "BluetoothMonitoringService destroyed")
+        super.onDestroy()
     }
 
     private fun stopService() {
@@ -534,6 +544,8 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
 
         worker?.terminateConnections()
         worker?.unregisterReceivers()
+
+        advertiser?.stopAdvertising()
 
         job.cancel()
     }
