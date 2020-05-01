@@ -65,7 +65,6 @@ To get started on the app, setup and configure the following:
 | PROD_WEB_URL                       | PWA URL - prod build flavour                                 |
 | STAGE_WEB_URL                      | PWA URL - stage build flavour                                |
 | DEV_WEB_URL                        | PWA URL - dev build flavour                                  |
-| SAFETYNET_API_KEY                  | Api key for safetynet                                        |
 
 ### Firebase and google-services.json
 Setup Firebase for the different environment.
