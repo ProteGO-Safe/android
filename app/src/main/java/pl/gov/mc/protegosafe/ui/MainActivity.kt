@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 
         saveNotificationData(intent)
         createNotificationChannel()
-        observerSafetyNetResult()
         if (BuildConfig.DEBUG) {
             requestDebugModePermissions()
         }
