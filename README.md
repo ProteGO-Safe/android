@@ -100,3 +100,9 @@ Added OpenTrace module for collecting BLE contacts
 Improved Bluetooth module operation
 
 Added support for deleting all data collected by Bluetooth module
+
+3.0.3
+
+Fixed wrong condition for battery optimization check for Android 5
+
+SafetyNet check disabled
