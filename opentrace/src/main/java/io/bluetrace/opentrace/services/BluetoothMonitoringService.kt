@@ -702,8 +702,6 @@ class BluetoothMonitoringService : Service(), CoroutineScope {
         private val CHANNEL_ID = BuildConfig.SERVICE_FOREGROUND_CHANNEL_ID
         val CHANNEL_SERVICE = BuildConfig.SERVICE_FOREGROUND_CHANNEL_NAME
 
-        val PUSH_NOTIFICATION_ID = BuildConfig.PUSH_NOTIFICATION_ID
-
         val COMMAND_KEY = "${BuildConfig.APPLICATION_ID}_CMD"
 
         val PENDING_ACTIVITY = 5

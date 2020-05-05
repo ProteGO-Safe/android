@@ -54,9 +54,6 @@ android {
         buildConfigField "String", "SERVICE_FOREGROUND_CHANNEL_ID", SERVICE_FOREGROUND_CHANNEL_ID
         buildConfigField "String", "SERVICE_FOREGROUND_CHANNEL_NAME", SERVICE_FOREGROUND_CHANNEL_NAME
 
-        buildConfigField "int", "PUSH_NOTIFICATION_ID", PUSH_NOTIFICATION_ID
-        buildConfigField "String", "PUSH_NOTIFICATION_CHANNEL_NAME", PUSH_NOTIFICATION_CHANNEL_NAME
-
         buildConfigField "long", "SCAN_DURATION", SCAN_DURATION
         buildConfigField "long", "MIN_SCAN_INTERVAL", MIN_SCAN_INTERVAL
         buildConfigField "long", "MAX_SCAN_INTERVAL", MAX_SCAN_INTERVAL

@@ -21,14 +21,14 @@ class PushNotifierImpl(private val context: Context): PushNotifier {
     override fun showNotificationWithData(title: String, content: String, data: String) {
         val notification = createNotification(title, content, data)
         notificationManager?.let {
-            it.notify(Consts.NOTIFICATION_PUSH_ID, notification)
+            it.notify(Consts.GENERAL_NOTIFICATION_PUSH_ID, notification)
             Timber.d("Show notification: $title, $content")
         } ?: Timber.d("Show notification failed")
     }
 
     private fun createNotification(title: String, content: String, data: String): Notification {
         val notificationIntent = Intent(context, MainActivity::class.java).apply {
-            putExtra(Consts.NOTIFICATION_EXTRA_DATA, data)
+            putExtra(Consts.GENERAL_NOTIFICATION_EXTRA_DATA, data)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
@@ -38,7 +38,7 @@ class PushNotifierImpl(private val context: Context): PushNotifier {
             notificationIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        return NotificationCompat.Builder(context, Consts.NOTIFICATION_CHANNEL_ID)
+        return NotificationCompat.Builder(context, Consts.GENERAL_NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
