@@ -59,7 +59,7 @@
     <string name="upload_data">Upload Data</string>
     <string name="for_official_use">For use by contact tracers</string>
     <string name="data_uploaded">Data has been uploaded to contact tracers</string>
-    <string name="upload_agreement">By uploading, you agree to share with OTC your OpenTrace proximity data for the past 21 days. <b>We do not collect any geolocation or personal data.</b></string>
+    <string name="upload_agreement">By uploading, you agree to share with OTC your OpenTrace proximity data for the past 14 days. <b>We do not collect any geolocation or personal data.</b></string>
     <string name="enter_code">Enter Code</string>
     <string name="submit">Submit</string>
     <string name="open_location_setting">Application needs location permission in order to work. Do you want to enable location permission?</string>
