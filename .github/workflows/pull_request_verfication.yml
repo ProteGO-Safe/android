@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - master
+
+jobs:
+  testing:
+    name: Pull Request Verification
+    runs-on: ubuntu-latest
+    env:
+      PROTEGO_KEYSTORE_DEBUG_FILE: protegosafe-debug.jks
+      PROTEGO_KEYSTORE_DEBUG_ALIAS: ${{ secrets.DEBUG_KEYSTORE_ALIAS }}
+      PROTEGO_KEYSTORE_DEBUG_PASSWORD: ${{ secrets.DEBUG_KEYSTORE_STORE_PASSWORD }}
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v1
+
+      - name: Setup Environment (JDK)
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Setup Environment (Keystore)
+        run: |
+          echo "${{ secrets.DEBUG_KEYSTORE }}" > debug.keystore.asc
+          gpg -d --passphrase "${{ secrets.DEBUG_KEYSTORE_PASSWORD }}" --batch debug.keystore.asc > $PROTEGO_KEYSTORE_DEBUG_FILE
+
+      - name: Cleanup
+        run: ./gradlew clean -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Run Unit Tests
+        run: ./gradlew testStageDebugUnitTest -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Assemble Application
+        run: ./gradlew assembleDebug -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
