@@ -61,21 +61,27 @@ class App : TracerApp() {
                 Timber.d("FCM token $token")
             })
 
-        FirebaseMessaging.getInstance().subscribeToTopic(BuildConfig.MAIN_TOPIC)
-            .addOnCompleteListener { task ->
-                Timber.d(
-                    if (!task.isSuccessful) "FCM MAIN topic subscribe success"
-                    else "FCM MAIN topic subscribe failed"
-                )
-            }
+        BuildConfig.MAIN_TOPIC.let {
+            FirebaseMessaging.getInstance().subscribeToTopic(it)
+                .addOnCompleteListener { task ->
+                    Timber.d(
+                        if (task.isSuccessful) "FCM MAIN topic subscribe success - $it"
+                        else "FCM MAIN topic subscribe failed - $it"
+                    )
+                }
+        }
 
-        FirebaseMessaging.getInstance().subscribeToTopic(BuildConfig.DAILY_TOPIC)
-            .addOnCompleteListener { task ->
-                Timber.d(
-                    if (!task.isSuccessful) "FCM DAILY topic subscribe success"
-                    else "FCM DAILY topic subscribe failed"
-                )
-            }
+
+        BuildConfig.DAILY_TOPIC.let {
+            FirebaseMessaging.getInstance().subscribeToTopic(it)
+                .addOnCompleteListener { task ->
+                    Timber.d(
+                        if (task.isSuccessful) "FCM DAILY topic subscribe success - $it"
+                        else "FCM DAILY topic subscribe failed - $it"
+                    )
+                }
+        }
+
     }
 
     private fun initializeStetho() {

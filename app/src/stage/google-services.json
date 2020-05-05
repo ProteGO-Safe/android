@@ -1,0 +1,101 @@
+{
+  "project_info": {
+    "project_number": "857351025736",
+    "firebase_url": "https://safesafe-test.firebaseio.com",
+    "project_id": "safesafe-test",
+    "storage_bucket": "safesafe-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:857351025736:android:ddca328fb869515828947d",
+        "android_client_info": {
+          "package_name": "pl.gov.mc.protegosafe.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "857351025736-1067ntee14g5mq1eqvb71baiv6b1m2u8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.gov.mc.protegosafe.dev",
+            "certificate_hash": "b888ac57233d296d591b360760815050c0bb7d19"
+          }
+        },
+        {
+          "client_id": "857351025736-nvl7599l63fscvdd1pilbk9lo5i6gdgp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.gov.mc.protegosafe.dev",
+            "certificate_hash": "0d4e43c8567014cc63d72a1c8809620412768bf9"
+          }
+        },
+        {
+          "client_id": "857351025736-54cq9t4akgr7b7jsmogju9dudh3e1tf3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMrsbpi3dpVf3AJJsoqiyyYTTKYNGUhmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "857351025736-54cq9t4akgr7b7jsmogju9dudh3e1tf3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:857351025736:android:36e52f99b6f41b8928947d",
+        "android_client_info": {
+          "package_name": "pl.gov.mc.protegosafe.stage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "857351025736-043mgu9vhdt358um7j4b243n7jou1b0f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.gov.mc.protegosafe.stage",
+            "certificate_hash": "b888ac57233d296d591b360760815050c0bb7d19"
+          }
+        },
+        {
+          "client_id": "857351025736-pue8j9d369gva6dd1toggs4lbp9nobo1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.gov.mc.protegosafe.stage",
+            "certificate_hash": "0d4e43c8567014cc63d72a1c8809620412768bf9"
+          }
+        },
+        {
+          "client_id": "857351025736-54cq9t4akgr7b7jsmogju9dudh3e1tf3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMrsbpi3dpVf3AJJsoqiyyYTTKYNGUhmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "857351025736-54cq9t4akgr7b7jsmogju9dudh3e1tf3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

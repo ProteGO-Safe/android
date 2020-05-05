@@ -47,7 +47,6 @@ android {
         buildConfigField "String", "PRIVACY_URL", PRIVACY_URL
         buildConfigField "String", "MAIN_URL", MAIN_URL
 
-        buildConfigField "String", "FIREBASE_REGION", FIREBASE_REGION
         buildConfigField "String", "FIREBASE_APP_KEY", FIREBASE_APP_KEY
 
         buildConfigField "String", "ORG", ORG
@@ -78,9 +77,6 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "FIREBASE_UPLOAD_BUCKET", STAGING_FIREBASE_UPLOAD_BUCKET
-            buildConfigField "String", "BLE_SSID", STAGING_SERVICE_UUID
-
             String ssid = STAGING_SERVICE_UUID
             versionNameSuffix "-debug-${getGitHash()}-${ssid.substring(ssid.length() - 5, ssid.length() - 1)}"
             resValue "string", "app_name", "OpenTrace Debug"
@@ -88,10 +84,6 @@ android {
         }
 
         release {
-
-            buildConfigField "String", "FIREBASE_UPLOAD_BUCKET", PRODUCTION_FIREBASE_UPLOAD_BUCKET
-            buildConfigField "String", "BLE_SSID", PRODUCTION_SERVICE_UUID
-
             debuggable false
             jniDebuggable false
             renderscriptDebuggable false
@@ -104,6 +96,28 @@ android {
                 // Ignore lint errors for now
                 abortOnError false
             }
+        }
+    }
+
+    flavorDimensions "mode"
+    productFlavors {
+        dev {
+            dimension "mode"
+            buildConfigField "String", "FIREBASE_UPLOAD_BUCKET", STAGING_FIREBASE_UPLOAD_BUCKET
+            buildConfigField "String", "BLE_SSID", STAGING_SERVICE_UUID
+            buildConfigField "String", "FIREBASE_REGION", STAGING_FIREBASE_REGION
+        }
+        stage {
+            dimension "mode"
+            buildConfigField "String", "FIREBASE_UPLOAD_BUCKET", STAGING_FIREBASE_UPLOAD_BUCKET
+            buildConfigField "String", "BLE_SSID", STAGING_SERVICE_UUID
+            buildConfigField "String", "FIREBASE_REGION", STAGING_FIREBASE_REGION
+        }
+        prod {
+            dimension "mode"
+            buildConfigField "String", "FIREBASE_UPLOAD_BUCKET", PRODUCTION_FIREBASE_UPLOAD_BUCKET
+            buildConfigField "String", "BLE_SSID", PRODUCTION_SERVICE_UUID
+            buildConfigField "String", "FIREBASE_REGION", PRODUCTION_FIREBASE_REGION
         }
     }
 
