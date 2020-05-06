@@ -34,6 +34,9 @@ object TempIDManager {
         val file = File(context.filesDir, "tempIDs")
         if (file.exists()) {
             val readback = file.readText()
+            if (readback.isBlank()) {
+                return null
+            }
             CentralLog.d(TAG, "[TempID] fetched broadcastmessage from file:  $readback")
             var tempIDArrayList =
                 convertToTemporaryIDs(
