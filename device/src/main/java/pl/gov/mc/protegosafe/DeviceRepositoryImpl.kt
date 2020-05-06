@@ -1,11 +1,15 @@
 package pl.gov.mc.protegosafe
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
@@ -34,12 +38,23 @@ class DeviceRepositoryImpl(
             ?.isEnabled == true
     }
 
+    @SuppressLint("BatteryLife")
     override fun isBatteryOptimizationOn(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.packageName?.let { packageName ->
+                Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).let { intent ->
+                    intent.data = Uri.parse("package:$packageName")
+                    context.packageManager?.let {
+                        if (intent.resolveActivity(it) == null) {
+                            return false
+                        }
+                    }
+                }
+            }
             (context.getSystemService(AppCompatActivity.POWER_SERVICE) as? PowerManager)
                 ?.isIgnoringBatteryOptimizations(context.packageName) == false
         } else {
-            true
+            false
         }
     }
 
