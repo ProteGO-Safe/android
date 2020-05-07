@@ -133,8 +133,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation deps.androidx_appcompat_appcompat
+    implementation deps.jetbrains.kotlin_stdlib
+    implementation deps.androidx.appcompat_appcompat
     implementation 'androidx.core:core-ktx:1.1.0'
     implementation group: 'androidx.localbroadcastmanager', name: 'localbroadcastmanager', version: '1.0.0-alpha3'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

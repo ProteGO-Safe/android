@@ -52,32 +52,31 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation deps.androidx_appcompat_appcompat
-    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation deps.jetbrains.kotlin_stdlib
+    implementation deps.androidx.appcompat_appcompat
+    implementation deps.androidx.core_ktx
 
     //Room
-    def room_version = "2.2.5"
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
+    implementation deps.room.runtime
+    kapt deps.room.compiler
+    implementation deps.room.ktx
+    implementation deps.room.rxjava2
 
     //koin
-    implementation "org.koin:koin-android:2.1.5"
+    implementation deps.koin.android
 
     //Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation deps.timber.timber
 
     //Gson
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation deps.google.gson
 
     //Firebase
-    implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation deps.google.firebase_auth
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation deps.tests.junit
+    androidTestImplementation deps.tests.junit_androidx_ext
+    androidTestImplementation deps.tests.espresso
 
     implementation project(path: ":domain")
 }

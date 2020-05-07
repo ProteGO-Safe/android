@@ -3,16 +3,16 @@ apply plugin: 'kotlin'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation deps.jetbrains.kotlin_stdlib
 
     //rx
-    implementation "io.reactivex.rxjava2:rxjava:2.2.17"
-    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    implementation deps.rx.rxjava
+    implementation deps.rx.rxkotlin
 
     //Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation deps.timber.timber
     //Time
-    implementation "com.jakewharton.threetenabp:threetenabp:1.2.1"
+    implementation deps.time.threetenabp
 }
 
 sourceCompatibility = "7"
