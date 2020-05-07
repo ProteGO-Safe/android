@@ -31,10 +31,8 @@ val useCaseModule = module {
     factory { StartBLEMonitoringServiceUseCase(get()) }
     factory { StopBLEMonitoringServiceUseCase(get()) }
     factory { SetBroadcastMessageUseCase(get()) }
-    factory { GetTemporaryIDsUseCase(get(), get()) }
     factory { SignInUseCase(get(), get()) }
     factory { SignInAndStartBLEMonitoringServiceUseCase(get(), get()) }
-    factory { GetSafetyNetNonceDataUseCase(get())}
     factory { GetInternetConnectionStatusUseCase(get()) }
     factory { GetServicesStatusUseCase(get()) }
     factory { GetTrackingAgreementStatusUseCase(get()) }
