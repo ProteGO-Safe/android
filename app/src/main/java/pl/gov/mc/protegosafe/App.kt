@@ -1,7 +1,5 @@
 package pl.gov.mc.protegosafe
 
-import android.app.Application
-import android.os.Trace
 import com.facebook.stetho.Stetho
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
@@ -11,9 +9,12 @@ import io.bluetrace.opentrace.TracerApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import pl.gov.mc.protegosafe.data.di.dataModule
+import pl.gov.mc.protegosafe.di.appModule
+import pl.gov.mc.protegosafe.di.deviceModule
+import pl.gov.mc.protegosafe.di.useCaseModule
+import pl.gov.mc.protegosafe.di.viewModelModule
 import timber.log.Timber
 import pl.gov.mc.protegosafe.data.BuildConfig
-import pl.gov.mc.protegosafe.di.*
 
 class App : TracerApp() {
 
@@ -24,8 +25,7 @@ class App : TracerApp() {
 
         startKoin {
             androidContext(this@App)
-            modules(appModule, deviceModule, useCaseModule, dataModule, viewModelModule,
-                safetyNetModule)
+            modules(appModule, deviceModule, useCaseModule, dataModule, viewModelModule)
         }
 
         initializeFcm()

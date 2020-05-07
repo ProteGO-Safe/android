@@ -4,22 +4,16 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.ActivityMainBinding
-import pl.gov.mc.protegosafe.manager.SafetyNetManager.SafetyNetResult
-import pl.gov.mc.protegosafe.ui.dialog.AlertDialogBuilder
-import pl.gov.mc.protegosafe.ui.dialog.LoadingDialog
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
@@ -27,11 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     private val vm: MainViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
-
-    private val loadingDialog by lazy {
-        LoadingDialog.newInstance(getString(R.string.please_wait))
-    }
-    private var safetyNetAlertDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,61 +46,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun observerSafetyNetResult() {
-        loadingDialog.show(supportFragmentManager, LoadingDialog.TAG)
-        vm.getSafetyNetResultData().observe(this, Observer { result ->
-            Timber.d("safetyNetResult: $result")
-            dismissDialogs()
-            handleSafetyNetUi(result)
-        })
-    }
-
-    private fun dismissDialogs() {
-        loadingDialog.dismissAllowingStateLoss()
-        safetyNetAlertDialog?.let { dialog ->
-            dialog.dismiss()
-            safetyNetAlertDialog = null
-        }
-    }
-
-    private fun handleSafetyNetUi(result: SafetyNetResult) {
-        // TODO: Handle SafetyNet UI with PWA.
-        when (result) {
-            is SafetyNetResult.Failure.ConnectionError -> {
-                safetyNetAlertDialog = if (vm.isInternetConnectionAvailable()) {
-                    getSafetyNetAlertDialog(result)
-                } else {
-                    getInternetConnectionDialog()
-                }
-            }
-            is SafetyNetResult.Failure.UpdatePlayServicesError,
-            is SafetyNetResult.Failure.SafetyError,
-            is SafetyNetResult.Failure.UnknownError ->
-                safetyNetAlertDialog = getSafetyNetAlertDialog(result)
-        }
-
-        safetyNetAlertDialog?.show()
-    }
-
-    private fun getSafetyNetAlertDialog(result: SafetyNetResult): AlertDialog? {
-        return AlertDialogBuilder.getSafetyNetErrorAlertDialog(
-            context = this,
-            result = result,
-            onClickListener = DialogInterface.OnClickListener { _, _ ->
-                startSafetyNetVerification()
-            }
-        )
-    }
-
-    private fun getInternetConnectionDialog(): AlertDialog {
-        return AlertDialogBuilder.getInternetConnectionAlertDialog(
-            context = this,
-            onClickListener = DialogInterface.OnClickListener { _, _ ->
-                startSafetyNetVerification()
-            }
-        )
-    }
-
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
@@ -127,11 +61,6 @@ class MainActivity : AppCompatActivity() {
                 Timber.d("createNotificationChannel: ${serviceChannel.id}")
             }
         }
-    }
-
-    private fun startSafetyNetVerification() {
-        loadingDialog.show(supportFragmentManager, LoadingDialog.TAG)
-        vm.startSafetyNetVerification()
     }
 
     private fun requestDebugModePermissions() {
