@@ -42,8 +42,6 @@ To get started on the app, setup and configure the following:
 | SERVICE_FOREGROUND_NOTIFICATION_ID | ID for tracing service notifications                         |
 | SERVICE_FOREGROUND_CHANNEL_ID      | ID for tracing service notifications channel                 |
 | SERVICE_FOREGROUND_CHANNEL_NAME    | Name of tracing service notifications channel                |
-| PUSH_NOTIFICATION_ID               | ID for push notifications                                    |
-| PUSH_NOTIFICATION_CHANNEL_NAME     | Name for push notifications channel                          |
 | SCAN_DURATION                      | Duration of BLE scan [ms]                                    |
 | MIN_SCAN_INTERVAL                  | Minimum interval between BLE scans [ms]                      |
 | MAX_SCAN_INTERVAL                  | Maximum interval between BLE scans [ms]                      |
