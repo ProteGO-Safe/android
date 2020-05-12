@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  schedule:
+    - cron: '* 9 * * *' # TODO: run at 3 AM UTC
+
+jobs:
+  nightly:
+    name: Nightly Build
+    runs-on: ubuntu-latest
+    env:
+      PROTEGO_KEYSTORE_DEBUG_FILE: protegosafe-debug.jks
+      PROTEGO_KEYSTORE_DEBUG_ALIAS: ${{ secrets.DEBUG_KEYSTORE_ALIAS }}
+      PROTEGO_KEYSTORE_DEBUG_PASSWORD: ${{ secrets.DEBUG_KEYSTORE_STORE_PASSWORD }}
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v1
+        with:
+          ref: dev
+
+      - name: Setup Environment (JDK)
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Setup Environment (Keystore)
+        run: |
+          echo "${{ secrets.DEBUG_KEYSTORE }}" > debug.keystore.asc
+          gpg -d --passphrase "${{ secrets.DEBUG_KEYSTORE_PASSWORD }}" --batch debug.keystore.asc > $PROTEGO_KEYSTORE_DEBUG_FILE
+          cp $PROTEGO_KEYSTORE_DEBUG_FILE app/$PROTEGO_KEYSTORE_DEBUG_FILE
+
+      - name: Cleanup
+        run: ./gradlew clean -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Run Unit Tests
+        run: ./gradlew testStageReleaseUnitTest -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Assemble Stage Release (Signed Debug Keystore)
+        run: ./gradlew assembleStageRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_DEBUG_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_DEBUG_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Conventional Changelog Action
+        uses: TriPSs/conventional-changelog-action@v2
+        with:
+          github-token: ${{ secrets.github_token }}
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: app
+          path: app/build/outputs/apk/stage/release/app-stage-release.apk
+
+      - name: Upload Mapping
+        uses: actions/upload-artifact@v1
+        with:
+          name: mapping
+          path: app/build/outputs/mapping/stageRelease/mapping.txt
