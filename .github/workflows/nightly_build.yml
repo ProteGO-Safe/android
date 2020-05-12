@@ -2,7 +2,7 @@ name: NIGHTLY
 
 on:
   schedule:
-    - cron: '* 12 * * *' # TODO: run at 3 AM UTC
+    - cron: '0 3 * * *'
 
 jobs:
   nightly:
