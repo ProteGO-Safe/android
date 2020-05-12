@@ -1,4 +1,4 @@
-name: CI
+name: NIGHTLY
 
 on:
   schedule:
@@ -39,10 +39,10 @@ jobs:
       - name: Assemble Stage Release (Signed Debug Keystore)
         run: ./gradlew assembleStageRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_DEBUG_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_DEBUG_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
 
-      - name: Conventional Changelog Action
-        uses: TriPSs/conventional-changelog-action@v2
-        with:
-          github-token: ${{ secrets.github_token }}
+      - name: Create Changelog
+        uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v1
