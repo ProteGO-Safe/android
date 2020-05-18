@@ -46,6 +46,8 @@ versions.rxjava = "2.2.18"
 versions.rxandroid = "2.1.1"
 versions.rxkotlin = "2.4.0"
 
+versions.ktlint = "0.36.0"
+
 def deps = [:]
 
 def gradle_plugin = [:]
@@ -151,5 +153,9 @@ deps.hyperion = hyperion
 def time = [:]
 time.threetenabp = "com.jakewharton.threetenabp:threetenabp:$versions.threetenabp"
 deps.time = time
+
+def ktlint = [:]
+ktlint.ktlint = "com.pinterest:ktlint:$versions.ktlint"
+deps.ktlint = ktlint
 
 ext.deps = deps
