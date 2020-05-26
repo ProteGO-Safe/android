@@ -21,7 +21,6 @@ class TriageRepositoryImpl(
     }
 
     override fun parseBridgePayload(payload: String): TriageItem {
-        Timber.d("Parsing payload: $payload")
         return Gson().fromJson(payload, TriageData::class.java).toEntity()
     }
 }

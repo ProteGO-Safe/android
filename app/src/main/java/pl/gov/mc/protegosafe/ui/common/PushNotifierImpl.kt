@@ -12,7 +12,7 @@ import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.ui.MainActivity
 import timber.log.Timber
 
-class PushNotifierImpl(private val context: Context): PushNotifier {
+class PushNotifierImpl(private val context: Context) : PushNotifier {
 
     private val notificationManager by lazy {
         context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
@@ -20,10 +20,8 @@ class PushNotifierImpl(private val context: Context): PushNotifier {
 
     override fun showNotificationWithData(title: String, content: String, data: String) {
         val notification = createNotification(title, content, data)
-        notificationManager?.let {
-            it.notify(Consts.GENERAL_NOTIFICATION_PUSH_ID, notification)
-            Timber.d("Show notification: $title, $content")
-        } ?: Timber.d("Show notification failed")
+        notificationManager?.notify(Consts.GENERAL_NOTIFICATION_PUSH_ID, notification)
+            ?: Timber.d("Show notification failed")
     }
 
     private fun createNotification(title: String, content: String, data: String): Notification {

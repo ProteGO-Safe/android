@@ -55,10 +55,6 @@ class App : TracerApp() {
                     Timber.w(task.exception, "Couldn't get FCM token")
                     return@OnCompleteListener
                 }
-
-                val token = task.result?.token
-                // Log and toast
-                Timber.d("FCM token $token")
             })
 
         BuildConfig.MAIN_TOPIC.let {
