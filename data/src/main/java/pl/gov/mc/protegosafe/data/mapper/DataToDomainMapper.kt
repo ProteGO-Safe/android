@@ -10,6 +10,7 @@ import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.TriageData
+import pl.gov.mc.protegosafe.domain.extension.calcRollingPeriod
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
@@ -71,7 +72,7 @@ fun PinData.toEntity() = PinItem(pin = pin)
 fun TemporaryExposureKey.toEntity() = TemporaryExposureKeyItem(
     key = keyData,
     rollingPeriod = if (rollingPeriod == 0) // TODO remove when fixed by Google - PSAFE-1021
-        TemporaryExposureKeyItem.ROLLING_PERIOD_MAX
+        calcRollingPeriod(rollingStartIntervalNumber)
     else
         rollingPeriod,
     rollingStartNumber = rollingStartIntervalNumber
