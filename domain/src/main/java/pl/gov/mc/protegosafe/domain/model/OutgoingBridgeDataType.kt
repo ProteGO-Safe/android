@@ -2,14 +2,13 @@ package pl.gov.mc.protegosafe.domain.model
 
 enum class OutgoingBridgeDataType(val code: Int) {
     NOTIFICATION_DATA(2),
-    SERVICES_STATUS(31),
-    PERMISSIONS_ACCEPTED(32),
-    BLUETOOTH_ENABLED(33),
-    BATTERY_OPTIMIZATION_SET(34),
-    SERVICE_STATUS_CHANGE(36),
-    TEMP_ID(41)
-    ;
+    APP_LIFECYCLE_STATE(11),
+    TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS(43),
+    SERVICES_STATUS(51),
+    ANALYZE_RESULT(61);
+
     companion object {
-        fun valueOf(value: Int): OutgoingBridgeDataType = values().find { it.code == value } ?: throw IllegalAccessException()
+        fun valueOf(value: Int): OutgoingBridgeDataType =
+            values().find { it.code == value } ?: throw IllegalAccessException()
     }
 }

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="card_view">140dp</dimen>
-    <dimen name="card_corner_radius">11dp</dimen>
-</resources>

@@ -1,25 +1,26 @@
 package pl.gov.mc.protegosafe.mapper
 
-import com.google.android.gms.tasks.Task
-import com.google.firebase.functions.HttpsCallableResult
-import io.bluetrace.opentrace.idmanager.TemporaryID
-import io.reactivex.Completable
-import pl.gov.mc.protegosafe.domain.model.TemporaryIDItem
-import pl.gov.mc.protegosafe.domain.model.TraceStatusItem
-import pl.gov.mc.protegosafe.model.TraceStatusDto
+import pl.gov.mc.protegosafe.domain.model.ChangeStatusRequestItem
+import pl.gov.mc.protegosafe.model.ChangeServiceStatusRequestData
 
-fun TemporaryID.toDomainModel() = TemporaryIDItem(
-    startTime = startTime,
-    tempID = tempID,
-    expiryTime = expiryTime
-)
-
-fun Task<HttpsCallableResult>.toCompletable() = Completable.create { emitter ->
-    this.addOnCompleteListener {
-        if (!emitter.isDisposed) {
-            if (it.isSuccessful) emitter.onComplete() else emitter.onError(it.exception as Throwable)
-        }
+fun ChangeServiceStatusRequestData.toDomainItem(): List<ChangeStatusRequestItem> {
+    val listOfChangeStatusRequests = mutableListOf<ChangeStatusRequestItem>()
+    if (enableNotification != null) {
+        listOfChangeStatusRequests.add(ChangeStatusRequestItem.ENABLE_NOTIFICATION)
     }
+    if (enableExposureNotificationService != null) {
+        listOfChangeStatusRequests.add(if (enableExposureNotificationService) {
+            ChangeStatusRequestItem.ENABLE_EXPOSURE_NOTIFICATION_SERVICE
+        } else {
+            ChangeStatusRequestItem.DISABLE_EXPOSURE_NOTIFICATION_SERVICE
+        })
+        return listOfChangeStatusRequests
+    }
+    if (enableBt != null) {
+        listOfChangeStatusRequests.add(ChangeStatusRequestItem.ENABLE_BLUETOOTH)
+    }
+    if (enableLocation != null) {
+        listOfChangeStatusRequests.add(ChangeStatusRequestItem.ENABLE_LOCATION)
+    }
+    return listOfChangeStatusRequests
 }
-
-fun TraceStatusDto.toDomainItem() = TraceStatusItem(enableBtService = enableBtService)

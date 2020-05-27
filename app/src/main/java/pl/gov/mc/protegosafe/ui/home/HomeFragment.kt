@@ -1,6 +1,5 @@
 package pl.gov.mc.protegosafe.ui.home
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.bluetooth.BluetoothAdapter
@@ -21,31 +20,31 @@ import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
+import com.google.android.gms.common.api.ApiException
 import kotlinx.android.synthetic.main.missing_connection.view.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.FragmentHomeBinding
+import pl.gov.mc.protegosafe.domain.model.ActivityRequest
+import pl.gov.mc.protegosafe.domain.model.ActivityResult
+import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
+import pl.gov.mc.protegosafe.domain.model.exposeNotification.ExposureNotificationActionNotResolvedException
+import pl.gov.mc.protegosafe.logging.webViewTimber
 import pl.gov.mc.protegosafe.ui.common.BaseFragment
 import pl.gov.mc.protegosafe.ui.common.livedata.observe
 import timber.log.Timber
-
 
 class HomeFragment : BaseFragment() {
 
     private val vm: HomeViewModel by viewModel()
     private val urlProvider by inject<WebUrlProvider>()
     private lateinit var binding: FragmentHomeBinding
-    private val rxperm by lazy {
-        RxPermissions(this)
-    }
-    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
@@ -60,7 +59,21 @@ class HomeFragment : BaseFragment() {
         setListeners()
         setUpWebView()
         observeRequests()
+
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        manageWebView(resumed = true)
+        vm.onAppLifecycleStateChanged(AppLifecycleState.RESUMED)
+        vm.processPendingActivityResult()
+    }
+
+    override fun onPause() {
+        vm.onAppLifecycleStateChanged(AppLifecycleState.PAUSED)
+        manageWebView(resumed = false)
+        super.onPause()
     }
 
     private fun setListeners() {
@@ -71,23 +84,18 @@ class HomeFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_ENABLE_BT -> {
-                if (resultCode == RESULT_OK) {
-                    vm.onBluetoothEnable()
-                }
-            }
-            REQUEST_POWER_SETTINGS -> {
-                vm.onPowerSettingsResult()
-            }
-            else -> Unit
-        }
+        Timber.d("onActivityResult requestCode:$requestCode resultCode: $resultCode")
+        val isResultOk = resultCode == RESULT_OK
+        val activityRequest = ActivityRequest.valueOf(requestCode)
+        vm.onActivityResult(ActivityResult(activityRequest, isResultOk))
     }
 
     private fun observeRequests() {
-        vm.requestPermissions.observe(viewLifecycleOwner, ::openRequestPermissions)
+        vm.requestResolve.observe(viewLifecycleOwner, ::requestExposureNotificationPermission)
         vm.requestBluetooth.observe(viewLifecycleOwner, ::requestBluetooth)
-        vm.changeBatteryOptimization.observe(viewLifecycleOwner, ::openPowerSettings)
+        vm.requestLocation.observe(viewLifecycleOwner, ::requestLocation)
+        vm.requestClearData.observe(viewLifecycleOwner, ::requestClearData)
+        vm.requestNotifications.observe(viewLifecycleOwner, ::requestNotifications)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -103,10 +111,12 @@ class HomeFragment : BaseFragment() {
                 ), NativeBridgeInterface.NATIVE_BRIDGE_NAME
             )
             loadUrl(urlProvider.getWebUrl())
-            webChromeClient = object : WebChromeClient() {
-                override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
-                    Timber.d("webView console ${consoleMessage.message()}")
-                    return true
+            if (BuildConfig.DEBUG) {
+                webChromeClient = object : WebChromeClient() {
+                    override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+                        webViewTimber().d("webView console ${consoleMessage.message()}")
+                        return true
+                    }
                 }
             }
         }
@@ -114,13 +124,13 @@ class HomeFragment : BaseFragment() {
             false
         }
         requireActivity().onBackPressedDispatcher.addCallback(
-            this,
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (binding.webView.canGoBack()) {
                         binding.webView.goBack()
                     } else {
-                        activity?.finish() //TODO handle back normally by activity
+                        activity?.finish()
                     }
                 }
             })
@@ -163,41 +173,74 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun runJavascript(script: String) {
-        Timber.d("run javascript: $script")
+        webViewTimber().d("run javascript: $script")
         binding.webView.evaluateJavascript(script, null)
     }
 
-    private fun openRequestPermissions() {
-        rxperm.request(Manifest.permission.ACCESS_FINE_LOCATION)
-            .subscribe({
-                Timber.d("Permissions accepted")
-                vm.onPermissionsAccepted()
-            }, {
-                Timber.d("Permissions rejected")
-            }).addTo(compositeDisposable)
+    private fun requestExposureNotificationPermission(exception: ExposureNotificationActionNotResolvedException) {
+        webViewTimber().d("Request exposure notification permission: ${exception.resolutionRequest}")
+        when (val apiException = exception.apiException) {
+            is ApiException -> {
+                startIntentSenderForResult(
+                    apiException.status.resolution.intentSender,
+                    exception.resolutionRequest.code,
+                    null,
+                    0,
+                    0,
+                    0,
+                    null
+                )
+            }
+            else -> Timber.e(exception, "Not supported exception")
+        }
     }
 
     private fun requestBluetooth() {
         val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-        startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+        startActivityForResult(enableBtIntent, ActivityRequest.ENABLE_BLUETOOTH.requestCode)
     }
 
-    /*
-     * "BatteryLife" needs to be suppressed because of OpenTrace that need to deeply control their
-     * own execution, at the potential expense of the user's battery life.
-     */
-    @SuppressLint("BatteryLife")
-    private fun openPowerSettings() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context?.packageName?.let { packageName ->
-                Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).let { intent ->
-                    intent.data = Uri.parse("package:$packageName")
-                    startActivityForResult(intent, REQUEST_POWER_SETTINGS)
+    private fun requestLocation() {
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivityForResult(intent, ActivityRequest.ENABLE_LOCATION.requestCode)
+    }
+
+    private fun requestNotifications() {
+        val packageName = activity?.packageName
+        val settingsIntent: Intent =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(Settings.EXTRA_APP_PACKAGE, activity?.packageName)
+                }
+            } else {
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    data = Uri.fromParts("package", packageName, null)
                 }
             }
+        startActivityForResult(settingsIntent, ActivityRequest.ENABLE_NOTIFICATIONS.requestCode)
+    }
+
+    private fun requestClearData() {
+        val intent = Intent(ACTION_EXPOSURE_NOTIFICATION_SETTINGS)
+        startActivityForResult(
+            intent,
+            ActivityRequest.CLEAR_EXPOSURE_NOTIFICATION_DATA.requestCode
+        )
+    }
+
+    private fun manageWebView(resumed: Boolean) {
+        Timber.d("manageWebView, resumed: $resumed")
+        if (resumed) {
+            binding.webView.onResume()
+            binding.webView.resumeTimers()
+        } else {
+            binding.webView.onPause()
+            binding.webView.pauseTimers()
         }
     }
 }
 
-private const val REQUEST_ENABLE_BT = 1
-private const val REQUEST_POWER_SETTINGS = 2
+private const val ACTION_EXPOSURE_NOTIFICATION_SETTINGS =
+    "com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS"

@@ -1,10 +1,10 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
+import java.util.Calendar
 import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
-import java.util.*
 
 class OnPushNotificationUseCase(
     private val triageRepository: TriageRepository,
@@ -32,8 +32,7 @@ class OnPushNotificationUseCase(
         val now: Calendar = Calendar.getInstance()
         val timeToCheck: Calendar = Calendar.getInstance()
         timeToCheck.timeInMillis = timestamp * 1000
-        return ((now.get(Calendar.YEAR) == timeToCheck.get(Calendar.YEAR))
-                && (now.get(Calendar.DAY_OF_YEAR) == timeToCheck.get(Calendar.DAY_OF_YEAR)))
+        return ((now.get(Calendar.YEAR) == timeToCheck.get(Calendar.YEAR)) &&
+                (now.get(Calendar.DAY_OF_YEAR) == timeToCheck.get(Calendar.DAY_OF_YEAR)))
     }
-
 }

@@ -10,10 +10,11 @@ dependencies {
     implementation deps.rx.rxjava
     implementation deps.rx.rxkotlin
 
+    //ThreeTenABP
+    implementation deps.time.threetenabp
+
     //Timber
     implementation deps.timber.timber
-    //Time
-    implementation deps.time.threetenabp
 }
 
 sourceCompatibility = "7"

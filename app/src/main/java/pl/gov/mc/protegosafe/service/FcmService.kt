@@ -13,7 +13,6 @@ class FcmService : FirebaseMessagingService() {
     private val onPushNotificationUseCase: OnPushNotificationUseCase by inject()
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // Check if message contains a data payload.
         remoteMessage.data.isNotEmpty().let {
             handleNotification(remoteMessage)
         }
@@ -25,16 +24,5 @@ class FcmService : FirebaseMessagingService() {
                 onPushNotificationUseCase.execute(it, Gson().toJson(remoteMessage.data))
             }
         }
-    }
-
-    override fun onNewToken(token: String) {
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-        sendRegistrationToServer(token)
-    }
-
-    private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
     }
 }

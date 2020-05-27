@@ -1,50 +1,99 @@
 package pl.gov.mc.protegosafe
 
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
 import com.facebook.stetho.Stetho
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
-import io.bluetrace.opentrace.TracerApp
+import com.jakewharton.threetenabp.AndroidThreeTen
 import io.reactivex.disposables.CompositeDisposable
-import org.koin.android.ext.android.inject
+import io.realm.Realm
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
+import org.koin.core.get
+import org.koin.core.inject
 import pl.gov.mc.protegosafe.data.BuildConfig
+import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.data.di.dataModule
+import pl.gov.mc.protegosafe.data.extension.copyTo
 import pl.gov.mc.protegosafe.di.appModule
 import pl.gov.mc.protegosafe.di.deviceModule
 import pl.gov.mc.protegosafe.di.useCaseModule
 import pl.gov.mc.protegosafe.di.viewModelModule
-import pl.gov.mc.protegosafe.domain.DumpTraceDataUseCase
+import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
 import timber.log.Timber
 
-class App : TracerApp() {
+class App : Application(), KoinComponent {
 
     private val disposables = CompositeDisposable()
-
-    private val dumpTraceDataUseCase by inject<DumpTraceDataUseCase>()
+    private val applicationTaskScheduler: ApplicationTaskScheduler by inject()
 
     override fun onCreate() {
         super.onCreate()
-
-        Timber.plant(Timber.DebugTree())
 
         startKoin {
             androidContext(this@App)
             modules(appModule, deviceModule, useCaseModule, dataModule, viewModelModule)
         }
 
+        initializeDatabase()
+        initializeLogging()
         initializeFcm()
         initializeStetho()
-        if (BuildConfig.DEBUG) {
-            initializeHyperionDebugMenu(dumpTraceDataUseCase)
+        initializeThreeTenABP()
+        removeAllOpenTraceData()
+        encryptSharedPrefsIfNeeded()
+        scheduleRemoveOldExposuresTask()
+    }
+
+    private fun initializeThreeTenABP() {
+        AndroidThreeTen.init(this)
+    }
+
+    private fun scheduleRemoveOldExposuresTask() {
+        applicationTaskScheduler.scheduleRemoveOldExposuresTask()
+    }
+
+    private fun initializeDatabase() {
+        Realm.init(this)
+        val realmDatabaseBuilder: RealmDatabaseBuilder by inject()
+        Realm.setDefaultConfiguration(realmDatabaseBuilder.build())
+    }
+
+    private fun encryptSharedPrefsIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // TODO PSAFE-1074
+            val regularSharedPrefsFileName = "shared_prefs"
+            val regularSharedPreferences = getSharedPreferences(
+                regularSharedPrefsFileName, Context.MODE_PRIVATE
+            )
+            val encryptedSharedPreferences = get<SharedPreferences>()
+            regularSharedPreferences.copyTo(encryptedSharedPreferences)
+            regularSharedPreferences.edit().clear().apply()
         }
+    }
+
+    private fun removeAllOpenTraceData() {
+        val dbName = "record_database"
+        val sharedPrefsName = "Tracer_pref"
+        deleteDatabase(dbName)
+        getSharedPreferences(sharedPrefsName, Context.MODE_PRIVATE)
+            .edit().clear().apply()
     }
 
     override fun onTerminate() {
         disposables.clear()
         super.onTerminate()
+    }
+
+    private fun initializeLogging() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 
     private fun initializeFcm() {
@@ -67,7 +116,6 @@ class App : TracerApp() {
                 }
         }
 
-
         BuildConfig.DAILY_TOPIC.let {
             FirebaseMessaging.getInstance().subscribeToTopic(it)
                 .addOnCompleteListener { task ->
@@ -77,7 +125,6 @@ class App : TracerApp() {
                     )
                 }
         }
-
     }
 
     private fun initializeStetho() {

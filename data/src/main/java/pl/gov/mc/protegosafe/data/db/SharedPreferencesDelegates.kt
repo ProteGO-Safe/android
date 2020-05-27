@@ -1,15 +1,10 @@
 package pl.gov.mc.protegosafe.data.db
 
-import android.content.Context
+import android.content.SharedPreferences
 import androidx.core.content.edit
 import kotlin.reflect.KProperty
 
-private const val SHARED_PREFS = "shared_prefs"
-
-class SharedPreferencesDelegates(context: Context) {
-    private val sharedPreferences by lazy {
-        context.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE)
-    }
+class SharedPreferencesDelegates(private val sharedPreferences: SharedPreferences) {
 
     fun containsValue(prefKey: String) = sharedPreferences.contains(prefKey)
 

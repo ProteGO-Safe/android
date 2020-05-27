@@ -34,12 +34,15 @@ android {
     productFlavors {
         dev {
             dimension "mode"
+            buildConfigField "String", "SAFETYNET_API_KEY", STAGING_SAFETYNET_API_KEY
         }
         stage {
             dimension "mode"
+            buildConfigField "String", "SAFETYNET_API_KEY", STAGING_SAFETYNET_API_KEY
         }
         prod {
             dimension "mode"
+            buildConfigField "String", "SAFETYNET_API_KEY", PRODUCTION_SAFETYNET_API_KEY
         }
     }
 
@@ -62,26 +65,13 @@ dependencies {
     implementation deps.rx.rxkotlin
     implementation deps.rx.rxandroid
 
-    //Gson
+    // RxWorker
+    implementation deps.androidx.work_rxjava2
+
     implementation deps.google.gson
-
-    //firebase
-    implementation(deps.google.firebase_analytics) {
-        exclude group: 'org.json', module: 'json'
-    }
-    implementation(deps.google.firebase_auth) {
-        exclude group: 'org.json', module: 'json'
-    }
-    implementation(deps.google.firebase_functions) {
-        exclude group: 'org.json', module: 'json'
-    }
-    implementation(deps.google.firebase_messaging) {
-        exclude group: 'org.json', module: 'json'
-    }
-
-    //permissions
-    implementation deps.permissions.easypermissions
+    implementation deps.google.guava
+    implementation deps.google.safetynet
+    implementation deps.google.play_services_tasks
 
     implementation project(path: ':domain')
-    implementation project(path: ':opentrace')
 }

@@ -26,4 +26,24 @@
   @com.google.gson.annotations.SerializedName <fields>;
 }
 
--keep class io.bluetrace.opentrace.** { *; }
+# Remove logging
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int d(...);
+    public static int i(...);
+}
+-assumenosideeffects class timber.log.Timber* {
+    public static *** v(...);
+    public static *** d(...);
+    public static *** i(...);
+}
+
+# Tink
+-keepclassmembers class * extends com.google.crypto.tink.shaded.protobuf.GeneratedMessageLite {
+  <fields>;
+}
+
+# Exposure Notification
+-keep class com.google.android.apps.exposurenotification.config.** { *; }
+-keep class com.google.android.gms.nearby.exposurenotification.** { *; }

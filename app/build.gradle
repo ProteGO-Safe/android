@@ -30,6 +30,8 @@ android {
         versionName "Develop-3.1.0-1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "false"
     }
 
     compileOptions {
@@ -43,6 +45,7 @@ android {
         debug {
             versionNameSuffix ".debug"
             signingConfig signingConfigs.debug
+            buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "false"
         }
         release {
             debuggable false
@@ -57,25 +60,24 @@ android {
             buildConfigField "String", "WEB", DEV_WEB_URL
             applicationIdSuffix ".dev"
             versionNameSuffix '-DEV'
-            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
         }
         stage {
             dimension "mode"
             buildConfigField "String", "WEB", STAGE_WEB_URL
             applicationIdSuffix ".stage"
             versionNameSuffix '-STAGE'
-            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
         }
         prod {
             dimension "mode"
             buildConfigField "String", "WEB", PROD_WEB_URL
-            manifestPlaceholders = [crashlyticsCollectionEnabled:"false"]
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
         }
     }
 }
 
 dependencies {
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation deps.jetbrains.kotlin_stdlib
 
@@ -85,8 +87,6 @@ dependencies {
     // Appcompat
     implementation deps.androidx.appcompat_appcompat
     implementation deps.androidx.core_ktx
-    implementation deps.androidx.recyclerview
-    implementation deps.androidx.cardview
     implementation deps.androidx.constraintlayout
 
     //livedata extensions
@@ -105,8 +105,8 @@ dependencies {
     // Annotation processor
     implementation deps.androidx.legacy
     kapt deps.androidx.lifecycle_compiler
-    // optional - ReactiveStreams support for LiveData
-    implementation deps.androidx.livedata_reactivestreams
+    // RxWorker
+    implementation deps.androidx.work_rxjava2
 
     // Material
     implementation deps.google.material
@@ -123,8 +123,10 @@ dependencies {
     //Timber
     implementation deps.timber.timber
 
+    //ThreeTenABP
+    implementation deps.time.threetenabp
+
     //Firebase
-    implementation deps.google.firebase_core
     implementation deps.google.firebase_messaging
     implementation deps.google.firebase_functions
     implementation deps.google.firebase_crashlytics
@@ -138,7 +140,6 @@ dependencies {
 
     //permissions
     implementation deps.permissions.easypermissions
-    implementation deps.permissions.rxpermissions
 
     //Hyperion debug tool
     debugImplementation deps.hyperion.core
@@ -157,5 +158,4 @@ dependencies {
     implementation project(path: ':data')
     implementation project(path: ":domain")
     implementation project(path: ":device")
-    implementation project(path: ':opentrace')
 }

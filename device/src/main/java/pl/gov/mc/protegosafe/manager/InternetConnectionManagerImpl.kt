@@ -37,5 +37,4 @@ class InternetConnectionManagerImpl(private val context: Context) : InternetConn
         }
         return result
     }
-
 }
