@@ -7,14 +7,13 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.google.android.gms.nearby.Nearby
 import com.google.firebase.functions.FirebaseFunctions
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.FirebaseCloudRepositoryImpl
 import pl.gov.mc.protegosafe.data.KeyUploadSystemInfoRepositoryImpl
+import pl.gov.mc.protegosafe.data.cloud.DiagnosisKeyDownloadService
 import pl.gov.mc.protegosafe.data.cloud.FirebaseFunctionCallableProvider
 import pl.gov.mc.protegosafe.data.cloud.FirebaseFunctionCallableProviderImpl
 import pl.gov.mc.protegosafe.data.db.NotificationDataStore
@@ -54,9 +53,17 @@ import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 import pl.gov.mc.protegosafe.domain.repository.WorkerStateRepository
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 val dataModule = module {
-    single { Firebase.storage(BuildConfig.FIREBASE_STORAGE_BUCKET) }
+    single {
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.FIREBASE_STORAGE_BUCKET_URL)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+            .create(DiagnosisKeyDownloadService::class.java)
+    }
     single { FirebaseFunctions.getInstance(BuildConfig.FIREBASE_REGION) }
     single<NotificationRepository> { NotificationRepositoryImpl(get()) }
     single<TriageRepository> { TriageRepositoryImpl(get()) }

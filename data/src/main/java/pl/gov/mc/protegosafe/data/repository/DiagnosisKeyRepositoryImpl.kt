@@ -1,27 +1,24 @@
 package pl.gov.mc.protegosafe.data.repository
 
 import android.content.Context
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ListResult
-import com.google.firebase.storage.StorageReference
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import java.io.File
-import java.util.concurrent.TimeUnit
+import pl.gov.mc.protegosafe.data.cloud.DiagnosisKeyDownloadService
+import pl.gov.mc.protegosafe.data.cloud.downloadToFile
 import pl.gov.mc.protegosafe.data.db.SharedPreferencesDelegates
-import pl.gov.mc.protegosafe.data.extension.toCompletable
-import pl.gov.mc.protegosafe.data.extension.toSingle
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
 import pl.gov.mc.protegosafe.domain.usecase.DiagnosisKeysFileNameToTimestampUseCase
 import timber.log.Timber
+import java.io.File
+import java.util.concurrent.TimeUnit
 
 class DiagnosisKeyRepositoryImpl(
     private val context: Context,
-    private val firebaseStorage: FirebaseStorage,
+    private val diagnosisKeyDownloadService: DiagnosisKeyDownloadService,
     private val remoteConfigurationRepository: RemoteConfigurationRepository,
     private val internetConnectionManager: InternetConnectionManager,
     sharedPreferencesDelegates: SharedPreferencesDelegates
@@ -41,19 +38,26 @@ class DiagnosisKeyRepositoryImpl(
     override fun getDiagnosisKeys(createdAfter: Long): Single<List<File>> {
         Timber.d("getDiagnosisKeys, createdAfter: $createdAfter")
         return getDiagnosisKeyDownloadConfiguration()
+            .subscribeOn(Schedulers.io())
             .flatMap { downloadConfiguration ->
                 val downloadedFileList = mutableListOf<File>()
-                return@flatMap getDiagnosisKeysFilesStorageReferences(createdAfter = createdAfter)
-                    .map { storageReferences ->
+                return@flatMap getFilteredDiagnosisKeysFilesNames(createdAfter = createdAfter)
+                    .map { diagnosisFileNames ->
                         val pendingDownloadCompletable = arrayListOf<Completable>()
-                        storageReferences.forEach { storageReference ->
-                            require(storageReference.name.isNotBlank())
-                            val file = File(_downloadDirectory, storageReference.name)
+                        diagnosisFileNames.forEach { diagnosisFileName ->
+                            // diagnosisFileName contains redundant "/" suffix
+                            val fileName = diagnosisFileName.removePrefix("/")
+                            require(fileName.isNotBlank())
+
+                            val file = File(_downloadDirectory, fileName)
                             if (file.exists()) {
                                 downloadedFileList.add(file)
                             } else {
                                 pendingDownloadCompletable.add(
-                                    storageReference.getFile(file).toCompletable()
+                                    diagnosisKeyDownloadService.downloadToFile(
+                                        diagnosisFileName,
+                                        file
+                                    )
                                         .timeout(
                                             downloadConfiguration.timeout,
                                             downloadConfiguration.timeoutUnit
@@ -82,15 +86,16 @@ class DiagnosisKeyRepositoryImpl(
         return _latestProcessedDiagnosisKeyTimestamp
     }
 
-    private fun getDiagnosisKeysFilesStorageReferences(createdAfter: Long):
-            Single<List<StorageReference>> {
+    private fun getFilteredDiagnosisKeysFilesNames(createdAfter: Long):
+            Single<List<String>> {
         Timber.d("getDiagnosisKeysFilesStorageReferences")
-        return getDiagnosisKeysFilesListResult()
+
+        return getDiagnosisKeysFiles()
             .observeOn(Schedulers.io())
             .map { listResult ->
-                return@map listResult.items.filter { item ->
-                    require(item.name.isNotBlank())
-                    DiagnosisKeysFileNameToTimestampUseCase().execute(item.name)
+                return@map listResult.filter { item ->
+                    require(item.isNotBlank())
+                    DiagnosisKeysFileNameToTimestampUseCase().execute(item)
                         ?.let { fileTimestamp ->
                             require(fileTimestamp > 0)
                             fileTimestamp > createdAfter
@@ -99,9 +104,13 @@ class DiagnosisKeyRepositoryImpl(
             }
     }
 
-    private fun getDiagnosisKeysFilesListResult(): Single<ListResult> {
+    private fun getDiagnosisKeysFiles(): Single<List<String>> {
         Timber.d("getDiagnosisKeysFilesListResult")
-        return firebaseStorage.reference.listAll().toSingle()
+        return diagnosisKeyDownloadService.getIndex()
+            .subscribeOn(Schedulers.io())
+            .flatMap { responseBody ->
+                return@flatMap Single.just(responseBody.string().split("\n"))
+            }
     }
 
     private fun initDownloadDirectory(): File {
