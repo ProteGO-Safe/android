@@ -30,6 +30,9 @@ jobs:
           gpg -d --passphrase "${{ secrets.DEBUG_KEYSTORE_PASSWORD }}" --batch debug.keystore.asc > $PROTEGO_KEYSTORE_DEBUG_FILE
           cp $PROTEGO_KEYSTORE_DEBUG_FILE app/$PROTEGO_KEYSTORE_DEBUG_FILE
 
+      - name: Ktlint
+        run: ./gradlew ktlint -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
       - name: Install NDK
         run: echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
 
