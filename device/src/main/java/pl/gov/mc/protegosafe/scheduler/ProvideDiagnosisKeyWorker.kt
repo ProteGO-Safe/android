@@ -70,10 +70,10 @@ class ProvideDiagnosisKeyWorker(
 
         diagnosisKeyFiles
             .forEach { file ->
-                file.delete()
                 DiagnosisKeysFileNameToTimestampUseCase().execute(file.name)?.let {
                     analysedFilesTimestamps.add(it)
                 }
+                file.delete()
             }
 
         analysedFilesTimestamps.max()?.let { largestAnalysedFilesTimestamp ->
