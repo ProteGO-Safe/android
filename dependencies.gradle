@@ -40,7 +40,6 @@ versions.firebase_messaging = "20.2.0"
 versions.firebase_functions = "19.0.2"
 versions.firebase_crashlytics = "17.0.0"
 versions.firebase_config_ktx = "19.1.4"
-versions.firebase_storage_ktx = "19.1.1"
 
 versions.rxjava = "2.2.18"
 versions.rxandroid = "2.1.1"
@@ -51,6 +50,8 @@ versions.play_services_base = "17.2.1"
 versions.play_services_tasks = "17.0.2"
 
 versions.ktlint = "0.36.0"
+
+versions.retrofit = "2.9.0"
 
 def deps = [:]
 
@@ -97,7 +98,6 @@ google.firebase_messaging = "com.google.firebase:firebase-messaging:$versions.fi
 google.firebase_functions = "com.google.firebase:firebase-functions:$versions.firebase_functions"
 google.firebase_crashlytics = "com.google.firebase:firebase-crashlytics:$versions.firebase_crashlytics"
 google.firebase_config_ktx = "com.google.firebase:firebase-config-ktx:$versions.firebase_config_ktx"
-google.firebase_storage_ktx = "com.google.firebase:firebase-storage-ktx:$versions.firebase_storage_ktx"
 google.material = "com.google.android.material:material:$versions.material"
 google.play_services_basement = "com.google.android.gms:play-services-basement:$versions.play_services_basement"
 google.play_services_base = "com.google.android.gms:play-services-base:$versions.play_services_base"
@@ -157,5 +157,10 @@ deps.time = time
 def ktlint = [:]
 ktlint.ktlint = "com.pinterest:ktlint:$versions.ktlint"
 deps.ktlint = ktlint
+
+def retrofit = [:]
+retrofit.retrofit = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+retrofit.adapter_rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit"
+deps.retrofit = retrofit
 
 ext.deps = deps

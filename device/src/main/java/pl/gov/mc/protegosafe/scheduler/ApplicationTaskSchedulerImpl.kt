@@ -18,6 +18,8 @@ class ApplicationTaskSchedulerImpl(
 ) : ApplicationTaskScheduler {
 
     companion object {
+        private const val REPEAT_INTERVAL = 4L
+        private val REPEAT_INTERVAL_TIME_UNIT = TimeUnit.HOURS
         const val PROVIDE_DIAGNOSIS_KEYS_WORK_NAME = "PROVIDE_DIAGNOSIS_KEYS_WORK_NAME"
         const val REMOVE_OLD_EXPOSURES_WORK_NAME = "REMOVE_OLD_EXPOSURES_WORK_NAME"
     }
@@ -27,8 +29,8 @@ class ApplicationTaskSchedulerImpl(
         Timber.i("scheduleProvideDiagnosisKeysTask")
         val workRequest = PeriodicWorkRequest.Builder(
             provideDiagnosisKeyWorker,
-            24,
-            TimeUnit.HOURS
+            REPEAT_INTERVAL,
+            REPEAT_INTERVAL_TIME_UNIT
         ).setConstraints(
             Constraints.Builder()
                 .setRequiresBatteryNotLow(true)

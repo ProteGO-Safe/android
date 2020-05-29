@@ -41,21 +41,21 @@ android {
             buildConfigField "String", "MAIN_TOPIC", "\"main-dev\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily-dev\""
             buildConfigField "String", "FIREBASE_REGION", STAGING_FIREBASE_REGION
-            buildConfigField "String", "FIREBASE_STORAGE_BUCKET", STAGING_FIREBASE_STORAGE_BUCKET
+            buildConfigField "String", "FIREBASE_STORAGE_BUCKET_URL", STAGING_FIREBASE_STORAGE_BUCKET_URL
         }
         stage {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main-stage\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily-stage\""
             buildConfigField "String", "FIREBASE_REGION", STAGING_FIREBASE_REGION
-            buildConfigField "String", "FIREBASE_STORAGE_BUCKET", STAGING_FIREBASE_STORAGE_BUCKET
+            buildConfigField "String", "FIREBASE_STORAGE_BUCKET_URL", STAGING_FIREBASE_STORAGE_BUCKET_URL
         }
         prod {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily\""
             buildConfigField "String", "FIREBASE_REGION", PRODUCTION_FIREBASE_REGION
-            buildConfigField "String", "FIREBASE_STORAGE_BUCKET", PRODUCTION_FIREBASE_STORAGE_BUCKET
+            buildConfigField "String", "FIREBASE_STORAGE_BUCKET_URL", PRODUCTION_FIREBASE_STORAGE_BUCKET_URL
         }
     }
 }
@@ -86,7 +86,6 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
     implementation deps.google.firebase_config_ktx
-    implementation deps.google.firebase_storage_ktx
 
     //GMS
     implementation deps.google.play_services_base
@@ -95,6 +94,10 @@ dependencies {
 
     //Guava
     implementation deps.google.guava
+
+    // Retrofit
+    implementation deps.retrofit.retrofit
+    implementation deps.retrofit.adapter_rxjava2
 
     testImplementation deps.tests.junit
     androidTestImplementation deps.tests.junit_androidx_ext
