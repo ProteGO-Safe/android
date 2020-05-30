@@ -55,11 +55,11 @@ To get started on the app, setup and configure the following:
 | ---------------------------------- | ------------------------------------------------------------ |
 | STAGING_FIREBASE_REGION            | Firebase region in development type of application                                  |
 | STAGING_FIREBASE_UPLOAD_BUCKET     | Firebase bucket for uploading data in development type of application                                 |
-| STAGING_FIREBASE_STORAGE_BUCKET    | Firebase bucket for files storage in development type of application                                 |
+| STAGING_FIREBASE_STORAGE_BUCKET_URL| Firebase bucket url for files storage in development type of application                                 |
 | STAGING_SAFETYNET_API_KEY          | SafetyNet device attestation API Key in development type of application                                |
 | PRODUCTION_FIREBASE_REGION         | Firebase region in production type of application                               |
 | PRODUCTION_FIREBASE_UPLOAD_BUCKET  | Firebase bucket for uploading data in production type of application                          |
-| PRODUCTION_FIREBASE_STORAGE_BUCKET | Firebase bucket for files storage in production type of application                                 |
+| PRODUCTION_FIREBASE_STORAGE_BUCKET_URL| Firebase bucket url for files storage in production type of application                                 |
 | PRODUCTION_SAFETYNET_API_KEY       | SafetyNet device attestation API Key in production type of application                                    |
 | PROD_WEB_URL                       | PWA URL - prod build flavour                                 |
 | STAGE_WEB_URL                      | PWA URL - stage build flavour                                |
