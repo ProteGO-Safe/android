@@ -17,8 +17,7 @@ interface DiagnosisKeyDownloadService {
     @CheckReturnValue
     fun getIndex(): Single<ResponseBody>
 
-    //"%2F" is a workaround for double "//" (slashes) before file name
-    @GET("%2F{fileName}")
+    @GET("{fileName}")
     fun download(@Path("fileName") fileName: String): Observable<Response<ResponseBody>>
 }
 
