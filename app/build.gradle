@@ -26,7 +26,7 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 21
+        versionCode 22
         versionName "4.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
