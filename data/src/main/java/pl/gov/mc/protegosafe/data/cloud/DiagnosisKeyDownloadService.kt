@@ -12,7 +12,7 @@ import retrofit2.http.Path
 import java.io.File
 
 interface DiagnosisKeyDownloadService {
-    //"%2F" is a workaround for double "//" (slashes) before index.txt
+    // "%2F" is a workaround for double "//" (slashes) before index.txt
     @GET("%2Findex.txt")
     @CheckReturnValue
     fun getIndex(): Single<ResponseBody>
