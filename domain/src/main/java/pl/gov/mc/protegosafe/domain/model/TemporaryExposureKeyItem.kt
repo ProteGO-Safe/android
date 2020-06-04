@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.domain.model.exposeNotification
+package pl.gov.mc.protegosafe.domain.model
 
 data class TemporaryExposureKeyItem(
     val key: ByteArray,

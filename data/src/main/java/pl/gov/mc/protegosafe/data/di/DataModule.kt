@@ -41,7 +41,7 @@ import pl.gov.mc.protegosafe.domain.model.ClearMapper
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinMapper
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.DiagnosisKeyDownloadConfigurationMapper
+import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfigurationMapper
 import pl.gov.mc.protegosafe.domain.repository.CloudRepository
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository

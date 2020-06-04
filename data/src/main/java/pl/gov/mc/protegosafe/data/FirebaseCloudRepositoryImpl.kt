@@ -11,7 +11,7 @@ import pl.gov.mc.protegosafe.data.mapper.toGetAccessTokenResponseBody
 import pl.gov.mc.protegosafe.data.mapper.toTemporaryExposureKeysUploadRequestBody
 import pl.gov.mc.protegosafe.data.model.GetAccessTokenRequestBody
 import pl.gov.mc.protegosafe.domain.model.PinItem
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.TemporaryExposureKeysUploadRequestData
+import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
 import pl.gov.mc.protegosafe.domain.repository.CloudRepository
 
 class FirebaseCloudRepositoryImpl(
@@ -26,8 +26,8 @@ class FirebaseCloudRepositoryImpl(
             }
     }
 
-    override fun uploadTemporaryExposureKeys(requestData: TemporaryExposureKeysUploadRequestData): Completable {
-        val requestBody = Gson().toJson(requestData.toTemporaryExposureKeysUploadRequestBody())
+    override fun uploadTemporaryExposureKeys(requestItem: TemporaryExposureKeysUploadRequestItem): Completable {
+        val requestBody = Gson().toJson(requestItem.toTemporaryExposureKeysUploadRequestBody())
         return callableProvider.getTemporaryExposureKeysUploadCallable()
             .call(JSONObject(requestBody))
             .toCompletable()

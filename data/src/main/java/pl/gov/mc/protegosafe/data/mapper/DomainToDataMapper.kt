@@ -7,8 +7,8 @@ import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeyRequestData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeysUploadRequestBody
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.TemporaryExposureKeyItem
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.TemporaryExposureKeysUploadRequestData
+import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
+import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
 
 fun ExposureConfigurationItem.toExposureConfiguration(): ExposureConfiguration {
     return ExposureConfiguration.ExposureConfigurationBuilder()
@@ -36,7 +36,7 @@ fun TemporaryExposureKeyItem.toTemporaryExposureKeyRequestData(): TemporaryExpos
 fun List<TemporaryExposureKeyItem>.toTemporaryExposureKeyRequestDataList(): List<TemporaryExposureKeyRequestData> =
     map { it.toTemporaryExposureKeyRequestData() }
 
-fun TemporaryExposureKeysUploadRequestData.toTemporaryExposureKeysUploadRequestBody(): TemporaryExposureKeysUploadRequestBody =
+fun TemporaryExposureKeysUploadRequestItem.toTemporaryExposureKeysUploadRequestBody(): TemporaryExposureKeysUploadRequestBody =
     TemporaryExposureKeysUploadRequestBody(
         temporaryExposureKeys = keys.toTemporaryExposureKeyRequestDataList(),
         platform = platform,

@@ -5,7 +5,7 @@ import com.google.android.gms.common.api.CommonStatusCodes
 import pl.gov.mc.protegosafe.domain.model.ApiExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationStatusItem
 import pl.gov.mc.protegosafe.domain.model.ResolutionRequest
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.ExposureNotificationActionNotResolvedException
+import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
 
 class ApiExceptionMapperImpl : ApiExceptionMapper {
     override fun toStatus(throwable: Throwable): ExposureNotificationStatusItem {

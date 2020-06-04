@@ -10,10 +10,10 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.ExposureNotificationActionNotResolvedException
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.TemporaryExposureKeyItem
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.TemporaryExposureKeysUploadRequestData
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.toDiagnosisKeyList
+import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
+import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
+import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
+import pl.gov.mc.protegosafe.domain.model.toDiagnosisKeyList
 import pl.gov.mc.protegosafe.domain.repository.CloudRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.KeyUploadSystemInfoRepository
@@ -81,15 +81,15 @@ class UploadTemporaryExposureKeysUseCase(
             )
         }
 
-    private fun uploadTemporaryExposureKeys(requestData: TemporaryExposureKeysUploadRequestData) =
-        cloudRepository.uploadTemporaryExposureKeys(requestData)
+    private fun uploadTemporaryExposureKeys(requestItem: TemporaryExposureKeysUploadRequestItem) =
+        cloudRepository.uploadTemporaryExposureKeys(requestItem)
 
     private fun getUploadRequestData(
         accessToken: String,
         keys: List<TemporaryExposureKeyItem>
-    ): Single<TemporaryExposureKeysUploadRequestData> =
+    ): Single<TemporaryExposureKeysUploadRequestItem> =
         getDeviceVerificationPayload(keys).map {
-            TemporaryExposureKeysUploadRequestData(
+            TemporaryExposureKeysUploadRequestItem(
                 keys,
                 keyUploadSystemInfoRepository.platform,
                 it,

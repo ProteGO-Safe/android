@@ -7,7 +7,7 @@ import io.reactivex.Single
 import java.util.Locale
 import pl.gov.mc.protegosafe.domain.extension.toSHA256
 import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.DiagnosisKey
+import pl.gov.mc.protegosafe.domain.model.DiagnosisKey
 import pl.gov.mc.protegosafe.extension.toSingle
 
 class SafetyNetAttestationWrapperImpl(
