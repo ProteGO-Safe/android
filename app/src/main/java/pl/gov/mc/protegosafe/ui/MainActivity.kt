@@ -121,7 +121,6 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == REQUEST_APP_UPDATES_CODE) {
             if (resultCode != RESULT_OK) {
                 Timber.e("Update flow failed! Result code: $resultCode")
-                vm.checkForApplicationUpdates()
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
