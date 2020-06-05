@@ -140,6 +140,9 @@ dependencies {
     //permissions
     implementation deps.permissions.easypermissions
 
+    implementation deps.google.play_core
+    implementation deps.google.play_core_ktx
+
     //Hyperion debug tool
     debugImplementation deps.hyperion.core
     debugImplementation deps.hyperion.attr

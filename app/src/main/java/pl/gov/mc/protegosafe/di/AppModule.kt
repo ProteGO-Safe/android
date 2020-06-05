@@ -1,6 +1,9 @@
 package pl.gov.mc.protegosafe.di
 
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import io.realm.Realm
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.domain.PushNotifier
@@ -38,6 +41,7 @@ val appModule = module {
     factory { WebUrlProvider(get()) }
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }
+    single<AppUpdateManager> { AppUpdateManagerFactory.create(androidContext()) }
 }
 
 val useCaseModule = module {
@@ -69,7 +73,7 @@ val useCaseModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { MainViewModel(get(), get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
     viewModel {
         HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }

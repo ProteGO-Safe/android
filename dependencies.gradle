@@ -48,6 +48,8 @@ versions.rxkotlin = "2.4.0"
 versions.play_services_basement = "17.2.1"
 versions.play_services_base = "17.2.1"
 versions.play_services_tasks = "17.0.2"
+versions.play_core = "1.7.3"
+versions.play_core_ktx = "1.7.0"
 
 versions.ktlint = "0.36.0"
 
@@ -108,6 +110,8 @@ google.play_services_base = "com.google.android.gms:play-services-base:$versions
 google.play_services_tasks = "com.google.android.gms:play-services-tasks:$versions.play_services_tasks"
 google.safetynet = "com.google.android.gms:play-services-safetynet:$versions.safetynet"
 google.guava = "com.google.guava:guava:$versions.guava"
+google.play_core = "com.google.android.play:core:$versions.play_core"
+google.play_core_ktx = "com.google.android.play:core-ktx:$versions.play_core_ktx"
 deps.google = google
 
 def tests = [:]
