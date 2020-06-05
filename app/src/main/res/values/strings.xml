@@ -1,6 +1,7 @@
 <resources>
     <string name="general_notification_channel_name">Wiadomości ProteGO Safe</string>
     <string name="no_internet_connection_msg">Sprawdź połączenie z Internetem</string>
+    <string name="not_secure_connection_msg">Połączenie nie jest bezpieczne</string>
     <string name="no_internet_connection_refresh">Odśwież</string>
 
     <string name="debug_write_store_rationale">Testowa wersja aplikacji potrzebuje uprawnienia do zapisu logów śledzenia urządzeń.</string>

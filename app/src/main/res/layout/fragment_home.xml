@@ -15,7 +15,7 @@
 
         <include
             android:id="@+id/missing_connection_layout"
-            layout="@layout/missing_connection"
+            layout="@layout/view_connection_error"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

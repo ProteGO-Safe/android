@@ -128,7 +128,6 @@ dependencies {
 
     //Firebase
     implementation deps.google.firebase_messaging
-    implementation deps.google.firebase_functions
     implementation deps.google.firebase_crashlytics
 
     testImplementation deps.tests.junit

@@ -40,22 +40,28 @@ android {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main-dev\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily-dev\""
-            buildConfigField "String", "FIREBASE_REGION", STAGING_FIREBASE_REGION
-            buildConfigField "String", "FIREBASE_STORAGE_BUCKET_URL", STAGING_FIREBASE_STORAGE_BUCKET_URL
+            buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
+            buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
+            buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
+            buildConfigField "String", "WEB", DEV_WEB_URL
         }
         stage {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main-stage\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily-stage\""
-            buildConfigField "String", "FIREBASE_REGION", STAGING_FIREBASE_REGION
-            buildConfigField "String", "FIREBASE_STORAGE_BUCKET_URL", STAGING_FIREBASE_STORAGE_BUCKET_URL
+            buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
+            buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
+            buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
+            buildConfigField "String", "WEB", STAGE_WEB_URL
         }
         prod {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily\""
-            buildConfigField "String", "FIREBASE_REGION", PRODUCTION_FIREBASE_REGION
-            buildConfigField "String", "FIREBASE_STORAGE_BUCKET_URL", PRODUCTION_FIREBASE_STORAGE_BUCKET_URL
+            buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", PRODUCTION_STORAGE_BUCKET_ENDPOINT
+            buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", PRODUCTION_GET_ACCESS_TOKEN_ENDPOINT
+            buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", PRODUCTION_UPLOAD_BUCKET_ENDPOINT
+            buildConfigField "String", "WEB", PROD_WEB_URL
         }
     }
 }
@@ -81,10 +87,6 @@ dependencies {
     //Gson
     implementation deps.google.gson
 
-    //Firebase
-    implementation(deps.google.firebase_functions) {
-        exclude group: 'org.json', module: 'json'
-    }
     implementation deps.google.firebase_config_ktx
 
     //GMS
@@ -98,6 +100,12 @@ dependencies {
     // Retrofit
     implementation deps.retrofit.retrofit
     implementation deps.retrofit.adapter_rxjava2
+    implementation deps.retrofit.converter_gson
+    implementation deps.retrofit.logging_interceptor
+
+    implementation deps.trustkit.trustkit
+    // Supply androidx.preference.PreferenceManager required by TrustKit
+    implementation deps.androidx.preference
 
     testImplementation deps.tests.junit
     androidTestImplementation deps.tests.junit_androidx_ext

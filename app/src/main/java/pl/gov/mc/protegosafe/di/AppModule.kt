@@ -54,7 +54,7 @@ val useCaseModule = module {
     factory { ProvideDiagnosisKeysUseCase(get(), get(), get()) }
     factory { GetSafetyNetAttestationTokenUseCase(get(), get()) }
     factory {
-        UploadTemporaryExposureKeysUseCase(get(), get(), get(), get(), get(), get(), get(), get())
+        UploadTemporaryExposureKeysUseCase(get(), get(), get(), get(), get(), get(), get())
     }
     factory { UploadTemporaryExposureKeysWithCachedPayloadUseCase(get(), get(), get()) }
     factory { SaveTriageCompletedUseCase(get()) }

@@ -14,7 +14,6 @@ import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedE
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
 import pl.gov.mc.protegosafe.domain.model.toDiagnosisKeyList
-import pl.gov.mc.protegosafe.domain.repository.CloudRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.KeyUploadSystemInfoRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
@@ -22,7 +21,6 @@ import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadReposi
 class UploadTemporaryExposureKeysUseCase(
     private val exposureNotificationRepository: ExposureNotificationRepository,
     private val keyUploadSystemInfoRepository: KeyUploadSystemInfoRepository,
-    private val cloudRepository: CloudRepository,
     private val safetyNetAttestationWrapper: SafetyNetAttestationWrapper,
     private val resultComposer: OutgoingBridgeDataResultComposer,
     private val pinMapper: PinMapper,
@@ -41,7 +39,7 @@ class UploadTemporaryExposureKeysUseCase(
             .observeOn(postExecutionThread.scheduler)
 
     private fun getAccessToken(pin: PinItem): Single<String> =
-        cloudRepository.getAccessToken(pin)
+        temporaryExposureKeysUploadRepository.getAccessToken(pin)
 
     private fun getAccessTokenAndUploadKeys(
         payload: String,
@@ -82,7 +80,7 @@ class UploadTemporaryExposureKeysUseCase(
         }
 
     private fun uploadTemporaryExposureKeys(requestItem: TemporaryExposureKeysUploadRequestItem) =
-        cloudRepository.uploadTemporaryExposureKeys(requestItem)
+        temporaryExposureKeysUploadRepository.uploadTemporaryExposureKeys(requestItem)
 
     private fun getUploadRequestData(
         accessToken: String,

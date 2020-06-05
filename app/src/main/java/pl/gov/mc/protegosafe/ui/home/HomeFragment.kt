@@ -5,6 +5,7 @@ import android.app.Activity.RESULT_OK
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.net.Uri
+import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -12,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.ConsoleMessage
+import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -21,7 +23,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.api.ApiException
-import kotlinx.android.synthetic.main.missing_connection.view.*
+import kotlinx.android.synthetic.main.view_connection_error.view.button_check_internet_connection
+import kotlinx.android.synthetic.main.view_connection_error.view.text_view_connection_error
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.BuildConfig
@@ -158,6 +161,18 @@ class HomeFragment : BaseFragment() {
         ) {
             vm.onWebViewReceivedError(request, error)
             super.onReceivedError(view, request, error)
+        }
+
+        override fun onReceivedSslError(
+            view: WebView?,
+            handler: SslErrorHandler?,
+            error: SslError?
+        ) {
+            handler?.cancel()
+            Timber.e(error.toString())
+            binding.missingConnectionLayout.text_view_connection_error
+                .setText(R.string.not_secure_connection_msg)
+            binding.webView.visibility = View.GONE
         }
 
         override fun onPageFinished(view: WebView?, url: String?) {
