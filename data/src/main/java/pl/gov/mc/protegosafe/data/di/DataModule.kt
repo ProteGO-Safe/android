@@ -17,6 +17,7 @@ import pl.gov.mc.protegosafe.data.KeyUploadSystemInfoRepositoryImpl
 import pl.gov.mc.protegosafe.data.cloud.DiagnosisKeyDownloadService
 import pl.gov.mc.protegosafe.data.cloud.UploadTemporaryExposureKeysService
 import pl.gov.mc.protegosafe.data.db.NotificationDataStore
+import pl.gov.mc.protegosafe.data.db.SafetyNetDataStore
 import pl.gov.mc.protegosafe.data.db.SharedPreferencesDelegates
 import pl.gov.mc.protegosafe.data.db.TriageDataStore
 import pl.gov.mc.protegosafe.data.db.dao.ExposureDao
@@ -34,6 +35,7 @@ import pl.gov.mc.protegosafe.data.repository.NotificationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.PendingActivityResultRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.CertificatePinningRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.RemoteConfigurationRepositoryImpl
+import pl.gov.mc.protegosafe.data.repository.SafetyNetCheckRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TemporaryExposureKeysUploadRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TriageRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.WorkerStateRepositoryImpl
@@ -51,6 +53,7 @@ import pl.gov.mc.protegosafe.domain.repository.NotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.PendingActivityResultRepository
 import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
+import pl.gov.mc.protegosafe.domain.repository.SafetyNetCheckRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 import pl.gov.mc.protegosafe.domain.repository.WorkerStateRepository
@@ -98,6 +101,8 @@ val dataModule = module {
     }
     single<WorkerStateRepository> { WorkerStateRepositoryImpl(get()) }
     single<CertificatePinningRepository> { CertificatePinningRepositoryImpl(get()) }
+    single { SafetyNetDataStore(get()) }
+    single<SafetyNetCheckRepository> { SafetyNetCheckRepositoryImpl(get()) }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(

@@ -15,6 +15,8 @@ import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.ActivityMainBinding
+import pl.gov.mc.protegosafe.ui.common.getSafetyNetErrorAlertDialog
+import pl.gov.mc.protegosafe.ui.common.livedata.observe
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
@@ -35,9 +37,14 @@ class MainActivity : AppCompatActivity() {
 
         saveNotificationData(intent)
         createNotificationChannel()
+        observeRequests()
         if (BuildConfig.DEBUG) {
             requestDebugModePermissions()
         }
+    }
+
+    private fun observeRequests() {
+        vm.showSafetyNetProblem.observe(this, ::showSafetyNetProblem)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -75,6 +82,10 @@ class MainActivity : AppCompatActivity() {
             REQUEST_STORE_PERMISSION_CODE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
+    }
+
+    private fun showSafetyNetProblem() {
+        getSafetyNetErrorAlertDialog(this)?.show()
     }
 }
 

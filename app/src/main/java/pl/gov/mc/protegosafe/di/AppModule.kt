@@ -6,6 +6,7 @@ import org.koin.dsl.module
 import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ClearExposureNotificationDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
@@ -64,10 +65,11 @@ val useCaseModule = module {
     factory { ProcessPendingActivityResultUseCase(get(), get()) }
     factory { GetExposureInformationUseCase(get(), get()) }
     factory { GetAnalyzeResultUseCase(get(), get(), get()) }
+    factory { CheckDeviceRootedUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get()) }
     viewModel {
         HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
