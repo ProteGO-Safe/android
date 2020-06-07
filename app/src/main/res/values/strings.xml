@@ -1,22 +1,7 @@
 <resources>
-    <string name="notification_channel_name">ProteGO Safe" notifications</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur
-adipiscing elit. Ut vehicula, diam vel
-dignissim porttitor, urna nulla consectetur
-tortor, quis vestibulum dui magna eget
-velit. Sed pellentesque massa non ante
-interdum, in commodo risus vehicula.
-Aenean volutpat neque et tincidunt
-sodales. Praesent sit amet nulla hendrerit,
-faucibus nisl nec, elementum lacus.</string>
-    <string name="ok">OK</string>
-
-    <string name="please_wait">Proszę czekać…</string>
-    <string name="no_internet_connection_title">Brak Internetu</string>
+    <string name="general_notification_channel_name">Wiadomości ProteGO Safe</string>
     <string name="no_internet_connection_msg">Sprawdź połączenie z Internetem</string>
     <string name="no_internet_connection_refresh">Odśwież</string>
-    <string name="try_again">Spróbuj ponownie</string>
+
     <string name="debug_write_store_rationale">Testowa wersja aplikacji potrzebuje uprawnienia do zapisu logów śledzenia urządzeń.</string>
-    <string name="bluetooth_module_enabled">Moduł Bluetooth już działa!</string>
-    <string name="bluetooth_module_disabled">Moduł Bluetooth został wyłączony</string>
 </resources>

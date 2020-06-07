@@ -1,0 +1,60 @@
+name: RELEASE CANDIDATE
+
+on:
+  push:
+    tags:
+      - "rc_*"
+
+jobs:
+  nightly:
+    name: Release Candidate Build
+    runs-on: ubuntu-latest
+    env:
+      PROTEGO_KEYSTORE_DEBUG_FILE: protegosafe-debug.jks
+      PROTEGO_KEYSTORE_DEBUG_ALIAS: ${{ secrets.DEBUG_KEYSTORE_ALIAS }}
+      PROTEGO_KEYSTORE_DEBUG_PASSWORD: ${{ secrets.DEBUG_KEYSTORE_STORE_PASSWORD }}
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v1
+
+      - name: Setup Environment (JDK)
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Setup Environment (Keystore)
+        run: |
+          echo "${{ secrets.DEBUG_KEYSTORE }}" > debug.keystore.asc
+          gpg -d --passphrase "${{ secrets.DEBUG_KEYSTORE_PASSWORD }}" --batch debug.keystore.asc > $PROTEGO_KEYSTORE_DEBUG_FILE
+          cp $PROTEGO_KEYSTORE_DEBUG_FILE app/$PROTEGO_KEYSTORE_DEBUG_FILE
+
+      - name: Ktlint
+        run: ./gradlew ktlint -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Install NDK
+        run: echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
+
+      - name: Cleanup
+        run: ./gradlew clean -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Run Unit Tests
+        run: ./gradlew testProdReleaseUnitTest -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Assemble Stage Release (Signed Debug Keystore)
+        run: ./gradlew assembleStageRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_DEBUG_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_DEBUG_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Assemble Production Release (Signed Debug Keystore)
+        run: ./gradlew assembleProdRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_DEBUG_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_DEBUG_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Upload APKs
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app/build/outputs/**/release/*
+
+      - name: Upload Mappings
+        uses: actions/upload-artifact@v2
+        with:
+          name: mapping
+          path: app/build/outputs/mapping/**/mapping.txt

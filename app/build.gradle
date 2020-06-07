@@ -5,8 +5,17 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.google.firebase.crashlytics'
+apply from: '../ktlint.gradle'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file(new File(getRootDir(), PROTEGO_KEYSTORE_DEBUG_FILE))
+            storePassword PROTEGO_KEYSTORE_DEBUG_PASSWORD
+            keyPassword PROTEGO_KEYSTORE_DEBUG_PASSWORD
+            keyAlias = PROTEGO_KEYSTORE_DEBUG_ALIAS
+        }
+    }
     dataBinding {
         enabled = true
     }
@@ -17,10 +26,12 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 10
-        versionName "3.0.3"
+        versionCode 19
+        versionName "4.1.0-beta7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "false"
     }
 
     compileOptions {
@@ -33,8 +44,11 @@ android {
     buildTypes {
         debug {
             versionNameSuffix ".debug"
+            signingConfig signingConfigs.debug
+            buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "false"
         }
         release {
+            debuggable false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -46,124 +60,102 @@ android {
             buildConfigField "String", "WEB", DEV_WEB_URL
             applicationIdSuffix ".dev"
             versionNameSuffix '-DEV'
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
         }
         stage {
             dimension "mode"
             buildConfigField "String", "WEB", STAGE_WEB_URL
             applicationIdSuffix ".stage"
             versionNameSuffix '-STAGE'
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
         }
         prod {
             dimension "mode"
             buildConfigField "String", "WEB", PROD_WEB_URL
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
         }
     }
 }
 
-ext {
-    kotlin_version = '1.3.70'
-    lifecycle_version = "2.2.0"
-    multidex_version = '2.0.1'
-    appcompat_version = '1.1.0'
-    ktx_version = '1.2.0'
-    cardview_version = '1.0.0'
-    constraintlayout_version = '1.1.3'
-    navigation_version = '2.2.1'
-    koinVersion = '2.1.5'
-    material_version = '1.2.0-alpha05'
-}
-
 dependencies {
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation deps.jetbrains.kotlin_stdlib
 
     // Multidex
-    implementation "androidx.multidex:multidex:$multidex_version"
+    implementation deps.androidx.multidex
 
     // Appcompat
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation "androidx.core:core-ktx:$ktx_version"
-    implementation "androidx.recyclerview:recyclerview:$appcompat_version"
-    implementation "androidx.cardview:cardview:$cardview_version"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation deps.androidx.appcompat_appcompat
+    implementation deps.androidx.core_ktx
+    implementation deps.androidx.constraintlayout
 
     //livedata extensions
-    implementation "com.snakydesign.livedataextensions:lives:1.3.0"
+    implementation deps.livedataextensions.livedataextensions
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    implementation deps.androidx.navigation_fragment_ktx
+    implementation deps.androidx.navigation_ui_ktx
 
     // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation deps.androidx.viewmodel_ktx
     // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation deps.androidx.livedata_ktx
     // Saved state module for ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    implementation deps.androidx.viewmodel_savedstate
     // Annotation processor
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
-    // optional - ReactiveStreams support for LiveData
-    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
+    implementation deps.androidx.legacy
+    kapt deps.androidx.lifecycle_compiler
+    // RxWorker
+    implementation deps.androidx.work_rxjava2
 
     // Material
-    implementation "com.google.android.material:material:$material_version"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation deps.google.material
+    implementation deps.androidx.constraintlayout
     //rx
-    implementation "io.reactivex.rxjava2:rxjava:2.2.17"
-    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
-    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation deps.rx.rxjava
+    implementation deps.rx.rxkotlin
+    implementation deps.rx.rxandroid
 
-    //koin
-    implementation "org.koin:koin-android:$koinVersion"
-    // or Koin for Lifecycle scoping
-    implementation "org.koin:koin-androidx-scope:$koinVersion"
-    // or Koin for Android Architecture ViewModel
-    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
-    implementation "org.koin:koin-androidx-viewmodel:2.1.5"
+    //Koin
+    implementation deps.koin.android
+    testImplementation deps.koin.test
 
     //Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation deps.timber.timber
+
+    //ThreeTenABP
+    implementation deps.time.threetenabp
 
     //Firebase
-    implementation 'com.google.firebase:firebase-core:17.3.0'
-    implementation 'com.google.firebase:firebase-messaging:20.1.5'
-    implementation 'com.google.firebase:firebase-functions:19.0.2'
+    implementation deps.google.firebase_messaging
+    implementation deps.google.firebase_functions
+    implementation deps.google.firebase_crashlytics
 
-    //RxPermission
-    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    testImplementation deps.tests.junit
+    androidTestImplementation deps.tests.junit_androidx_ext
+    androidTestImplementation deps.tests.espresso
 
-    // Add the Firebase SDK for Crashlytics.
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta04'
-
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-    implementation 'com.facebook.stetho:stetho:1.5.1'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation deps.facebook.stetho
+    implementation deps.google.gson
 
     //permissions
-    implementation 'pub.devrel:easypermissions:3.0.0'
+    implementation deps.permissions.easypermissions
 
     //Hyperion debug tool
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-core:0.9.27'
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-attr:0.9.27'
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-build-config:0.9.27'
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-crash:0.9.27'
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-disk:0.9.27'
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-geiger-counter:0.9.27'
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-measurement:0.9.27'
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-phoenix:0.9.27'
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-recorder:0.9.27'
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-shared-preferences:0.9.27'
-    debugImplementation 'com.willowtreeapps.hyperion:hyperion-timber:0.9.27'
+    debugImplementation deps.hyperion.core
+    debugImplementation deps.hyperion.attr
+    debugImplementation deps.hyperion.build_config
+    debugImplementation deps.hyperion.crash
+    debugImplementation deps.hyperion.disk
+    debugImplementation deps.hyperion.geiger_counter
+    debugImplementation deps.hyperion.measurement
+    debugImplementation deps.hyperion.phoenix
+    debugImplementation deps.hyperion.recorder
+    debugImplementation deps.hyperion.shared_preferences
+    debugImplementation deps.hyperion.timber
+    debugImplementation deps.hyperion.simple_item
 
     implementation project(path: ':data')
     implementation project(path: ":domain")
     implementation project(path: ":device")
-
-    implementation project(path: ':opentrace')
-
 }

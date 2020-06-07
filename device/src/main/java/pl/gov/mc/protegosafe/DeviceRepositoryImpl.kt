@@ -1,67 +1,54 @@
 package pl.gov.mc.protegosafe
 
-import android.Manifest
 import android.bluetooth.BluetoothManager
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import android.os.PowerManager
-import androidx.appcompat.app.AppCompatActivity
+import android.location.LocationManager
 import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
+import io.reactivex.Single
+import pl.gov.mc.protegosafe.domain.model.ExposureNotificationStatusItem
 import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
-import pl.gov.mc.protegosafe.domain.repository.TrackingRepository
+import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.model.ServicesStatus
 import pl.gov.mc.protegosafe.model.ServicesStatusRoot
-import pub.devrel.easypermissions.EasyPermissions
 
 class DeviceRepositoryImpl(
     private val context: Context,
-    private val trackingRepository: TrackingRepository
+    private val exposureNotificationRepository: ExposureNotificationRepository
 ) : DeviceRepository {
 
-    override fun isBtSupported(): Boolean {
-        return context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)
+    override fun getServicesStatusJson(): Single<String> {
+        return getExposureNotificationStatus()
+            .map {
+                val servicesStatus = ServicesStatusRoot(
+                    ServicesStatus(
+                        isNotificationEnabled = isNotificationEnabled(),
+                        exposureNotificationStatus = it.value,
+                        isBtOn = isBtOn(),
+                        isLocationOn = isLocationOn()
+                    )
+                )
+                Gson().toJson(servicesStatus)
+            }
     }
 
-    override fun isLocationEnabled(): Boolean {
-        return EasyPermissions.hasPermissions(context, Manifest.permission.ACCESS_FINE_LOCATION)
+    override fun getExposureNotificationStatus(): Single<ExposureNotificationStatusItem> {
+        return exposureNotificationRepository.getExposureNotificationState()
     }
 
-    override fun isBtOn(): Boolean {
+    private fun isBtOn(): Boolean {
         return (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager)
             ?.adapter
             ?.isEnabled == true
     }
 
-    override fun isBatteryOptimizationOn(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            (context.getSystemService(AppCompatActivity.POWER_SERVICE) as? PowerManager)
-                ?.isIgnoringBatteryOptimizations(context.packageName) == false
-        } else {
-            false
-        }
-    }
-
-    override fun isNotificationEnabled(): Boolean {
+    private fun isNotificationEnabled(): Boolean {
         return NotificationManagerCompat.from(context).areNotificationsEnabled()
     }
 
-    override fun isBtServiceOn(): Boolean {
-        return trackingRepository.isTrackingAccepted()
-    }
-
-    override fun getServicesStatusJson(): String {
-        val servicesStatus = ServicesStatusRoot(
-            ServicesStatus(
-                isBtSupported = isBtSupported(),
-                isLocationEnabled = isLocationEnabled(),
-                isBtOn = isBtOn(),
-                isBatteryOptimizationOn = isBatteryOptimizationOn(),
-                isNotificationEnabled = isNotificationEnabled(),
-                isBtServiceOn = isBtServiceOn()
-            )
-        )
-        return Gson().toJson(servicesStatus)
+    private fun isLocationOn(): Boolean {
+        return (context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager)
+            ?.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            ?: false
     }
 }

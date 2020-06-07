@@ -1,7 +1,8 @@
 package pl.gov.mc.protegosafe
 
 object Consts {
-    const val NOTIFICATION_CHANNEL_ID = "pl.gov.mc.protegosafe"
-    const val NOTIFICATION_PUSH_ID = 18678
-    const val NOTIFICATION_EXTRA_DATA = "extra-data"
+    const val GENERAL_NOTIFICATION_CHANNEL_ID = "ProtegoSafe general"
+    const val GENERAL_NOTIFICATION_PUSH_ID = 18678
+    const val GENERAL_NOTIFICATION_EXTRA_DATA = "extra-notification-data"
+    const val EXPOSURE_STATE_UPDATED_EXTRA_TOKEN = "extra-exposure"
 }

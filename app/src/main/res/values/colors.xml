@@ -4,12 +4,6 @@
     <color name="colorPrimaryDark">@color/blue</color>
     <color name="colorAccent">@color/blue</color>
 
-    <color name="green_dark_color">#3f978c</color>
-    <color name="grayish_blue">#99ABB7</color>
     <color name="blue">#0075e2</color>
-    <color name="white_darker">#f7f7f7</color>
-    <color name="text_color">#757575</color>
-    <color name="colored_text">#51c2f5</color>
     <color name="background">#fafafa</color>
-    <color name="light_blue">#4fc3f7</color>
 </resources>

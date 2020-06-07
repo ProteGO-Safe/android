@@ -1,5 +1,5 @@
 package pl.gov.mc.protegosafe.domain.model
 
-class ClearItem (
+class ClearItem(
     val clearBtData: Boolean
 )

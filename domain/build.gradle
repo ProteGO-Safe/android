@@ -1,18 +1,20 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
+apply from: '../ktlint.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation deps.jetbrains.kotlin_stdlib
 
     //rx
-    implementation "io.reactivex.rxjava2:rxjava:2.2.17"
-    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    implementation deps.rx.rxjava
+    implementation deps.rx.rxkotlin
+
+    //ThreeTenABP
+    implementation deps.time.threetenabp
 
     //Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-    //Time
-    implementation "com.jakewharton.threetenabp:threetenabp:1.2.1"
+    implementation deps.timber.timber
 }
 
 sourceCompatibility = "7"

@@ -9,6 +9,7 @@ import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager.InternetCo
 
 class InternetConnectionManagerImpl(private val context: Context) : InternetConnectionManager {
 
+    @Suppress("DEPRECATION")
     override fun getInternetConnectionStatus(): InternetConnectionStatus {
         var result = InternetConnectionStatus.NONE
 
@@ -37,5 +38,4 @@ class InternetConnectionManagerImpl(private val context: Context) : InternetConn
         }
         return result
     }
-
 }

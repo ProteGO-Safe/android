@@ -3,24 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="pl.gov.mc.protegosafe">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
+    <uses-feature android:name="android.hardware.bluetooth" />
+
+    <uses-sdk tools:overrideLibrary="androidx.security" /> <!-- TODO PSAFE-1074 androidx.security min SDK is 23 -->
 
     <application
         android:name=".App"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -39,17 +33,6 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".receiver.BootCompleteReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name="io.bluetrace.opentrace.services.BluetoothMonitoringService"
-            android:foregroundServiceType="location" />
-
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleInstance"
@@ -61,6 +44,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="${crashlyticsCollectionEnabled}" />
+
+        <!-- Receivers -->
+        <receiver
+            android:name=".receiver.ExposureNotificationBroadcastReceiver"
+            android:exported="true"
+            android:permission="com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK">
+            <intent-filter>
+                <action android:name="com.google.android.gms.exposurenotification.ACTION_EXPOSURE_STATE_UPDATED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receiver.BootCompleteReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

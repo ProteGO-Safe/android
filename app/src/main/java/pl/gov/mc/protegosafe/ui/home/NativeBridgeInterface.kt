@@ -1,30 +1,29 @@
 package pl.gov.mc.protegosafe.ui.home
 
 import android.webkit.JavascriptInterface
-import timber.log.Timber
-
+import pl.gov.mc.protegosafe.logging.webViewTimber
 
 class NativeBridgeInterface(
     private val setBridgeDataCallback: ((dataType: Int, data: String) -> Unit),
-    private val getBridgeDataCallback: (dataType: Int) -> String
+    private val getBridgeDataCallback: ((dataType: Int, data: String, requestId: String) -> Unit)
 ) {
 
     @JavascriptInterface
     fun setBridgeData(dataType: Int, data: String) {
-        Timber.d("setBridgeData: $dataType - $data")
+        webViewTimber().d("setBridgeData: $dataType - $data")
         setBridgeDataCallback(dataType, data)
     }
 
     @JavascriptInterface
     fun setBridgeData(dataType: Int) {
-        Timber.d("setBridgeData: $dataType")
+        webViewTimber().d("setBridgeData: $dataType")
         setBridgeDataCallback(dataType, "")
     }
 
     @JavascriptInterface
-    fun getBridgeData(dataType: Int): String {
-        Timber.d("getBridgeData called: $dataType")
-        return getBridgeDataCallback(dataType)
+    fun getBridgeData(dataType: Int, data: String, requestId: String) {
+        webViewTimber().d("getBridgeData called: $dataType")
+        getBridgeDataCallback(dataType, data, requestId)
     }
 
     companion object {

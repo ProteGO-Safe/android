@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "857351025736-1067ntee14g5mq1eqvb71baiv6b1m2u8.apps.googleusercontent.com",
+          "client_id": "857351025736-7f5kjl1pdecino2ds6vuhpguojkc20sj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "pl.gov.mc.protegosafe.dev",
-            "certificate_hash": "b888ac57233d296d591b360760815050c0bb7d19"
+            "certificate_hash": "7af07167fa4c37ff4454114e2aa9d966d2001981"
           }
         },
         {
@@ -46,6 +46,13 @@
             {
               "client_id": "857351025736-54cq9t4akgr7b7jsmogju9dudh3e1tf3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "857351025736-k6q9ai3h01scaihtv2fvbqp3ka20d0tp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "se.sigmaconnectivity.protegosafe"
+              }
             }
           ]
         }
@@ -60,11 +67,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "857351025736-043mgu9vhdt358um7j4b243n7jou1b0f.apps.googleusercontent.com",
+          "client_id": "857351025736-gii7kil2htiicvck4kluo5hu60lnoe5d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "pl.gov.mc.protegosafe.stage",
-            "certificate_hash": "b888ac57233d296d591b360760815050c0bb7d19"
+            "certificate_hash": "7af07167fa4c37ff4454114e2aa9d966d2001981"
           }
         },
         {
@@ -91,6 +98,13 @@
             {
               "client_id": "857351025736-54cq9t4akgr7b7jsmogju9dudh3e1tf3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "857351025736-k6q9ai3h01scaihtv2fvbqp3ka20d0tp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "se.sigmaconnectivity.protegosafe"
+              }
             }
           ]
         }

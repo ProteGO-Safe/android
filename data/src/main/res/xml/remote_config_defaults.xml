@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>exposureConfiguration</key>
+        <value>
+            {"minimumRiskScore":1,"attenuationScores":[2,5,6,7,8,8,8,8],"attenuationWeigh":50,"daysSinceLastExposureScores":[7,8,8,8,8,8,8,8],"daysSinceLastExposureWeight":50,"durationScores":[0,5,6,7,8,8,8,8],"durationWeight":50,"transmissionRiskScores":[8,8,8,8,8,8,8,8],"transmissionRiskWeight":50,"durationAtAttenuationThresholds":[48,58]}
+        </value>
+    </entry>
+    <entry>
+        <key>diagnosisKeyDownloadConfiguration</key>
+        <value>
+            {"timeoutMobileSeconds":120,"timeoutWifiSeconds":60,"retryCount":2}
+        </value>
+    </entry>
+</defaultsMap>

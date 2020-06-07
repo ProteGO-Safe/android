@@ -1,0 +1,10 @@
+package pl.gov.mc.protegosafe.domain.model
+
+enum class ChangeStatusRequestItem {
+    ENABLE_EXPOSURE_NOTIFICATION_SERVICE,
+    DISABLE_EXPOSURE_NOTIFICATION_SERVICE,
+    ENABLE_BLUETOOTH,
+    ENABLE_LOCATION,
+    ENABLE_NOTIFICATION,
+    UNKNOWN
+}

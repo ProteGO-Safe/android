@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveNotificationData(intent: Intent?) {
-        intent?.getStringExtra(Consts.NOTIFICATION_EXTRA_DATA)?.let {
+        intent?.getStringExtra(Consts.GENERAL_NOTIFICATION_EXTRA_DATA)?.let {
             vm.onNotificationDataReceived(it)
         }
     }
@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
-                Consts.NOTIFICATION_CHANNEL_ID,
-                getString(R.string.notification_channel_name),
+                Consts.GENERAL_NOTIFICATION_CHANNEL_ID,
+                getString(R.string.general_notification_channel_name),
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 enableVibration(false)

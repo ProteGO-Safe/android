@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
+apply from: '../ktlint.gradle'
 
 android {
     compileSdkVersion 29
@@ -12,6 +14,8 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String", "SHARED_PREFERENCES_FILE_NAME", SHARED_PREFERENCES_FILE_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -36,48 +40,68 @@ android {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main-dev\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily-dev\""
+            buildConfigField "String", "FIREBASE_REGION", STAGING_FIREBASE_REGION
+            buildConfigField "String", "FIREBASE_STORAGE_BUCKET_URL", STAGING_FIREBASE_STORAGE_BUCKET_URL
         }
         stage {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main-stage\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily-stage\""
+            buildConfigField "String", "FIREBASE_REGION", STAGING_FIREBASE_REGION
+            buildConfigField "String", "FIREBASE_STORAGE_BUCKET_URL", STAGING_FIREBASE_STORAGE_BUCKET_URL
         }
         prod {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily\""
+            buildConfigField "String", "FIREBASE_REGION", PRODUCTION_FIREBASE_REGION
+            buildConfigField "String", "FIREBASE_STORAGE_BUCKET_URL", PRODUCTION_FIREBASE_STORAGE_BUCKET_URL
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-
-    //Room
-    def room_version = "2.2.5"
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation deps.jetbrains.kotlin_stdlib
+    implementation deps.androidx.appcompat_appcompat
+    implementation deps.androidx.core_ktx
+    implementation deps.androidx.security_crypto
 
     //koin
-    implementation "org.koin:koin-android:2.1.5"
+    implementation deps.koin.android
+
+    //rx
+    implementation deps.rx.rxjava
+    implementation deps.rx.rxkotlin
+    implementation deps.rx.rxandroid
 
     //Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation deps.timber.timber
 
     //Gson
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation deps.google.gson
 
     //Firebase
-    implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation(deps.google.firebase_functions) {
+        exclude group: 'org.json', module: 'json'
+    }
+    implementation deps.google.firebase_config_ktx
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    //GMS
+    implementation deps.google.play_services_base
+    implementation deps.google.play_services_basement
+    implementation deps.google.play_services_tasks
+
+    //Guava
+    implementation deps.google.guava
+
+    // Retrofit
+    implementation deps.retrofit.retrofit
+    implementation deps.retrofit.adapter_rxjava2
+
+    testImplementation deps.tests.junit
+    androidTestImplementation deps.tests.junit_androidx_ext
+    androidTestImplementation deps.tests.espresso
 
     implementation project(path: ":domain")
 }

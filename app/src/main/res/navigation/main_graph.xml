@@ -10,17 +10,4 @@
         android:name="pl.gov.mc.protegosafe.ui.home.HomeFragment"
         tools:layout="@layout/fragment_home" />
 
-    <action
-        android:id="@+id/action_to_infoDialog"
-        app:destination="@+id/infoDialogFragment" />
-
-    <dialog
-        android:id="@+id/infoDialogFragment"
-        android:name="pl.gov.mc.protegosafe.ui.dialog.InfoDialogFragment">
-
-        <argument
-            android:name="messageTextRes"
-            app:argType="reference" />
-    </dialog>
-
 </navigation>

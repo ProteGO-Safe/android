@@ -5,28 +5,33 @@ import android.content.Context
 import android.content.Intent
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import pl.gov.mc.protegosafe.domain.usecase.GetTrackingAgreementStatusUseCase
-import pl.gov.mc.protegosafe.domain.usecase.StartBLEMonitoringServiceUseCase
+import pl.gov.mc.protegosafe.domain.repository.WorkerStateRepository
+import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
 import timber.log.Timber
 
 class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
 
-    private val startBLEMonitoringServiceUseCase: StartBLEMonitoringServiceUseCase by inject()
-    private val getTrackingAgreementStatusUseCase: GetTrackingAgreementStatusUseCase by inject()
+    private val applicationTaskScheduler: ApplicationTaskScheduler by inject()
+    private val workerStateRepository: WorkerStateRepository by inject()
 
     override fun onReceive(context: Context?, intent: Intent) {
-        if (Intent.ACTION_BOOT_COMPLETED == intent.action && getTrackingAgreementStatusUseCase.execute()) {
+        if (Intent.ACTION_BOOT_COMPLETED == intent.action) {
             Timber.d("Boot completed received")
-            try {
-                Timber.d("Attempting to start service")
-                startBLEMonitoringServiceUseCase.execute(START_BLE_MONITOR_SERVICE_DELAY)
-            } catch (e: Throwable) {
-                Timber.e(e, "StartOnBootReceiver")
-            }
+            scheduleProvideDiagnosisKeysWorker()
+            scheduleRemoveOldExposuresWorker()
         }
     }
 
-    companion object {
-        private const val START_BLE_MONITOR_SERVICE_DELAY = 0L
+    private fun scheduleProvideDiagnosisKeysWorker() {
+        val shouldProvideDiagnosisKeysWorkerStartOnBoot =
+            workerStateRepository.shouldProvideDiagnosisKeysWorkerStartOnBoot
+        Timber.i("Should ProvideDiagnosisKeysWorker start on boot: $shouldProvideDiagnosisKeysWorkerStartOnBoot")
+        if (shouldProvideDiagnosisKeysWorkerStartOnBoot) {
+            applicationTaskScheduler.scheduleProvideDiagnosisKeysTask()
+        }
+    }
+
+    private fun scheduleRemoveOldExposuresWorker() {
+        applicationTaskScheduler.scheduleRemoveOldExposuresTask()
     }
 }

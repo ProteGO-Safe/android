@@ -1,11 +1,9 @@
 package pl.gov.mc.protegosafe.domain.repository
 
+import io.reactivex.Single
+import pl.gov.mc.protegosafe.domain.model.ExposureNotificationStatusItem
+
 interface DeviceRepository {
-    fun isBtSupported(): Boolean
-    fun isLocationEnabled(): Boolean
-    fun isBtOn(): Boolean
-    fun isBatteryOptimizationOn(): Boolean
-    fun isNotificationEnabled(): Boolean
-    fun isBtServiceOn(): Boolean
-    fun getServicesStatusJson(): String
+    fun getServicesStatusJson(): Single<String>
+    fun getExposureNotificationStatus(): Single<ExposureNotificationStatusItem>
 }

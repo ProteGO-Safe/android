@@ -3,48 +3,33 @@ package pl.gov.mc.protegosafe.domain.usecase
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
-import pl.gov.mc.protegosafe.domain.model.ClearMapper
+import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
-import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
-import pl.gov.mc.protegosafe.domain.model.TraceStatusMapper
-import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 
 class OnSetBridgeDataUseCase(
     private val postExecutionThread: PostExecutionThread,
-    private val triageRepository: TriageRepository,
-    private val enableBTServiceUseCase: EnableBTServiceUseCase,
-    private val servicesStatusUseCase: GetServicesStatusUseCase,
-    private val clearBtDataUseCase: ClearBtDataUseCase,
-    private val traceStatusMapper: TraceStatusMapper,
-    private val clearMapper: ClearMapper
+    private val saveTriageCompletedUseCase: SaveTriageCompletedUseCase,
+    private val changeServiceStatusUseCase: ChangeServiceStatusUseCase,
+    private val clearExposureNotificationDataUseCase: ClearExposureNotificationDataUseCase,
+    private val uploadTemporaryExposureKeysUseCase: UploadTemporaryExposureKeysUseCase
 ) {
-
-    fun execute(input: IncomingBridgeDataItem, onBridgeData: (Int, String) -> Unit): Completable =
+    fun execute(input: IncomingBridgeDataItem, onResultActionRequired: (ActionRequiredItem) -> Unit): Completable =
         when (input.type) {
             IncomingBridgeDataType.TRIAGE -> {
-                Completable.fromAction {
-                    triageRepository.saveTriageCompletedTimestamp(
-                        triageRepository.parseBridgePayload(
-                            input.payload
-                        ).timestamp
-                    )
-                }
+                saveTriageCompletedUseCase.execute(input.payload)
             }
-            IncomingBridgeDataType.REQUEST_ENABLE_BT_SERVICE -> {
-                enableBTServiceUseCase.execute(
-                    traceStatusMapper.toDomainItem(input.payload).enableBtService
-                ).andThen(Completable.fromAction {
-                    onBridgeData(
-                        OutgoingBridgeDataType.SERVICE_STATUS_CHANGE.code,
-                        servicesStatusUseCase.execute()
-                    )
-                })
+            IncomingBridgeDataType.REQUEST_SERVICE_STATUS_CHANGE -> {
+                changeServiceStatusUseCase.execute(input.payload, onResultActionRequired)
             }
-            IncomingBridgeDataType.REQUEST_CLEAR_BT_DATA -> {
-                clearBtDataUseCase.execute(
-                    clearMapper.toEntity(input.payload)
+            IncomingBridgeDataType.REQUEST_CLEAR_EXPOSURE_NOTIFICATIONS_DATA -> {
+                clearExposureNotificationDataUseCase.execute(
+                    input.payload,
+                    onResultActionRequired
                 )
+            }
+            IncomingBridgeDataType.REQUEST_TEMPORARY_EXPOSURE_KEYS_UPLOAD -> {
+                uploadTemporaryExposureKeysUseCase.execute(input.payload, onResultActionRequired)
             }
             else -> throw IllegalStateException("Illegal input type")
         }
