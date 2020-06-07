@@ -16,7 +16,7 @@ import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.ExposureNotificationActionNotResolvedException
+import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase

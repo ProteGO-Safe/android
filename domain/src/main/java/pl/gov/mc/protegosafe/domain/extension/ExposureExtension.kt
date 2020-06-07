@@ -4,7 +4,7 @@ import java.util.Date
 import org.threeten.bp.DateTimeUtils
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.OffsetDateTime
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.TemporaryExposureKeyItem
+import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 
 private const val EXPOSURE_VALIDITY_DAYS = 14L
 private const val START_TIME_VALUE = 0

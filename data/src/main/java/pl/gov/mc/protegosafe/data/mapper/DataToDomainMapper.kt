@@ -21,7 +21,7 @@ import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import pl.gov.mc.protegosafe.domain.model.TriageItem
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.TemporaryExposureKeyItem
+import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 
 private const val FCM_NOTIFICATION_TITLE_KEY = "title"
 private const val FCM_NOTIFICATION_CONTENT_KEY = "content"
@@ -69,14 +69,15 @@ fun PinData.toEntity() = PinItem(pin = pin)
  * Function contains fix for known Exposure Notification API issue!
  * If [TemporaryExposureKey.getRollingPeriod] == 0, [TemporaryExposureKeyItem.rollingPeriod] = 144
  */
-fun TemporaryExposureKey.toEntity() = TemporaryExposureKeyItem(
-    key = keyData,
-    rollingPeriod = if (rollingPeriod == 0) // TODO remove when fixed by Google - PSAFE-1021
-        calcRollingPeriod(rollingStartIntervalNumber)
-    else
-        rollingPeriod,
-    rollingStartNumber = rollingStartIntervalNumber
-)
+fun TemporaryExposureKey.toEntity() =
+    TemporaryExposureKeyItem(
+        key = keyData,
+        rollingPeriod = if (rollingPeriod == 0) // TODO remove when fixed by Google - PSAFE-1021
+            calcRollingPeriod(rollingStartIntervalNumber)
+        else
+            rollingPeriod,
+        rollingStartNumber = rollingStartIntervalNumber
+    )
 
 fun ExposureSummary.toEntity() = ExposureSummaryItem(
     daysSinceLastExposure = daysSinceLastExposure,

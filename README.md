@@ -53,18 +53,17 @@ To get started on the app, setup and configure the following:
 
 | Name                               | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
-| STAGING_FIREBASE_REGION            | Firebase region in development type of application                                  |
-| STAGING_FIREBASE_UPLOAD_BUCKET     | Firebase bucket for uploading data in development type of application                                 |
-| STAGING_FIREBASE_STORAGE_BUCKET_URL| Firebase bucket url for files storage in development type of application                                 |
-| STAGING_SAFETYNET_API_KEY          | SafetyNet device attestation API Key in development type of application                                |
-| PRODUCTION_FIREBASE_REGION         | Firebase region in production type of application                               |
-| PRODUCTION_FIREBASE_UPLOAD_BUCKET  | Firebase bucket for uploading data in production type of application                          |
-| PRODUCTION_FIREBASE_STORAGE_BUCKET_URL| Firebase bucket url for files storage in production type of application                                 |
-| PRODUCTION_SAFETYNET_API_KEY       | SafetyNet device attestation API Key in production type of application                                    |
+| STAGING_GET_ACCESS_TOKEN_ENDPOINT  | Endpoint for HTTPS call to validate PIN and get proper access token for TEKs upload (development type of application)                              |
+| STAGING_UPLOAD_BUCKET_ENDPOINT     | Endpoint for HTTPS call to upload TEKs (development type of application)                                 |
+| STAGING_STORAGE_BUCKET_ENDPOINT    | Endpoint for CDN with Diagnosis Keys (development type of application)                                   |
+| STAGING_SAFETYNET_API_KEY          | SafetyNet device attestation API Key (development type of application)                                 |
+| PRODUCTION_GET_ACCESS_TOKEN_ENDPOINT| Endpoint for HTTPS call to validate PIN and get proper access token for TEKs upload (production type of application)                              |
+| PRODUCTION_UPLOAD_BUCKET_ENDPOINT  | Endpoint for HTTPS call to upload TEKs (production type of application)                         |
+| PRODUCTION_STORAGE_BUCKET_ENDPOINT | Endpoint for CDN with Diagnosis Keys (production type of application)                                       |
+| PRODUCTION_SAFETYNET_API_KEY       | SafetyNet device attestation API Key (production type of application)                                    |
 | PROD_WEB_URL                       | PWA URL - prod build flavour                                 |
 | STAGE_WEB_URL                      | PWA URL - stage build flavour                                |
 | DEV_WEB_URL                        | PWA URL - dev build flavour                                  |
-| SAFETYNET_API_KEY                  | Api key for SafetyNet                                        |
 | SHARED_PREFERENCES_FILE_NAME       | File name for Shared Preferences storage                     |
 
 ### Firebase and google-services.json
@@ -81,6 +80,16 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.1.1
+
+Security fixes added:
+- Migration of Firebase Cloud Functions to HTTP calls
+- Certificate pinning for HTTP calls and PWA application
+- Preventing app screen recording/taking screenshots
+- Warning about rooted devices displayed on first app launch
+- In-app updates added
+
+Config changes
 
 4.1.0
 

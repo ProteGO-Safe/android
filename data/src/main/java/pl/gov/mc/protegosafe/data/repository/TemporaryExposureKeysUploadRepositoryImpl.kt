@@ -2,10 +2,19 @@ package pl.gov.mc.protegosafe.data.repository
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
+import pl.gov.mc.protegosafe.data.cloud.UploadTemporaryExposureKeysService
+import pl.gov.mc.protegosafe.data.mapper.toTemporaryExposureKeysUploadRequestBody
+import pl.gov.mc.protegosafe.data.model.GetAccessTokenRequestData
+import pl.gov.mc.protegosafe.data.model.RequestBody
+import pl.gov.mc.protegosafe.domain.model.PinItem
+import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
 import timber.log.Timber
 
-class TemporaryExposureKeysUploadRepositoryImpl : TemporaryExposureKeysUploadRepository {
+class TemporaryExposureKeysUploadRepositoryImpl(
+    private val uploadTemporaryExposureKeysService: UploadTemporaryExposureKeysService
+) : TemporaryExposureKeysUploadRepository {
     private var cachedPayload: String? = null
 
     override fun cacheRequestPayload(payload: String): Completable {
@@ -22,5 +31,20 @@ class TemporaryExposureKeysUploadRepositoryImpl : TemporaryExposureKeysUploadRep
     override fun clearCache(): Completable {
         Timber.d("Clear payload cache")
         return Completable.fromAction { cachedPayload = null }
+    }
+
+    override fun getAccessToken(pinItem: PinItem): Single<String> {
+        val requestBody = RequestBody(GetAccessTokenRequestData(pinItem.pin))
+        return uploadTemporaryExposureKeysService.getAccessToken(requestBody)
+            .subscribeOn(Schedulers.io())
+            .map { it.result.token }
+    }
+
+    override fun uploadTemporaryExposureKeys(
+        requestItem: TemporaryExposureKeysUploadRequestItem
+    ): Completable {
+        val requestBody = RequestBody(requestItem.toTemporaryExposureKeysUploadRequestBody())
+        return uploadTemporaryExposureKeysService.uploadDiagnosisKeys(requestBody)
+            .subscribeOn(Schedulers.io())
     }
 }

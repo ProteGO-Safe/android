@@ -12,7 +12,7 @@ import pl.gov.mc.protegosafe.data.extension.toCompletable
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.DiagnosisKeyDownloadConfigurationMapper
+import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfigurationMapper
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
 import timber.log.Timber
 

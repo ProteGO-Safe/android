@@ -44,7 +44,7 @@ Contract with PWA:
   | enableBt | Enable Bluetooth service |
   | enableLocation | Enable Location service |
   | enableNotification | Enable notifications |
-  
+
 - function onBridgeData
 
 |Data type|Description|JSON format|

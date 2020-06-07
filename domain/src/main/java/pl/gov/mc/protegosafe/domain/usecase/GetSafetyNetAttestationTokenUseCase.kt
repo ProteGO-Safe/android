@@ -4,7 +4,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.DiagnosisKey
+import pl.gov.mc.protegosafe.domain.model.DiagnosisKey
 
 class GetSafetyNetAttestationTokenUseCase(
     private val safetyNetAttestationWrapper: SafetyNetAttestationWrapper,
