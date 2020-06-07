@@ -1,11 +1,15 @@
 package pl.gov.mc.protegosafe.di
 
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import io.realm.Realm
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ClearExposureNotificationDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
@@ -37,6 +41,7 @@ val appModule = module {
     factory { WebUrlProvider(get()) }
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }
+    single<AppUpdateManager> { AppUpdateManagerFactory.create(androidContext()) }
 }
 
 val useCaseModule = module {
@@ -54,7 +59,7 @@ val useCaseModule = module {
     factory { ProvideDiagnosisKeysUseCase(get(), get(), get()) }
     factory { GetSafetyNetAttestationTokenUseCase(get(), get()) }
     factory {
-        UploadTemporaryExposureKeysUseCase(get(), get(), get(), get(), get(), get(), get(), get())
+        UploadTemporaryExposureKeysUseCase(get(), get(), get(), get(), get(), get(), get())
     }
     factory { UploadTemporaryExposureKeysWithCachedPayloadUseCase(get(), get(), get()) }
     factory { SaveTriageCompletedUseCase(get()) }
@@ -64,10 +69,11 @@ val useCaseModule = module {
     factory { ProcessPendingActivityResultUseCase(get(), get()) }
     factory { GetExposureInformationUseCase(get(), get()) }
     factory { GetAnalyzeResultUseCase(get(), get(), get()) }
+    factory { CheckDeviceRootedUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
     viewModel {
         HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }

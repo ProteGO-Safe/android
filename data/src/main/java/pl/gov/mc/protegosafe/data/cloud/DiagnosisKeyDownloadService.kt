@@ -6,6 +6,7 @@ import io.reactivex.Single
 import io.reactivex.annotations.CheckReturnValue
 import okhttp3.ResponseBody
 import okio.Okio
+import pl.gov.mc.protegosafe.data.BuildConfig
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -13,11 +14,11 @@ import java.io.File
 
 interface DiagnosisKeyDownloadService {
     // "%2F" is a workaround for double "//" (slashes) before index.txt
-    @GET("%2Findex.txt")
+    @GET("${BuildConfig.STORAGE_BUCKET_ENDPOINT}%2Findex.txt")
     @CheckReturnValue
     fun getIndex(): Single<ResponseBody>
 
-    @GET("{fileName}")
+    @GET("${BuildConfig.STORAGE_BUCKET_ENDPOINT}{fileName}")
     fun download(@Path("fileName") fileName: String): Observable<Response<ResponseBody>>
 }
 

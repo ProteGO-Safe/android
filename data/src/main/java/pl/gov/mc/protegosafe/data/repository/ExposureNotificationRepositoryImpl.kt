@@ -17,7 +17,7 @@ import pl.gov.mc.protegosafe.domain.model.ExposureInformationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationStatusItem
 import pl.gov.mc.protegosafe.domain.model.ExposureSummaryItem
 import pl.gov.mc.protegosafe.domain.model.ResolutionRequest
-import pl.gov.mc.protegosafe.domain.model.exposeNotification.TemporaryExposureKeyItem
+import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import timber.log.Timber
 

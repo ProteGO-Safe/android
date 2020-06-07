@@ -1,6 +1,4 @@
-package pl.gov.mc.protegosafe.domain.model.exposeNotification
-
-import pl.gov.mc.protegosafe.domain.model.ResolutionRequest
+package pl.gov.mc.protegosafe.domain.model
 
 data class ExposureNotificationActionNotResolvedException(
     val resolutionRequest: ResolutionRequest,

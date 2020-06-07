@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config>
+        <domain includeSubdomains="true">safesafe.app</domain>
+        <pin-set>
+            <pin digest="SHA-256">bAXXezeUiUzS0N93QpfratVGiNcHVIKKMfBDjR8S/Ag=</pin>
+            <pin digest="SHA-256">3kcNJzkUJ1RqMXJzFX4Zxux5WfETK+uL6Viq9lJNn4o=</pin>
+        </pin-set>
+        <!-- TrustKit Android API -->
+        <!-- Enforce pinning validation -->
+        <trustkit-config enforcePinning="true" />
+    </domain-config>
+</network-security-config>

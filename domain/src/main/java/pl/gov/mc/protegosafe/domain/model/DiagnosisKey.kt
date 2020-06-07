@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.domain.model.exposeNotification
+package pl.gov.mc.protegosafe.domain.model
 
 data class DiagnosisKey(
     val key: ByteArray,

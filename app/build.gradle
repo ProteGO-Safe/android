@@ -26,8 +26,8 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 19
-        versionName "4.1.0-beta7"
+        versionCode 25
+        versionName "4.1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -128,7 +128,6 @@ dependencies {
 
     //Firebase
     implementation deps.google.firebase_messaging
-    implementation deps.google.firebase_functions
     implementation deps.google.firebase_crashlytics
 
     testImplementation deps.tests.junit
@@ -140,6 +139,9 @@ dependencies {
 
     //permissions
     implementation deps.permissions.easypermissions
+
+    implementation deps.google.play_core
+    implementation deps.google.play_core_ktx
 
     //Hyperion debug tool
     debugImplementation deps.hyperion.core

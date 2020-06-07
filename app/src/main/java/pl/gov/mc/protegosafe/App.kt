@@ -25,6 +25,7 @@ import pl.gov.mc.protegosafe.di.appModule
 import pl.gov.mc.protegosafe.di.deviceModule
 import pl.gov.mc.protegosafe.di.useCaseModule
 import pl.gov.mc.protegosafe.di.viewModelModule
+import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository
 import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
 import timber.log.Timber
 
@@ -32,6 +33,7 @@ class App : Application(), KoinComponent {
 
     private val disposables = CompositeDisposable()
     private val applicationTaskScheduler: ApplicationTaskScheduler by inject()
+    private val certificatePinningRepository: CertificatePinningRepository by inject()
 
     override fun onCreate() {
         super.onCreate()
@@ -41,6 +43,7 @@ class App : Application(), KoinComponent {
             modules(appModule, deviceModule, useCaseModule, dataModule, viewModelModule)
         }
 
+        initializePinning()
         initializeDatabase()
         initializeLogging()
         initializeFcm()
@@ -49,6 +52,10 @@ class App : Application(), KoinComponent {
         removeAllOpenTraceData()
         encryptSharedPrefsIfNeeded()
         scheduleRemoveOldExposuresTask()
+    }
+
+    private fun initializePinning() {
+        certificatePinningRepository.initialize()
     }
 
     private fun initializeThreeTenABP() {

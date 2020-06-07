@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/text_view_no_internet_connection"
+        android:id="@+id/text_view_connection_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_internet_connection_msg"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
         android:src="@drawable/ic_cloud_off"
-        app:layout_constraintBottom_toTopOf="@+id/text_view_no_internet_connection"
+        app:layout_constraintBottom_toTopOf="@+id/text_view_connection_error"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
@@ -32,6 +32,6 @@
         android:text="@string/no_internet_connection_refresh"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_view_no_internet_connection" />
+        app:layout_constraintTop_toBottomOf="@id/text_view_connection_error" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
