@@ -5,6 +5,7 @@ import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
 import pl.gov.mc.protegosafe.domain.model.SafetyNetResult
+import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.domain.repository.SafetyNetCheckRepository
 import java.io.ByteArrayOutputStream
 import java.security.SecureRandom
@@ -13,15 +14,22 @@ import java.util.UUID
 class CheckDeviceRootedUseCase(
     private val safetyNetCheckRepository: SafetyNetCheckRepository,
     private val safetyNetAttestationWrapper: SafetyNetAttestationWrapper,
+    private val deviceRepository: DeviceRepository,
     private val postExecutionThread: PostExecutionThread
 ) {
     fun execute() =
         safetyNetCheckRepository.isDeviceChecked()
-            .flatMap {
-                if (it) {
-                    Single.just(SafetyNetResult.Success)
-                } else {
-                    checkDevice()
+            .flatMap { isDeviceChecked ->
+                when {
+                    isDeviceChecked -> {
+                        Single.just(SafetyNetResult.Success)
+                    }
+                    deviceRepository.isGooglePlayServicesAvailable() -> {
+                        checkDevice()
+                    }
+                    else -> {
+                        Single.just(SafetyNetResult.Failure.GooglePlayServicesNotAvailable)
+                    }
                 }
             }
 

@@ -6,4 +6,5 @@ import pl.gov.mc.protegosafe.domain.model.ExposureNotificationStatusItem
 interface DeviceRepository {
     fun getServicesStatusJson(): Single<String>
     fun getExposureNotificationStatus(): Single<ExposureNotificationStatusItem>
+    fun isGooglePlayServicesAvailable(): Boolean
 }

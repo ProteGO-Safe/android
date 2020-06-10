@@ -69,7 +69,7 @@ val useCaseModule = module {
     factory { ProcessPendingActivityResultUseCase(get(), get()) }
     factory { GetExposureInformationUseCase(get(), get()) }
     factory { GetAnalyzeResultUseCase(get(), get(), get()) }
-    factory { CheckDeviceRootedUseCase(get(), get(), get()) }
+    factory { CheckDeviceRootedUseCase(get(), get(), get(), get()) }
 }
 
 val viewModelModule = module {

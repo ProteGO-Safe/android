@@ -19,15 +19,6 @@ class MainViewModel(
 ) : BaseViewModel() {
 
     init {
-        checkForApplicationUpdates()
-    }
-
-    private val _appUpdateInfoEvent = MutableLiveData<AppUpdateInfo>()
-    val appUpdateInfoEvent: LiveData<AppUpdateInfo> = _appUpdateInfoEvent
-    private val _showSafetyNetProblem = SingleLiveEvent<Unit>()
-    val showSafetyNetProblem: LiveData<Unit> = _showSafetyNetProblem
-
-    init {
         checkDeviceRootedUseCase.execute()
             .subscribe({
                 if (it == SafetyNetResult.Failure.SafetyError) {
@@ -36,13 +27,20 @@ class MainViewModel(
             }, {
                 Timber.e(it, "SafetyNetError")
             }).addTo(disposables)
+
+        checkForApplicationUpdates()
     }
+
+    private val _appUpdateInfoEvent = MutableLiveData<AppUpdateInfo>()
+    val appUpdateInfoEvent: LiveData<AppUpdateInfo> = _appUpdateInfoEvent
+    private val _showSafetyNetProblem = SingleLiveEvent<Unit>()
+    val showSafetyNetProblem: LiveData<Unit> = _showSafetyNetProblem
 
     fun onNotificationDataReceived(data: String) {
         saveNotificationDataUseCase.execute(data)
     }
 
-    fun checkForApplicationUpdates() {
+    private fun checkForApplicationUpdates() {
         Timber.d("checkForApplicationUpdates")
         appUpdateManager.appUpdateInfo.addOnCompleteListener { task ->
             if (task.isSuccessful) {

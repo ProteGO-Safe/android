@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.location.LocationManager
 import androidx.core.app.NotificationManagerCompat
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
 import io.reactivex.Single
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationStatusItem
@@ -34,6 +36,11 @@ class DeviceRepositoryImpl(
 
     override fun getExposureNotificationStatus(): Single<ExposureNotificationStatusItem> {
         return exposureNotificationRepository.getExposureNotificationState()
+    }
+
+    override fun isGooglePlayServicesAvailable(): Boolean {
+        return GoogleApiAvailability.getInstance()
+            .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
     }
 
     private fun isBtOn(): Boolean {
