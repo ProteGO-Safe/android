@@ -40,7 +40,10 @@ class DeviceRepositoryImpl(
 
     override fun isGooglePlayServicesAvailable(): Boolean {
         return GoogleApiAvailability.getInstance()
-            .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
+            .isGooglePlayServicesAvailable(
+                context,
+                MIN_GOOGLE_PLAY_SERVICES_VERSION
+            ) == ConnectionResult.SUCCESS
     }
 
     private fun isBtOn(): Boolean {
@@ -59,3 +62,6 @@ class DeviceRepositoryImpl(
             ?: false
     }
 }
+
+// A minApkVersion of Google Play services - 13000000 - must be verified when using app-restricted API keys for SafetyNet
+private const val MIN_GOOGLE_PLAY_SERVICES_VERSION = 13000000
