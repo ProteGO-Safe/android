@@ -141,7 +141,8 @@ class DiagnosisKeyRepositoryImpl(
                 val timeout = when (internetConnectionManager.getInternetConnectionStatus()) {
                     InternetConnectionManager.InternetConnectionStatus.NONE ->
                         throw NoInternetConnectionException()
-                    InternetConnectionManager.InternetConnectionStatus.MOBILE_DATA ->
+                    InternetConnectionManager.InternetConnectionStatus.MOBILE_DATA,
+                    InternetConnectionManager.InternetConnectionStatus.VPN ->
                         remoteConfiguration.timeoutMobileSeconds
                     InternetConnectionManager.InternetConnectionStatus.WIFI ->
                         remoteConfiguration.timeoutWifiSeconds
