@@ -12,4 +12,10 @@
             {"timeoutMobileSeconds":120,"timeoutWifiSeconds":60,"retryCount":2}
         </value>
     </entry>
+    <entry>
+        <key>riskLevelConfiguration</key>
+        <value>
+            {"maxNoRiskScore":0,"maxLowRiskScore":1499,"maxMiddleRiskScore":2999}
+        </value>
+    </entry>
 </defaultsMap>

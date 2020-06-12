@@ -27,6 +27,7 @@ import pl.gov.mc.protegosafe.data.mapper.ClearMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.DiagnosisKeyDownloadConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.ExposureConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.PinMapperImpl
+import pl.gov.mc.protegosafe.data.mapper.RiskLevelConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.model.OutgoingBridgeDataResultComposerImpl
 import pl.gov.mc.protegosafe.data.repository.DiagnosisKeyRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureNotificationRepositoryImpl
@@ -45,6 +46,7 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfigurationMapper
+import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
@@ -77,7 +79,7 @@ val dataModule = module {
     factory<ClearMapper> { ClearMapperImpl() }
     single { Nearby.getExposureNotificationClient(androidApplication()) }
     single<ExposureNotificationRepository> { ExposureNotificationRepositoryImpl(get(), get()) }
-    single<RemoteConfigurationRepository> { RemoteConfigurationRepositoryImpl(get(), get()) }
+    single<RemoteConfigurationRepository> { RemoteConfigurationRepositoryImpl(get(), get(), get()) }
     factory<ExposureConfigurationMapper> { ExposureConfigurationMapperImpl() }
     factory<DiagnosisKeyDownloadConfigurationMapper> { DiagnosisKeyDownloadConfigurationMapperImpl() }
     factory<PinMapper> { PinMapperImpl() }
@@ -103,6 +105,7 @@ val dataModule = module {
     single<CertificatePinningRepository> { CertificatePinningRepositoryImpl(get()) }
     single { SafetyNetDataStore(get()) }
     single<SafetyNetCheckRepository> { SafetyNetCheckRepositoryImpl(get()) }
+    single<RiskLevelConfigurationMapper> { RiskLevelConfigurationMapperImpl() }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(

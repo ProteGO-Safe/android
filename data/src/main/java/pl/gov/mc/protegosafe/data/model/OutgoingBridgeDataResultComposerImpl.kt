@@ -1,18 +1,26 @@
 package pl.gov.mc.protegosafe.data.model
 
-import com.google.gson.Gson
+import pl.gov.mc.protegosafe.data.extension.toJson
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
+import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 
 class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
     override fun composeTemporaryExposureKeysUploadResult(state: TemporaryExposureKeysUploadState): String =
-        Gson().toJson(TemporaryExposureKeysUploadResult(state.code))
+        TemporaryExposureKeysUploadResult(state.code).toJson()
 
     override fun composeAppLifecycleStateResult(state: AppLifecycleState): String =
-        Gson().toJson(AppLifecycleStateResult(state.code))
+        AppLifecycleStateResult(state.code).toJson()
 
-    override fun composeAnalyzeResult(exposure: ExposureItem): String =
-        Gson().toJson(AnalyzeResultData(RiskLevelData.fromRiskScore(exposure.riskScore).value))
+    override fun composeAnalyzeResult(
+        riskLevelConfigurationItem: RiskLevelConfigurationItem,
+        exposure: ExposureItem
+    ): String = AnalyzeResultData(
+        RiskLevelData.fromRiskScore(
+            riskLevelConfigurationItem,
+            exposure.riskScore
+        ).value
+    ).toJson()
 }
