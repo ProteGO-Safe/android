@@ -61,9 +61,6 @@ To get started on the app, setup and configure the following:
 | PRODUCTION_FIREBASE_UPLOAD_BUCKET  | Firebase bucket for uploading data in production type of application                          |
 | PRODUCTION_FIREBASE_STORAGE_BUCKET | Firebase bucket for files storage in production type of application                                 |
 | PRODUCTION_SAFETYNET_API_KEY       | SafetyNet device attestation API Key in production type of application                                    |
-| PROD_WEB_URL                       | PWA URL - prod build flavour                                 |
-| STAGE_WEB_URL                      | PWA URL - stage build flavour                                |
-| DEV_WEB_URL                        | PWA URL - dev build flavour                                  |
 | SAFETYNET_API_KEY                  | Api key for SafetyNet                                        |
 | SHARED_PREFERENCES_FILE_NAME       | File name for Shared Preferences storage                     |
 

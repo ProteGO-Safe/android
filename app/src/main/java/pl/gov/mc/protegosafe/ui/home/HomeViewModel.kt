@@ -1,13 +1,10 @@
 package pl.gov.mc.protegosafe.ui.home
 
-import android.os.Build
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebViewClient
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
 import pl.gov.mc.protegosafe.domain.model.ActivityResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
@@ -18,7 +15,6 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
@@ -35,7 +31,6 @@ class HomeViewModel(
     private val onSetBridgeDataUseCase: OnSetBridgeDataUseCase,
     private val servicesStatusUseCase: GetServicesStatusUseCase,
     private val onGetBridgeDataUseCase: OnGetBridgeDataUseCase,
-    private val internetConnectionStatusUseCase: GetInternetConnectionStatusUseCase,
     private val startExposureNotificationUseCase: StartExposureNotificationUseCase,
     private val composeAppLifecycleStateBrideDataUseCase: ComposeAppLifecycleStateBrideDataUseCase,
     private val uploadTemporaryExposureKeysWithCachedPayloadUseCase: UploadTemporaryExposureKeysWithCachedPayloadUseCase,
@@ -59,8 +54,8 @@ class HomeViewModel(
     private val _requestClearData = SingleLiveEvent<Unit>()
     val requestClearData: LiveData<Unit> = _requestClearData
 
-    private val _webViewVisibilityChanged = MutableLiveData<Boolean>()
-    val webViewVisibilityChanged: LiveData<Boolean> = _webViewVisibilityChanged
+    private val _showConnectionError = MutableLiveData<Unit>()
+    val showConnectionError: LiveData<Unit> = _showConnectionError
 
     private val _requestExposureNotificationPermission =
         SingleLiveEvent<ExposureNotificationActionNotResolvedException>()
@@ -75,11 +70,7 @@ class HomeViewModel(
             ), ::onResultActionRequired
         ).subscribeBy(
             onComplete = { Timber.d("OnSetBridgeData executed") },
-            onError = { error ->
-                (error as? ExposureNotificationActionNotResolvedException)?.let {
-                    handleNotResolvedException(it)
-                } ?: Timber.e(error, "Problem running onSetBridgeDataUseCase")
-            }
+            onError = { error -> handleError(error) }
         ).addTo(disposables)
     }
 
@@ -102,12 +93,43 @@ class HomeViewModel(
             }).addTo(disposables)
     }
 
+    fun onUploadRetry() {
+        uploadTemporaryExposureKeysWithCachedPayload()
+    }
+
+    fun sendUploadCanceled() {
+        onBridgeData(
+            OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code,
+            outgoingBridgeDataResultComposer.composeTemporaryExposureKeysUploadResult(
+                TemporaryExposureKeysUploadState.OTHER
+            )
+        )
+    }
+
+    private fun handleError(error: Throwable) {
+        when (error) {
+            is ExposureNotificationActionNotResolvedException -> {
+                handleNotResolvedException(error)
+            }
+            is NoInternetConnectionException -> {
+                _showConnectionError.postValue(Unit)
+            }
+            else -> {
+                Timber.e(error, "Problem can not be handled")
+            }
+        }
+    }
+
     private fun onTemporaryExposureKeysAccessGranted() {
+        uploadTemporaryExposureKeysWithCachedPayload()
+    }
+
+    private fun uploadTemporaryExposureKeysWithCachedPayload() {
         uploadTemporaryExposureKeysWithCachedPayloadUseCase.execute(::onResultActionRequired)
             .subscribe({
                 Timber.d("Temporary exposure keys upload with cached payload finished")
             }, {
-                Timber.e(it, "Temporary exposure keys upload with cached payload failed")
+                handleError(it)
             }).addTo(disposables)
     }
 
@@ -119,27 +141,6 @@ class HomeViewModel(
             }, {
                 Timber.d(it, "Starting Exposure Notification failed")
             }).addTo(disposables)
-    }
-
-    fun onWebViewReceivedError(
-        request: WebResourceRequest?,
-        error: WebResourceError?
-    ) {
-        Timber.e("onWebViewReceivedError, error: $error")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (error?.errorCode in CONNECTION_ERROR_LIST) {
-                _webViewVisibilityChanged.postValue(false)
-            } else {
-                updateWebViewVisibility()
-            }
-        } else {
-            updateWebViewVisibility()
-        }
-    }
-
-    fun onWebViewPageFinished(url: String?) {
-        Timber.i("onWebViewPageFinished, url: $url")
-        updateWebViewVisibility()
     }
 
     fun processPendingActivityResult() {
@@ -211,13 +212,6 @@ class HomeViewModel(
             }).addTo(disposables)
     }
 
-    private fun updateWebViewVisibility() {
-        val showWebView = internetConnectionStatusUseCase.execute().isConnected()
-        if (showWebView != _webViewVisibilityChanged.value) {
-            _webViewVisibilityChanged.postValue(showWebView)
-        }
-    }
-
     private fun bridgeDataResponse(body: String, dataType: Int, requestId: String) {
         val codeToExecute = "bridgeDataResponse('$body', $dataType, '$requestId')"
         webViewTimber().d("run Javascript: -$codeToExecute-")
@@ -232,13 +226,5 @@ class HomeViewModel(
 
     private fun handleNotResolvedException(exception: ExposureNotificationActionNotResolvedException) {
         _requestExposureNotificationPermission.postValue(exception)
-    }
-
-    companion object {
-        private val CONNECTION_ERROR_LIST = arrayOf(
-            WebViewClient.ERROR_HOST_LOOKUP,
-            WebViewClient.ERROR_CONNECT,
-            WebViewClient.ERROR_TIMEOUT
-        )
     }
 }

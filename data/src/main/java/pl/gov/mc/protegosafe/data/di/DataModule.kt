@@ -13,6 +13,7 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.data.BuildConfig
+import pl.gov.mc.protegosafe.data.Consts
 import pl.gov.mc.protegosafe.data.KeyUploadSystemInfoRepositoryImpl
 import pl.gov.mc.protegosafe.data.cloud.DiagnosisKeyDownloadService
 import pl.gov.mc.protegosafe.data.cloud.UploadTemporaryExposureKeysService
@@ -20,6 +21,7 @@ import pl.gov.mc.protegosafe.data.db.NotificationDataStore
 import pl.gov.mc.protegosafe.data.db.SafetyNetDataStore
 import pl.gov.mc.protegosafe.data.db.SharedPreferencesDelegates
 import pl.gov.mc.protegosafe.data.db.TriageDataStore
+import pl.gov.mc.protegosafe.data.db.AppVersionDataStore
 import pl.gov.mc.protegosafe.data.db.dao.ExposureDao
 import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.data.mapper.ApiExceptionMapperImpl
@@ -35,6 +37,7 @@ import pl.gov.mc.protegosafe.data.repository.ExposureRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.NotificationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.PendingActivityResultRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.CertificatePinningRepositoryImpl
+import pl.gov.mc.protegosafe.data.repository.MigrationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.RemoteConfigurationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.SafetyNetCheckRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TemporaryExposureKeysUploadRepositoryImpl
@@ -54,6 +57,7 @@ import pl.gov.mc.protegosafe.domain.repository.KeyUploadSystemInfoRepository
 import pl.gov.mc.protegosafe.domain.repository.NotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.PendingActivityResultRepository
 import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository
+import pl.gov.mc.protegosafe.domain.repository.MigrationRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
 import pl.gov.mc.protegosafe.domain.repository.SafetyNetCheckRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
@@ -106,6 +110,8 @@ val dataModule = module {
     single { SafetyNetDataStore(get()) }
     single<SafetyNetCheckRepository> { SafetyNetCheckRepositoryImpl(get()) }
     single<RiskLevelConfigurationMapper> { RiskLevelConfigurationMapperImpl() }
+    single { AppVersionDataStore(get()) }
+    single<MigrationRepository> { MigrationRepositoryImpl(get(), get(), get()) }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(
@@ -138,7 +144,7 @@ fun provideRetrofit(): Retrofit {
     }.build()
 
     return Retrofit.Builder()
-        .baseUrl(BuildConfig.WEB)
+        .baseUrl(Consts.BASE_URL_FORMAT)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
