@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "09c5c841de8efb0f4a65b492e2f47e31",
+    "revision": "927905ee231dd7f54879b467d6c0dd2b",
     "url": "./index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/css/2.fb8a0bac.chunk.css"
   },
   {
-    "revision": "68375b39ee54cc86f677",
+    "revision": "ec24c0f04ca0b8be525f",
     "url": "./static/css/main.dc94683e.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/js/2.6f40d57d.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "68375b39ee54cc86f677",
-    "url": "./static/js/main.7b5f2f9d.chunk.js"
+    "revision": "ec24c0f04ca0b8be525f",
+    "url": "./static/js/main.7df5109e.chunk.js"
   },
   {
     "revision": "fe551a0d0a353dab2e43",
@@ -60,20 +60,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/media/OpenSans-Regular.6fde2eb6.woff"
   },
   {
-    "revision": "5bfd3fe39b33b3e3d2437f09c376d6b4",
-    "url": "./static/media/SafeSafe-dolne-menu-FAQ-white.5bfd3fe3.svg"
+    "revision": "c3c8508dfccf8c952d2a91c9df7ecce8",
+    "url": "./static/media/SafeSafe-dolne-menu-FAQ-white.c3c8508d.svg"
   },
   {
-    "revision": "4706e1fa30a41ee47d833b1aeff5a8f5",
-    "url": "./static/media/SafeSafe-dolne-menu-Home-white.4706e1fa.svg"
+    "revision": "f2c37e8488c0422a7380253048041b89",
+    "url": "./static/media/SafeSafe-dolne-menu-Home-white.f2c37e84.svg"
   },
   {
-    "revision": "32b14e827014ee15802ff6ee08cfe812",
-    "url": "./static/media/SafeSafe-dolne-menu-Info-white.32b14e82.svg"
+    "revision": "bd90a667766659f9106e433c7814781a",
+    "url": "./static/media/SafeSafe-dolne-menu-Info-white.bd90a667.svg"
   },
   {
-    "revision": "0effcbf62df269e35f172040cb1b6fb0",
-    "url": "./static/media/SafeSafe-dolne-menu-More-white.0effcbf6.svg"
+    "revision": "687ad993c2bf309e0d591de3c9d5387b",
+    "url": "./static/media/SafeSafe-dolne-menu-More-white.687ad993.svg"
   },
   {
     "revision": "31a0db43cc183e62ab26489a19c14b6f",
