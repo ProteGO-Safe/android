@@ -3,7 +3,9 @@ package pl.gov.mc.protegosafe.domain.usecase
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
+import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
 import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
@@ -25,6 +27,7 @@ class UploadTemporaryExposureKeysUseCase(
     private val resultComposer: OutgoingBridgeDataResultComposer,
     private val pinMapper: PinMapper,
     private val temporaryExposureKeysUploadRepository: TemporaryExposureKeysUploadRepository,
+    private val internetConnectionManager: InternetConnectionManager,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -32,11 +35,40 @@ class UploadTemporaryExposureKeysUseCase(
         payload: String,
         onResultActionRequired: (ActionRequiredItem) -> Unit
     ): Completable =
-        getTemporaryExposureKeys(payload, onResultActionRequired)
-            .flatMapCompletable { getAccessTokenAndUploadKeys(payload, onResultActionRequired, it) }
-            .andThen(sendSuccessResult(onResultActionRequired))
+        checkInternet()
+            .flatMapCompletable {
+                if (it.isConnected()) {
+                    startUpload(payload, onResultActionRequired)
+                } else {
+                    cachePayloadAndReturnConnectionError(payload)
+                }
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
+
+    private fun checkInternet(): Single<InternetConnectionManager.InternetConnectionStatus> {
+        return Single.fromCallable {
+            internetConnectionManager.getInternetConnectionStatus()
+        }
+    }
+
+    private fun startUpload(
+        payload: String,
+        onResultActionRequired: (ActionRequiredItem) -> Unit
+    ): Completable {
+        return getTemporaryExposureKeys(payload, onResultActionRequired)
+            .flatMapCompletable {
+                getAccessTokenAndUploadKeys(payload, onResultActionRequired, it)
+            }
+            .andThen(sendSuccessResult(onResultActionRequired))
+    }
+
+    private fun cachePayloadAndReturnConnectionError(payload: String): Completable {
+        return temporaryExposureKeysUploadRepository.cacheRequestPayload(payload)
+            .andThen(
+                Completable.error(NoInternetConnectionException())
+            )
+    }
 
     private fun getAccessToken(pin: PinItem): Single<String> =
         temporaryExposureKeysUploadRepository.getAccessToken(pin)
@@ -62,10 +94,17 @@ class UploadTemporaryExposureKeysUseCase(
     private fun sendFailureResultAndThrowError(
         error: Throwable,
         onResultActionRequired: (ActionRequiredItem) -> Unit
-    ): Completable =
-        sendResult(TemporaryExposureKeysUploadState.FAILURE, onResultActionRequired).andThen(
-            Completable.error(error)
-        )
+    ): Completable {
+        val state = if (error is NoInternetConnectionException) {
+            TemporaryExposureKeysUploadState.OTHER
+        } else {
+            TemporaryExposureKeysUploadState.FAILURE
+        }
+        return sendResult(state, onResultActionRequired)
+            .andThen(
+                Completable.error(error)
+            )
+    }
 
     private fun sendResult(
         state: TemporaryExposureKeysUploadState,

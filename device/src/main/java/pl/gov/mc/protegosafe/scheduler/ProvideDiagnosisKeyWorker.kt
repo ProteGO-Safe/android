@@ -6,7 +6,6 @@ import androidx.work.WorkerParameters
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import java.io.File
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
@@ -16,6 +15,7 @@ import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
 import pl.gov.mc.protegosafe.domain.usecase.DiagnosisKeysFileNameToTimestampUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
 import timber.log.Timber
+import java.io.File
 
 class ProvideDiagnosisKeyWorker(
     appContext: Context,
@@ -53,6 +53,7 @@ class ProvideDiagnosisKeyWorker(
                         }
                     }
                 }.onErrorResumeNext {
+                    Timber.d(it, "ProvideDiagnosisKeyWorker")
                     Single.just(Result.retry())
                 }
             }
