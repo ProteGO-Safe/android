@@ -38,7 +38,7 @@ class DeviceRepositoryImpl(
         return exposureNotificationRepository.getExposureNotificationState()
     }
 
-    override fun isGooglePlayServicesAvailable(): Boolean {
+    override fun isGooglePlayServicesForSafetyNetAvailable(): Boolean {
         return GoogleApiAvailability.getInstance()
             .isGooglePlayServicesAvailable(
                 context,

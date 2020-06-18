@@ -24,11 +24,11 @@ class CheckDeviceRootedUseCase(
                     isDeviceChecked -> {
                         Single.just(SafetyNetResult.Success)
                     }
-                    deviceRepository.isGooglePlayServicesAvailable() -> {
+                    deviceRepository.isGooglePlayServicesForSafetyNetAvailable() -> {
                         checkDevice()
                     }
                     else -> {
-                        Single.just(SafetyNetResult.Failure.GooglePlayServicesNotAvailable)
+                        Single.just(SafetyNetResult.Failure.GooglePlayServicesForSafetyNetNotAvailable)
                     }
                 }
             }
