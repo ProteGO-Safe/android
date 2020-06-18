@@ -77,6 +77,15 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.2.0
+
+PWA GUI migrated to offline version (local assets)
+Migration of PWA data from previous versions added
+Improved device verification check (missing Google Play services handled properly)
+Risk level thresholds added as configuration
+VPN connection problem fixed (still valid for keys upload)
+Improved download files process (omitting not existing files)
+
 4.1.1
 
 Security fixes added:
