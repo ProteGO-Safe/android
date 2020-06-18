@@ -15,12 +15,8 @@ import timber.log.Timber
 class MainViewModel(
     private val appUpdateManager: AppUpdateManager,
     private val saveNotificationDataUseCase: SaveNotificationDataUseCase,
-    checkDeviceRootedUseCase: CheckDeviceRootedUseCase
+    private val checkDeviceRootedUseCase: CheckDeviceRootedUseCase
 ) : BaseViewModel() {
-
-    init {
-        checkForApplicationUpdates()
-    }
 
     private val _appUpdateInfoEvent = MutableLiveData<AppUpdateInfo>()
     val appUpdateInfoEvent: LiveData<AppUpdateInfo> = _appUpdateInfoEvent
@@ -28,6 +24,16 @@ class MainViewModel(
     val showSafetyNetProblem: LiveData<Unit> = _showSafetyNetProblem
 
     init {
+        checkDeviceRooted()
+        checkForApplicationUpdates()
+    }
+
+    fun onNotificationDataReceived(data: String) {
+        saveNotificationDataUseCase.execute(data)
+    }
+
+    private fun checkDeviceRooted() {
+        Timber.d("checkDeviceRooted")
         checkDeviceRootedUseCase.execute()
             .subscribe({
                 if (it == SafetyNetResult.Failure.SafetyError) {
@@ -38,11 +44,7 @@ class MainViewModel(
             }).addTo(disposables)
     }
 
-    fun onNotificationDataReceived(data: String) {
-        saveNotificationDataUseCase.execute(data)
-    }
-
-    fun checkForApplicationUpdates() {
+    private fun checkForApplicationUpdates() {
         Timber.d("checkForApplicationUpdates")
         appUpdateManager.appUpdateInfo.addOnCompleteListener { task ->
             if (task.isSuccessful) {

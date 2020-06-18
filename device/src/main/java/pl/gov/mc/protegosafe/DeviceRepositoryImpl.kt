@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.location.LocationManager
 import androidx.core.app.NotificationManagerCompat
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
 import io.reactivex.Single
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationStatusItem
@@ -36,6 +38,14 @@ class DeviceRepositoryImpl(
         return exposureNotificationRepository.getExposureNotificationState()
     }
 
+    override fun isGooglePlayServicesForSafetyNetAvailable(): Boolean {
+        return GoogleApiAvailability.getInstance()
+            .isGooglePlayServicesAvailable(
+                context,
+                MIN_GOOGLE_PLAY_SERVICES_VERSION
+            ) == ConnectionResult.SUCCESS
+    }
+
     private fun isBtOn(): Boolean {
         return (context.getSystemService(Context.BLUETOOTH_SERVICE) as? BluetoothManager)
             ?.adapter
@@ -52,3 +62,6 @@ class DeviceRepositoryImpl(
             ?: false
     }
 }
+
+// A minApkVersion of Google Play services - 13000000 - must be verified when using app-restricted API keys for SafetyNet
+private const val MIN_GOOGLE_PLAY_SERVICES_VERSION = 13000000

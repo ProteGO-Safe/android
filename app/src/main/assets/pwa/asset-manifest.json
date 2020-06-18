@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "./static/css/main.dc94683e.chunk.css",
-    "main.js": "./static/js/main.7b5f2f9d.chunk.js",
-    "main.js.map": "./static/js/main.7b5f2f9d.chunk.js.map",
+    "main.js": "./static/js/main.7df5109e.chunk.js",
+    "main.js.map": "./static/js/main.7df5109e.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.115a4ed7.js",
     "runtime-main.js.map": "./static/js/runtime-main.115a4ed7.js.map",
     "static/css/2.fb8a0bac.chunk.css": "./static/css/2.fb8a0bac.chunk.css",
     "static/js/2.6f40d57d.chunk.js": "./static/js/2.6f40d57d.chunk.js",
     "static/js/2.6f40d57d.chunk.js.map": "./static/js/2.6f40d57d.chunk.js.map",
     "index.html": "./index.html",
-    "precache-manifest.9b93fd1df078ff042a4ca9000566e8b5.js": "./precache-manifest.9b93fd1df078ff042a4ca9000566e8b5.js",
+    "precache-manifest.44b24abcf888dcd8dbf2ca69917ccf94.js": "./precache-manifest.44b24abcf888dcd8dbf2ca69917ccf94.js",
     "service-worker.js": "./service-worker.js",
     "static/css/2.fb8a0bac.chunk.css.map": "./static/css/2.fb8a0bac.chunk.css.map",
     "static/css/main.dc94683e.chunk.css.map": "./static/css/main.dc94683e.chunk.css.map",
@@ -17,10 +17,10 @@
     "static/media/Logo-govpl-WHITE.svg": "./static/media/Logo-govpl-WHITE.83177134.svg",
     "static/media/Logo-govpl.svg": "./static/media/Logo-govpl.65d43f08.svg",
     "static/media/index.css": "./static/media/OpenSans-Regular.6fde2eb6.woff",
-    "static/media/SafeSafe-dolne-menu-FAQ-white.5bfd3fe3.svg": "./static/media/SafeSafe-dolne-menu-FAQ-white.5bfd3fe3.svg",
-    "static/media/SafeSafe-dolne-menu-Home-white.4706e1fa.svg": "./static/media/SafeSafe-dolne-menu-Home-white.4706e1fa.svg",
-    "static/media/SafeSafe-dolne-menu-Info-white.32b14e82.svg": "./static/media/SafeSafe-dolne-menu-Info-white.32b14e82.svg",
-    "static/media/SafeSafe-dolne-menu-More-white.0effcbf6.svg": "./static/media/SafeSafe-dolne-menu-More-white.0effcbf6.svg",
+    "static/media/SafeSafe-dolne-menu-FAQ-white.c3c8508d.svg": "./static/media/SafeSafe-dolne-menu-FAQ-white.c3c8508d.svg",
+    "static/media/SafeSafe-dolne-menu-Home-white.f2c37e84.svg": "./static/media/SafeSafe-dolne-menu-Home-white.f2c37e84.svg",
+    "static/media/SafeSafe-dolne-menu-Info-white.bd90a667.svg": "./static/media/SafeSafe-dolne-menu-Info-white.bd90a667.svg",
+    "static/media/SafeSafe-dolne-menu-More-white.687ad993.svg": "./static/media/SafeSafe-dolne-menu-More-white.687ad993.svg",
     "static/media/angle-left.31a0db43.svg": "./static/media/angle-left.31a0db43.svg",
     "static/media/angle-right-current.svg": "./static/media/angle-right-current.741006e6.svg",
     "static/media/angle-right-white.svg": "./static/media/angle-right-white.e7a48e3d.svg",
@@ -69,6 +69,6 @@
     "static/css/2.fb8a0bac.chunk.css",
     "static/js/2.6f40d57d.chunk.js",
     "static/css/main.dc94683e.chunk.css",
-    "static/js/main.7b5f2f9d.chunk.js"
+    "static/js/main.7df5109e.chunk.js"
   ]
 }
