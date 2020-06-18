@@ -26,8 +26,8 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 22
-        versionName "4.1.0"
+        versionCode 33
+        versionName "4.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -57,21 +57,18 @@ android {
     productFlavors {
         dev {
             dimension "mode"
-            buildConfigField "String", "WEB", DEV_WEB_URL
             applicationIdSuffix ".dev"
             versionNameSuffix '-DEV'
             manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
         }
         stage {
             dimension "mode"
-            buildConfigField "String", "WEB", STAGE_WEB_URL
             applicationIdSuffix ".stage"
             versionNameSuffix '-STAGE'
             manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
         }
         prod {
             dimension "mode"
-            buildConfigField "String", "WEB", PROD_WEB_URL
             manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
         }
     }

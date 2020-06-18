@@ -64,6 +64,19 @@ class DiagnosisKeyRepositoryImpl(
                                         )
                                         .retry(downloadConfiguration.retryCount)
                                         .doOnComplete { downloadedFileList.add(file) }
+                                        .doOnError {
+                                            /*
+                                             * If file download fail from any reason then the file
+                                             * has to be deleted. Otherwise, potentially malformed
+                                             * file won't be downloaded again - if file already
+                                             * exists in internal storage then won't be downloaded.
+                                             */
+                                            try {
+                                                file.delete()
+                                            } catch (e: Exception) {
+                                                Timber.e(e, "Couldn't delete DK file.")
+                                            }
+                                        }
                                 )
                             }
                         }
@@ -128,7 +141,8 @@ class DiagnosisKeyRepositoryImpl(
                 val timeout = when (internetConnectionManager.getInternetConnectionStatus()) {
                     InternetConnectionManager.InternetConnectionStatus.NONE ->
                         throw NoInternetConnectionException()
-                    InternetConnectionManager.InternetConnectionStatus.MOBILE_DATA ->
+                    InternetConnectionManager.InternetConnectionStatus.MOBILE_DATA,
+                    InternetConnectionManager.InternetConnectionStatus.VPN ->
                         remoteConfiguration.timeoutMobileSeconds
                     InternetConnectionManager.InternetConnectionStatus.WIFI ->
                         remoteConfiguration.timeoutWifiSeconds

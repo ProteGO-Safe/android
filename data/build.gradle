@@ -43,7 +43,6 @@ android {
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
-            buildConfigField "String", "WEB", DEV_WEB_URL
         }
         stage {
             dimension "mode"
@@ -52,7 +51,6 @@ android {
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
-            buildConfigField "String", "WEB", STAGE_WEB_URL
         }
         prod {
             dimension "mode"
@@ -61,7 +59,6 @@ android {
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", PRODUCTION_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", PRODUCTION_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", PRODUCTION_UPLOAD_BUCKET_ENDPOINT
-            buildConfigField "String", "WEB", PROD_WEB_URL
         }
     }
 }

@@ -25,6 +25,13 @@
             android:layout_height="match_parent"
             android:background="@color/background"
             tools:context="pl.gov.mc.protegosafe.ui.MainActivity" />
+
+        <include
+            android:id="@+id/migration_layout"
+            layout="@layout/migration_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </layout>
