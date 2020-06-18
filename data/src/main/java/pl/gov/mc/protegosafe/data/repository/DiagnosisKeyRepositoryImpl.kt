@@ -64,18 +64,13 @@ class DiagnosisKeyRepositoryImpl(
                                         )
                                         .retry(downloadConfiguration.retryCount)
                                         .doOnComplete { downloadedFileList.add(file) }
-                                        .doOnError {
-                                            /*
-                                             * If file download fail from any reason then the file
-                                             * has to be deleted. Otherwise, potentially malformed
-                                             * file won't be downloaded again - if file already
-                                             * exists in internal storage then won't be downloaded.
-                                             */
+                                        .onErrorResumeNext {
                                             try {
                                                 file.delete()
                                             } catch (e: Exception) {
                                                 Timber.e(e, "Couldn't delete DK file.")
                                             }
+                                            Completable.complete()
                                         }
                                 )
                             }
