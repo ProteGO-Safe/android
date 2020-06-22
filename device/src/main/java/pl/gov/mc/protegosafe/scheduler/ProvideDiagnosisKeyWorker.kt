@@ -12,10 +12,8 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
-import pl.gov.mc.protegosafe.domain.usecase.DiagnosisKeysFileNameToTimestampUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
 import timber.log.Timber
-import java.io.File
 
 class ProvideDiagnosisKeyWorker(
     appContext: Context,
@@ -47,9 +45,7 @@ class ProvideDiagnosisKeyWorker(
                             provideDiagnosisKeysUseCase.execute(
                                 files = diagnosisKeyFiles,
                                 exposureConfigurationItem = exposureConfiguration
-                            ).doOnComplete {
-                                finalizeDiagnosisKeyProviding(diagnosisKeyFiles)
-                            }.toSingleDefault(Result.success())
+                            ).toSingleDefault(Result.success())
                         }
                     }
                 }.onErrorResumeNext {
@@ -63,25 +59,6 @@ class ProvideDiagnosisKeyWorker(
     private fun getExposureConfiguration(): Single<ExposureConfigurationItem> {
         return remoteConfigurationRepository.update()
             .andThen(remoteConfigurationRepository.getExposureConfigurationItem())
-    }
-
-    private fun finalizeDiagnosisKeyProviding(diagnosisKeyFiles: List<File>) {
-        Timber.d("finalizeDiagnosisKeyProviding")
-        val analysedFilesTimestamps = mutableListOf<Long>()
-
-        diagnosisKeyFiles
-            .forEach { file ->
-                DiagnosisKeysFileNameToTimestampUseCase().execute(file.name)?.let {
-                    analysedFilesTimestamps.add(it)
-                }
-                file.delete()
-            }
-
-        analysedFilesTimestamps.max()?.let { largestAnalysedFilesTimestamp ->
-            diagnosisKeyRepository.setLatestProcessedDiagnosisKeyTimestamp(
-                largestAnalysedFilesTimestamp
-            )
-        }
     }
 
     override fun getBackgroundScheduler(): Scheduler {
