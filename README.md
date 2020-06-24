@@ -61,9 +61,6 @@ To get started on the app, setup and configure the following:
 | PRODUCTION_UPLOAD_BUCKET_ENDPOINT  | Endpoint for HTTPS call to upload TEKs (production type of application)                         |
 | PRODUCTION_STORAGE_BUCKET_ENDPOINT | Endpoint for CDN with Diagnosis Keys (production type of application)                                       |
 | PRODUCTION_SAFETYNET_API_KEY       | SafetyNet device attestation API Key (production type of application)                                    |
-| PROD_WEB_URL                       | PWA URL - prod build flavour                                 |
-| STAGE_WEB_URL                      | PWA URL - stage build flavour                                |
-| DEV_WEB_URL                        | PWA URL - dev build flavour                                  |
 | SHARED_PREFERENCES_FILE_NAME       | File name for Shared Preferences storage                     |
 
 ### Firebase and google-services.json
@@ -79,6 +76,15 @@ Dev: ./app/src/dev/google-services.json
 ---
 
 ## ChangeLog
+
+4.2.0
+
+PWA GUI migrated to offline version (local assets)
+Migration of PWA data from previous versions added
+Improved device verification check (missing Google Play services handled properly)
+Risk level thresholds added as configuration
+VPN connection problem fixed (still valid for keys upload)
+Improved download files process (omitting not existing files)
 
 4.1.1
 

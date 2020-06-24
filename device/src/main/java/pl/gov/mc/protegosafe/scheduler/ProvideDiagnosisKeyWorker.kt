@@ -6,14 +6,12 @@ import androidx.work.WorkerParameters
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import java.io.File
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
-import pl.gov.mc.protegosafe.domain.usecase.DiagnosisKeysFileNameToTimestampUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
 import timber.log.Timber
 
@@ -47,12 +45,11 @@ class ProvideDiagnosisKeyWorker(
                             provideDiagnosisKeysUseCase.execute(
                                 files = diagnosisKeyFiles,
                                 exposureConfigurationItem = exposureConfiguration
-                            ).doOnComplete {
-                                finalizeDiagnosisKeyProviding(diagnosisKeyFiles)
-                            }.toSingleDefault(Result.success())
+                            ).toSingleDefault(Result.success())
                         }
                     }
                 }.onErrorResumeNext {
+                    Timber.d(it, "ProvideDiagnosisKeyWorker")
                     Single.just(Result.retry())
                 }
             }
@@ -62,25 +59,6 @@ class ProvideDiagnosisKeyWorker(
     private fun getExposureConfiguration(): Single<ExposureConfigurationItem> {
         return remoteConfigurationRepository.update()
             .andThen(remoteConfigurationRepository.getExposureConfigurationItem())
-    }
-
-    private fun finalizeDiagnosisKeyProviding(diagnosisKeyFiles: List<File>) {
-        Timber.d("finalizeDiagnosisKeyProviding")
-        val analysedFilesTimestamps = mutableListOf<Long>()
-
-        diagnosisKeyFiles
-            .forEach { file ->
-                DiagnosisKeysFileNameToTimestampUseCase().execute(file.name)?.let {
-                    analysedFilesTimestamps.add(it)
-                }
-                file.delete()
-            }
-
-        analysedFilesTimestamps.max()?.let { largestAnalysedFilesTimestamp ->
-            diagnosisKeyRepository.setLatestProcessedDiagnosisKeyTimestamp(
-                largestAnalysedFilesTimestamp
-            )
-        }
     }
 
     override fun getBackgroundScheduler(): Scheduler {

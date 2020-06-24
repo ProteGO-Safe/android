@@ -9,12 +9,13 @@ import org.koin.dsl.module
 import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ClearExposureNotificationDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetInternetConnectionStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetSafetyNetAttestationTokenUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
@@ -52,14 +53,13 @@ val useCaseModule = module {
     factory { GetNotificationDataAndClearUseCase(get()) }
     factory { StartExposureNotificationUseCase(get(), get(), get()) }
     factory { StopExposureNotificationUseCase(get(), get(), get()) }
-    factory { GetInternetConnectionStatusUseCase(get()) }
     factory { GetServicesStatusUseCase(get()) }
     factory { ChangeServiceStatusUseCase(get(), get(), get()) }
     factory { ClearExposureNotificationDataUseCase(get(), get(), get()) }
     factory { ProvideDiagnosisKeysUseCase(get(), get(), get()) }
     factory { GetSafetyNetAttestationTokenUseCase(get(), get()) }
     factory {
-        UploadTemporaryExposureKeysUseCase(get(), get(), get(), get(), get(), get(), get())
+        UploadTemporaryExposureKeysUseCase(get(), get(), get(), get(), get(), get(), get(), get())
     }
     factory { UploadTemporaryExposureKeysWithCachedPayloadUseCase(get(), get(), get()) }
     factory { SaveTriageCompletedUseCase(get()) }
@@ -68,13 +68,15 @@ val useCaseModule = module {
     factory { StorePendingActivityResultUseCase(get(), get()) }
     factory { ProcessPendingActivityResultUseCase(get(), get()) }
     factory { GetExposureInformationUseCase(get(), get()) }
-    factory { GetAnalyzeResultUseCase(get(), get(), get()) }
-    factory { CheckDeviceRootedUseCase(get(), get(), get()) }
+    factory { GetAnalyzeResultUseCase(get(), get(), get(), get()) }
+    factory { CheckDeviceRootedUseCase(get(), get(), get(), get()) }
+    factory { PrepareMigrationIfRequiredUseCase(get(), get()) }
+    factory { GetMigrationUrlUseCase(get()) }
 }
 
 val viewModelModule = module {
     viewModel { MainViewModel(get(), get(), get()) }
     viewModel {
-        HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+        HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
 }
