@@ -22,6 +22,8 @@ class InternetConnectionManagerImpl(private val context: Context) : InternetConn
                         result = InternetConnectionStatus.WIFI
                     } else if (hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                         result = InternetConnectionStatus.MOBILE_DATA
+                    } else if (hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
+                        result = InternetConnectionStatus.VPN
                     }
                 }
             }

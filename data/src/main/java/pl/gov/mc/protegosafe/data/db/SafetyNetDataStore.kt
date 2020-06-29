@@ -1,6 +1,6 @@
 package pl.gov.mc.protegosafe.data.db
 
-private const val SHARED_PREFS_SAFETYNET_IS_DEVICE_CHECKED =
+const val SHARED_PREFS_SAFETYNET_IS_DEVICE_CHECKED =
     "data.db.SafetyNetDataStore-safetynet-is-device-checked"
 
 class SafetyNetDataStore(sharedPreferencesDelegates: SharedPreferencesDelegates) {

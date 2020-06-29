@@ -15,16 +15,18 @@ import android.view.ViewGroup
 import android.webkit.ConsoleMessage
 import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.api.ApiException
+import kotlinx.android.synthetic.main.view_connection_error.view.button_cancel
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.view_connection_error.view.button_check_internet_connection
 import kotlinx.android.synthetic.main.view_connection_error.view.text_view_connection_error
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.BuildConfig
@@ -34,6 +36,7 @@ import pl.gov.mc.protegosafe.domain.model.ActivityRequest
 import pl.gov.mc.protegosafe.domain.model.ActivityResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
+import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
 import pl.gov.mc.protegosafe.logging.webViewTimber
 import pl.gov.mc.protegosafe.ui.common.BaseFragment
 import pl.gov.mc.protegosafe.ui.common.livedata.observe
@@ -44,6 +47,8 @@ class HomeFragment : BaseFragment() {
     private val vm: HomeViewModel by viewModel()
     private val urlProvider by inject<WebUrlProvider>()
     private lateinit var binding: FragmentHomeBinding
+
+    private var pwaDump: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,8 +64,7 @@ class HomeFragment : BaseFragment() {
         binding.vm = vm
         binding.lifecycleOwner = this
 
-        setListeners()
-        setUpWebView()
+        setupPWA()
         observeRequests()
 
         return binding.root
@@ -79,12 +83,6 @@ class HomeFragment : BaseFragment() {
         super.onPause()
     }
 
-    private fun setListeners() {
-        binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
-            binding.webView.reload()
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Timber.d("onActivityResult requestCode:$requestCode resultCode: $resultCode")
@@ -99,6 +97,39 @@ class HomeFragment : BaseFragment() {
         vm.requestLocation.observe(viewLifecycleOwner, ::requestLocation)
         vm.requestClearData.observe(viewLifecycleOwner, ::requestClearData)
         vm.requestNotifications.observe(viewLifecycleOwner, ::requestNotifications)
+        vm.showConnectionError.observe(viewLifecycleOwner, ::showConnectionError)
+    }
+
+    private fun setupPWA() {
+        get<GetMigrationUrlUseCase>().execute()
+            .subscribe({ url ->
+                if (url.isBlank()) {
+                    setUpWebView()
+                } else {
+                    startPwaMigration(url)
+                }
+            }, {
+                Timber.e(it, "Migration can not be performed")
+                setUpWebView()
+            }).addTo(disposables)
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun startPwaMigration(url: String) {
+        binding.migrationLayout.isVisible = true
+        binding.webView.apply {
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    binding.webView.evaluateJavascript(DUMP_PWA_SCRIPT) { dump ->
+                        pwaDump = dump
+                        setUpWebView()
+                    }
+                }
+            }
+            loadUrl(url)
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -139,7 +170,6 @@ class HomeFragment : BaseFragment() {
             })
 
         vm.javascriptCode.observe(viewLifecycleOwner, ::runJavascript)
-        vm.webViewVisibilityChanged.observe(viewLifecycleOwner, ::setWebViewVisible)
     }
 
     private inner class ProteGoWebViewClient : WebViewClient() {
@@ -154,13 +184,14 @@ class HomeFragment : BaseFragment() {
             } else false
         }
 
-        override fun onReceivedError(
-            view: WebView?,
-            request: WebResourceRequest?,
-            error: WebResourceError?
-        ) {
-            vm.onWebViewReceivedError(request, error)
-            super.onReceivedError(view, request, error)
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+            pwaDump?.let {
+                loadDumpedPwaData(it)
+                pwaDump = null
+                binding.webView.reload()
+                binding.migrationLayout.isVisible = false
+            }
         }
 
         override fun onReceivedSslError(
@@ -172,18 +203,10 @@ class HomeFragment : BaseFragment() {
             Timber.e(error.toString())
             binding.missingConnectionLayout.text_view_connection_error
                 .setText(R.string.not_secure_connection_msg)
+            binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
+                binding.webView.reload()
+            }
             binding.webView.visibility = View.GONE
-        }
-
-        override fun onPageFinished(view: WebView?, url: String?) {
-            vm.onWebViewPageFinished(url)
-            super.onPageFinished(view, url)
-        }
-    }
-
-    private fun setWebViewVisible(visible: Boolean) {
-        if (binding.webView.isVisible != visible) {
-            binding.webView.isVisible = visible
         }
     }
 
@@ -237,6 +260,18 @@ class HomeFragment : BaseFragment() {
         startActivityForResult(settingsIntent, ActivityRequest.ENABLE_NOTIFICATIONS.requestCode)
     }
 
+    private fun showConnectionError() {
+        binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
+            binding.webView.visibility = View.VISIBLE
+            vm.onUploadRetry()
+        }
+        binding.missingConnectionLayout.button_cancel.setOnClickListener {
+            vm.sendUploadCanceled()
+            binding.webView.visibility = View.VISIBLE
+        }
+        binding.webView.visibility = View.INVISIBLE
+    }
+
     private fun requestClearData() {
         val intent = Intent(ACTION_EXPOSURE_NOTIFICATION_SETTINGS)
         startActivityForResult(
@@ -255,7 +290,13 @@ class HomeFragment : BaseFragment() {
             binding.webView.pauseTimers()
         }
     }
+
+    private fun loadDumpedPwaData(dump: String) {
+        val script = "localStorage.setItem(\"persist:root\",$dump);"
+        runJavascript(script)
+    }
 }
 
 private const val ACTION_EXPOSURE_NOTIFICATION_SETTINGS =
     "com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS"
+private const val DUMP_PWA_SCRIPT = "localStorage.getItem(\"persist:root\");"

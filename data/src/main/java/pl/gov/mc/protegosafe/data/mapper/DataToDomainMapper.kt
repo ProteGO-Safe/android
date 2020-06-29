@@ -9,6 +9,7 @@ import pl.gov.mc.protegosafe.data.model.DiagnosisKeyDownloadConfigurationData
 import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.PinData
+import pl.gov.mc.protegosafe.data.model.RiskLevelConfigurationData
 import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.domain.extension.calcRollingPeriod
 import pl.gov.mc.protegosafe.domain.model.ClearItem
@@ -20,6 +21,7 @@ import pl.gov.mc.protegosafe.domain.model.ExposureSummaryItem
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
+import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.TriageItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 
@@ -100,4 +102,10 @@ fun ExposureDto.toEntity() = ExposureItem(
     date = date,
     riskScore = riskScore,
     durationInMinutes = durationInMinutes
+)
+
+fun RiskLevelConfigurationData.toEntity() = RiskLevelConfigurationItem(
+    maxNoRiskScore = maxNoRiskScore,
+    maxLowRiskScore = maxLowRiskScore,
+    maxMiddleRiskScore = maxMiddleRiskScore
 )

@@ -11,12 +11,15 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.jakewharton.threetenabp.AndroidThreeTen
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.realm.Realm
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
 import org.koin.core.get
 import org.koin.core.inject
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.OffsetDateTime
 import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.data.di.dataModule
@@ -26,7 +29,9 @@ import pl.gov.mc.protegosafe.di.deviceModule
 import pl.gov.mc.protegosafe.di.useCaseModule
 import pl.gov.mc.protegosafe.di.viewModelModule
 import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository
+import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
+import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import timber.log.Timber
 
 class App : Application(), KoinComponent {
@@ -43,15 +48,26 @@ class App : Application(), KoinComponent {
             modules(appModule, deviceModule, useCaseModule, dataModule, viewModelModule)
         }
 
+        prepareMigrationIfRequired()
         initializePinning()
         initializeDatabase()
         initializeLogging()
         initializeFcm()
         initializeStetho()
         initializeThreeTenABP()
-        removeAllOpenTraceData()
-        encryptSharedPrefsIfNeeded()
         scheduleRemoveOldExposuresTask()
+        setTemporaryExposureKeysDownloadTimestampIfEmpty()
+    }
+
+    private fun prepareMigrationIfRequired() {
+        get<PrepareMigrationIfRequiredUseCase>().execute(
+            pl.gov.mc.protegosafe.BuildConfig.VERSION_NAME
+        ).subscribe({
+            removeAllOpenTraceData()
+            encryptSharedPrefsIfNeeded()
+        }, {
+            Timber.e(it, "PrepareMigrationIfRequiredUseCase: failed")
+        }).addTo(disposables)
     }
 
     private fun initializePinning() {
@@ -100,6 +116,16 @@ class App : Application(), KoinComponent {
     private fun initializeLogging() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+        }
+    }
+
+    private fun setTemporaryExposureKeysDownloadTimestampIfEmpty() {
+        get<DiagnosisKeyRepository>().apply {
+            if (getLatestProcessedDiagnosisKeyTimestamp() == 0L) {
+                setLatestProcessedDiagnosisKeyTimestamp(
+                    LocalDateTime.now().toInstant(OffsetDateTime.now().offset).epochSecond
+                )
+            }
         }
     }
 

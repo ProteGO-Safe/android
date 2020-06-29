@@ -4,8 +4,8 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 3.0.1   | :white_check_mark: |
 | 2.0.1   | :white_check_mark: |
-| 1.x.x   | :white_check_mark: |
 
 This document outlines Security Procedures and General Policies for this Project.
 
