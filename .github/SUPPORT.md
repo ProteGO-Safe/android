@@ -1,7 +1,6 @@
 ## Issues - Features, Bugs and Security:
 
 Please create new Issues in apropriate repository only using the correct issue template type:
-- [Pull Requests](PULL_REQUEST_TEMPLATE/README.md)
 - [Features](ISSUE_TEMPLATE/feature_request.md)
 - [Bugs](ISSUE_TEMPLATE/bug_report.md)
 - [Security](SECURITY.md)
