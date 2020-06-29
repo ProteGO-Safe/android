@@ -66,6 +66,7 @@ import pl.gov.mc.protegosafe.domain.repository.WorkerStateRepository
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 val dataModule = module {
     single<Retrofit> { provideRetrofit() }
@@ -141,6 +142,9 @@ fun provideRetrofit(): Retrofit {
         ))
         followSslRedirects(false)
         followRedirects(false)
+        connectTimeout(DEFAULT_TIMEOUT_SEC, TimeUnit.SECONDS)
+        readTimeout(DEFAULT_TIMEOUT_SEC, TimeUnit.SECONDS)
+        writeTimeout(DEFAULT_TIMEOUT_SEC, TimeUnit.SECONDS)
     }.build()
 
     return Retrofit.Builder()
@@ -150,3 +154,5 @@ fun provideRetrofit(): Retrofit {
         .client(client)
         .build()
 }
+
+private const val DEFAULT_TIMEOUT_SEC = 40L
