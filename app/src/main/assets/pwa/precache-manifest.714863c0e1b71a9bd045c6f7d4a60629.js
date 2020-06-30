@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ac79331a317ac1e043547a3d30da395f",
+    "revision": "ab51f764ca468259a10d646d54f6717f",
     "url": "./index.html"
   },
   {
-    "revision": "27e5f940087e0e10b8f0",
+    "revision": "2a2f2d196b4fb9f906a6",
     "url": "./static/css/2.fb8a0bac.chunk.css"
   },
   {
-    "revision": "b3dd13eb45eb7effe68c",
+    "revision": "bd548d74f012f519cb69",
     "url": "./static/css/main.dc94683e.chunk.css"
   },
   {
-    "revision": "27e5f940087e0e10b8f0",
-    "url": "./static/js/2.6f40d57d.chunk.js"
+    "revision": "2a2f2d196b4fb9f906a6",
+    "url": "./static/js/2.e121491e.chunk.js"
   },
   {
     "revision": "21968521f2ed82ae33d0a85b3c11b74e",
-    "url": "./static/js/2.6f40d57d.chunk.js.LICENSE.txt"
+    "url": "./static/js/2.e121491e.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "b3dd13eb45eb7effe68c",
-    "url": "./static/js/main.ab0fa471.chunk.js"
+    "revision": "bd548d74f012f519cb69",
+    "url": "./static/js/main.1dea9554.chunk.js"
   },
   {
     "revision": "fe551a0d0a353dab2e43",
@@ -190,6 +190,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "e85d9c052c0ac12d77a1ed6be900e918",
     "url": "./static/media/menu-boczne-zle-sie-czuje_BLUE.e85d9c05.svg"
+  },
+  {
+    "revision": "ce491885444b2ecaf2e5d90ee081e5d0",
+    "url": "./static/media/not_supported_logo.ce491885.svg"
   },
   {
     "revision": "2cc22eaf1b55c60073f53547b050b6d1",
