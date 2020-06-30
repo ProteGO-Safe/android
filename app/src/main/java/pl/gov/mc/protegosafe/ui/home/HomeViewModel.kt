@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
+import pl.gov.mc.protegosafe.domain.exception.UploadException
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
 import pl.gov.mc.protegosafe.domain.model.ActivityResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
@@ -26,6 +27,8 @@ import pl.gov.mc.protegosafe.logging.webViewTimber
 import pl.gov.mc.protegosafe.ui.common.BaseViewModel
 import pl.gov.mc.protegosafe.ui.common.livedata.SingleLiveEvent
 import timber.log.Timber
+import java.net.UnknownHostException
+import kotlin.Exception
 
 class HomeViewModel(
     private val onSetBridgeDataUseCase: OnSetBridgeDataUseCase,
@@ -54,8 +57,8 @@ class HomeViewModel(
     private val _requestClearData = SingleLiveEvent<Unit>()
     val requestClearData: LiveData<Unit> = _requestClearData
 
-    private val _showConnectionError = MutableLiveData<Unit>()
-    val showConnectionError: LiveData<Unit> = _showConnectionError
+    private val _showUploadError = MutableLiveData<Exception>()
+    val showConnectionError: LiveData<Exception> = _showUploadError
 
     private val _requestExposureNotificationPermission =
         SingleLiveEvent<ExposureNotificationActionNotResolvedException>()
@@ -111,8 +114,13 @@ class HomeViewModel(
             is ExposureNotificationActionNotResolvedException -> {
                 handleNotResolvedException(error)
             }
-            is NoInternetConnectionException -> {
-                _showConnectionError.postValue(Unit)
+            is UploadException.PinVerificationFailed -> {
+                Timber.e(error, "No need to handle error")
+            }
+            is NoInternetConnectionException,
+            is UnknownHostException,
+            is UploadException -> {
+                _showUploadError.postValue(error as Exception)
             }
             else -> {
                 Timber.e(error, "Problem can not be handled")

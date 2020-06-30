@@ -16,10 +16,16 @@ class TemporaryExposureKeysUploadRepositoryImpl(
     private val uploadTemporaryExposureKeysService: UploadTemporaryExposureKeysService
 ) : TemporaryExposureKeysUploadRepository {
     private var cachedPayload: String? = null
+    private var cachedAccessToken: String? = null
 
     override fun cacheRequestPayload(payload: String): Completable {
         Timber.d("Cache request payload: $payload")
         return Completable.fromAction { cachedPayload = payload }
+    }
+
+    override fun cacheRequestAccessToken(accessToken: String): Completable {
+        Timber.d("Cache request access token")
+        return Completable.fromAction { cachedAccessToken = accessToken }
     }
 
     override fun getCachedRequestPayload(): Single<String> {
@@ -28,9 +34,18 @@ class TemporaryExposureKeysUploadRepositoryImpl(
             ?: Single.error(Exception("Payload cache is empty"))
     }
 
+    override fun getCachedRequestAccessToken(): Single<String> {
+        Timber.d("Get cache request payload")
+        return cachedAccessToken?.let { Single.fromCallable { it } }
+            ?: Single.error(Exception("Payload cache is empty"))
+    }
+
     override fun clearCache(): Completable {
         Timber.d("Clear payload cache")
-        return Completable.fromAction { cachedPayload = null }
+        return Completable.fromAction {
+            cachedPayload = null
+            cachedAccessToken = null
+        }
     }
 
     override fun getAccessToken(pinItem: PinItem): Single<String> {

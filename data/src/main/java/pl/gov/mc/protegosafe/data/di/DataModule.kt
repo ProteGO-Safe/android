@@ -29,6 +29,7 @@ import pl.gov.mc.protegosafe.data.mapper.ClearMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.DiagnosisKeyDownloadConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.ExposureConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.PinMapperImpl
+import pl.gov.mc.protegosafe.data.mapper.RetrofitExceptionMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RiskLevelConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.model.OutgoingBridgeDataResultComposerImpl
 import pl.gov.mc.protegosafe.data.repository.DiagnosisKeyRepositoryImpl
@@ -49,6 +50,7 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfigurationMapper
+import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
@@ -113,6 +115,7 @@ val dataModule = module {
     single<RiskLevelConfigurationMapper> { RiskLevelConfigurationMapperImpl() }
     single { AppVersionDataStore(get()) }
     single<MigrationRepository> { MigrationRepositoryImpl(get(), get(), get()) }
+    single<RetrofitExceptionMapper> { RetrofitExceptionMapperImpl() }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(
