@@ -12,7 +12,7 @@ Applicaiton is structured based on Clean Architecture pattern and Presentation (
 
 App implements contact tracing module that is based on [ExposureNotification API](https://www.google.com/covid19/exposurenotifications/) (EN) and we can extract couple of features related to this:
 * [Controlling EN](doc/ControllingExposureNotification.md): start, stop, check if device supports it, check what is its state
-* [Uploading Temporary Exposure Keys](doc/UploadingTemporaryExposureKeys.md) (TEKs) of positively diagnosed user verified by the application: authorize user for TEKs upload, get TEKs from EN, add proper verification data (using SafetyNet API), upload data to the [Cloud Server](TODO_link_to_cloud_server_documentation).
+* [Uploading Temporary Exposure Keys](doc/UploadingTemporaryExposureKeys.md) (TEKs) of positively diagnosed user verified by the application: authorize user for TEKs upload, get TEKs from EN, add proper verification data (using SafetyNet API), upload data to the [Cloud Server](https://github.com/ProteGO-Safe/backend).
 * [Downloading](doc/DownloadingDiagnosisKeys.md) periodically files with batch of TEKs of positively diagnosed users (that recently uploaded their TEKs): execute periodic task responsible for downloading recently created .zip files (it fetches list of available files from CDN, selects only not yet analyzed files and downloads only these ones)
 * [Providing files](doc/ProvidingDiagnosisKeys.md) to EN API for detecting exposures: get proper configuration for risk calculation (Exposure Configuration), fire EN API with list of downloaded files and configuration, delete analyzed files
 * [Receiving information](doc/ReceivingExposuresInformation.md) about detected exposures: register broadcast receiver about exposures, get information about exposures, store part of information (day of exposure, risk score and duration that is in 5 minutes intervals but max 30 minutes)
@@ -76,6 +76,12 @@ Dev: ./app/src/dev/google-services.json
 ---
 
 ## ChangeLog
+
+4.2.1
+
+Increase connection timeouts
+Handle upload errors
+Update PWA
 
 4.2.0
 
