@@ -3,8 +3,8 @@
     <domain-config>
         <domain includeSubdomains="true">safesafe.app</domain>
         <pin-set>
-            <pin digest="SHA-256">bAXXezeUiUzS0N93QpfratVGiNcHVIKKMfBDjR8S/Ag=</pin>
-            <pin digest="SHA-256">3kcNJzkUJ1RqMXJzFX4Zxux5WfETK+uL6Viq9lJNn4o=</pin>
+            <pin digest="SHA-256">LSWuEvDZ3CS5f8fyaJDiYob0mmtqq7NGoqsaIrKxqCU=</pin>
+            <pin digest="SHA-256">FEzVOUp4dF3gI0ZVPRJhFbSJVXR+uQmMH65xhs1glH4=</pin>
         </pin-set>
         <!-- TrustKit Android API -->
         <!-- Enforce pinning validation -->
