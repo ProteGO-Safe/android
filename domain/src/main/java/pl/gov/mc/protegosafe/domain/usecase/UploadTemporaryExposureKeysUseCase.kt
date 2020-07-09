@@ -4,21 +4,25 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
+import pl.gov.mc.protegosafe.domain.exception.UploadException
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
 import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
+import pl.gov.mc.protegosafe.domain.model.ConnectionException
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
+import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
 import pl.gov.mc.protegosafe.domain.model.toDiagnosisKeyList
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.KeyUploadSystemInfoRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
+import java.lang.Exception
 
 class UploadTemporaryExposureKeysUseCase(
     private val exposureNotificationRepository: ExposureNotificationRepository,
@@ -28,6 +32,7 @@ class UploadTemporaryExposureKeysUseCase(
     private val pinMapper: PinMapper,
     private val temporaryExposureKeysUploadRepository: TemporaryExposureKeysUploadRepository,
     private val internetConnectionManager: InternetConnectionManager,
+    private val retrofitExceptionMapper: RetrofitExceptionMapper,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -56,7 +61,7 @@ class UploadTemporaryExposureKeysUseCase(
         payload: String,
         onResultActionRequired: (ActionRequiredItem) -> Unit
     ): Completable {
-        return getTemporaryExposureKeys(payload, onResultActionRequired)
+        return getTemporaryExposureKeys(payload)
             .flatMapCompletable {
                 getAccessTokenAndUploadKeys(payload, onResultActionRequired, it)
             }
@@ -71,7 +76,24 @@ class UploadTemporaryExposureKeysUseCase(
     }
 
     private fun getAccessToken(pin: PinItem): Single<String> =
-        temporaryExposureKeysUploadRepository.getAccessToken(pin)
+        temporaryExposureKeysUploadRepository.getCachedRequestAccessToken()
+            .onErrorResumeNext {
+                temporaryExposureKeysUploadRepository.getAccessToken(pin)
+                    .onErrorResumeNext {
+                        Single.error {
+                            retrofitExceptionMapper.toConnectionError(it as Exception).let {
+                                return@error when (it) {
+                                    ConnectionException.NotFound -> {
+                                        UploadException.PinVerificationFailed
+                                    }
+                                    else -> {
+                                        UploadException.PinVerificationError
+                                    }
+                                }
+                            }
+                        }
+                    }
+            }
 
     private fun getAccessTokenAndUploadKeys(
         payload: String,
@@ -79,7 +101,17 @@ class UploadTemporaryExposureKeysUseCase(
         keys: List<TemporaryExposureKeyItem>
     ): Completable = getAccessToken(pinMapper.toEntity(payload))
         .flatMapCompletable { uploadKeys(it, keys) }
-        .onErrorResumeNext { sendFailureResultAndThrowError(it, onResultActionRequired) }
+        .onErrorResumeNext {
+            when (it) {
+                UploadException.PinVerificationFailed -> {
+                    sendFailureResultAndThrowError(it, onResultActionRequired)
+                }
+                else -> {
+                    temporaryExposureKeysUploadRepository.cacheRequestPayload(payload)
+                        .andThen(Completable.error(it))
+                }
+            }
+        }
 
     private fun uploadKeys(
         accessToken: String,
@@ -87,6 +119,10 @@ class UploadTemporaryExposureKeysUseCase(
     ): Completable =
         getUploadRequestData(accessToken, keys)
             .flatMapCompletable { uploadTemporaryExposureKeys(it) }
+            .onErrorResumeNext {
+                temporaryExposureKeysUploadRepository.cacheRequestAccessToken(accessToken)
+                    .andThen(Completable.error(UploadException.UploadTemporaryExposureKeysError))
+            }
 
     private fun sendSuccessResult(onResultActionRequired: (ActionRequiredItem) -> Unit) =
         sendResult(TemporaryExposureKeysUploadState.SUCCESS, onResultActionRequired)
@@ -143,8 +179,7 @@ class UploadTemporaryExposureKeysUseCase(
         )
 
     private fun getTemporaryExposureKeys(
-        payload: String,
-        onResultActionRequired: (ActionRequiredItem) -> Unit
+        payload: String
     ): Single<List<TemporaryExposureKeyItem>> =
         exposureNotificationRepository.getTemporaryExposureKeyHistory()
             .onErrorResumeNext {
@@ -154,8 +189,8 @@ class UploadTemporaryExposureKeysUseCase(
                             .andThen(Single.error(it))
                     }
                     else -> {
-                        sendFailureResultAndThrowError(it, onResultActionRequired)
-                            .toSingleDefault(emptyList())
+                        temporaryExposureKeysUploadRepository.cacheRequestPayload(payload)
+                            .andThen(Single.error(UploadException.GetTemporaryExposureKeysError))
                     }
                 }
             }

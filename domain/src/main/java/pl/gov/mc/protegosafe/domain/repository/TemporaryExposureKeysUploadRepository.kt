@@ -9,6 +9,8 @@ interface TemporaryExposureKeysUploadRepository {
     fun getAccessToken(pinItem: PinItem): Single<String>
     fun uploadTemporaryExposureKeys(requestItem: TemporaryExposureKeysUploadRequestItem): Completable
     fun cacheRequestPayload(payload: String): Completable
+    fun cacheRequestAccessToken(accessToken: String): Completable
     fun getCachedRequestPayload(): Single<String>
+    fun getCachedRequestAccessToken(): Single<String>
     fun clearCache(): Completable
 }

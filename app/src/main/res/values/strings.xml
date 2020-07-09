@@ -4,6 +4,9 @@
     <string name="not_secure_connection_msg">Połączenie nie jest bezpieczne</string>
     <string name="no_internet_connection_retry">Spróbuj ponownie</string>
     <string name="no_internet_connection_cancel">Anuluj</string>
+    <string name="pin_verification_error">Wystąpił błąd weryfikacji kodu PIN</string>
+    <string name="upload_temporary_exposure_keys_error">Wystąpił błąd przesyłania danych</string>
+    <string name="get_temporary_exposure_keys_error">Wystąpił błąd przy próbie pobierania Twoich dziennych kluczy</string>
 
     <string name="safetynet_dialog_title">Wystąpił problem</string>
     <string name="safetynet_dialog_verification_error">Twoje urządzenie nie mogło zostać pozytywnie zweryfikowane</string>

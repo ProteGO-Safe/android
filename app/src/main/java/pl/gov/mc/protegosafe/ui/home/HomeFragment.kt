@@ -21,9 +21,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.api.ApiException
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.view_connection_error.view.button_cancel
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.view_connection_error.view.button_check_internet_connection
 import kotlinx.android.synthetic.main.view_connection_error.view.text_view_connection_error
 import org.koin.android.ext.android.get
@@ -32,6 +31,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.FragmentHomeBinding
+import pl.gov.mc.protegosafe.domain.exception.UploadException
 import pl.gov.mc.protegosafe.domain.model.ActivityRequest
 import pl.gov.mc.protegosafe.domain.model.ActivityResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
@@ -260,7 +260,7 @@ class HomeFragment : BaseFragment() {
         startActivityForResult(settingsIntent, ActivityRequest.ENABLE_NOTIFICATIONS.requestCode)
     }
 
-    private fun showConnectionError() {
+    private fun showConnectionError(error: Exception) {
         binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
             binding.webView.visibility = View.VISIBLE
             vm.onUploadRetry()
@@ -269,6 +269,9 @@ class HomeFragment : BaseFragment() {
             vm.sendUploadCanceled()
             binding.webView.visibility = View.VISIBLE
         }
+        binding.missingConnectionLayout.text_view_connection_error.setText(
+            getConnectionErrorText(error)
+        )
         binding.webView.visibility = View.INVISIBLE
     }
 
@@ -288,6 +291,23 @@ class HomeFragment : BaseFragment() {
         } else {
             binding.webView.onPause()
             binding.webView.pauseTimers()
+        }
+    }
+
+    private fun getConnectionErrorText(error: Exception): Int {
+        return when (error) {
+            is UploadException.GetTemporaryExposureKeysError -> {
+                R.string.get_temporary_exposure_keys_error
+            }
+            is UploadException.PinVerificationError -> {
+                R.string.pin_verification_error
+            }
+            is UploadException.UploadTemporaryExposureKeysError -> {
+                R.string.upload_temporary_exposure_keys_error
+            }
+            else -> {
+                R.string.no_internet_connection_msg
+            }
         }
     }
 

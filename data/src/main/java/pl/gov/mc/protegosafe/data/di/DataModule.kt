@@ -29,6 +29,7 @@ import pl.gov.mc.protegosafe.data.mapper.ClearMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.DiagnosisKeyDownloadConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.ExposureConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.PinMapperImpl
+import pl.gov.mc.protegosafe.data.mapper.RetrofitExceptionMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RiskLevelConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.model.OutgoingBridgeDataResultComposerImpl
 import pl.gov.mc.protegosafe.data.repository.DiagnosisKeyRepositoryImpl
@@ -49,6 +50,7 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfigurationMapper
+import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
@@ -66,6 +68,7 @@ import pl.gov.mc.protegosafe.domain.repository.WorkerStateRepository
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 val dataModule = module {
     single<Retrofit> { provideRetrofit() }
@@ -112,6 +115,7 @@ val dataModule = module {
     single<RiskLevelConfigurationMapper> { RiskLevelConfigurationMapperImpl() }
     single { AppVersionDataStore(get()) }
     single<MigrationRepository> { MigrationRepositoryImpl(get(), get(), get()) }
+    single<RetrofitExceptionMapper> { RetrofitExceptionMapperImpl() }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(
@@ -141,6 +145,9 @@ fun provideRetrofit(): Retrofit {
         ))
         followSslRedirects(false)
         followRedirects(false)
+        connectTimeout(DEFAULT_TIMEOUT_SEC, TimeUnit.SECONDS)
+        readTimeout(DEFAULT_TIMEOUT_SEC, TimeUnit.SECONDS)
+        writeTimeout(DEFAULT_TIMEOUT_SEC, TimeUnit.SECONDS)
     }.build()
 
     return Retrofit.Builder()
@@ -150,3 +157,5 @@ fun provideRetrofit(): Retrofit {
         .client(client)
         .build()
 }
+
+private const val DEFAULT_TIMEOUT_SEC = 40L
