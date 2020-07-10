@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "./static/css/main.dc94683e.chunk.css",
-    "main.js": "./static/js/main.ab0fa471.chunk.js",
-    "main.js.map": "./static/js/main.ab0fa471.chunk.js.map",
+    "main.js": "./static/js/main.11f46f97.chunk.js",
+    "main.js.map": "./static/js/main.11f46f97.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.115a4ed7.js",
     "runtime-main.js.map": "./static/js/runtime-main.115a4ed7.js.map",
     "static/css/2.fb8a0bac.chunk.css": "./static/css/2.fb8a0bac.chunk.css",
-    "static/js/2.6f40d57d.chunk.js": "./static/js/2.6f40d57d.chunk.js",
-    "static/js/2.6f40d57d.chunk.js.map": "./static/js/2.6f40d57d.chunk.js.map",
+    "static/js/2.e121491e.chunk.js": "./static/js/2.e121491e.chunk.js",
+    "static/js/2.e121491e.chunk.js.map": "./static/js/2.e121491e.chunk.js.map",
     "index.html": "./index.html",
-    "precache-manifest.3d264847c8056be22df4eb38db22788f.js": "./precache-manifest.3d264847c8056be22df4eb38db22788f.js",
+    "precache-manifest.636400c6da18f9786d87a81cf7f68000.js": "./precache-manifest.636400c6da18f9786d87a81cf7f68000.js",
     "service-worker.js": "./service-worker.js",
     "static/css/2.fb8a0bac.chunk.css.map": "./static/css/2.fb8a0bac.chunk.css.map",
     "static/css/main.dc94683e.chunk.css.map": "./static/css/main.dc94683e.chunk.css.map",
-    "static/js/2.6f40d57d.chunk.js.LICENSE.txt": "./static/js/2.6f40d57d.chunk.js.LICENSE.txt",
+    "static/js/2.e121491e.chunk.js.LICENSE.txt": "./static/js/2.e121491e.chunk.js.LICENSE.txt",
     "static/media/Logo-govpl-WHITE.svg": "./static/media/Logo-govpl-WHITE.83177134.svg",
     "static/media/Logo-govpl.svg": "./static/media/Logo-govpl.65d43f08.svg",
     "static/media/index.css": "./static/media/OpenSans-Regular.6fde2eb6.woff",
@@ -48,6 +48,7 @@
     "static/media/menu-boczne-ustawienia_BLUE.svg": "./static/media/menu-boczne-ustawienia_BLUE.6741ae77.svg",
     "static/media/menu-boczne-zglos-blad_BLUE.svg": "./static/media/menu-boczne-zglos-blad_BLUE.06c4e08e.svg",
     "static/media/menu-boczne-zle-sie-czuje_BLUE.svg": "./static/media/menu-boczne-zle-sie-czuje_BLUE.e85d9c05.svg",
+    "static/media/not_supported_logo.svg": "./static/media/not_supported_logo.ce491885.svg",
     "static/media/notifi_close.svg": "./static/media/notifi_close.2cc22eaf.svg",
     "static/media/ok.svg": "./static/media/ok.a80a402c.svg",
     "static/media/phone.987ed662.svg": "./static/media/phone.987ed662.svg",
@@ -67,8 +68,8 @@
   "entrypoints": [
     "static/js/runtime-main.115a4ed7.js",
     "static/css/2.fb8a0bac.chunk.css",
-    "static/js/2.6f40d57d.chunk.js",
+    "static/js/2.e121491e.chunk.js",
     "static/css/main.dc94683e.chunk.css",
-    "static/js/main.ab0fa471.chunk.js"
+    "static/js/main.11f46f97.chunk.js"
   ]
 }
