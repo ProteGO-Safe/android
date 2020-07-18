@@ -102,16 +102,19 @@ class HomeFragment : BaseFragment() {
 
     private fun setupPWA() {
         get<GetMigrationUrlUseCase>().execute()
-            .subscribe({ url ->
-                if (url.isBlank()) {
+            .subscribe(
+                { url ->
+                    if (url.isBlank()) {
+                        setUpWebView()
+                    } else {
+                        startPwaMigration(url)
+                    }
+                },
+                {
+                    Timber.e(it, "Migration can not be performed")
                     setUpWebView()
-                } else {
-                    startPwaMigration(url)
                 }
-            }, {
-                Timber.e(it, "Migration can not be performed")
-                setUpWebView()
-            }).addTo(disposables)
+            ).addTo(disposables)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -142,7 +145,8 @@ class HomeFragment : BaseFragment() {
                 NativeBridgeInterface(
                     vm::setBridgeData,
                     vm::getBridgeData
-                ), NativeBridgeInterface.NATIVE_BRIDGE_NAME
+                ),
+                NativeBridgeInterface.NATIVE_BRIDGE_NAME
             )
             loadUrl(urlProvider.getWebUrl())
             if (BuildConfig.DEBUG) {
@@ -167,7 +171,8 @@ class HomeFragment : BaseFragment() {
                         activity?.finish()
                     }
                 }
-            })
+            }
+        )
 
         vm.javascriptCode.observe(viewLifecycleOwner, ::runJavascript)
     }

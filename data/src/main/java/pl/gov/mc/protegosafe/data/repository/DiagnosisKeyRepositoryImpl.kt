@@ -95,22 +95,22 @@ class DiagnosisKeyRepositoryImpl(
     }
 
     private fun getFilteredDiagnosisKeysFilesNames(createdAfter: Long):
-            Single<List<String>> {
-        Timber.d("getDiagnosisKeysFilesStorageReferences")
+        Single<List<String>> {
+            Timber.d("getDiagnosisKeysFilesStorageReferences")
 
-        return getDiagnosisKeysFiles()
-            .observeOn(Schedulers.io())
-            .map { listResult ->
-                return@map listResult.filter { item ->
-                    require(item.isNotBlank())
-                    DiagnosisKeysFileNameToTimestampUseCase().execute(item)
-                        ?.let { fileTimestamp ->
-                            require(fileTimestamp > 0)
-                            fileTimestamp > createdAfter
-                        } ?: false
+            return getDiagnosisKeysFiles()
+                .observeOn(Schedulers.io())
+                .map { listResult ->
+                    return@map listResult.filter { item ->
+                        require(item.isNotBlank())
+                        DiagnosisKeysFileNameToTimestampUseCase().execute(item)
+                            ?.let { fileTimestamp ->
+                                require(fileTimestamp > 0)
+                                fileTimestamp > createdAfter
+                            } ?: false
+                    }
                 }
-            }
-    }
+        }
 
     private fun getDiagnosisKeysFiles(): Single<List<String>> {
         Timber.d("getDiagnosisKeysFilesListResult")

@@ -9,11 +9,13 @@ fun ChangeServiceStatusRequestData.toDomainItem(): List<ChangeStatusRequestItem>
         listOfChangeStatusRequests.add(ChangeStatusRequestItem.ENABLE_NOTIFICATION)
     }
     if (enableExposureNotificationService != null) {
-        listOfChangeStatusRequests.add(if (enableExposureNotificationService) {
-            ChangeStatusRequestItem.ENABLE_EXPOSURE_NOTIFICATION_SERVICE
-        } else {
-            ChangeStatusRequestItem.DISABLE_EXPOSURE_NOTIFICATION_SERVICE
-        })
+        listOfChangeStatusRequests.add(
+            if (enableExposureNotificationService) {
+                ChangeStatusRequestItem.ENABLE_EXPOSURE_NOTIFICATION_SERVICE
+            } else {
+                ChangeStatusRequestItem.DISABLE_EXPOSURE_NOTIFICATION_SERVICE
+            }
+        )
         return listOfChangeStatusRequests
     }
     if (enableBt != null) {

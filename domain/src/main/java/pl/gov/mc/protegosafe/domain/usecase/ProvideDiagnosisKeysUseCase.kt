@@ -36,14 +36,15 @@ class ProvideDiagnosisKeysUseCase(
             filesToBatches(files)
                 .sortedBy { it.first().name }
                 .map { listOfFilesInBatch ->
-                exposureNotificationRepository.provideDiagnosisKeys(
-                    listOfFilesInBatch,
-                    token,
-                    exposureConfigurationItem
-                ).doOnComplete {
-                    finalizeDiagnosisKeyProviding(listOfFilesInBatch)
+                    exposureNotificationRepository.provideDiagnosisKeys(
+                        listOfFilesInBatch,
+                        token,
+                        exposureConfigurationItem
+                    ).doOnComplete {
+                        finalizeDiagnosisKeyProviding(listOfFilesInBatch)
+                    }
                 }
-            })
+        )
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
     }

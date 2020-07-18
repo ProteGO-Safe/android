@@ -136,13 +136,15 @@ fun provideRetrofit(): Retrofit {
     val client = OkHttpClient.Builder().apply {
         sslSocketFactory(OkHttp3Helper.getSSLSocketFactory(), OkHttp3Helper.getTrustManager())
         addInterceptor(OkHttp3Helper.getPinningInterceptor())
-        addInterceptor(HttpLoggingInterceptor().setLevel(
-            if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BASIC
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
-        ))
+        addInterceptor(
+            HttpLoggingInterceptor().setLevel(
+                if (BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor.Level.BASIC
+                } else {
+                    HttpLoggingInterceptor.Level.NONE
+                }
+            )
+        )
         followSslRedirects(false)
         followRedirects(false)
         connectTimeout(DEFAULT_TIMEOUT_SEC, TimeUnit.SECONDS)

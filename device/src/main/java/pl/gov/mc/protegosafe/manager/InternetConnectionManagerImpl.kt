@@ -14,7 +14,7 @@ class InternetConnectionManagerImpl(private val context: Context) : InternetConn
         var result = InternetConnectionStatus.NONE
 
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
-                as ConnectivityManager?
+            as ConnectivityManager?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             connectivityManager?.run {
                 connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.run {
