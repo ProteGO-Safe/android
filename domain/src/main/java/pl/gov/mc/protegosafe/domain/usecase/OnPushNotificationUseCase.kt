@@ -32,7 +32,9 @@ class OnPushNotificationUseCase(
         val now: Calendar = Calendar.getInstance()
         val timeToCheck: Calendar = Calendar.getInstance()
         timeToCheck.timeInMillis = timestamp * 1000
-        return ((now.get(Calendar.YEAR) == timeToCheck.get(Calendar.YEAR)) &&
-                (now.get(Calendar.DAY_OF_YEAR) == timeToCheck.get(Calendar.DAY_OF_YEAR)))
+        return (
+            (now.get(Calendar.YEAR) == timeToCheck.get(Calendar.YEAR)) &&
+                (now.get(Calendar.DAY_OF_YEAR) == timeToCheck.get(Calendar.DAY_OF_YEAR))
+            )
     }
 }

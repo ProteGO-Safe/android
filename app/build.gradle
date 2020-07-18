@@ -17,8 +17,8 @@ android {
             keyAlias = PROTEGO_KEYSTORE_DEBUG_ALIAS
         }
     }
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
