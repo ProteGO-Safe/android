@@ -79,11 +79,12 @@ class SafetyNetAttestationWrapperImpl(
     }
 
     private fun isNonceSame(nonce: String, nonceFromResponse: String?): Boolean {
-        return (nonceFromResponse != null &&
+        return (
+            nonceFromResponse != null &&
                 _base64.encode(nonce.toByteArray()) == nonceFromResponse
-                ).also { result ->
-                Timber.d("isNonceSame result: $result")
-            }
+            ).also { result ->
+            Timber.d("isNonceSame result: $result")
+        }
     }
 
     private fun cleartextFor(keys: List<DiagnosisKey>, regions: List<String>): String {
