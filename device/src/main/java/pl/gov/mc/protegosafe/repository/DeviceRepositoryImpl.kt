@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe
+package pl.gov.mc.protegosafe.repository
 
 import android.bluetooth.BluetoothManager
 import android.content.Context

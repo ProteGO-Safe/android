@@ -6,14 +6,17 @@ import io.realm.Realm
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import pl.gov.mc.protegosafe.AppRepositoryImpl
 import pl.gov.mc.protegosafe.domain.PushNotifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
+import pl.gov.mc.protegosafe.domain.repository.AppRepository
 import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ClearExposureNotificationDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
@@ -43,10 +46,11 @@ val appModule = module {
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }
     single<AppUpdateManager> { AppUpdateManagerFactory.create(androidContext()) }
+    single<AppRepository> { AppRepositoryImpl() }
 }
 
 val useCaseModule = module {
-    factory { OnGetBridgeDataUseCase(get(), get(), get(), get()) }
+    factory { OnGetBridgeDataUseCase(get(), get(), get(), get(), get()) }
     factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
@@ -72,6 +76,7 @@ val useCaseModule = module {
     factory { CheckDeviceRootedUseCase(get(), get(), get(), get()) }
     factory { PrepareMigrationIfRequiredUseCase(get(), get()) }
     factory { GetMigrationUrlUseCase(get()) }
+    factory { GetAppVersionNameUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {

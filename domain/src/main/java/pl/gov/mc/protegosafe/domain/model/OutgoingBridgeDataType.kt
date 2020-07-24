@@ -5,7 +5,8 @@ enum class OutgoingBridgeDataType(val code: Int) {
     APP_LIFECYCLE_STATE(11),
     TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS(43),
     SERVICES_STATUS(51),
-    ANALYZE_RESULT(61);
+    ANALYZE_RESULT(61),
+    APP_VERSION(62);
 
     companion object {
         fun valueOf(value: Int): OutgoingBridgeDataType =
