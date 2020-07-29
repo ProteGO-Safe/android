@@ -3,7 +3,7 @@ package pl.gov.mc.protegosafe.di
 import androidx.work.WorkManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
-import pl.gov.mc.protegosafe.DeviceRepositoryImpl
+import pl.gov.mc.protegosafe.repository.DeviceRepositoryImpl
 import pl.gov.mc.protegosafe.device.BuildConfig
 import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
 import pl.gov.mc.protegosafe.domain.manager.KeystoreManager

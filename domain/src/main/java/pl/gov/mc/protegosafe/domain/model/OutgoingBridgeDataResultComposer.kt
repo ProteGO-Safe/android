@@ -7,4 +7,5 @@ interface OutgoingBridgeDataResultComposer {
         riskLevelConfigurationItem: RiskLevelConfigurationItem,
         exposure: ExposureItem
     ): String
+    fun composeAppVersionNameResult(versionName: String): String
 }

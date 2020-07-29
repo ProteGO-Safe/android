@@ -23,4 +23,8 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
             exposure.riskScore
         ).value
     ).toJson()
+
+    override fun composeAppVersionNameResult(versionName: String): String {
+        return AppVersionNameResult(versionName).toJson()
+    }
 }
