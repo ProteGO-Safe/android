@@ -5,6 +5,7 @@
         <pin-set>
             <pin digest="SHA-256">LSWuEvDZ3CS5f8fyaJDiYob0mmtqq7NGoqsaIrKxqCU=</pin>
             <pin digest="SHA-256">FEzVOUp4dF3gI0ZVPRJhFbSJVXR+uQmMH65xhs1glH4=</pin>
+            <pin digest="SHA-256">nopOJhvRDDCBiANrCZsvoz4YwbGZtr62+ykR90ziMRg=</pin>
         </pin-set>
         <!-- TrustKit Android API -->
         <!-- Enforce pinning validation -->
