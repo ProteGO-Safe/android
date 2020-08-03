@@ -77,11 +77,21 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.2.3
+
+Updated PWA
+Passed app version to PWA
+Updated certification pinning
+
+4.2.2
+
+Updated PWA
+
 4.2.1
 
-Increase connection timeouts
-Handle upload errors
-Update PWA
+Increased connection timeouts
+Handled upload errors
+Updated PWA
 
 4.2.0
 
