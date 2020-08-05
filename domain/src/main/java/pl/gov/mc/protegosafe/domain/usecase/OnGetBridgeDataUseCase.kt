@@ -10,6 +10,7 @@ class OnGetBridgeDataUseCase(
     private val getServicesStatusUseCase: GetServicesStatusUseCase,
     private val getAnalyzeResultUseCase: GetAnalyzeResultUseCase,
     private val getAppVersionNameUseCase: GetAppVersionNameUseCase,
+    private val getSystemLanguageUseCase: GetSystemLanguageUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -28,6 +29,9 @@ class OnGetBridgeDataUseCase(
             }
             OutgoingBridgeDataType.APP_VERSION -> {
                 getAppVersionNameUseCase.execute()
+            }
+            OutgoingBridgeDataType.SYSTEM_LANGUAGE -> {
+                getSystemLanguageUseCase.execute()
             }
             else -> {
                 throw IllegalArgumentException("OutgoingBridgeDataType has wrong value")

@@ -8,4 +8,5 @@ interface OutgoingBridgeDataResultComposer {
         exposure: ExposureItem
     ): String
     fun composeAppVersionNameResult(versionName: String): String
+    fun composeSystemLanguageResult(languageISO: String): String
 }

@@ -27,4 +27,8 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
     override fun composeAppVersionNameResult(versionName: String): String {
         return AppVersionNameResult(versionName).toJson()
     }
+
+    override fun composeSystemLanguageResult(languageISO: String): String {
+        return SystemLanguageResult(languageISO).toJson()
+    }
 }
