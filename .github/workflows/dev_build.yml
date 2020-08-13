@@ -16,9 +16,9 @@ jobs:
 
     steps:
       - name: Clone Repository
-          uses: actions/checkout@v1
-          with:
-            ref: dev
+        uses: actions/checkout@v1
+        with:
+          ref: dev
 
       - name: Setup Environment (JDK)
         uses: actions/setup-java@v1
@@ -32,11 +32,12 @@ jobs:
           cp $PROTEGO_KEYSTORE_FILE app/$PROTEGO_KEYSTORE_FILE
 
       - name: Remove old PWA
-          run: |
-            rm -r app/app/src/main/assets/pwa/*
+        run: |
+          rm -r app/app/src/main/assets/pwa/*
 
       - name: Download and unpack new PWA artifact
-          run: #TODO copy new PWA files to app/src/main/assets/pwa/
+        run: |
+        #TODO copy new PWA files to app/src/main/assets/pwa/
 
       - name: Ktlint
         run: ./gradlew ktlint -PPROTEGO_KEYSTORE_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_ALIAS=$PROTEGO_KEYSTORE_ALIAS
