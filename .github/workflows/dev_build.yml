@@ -1,0 +1,80 @@
+name: DEV
+
+on:
+  repository_dispatch:
+    types: [stage, prod] #TODO change to proper event type
+
+jobs:
+  build:
+    name: PWA Release Build
+    if: github.repository_owner != 'ProteGO-Safe'
+    runs-on: ubuntu-latest
+    env:
+      PROTEGO_KEYSTORE_FILE: protegosafe-stage.jks
+      PROTEGO_KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+      PROTEGO_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+
+    steps:
+      - name: Clone Repository
+          uses: actions/checkout@v1
+          with:
+            ref: dev
+
+      - name: Setup Environment (JDK)
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Setup Environment (Keystore)
+        run: |
+          echo "${{ secrets.KEYSTORE }}" > stage.keystore.asc
+          gpg -d --passphrase "${{ secrets.KEYSTORE_PASSWORD }}" --batch stage.keystore.asc > $PROTEGO_KEYSTORE_FILE
+          cp $PROTEGO_KEYSTORE_FILE app/$PROTEGO_KEYSTORE_FILE
+
+      - name: Remove old PWA
+          run: |
+            rm -r app/app/src/main/assets/pwa/*
+
+      - name: Download and unpack new PWA artifact
+          run: #TODO copy new PWA files to app/src/main/assets/pwa/
+
+      - name: Ktlint
+        run: ./gradlew ktlint -PPROTEGO_KEYSTORE_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
+      - name: Install NDK
+        run: echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
+
+      - name: Cleanup
+        run: ./gradlew clean -PPROTEGO_KEYSTORE_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
+      - name: Run Stage Unit Tests
+        if: github.event.event_type == 'stage' #TODO change to proper event type name
+        run: ./gradlew testStageReleaseUnitTest -PPROTEGO_KEYSTORE_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
+      - name: Run Prod Unit Tests
+        if: github.event.event_type == 'prod' #TODO change to proper event type name
+        run: ./gradlew testProdReleaseUnitTest -PPROTEGO_KEYSTORE_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
+      - name: Assemble Stage Debug with Screencast (Signed Stage Keystore)
+        if: github.event.event_type == 'stage' #TODO change to proper event type name
+        run: ./gradlew assembleStageDebug -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
+      - name: Assemble Stage Release (Signed Stage Keystore)
+        if: github.event.event_type == 'stage' #TODO change to proper event type name
+        run: ./gradlew assembleStageRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
+      - name: Assemble Prod Release (Signed Stage Keystore)
+        if: github.event.event_type == 'prod' #TODO change to proper event type name
+        run: ./gradlew assembleProdRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
+      - name: Upload APKs
+        uses: actions/upload-artifact@v2
+        with:
+          name: Build
+          path: app/build/outputs/apk/*
+
+      - name: Upload Mappings
+        uses: actions/upload-artifact@v2
+        with:
+          name: mapping
+          path: app/build/outputs/mapping/**/mapping.txt
