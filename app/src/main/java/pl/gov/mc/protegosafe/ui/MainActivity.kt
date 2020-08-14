@@ -5,45 +5,32 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.ActivityMainBinding
-import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
+import pl.gov.mc.protegosafe.ui.common.BaseActivity
 import pl.gov.mc.protegosafe.ui.common.getSafetyNetErrorAlertDialog
 import pl.gov.mc.protegosafe.ui.common.livedata.observe
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private val vm: MainViewModel by viewModel()
     private val appUpdateManager: AppUpdateManager by inject()
     private lateinit var binding: ActivityMainBinding
-
-    override fun attachBaseContext(newBase: Context?) {
-        val locale = get<GetLocaleUseCase>().execute()
-        val context = get<Context>()
-
-        val config = Configuration(context.resources.configuration)
-        config.setLocale(locale)
-
-        super.attachBaseContext(context.createConfigurationContext(config))
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
