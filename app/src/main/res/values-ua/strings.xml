@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="general_notification_channel_name">general_notification_channel_name</string>
+    <string name="no_internet_connection_msg">no_internet_connection_msg</string>
+    <string name="not_secure_connection_msg">not_secure_connection_msg</string>
+    <string name="no_internet_connection_retry">no_internet_connection_retry</string>
+    <string name="no_internet_connection_cancel">no_internet_connection_cancel</string>
+    <string name="pin_verification_error">pin_verification_error</string>
+    <string name="upload_temporary_exposure_keys_error">upload_temporary_exposure_keys_error</string>
+    <string name="get_temporary_exposure_keys_error">get_temporary_exposure_keys_error</string>
+    <string name="safetynet_dialog_title">safetynet_dialog_title</string>
+    <string name="safetynet_dialog_verification_error">safetynet_dialog_verification_error</string>
+    <string name="common_ok">common_ok</string>
+    <string name="debug_write_store_rationale">debug_write_store_rationale</string>
+    <string name="data_migration_in_progress">data_migration_in_progress</string>
+</resources>
