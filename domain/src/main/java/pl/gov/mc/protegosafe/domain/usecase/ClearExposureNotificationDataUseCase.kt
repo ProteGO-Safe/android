@@ -4,21 +4,21 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
-import pl.gov.mc.protegosafe.domain.model.ClearMapper
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationStatusItem
+import pl.gov.mc.protegosafe.domain.model.IncomingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
 
 class ClearExposureNotificationDataUseCase(
-    private val clearMapper: ClearMapper,
     private val deviceRepository: DeviceRepository,
-    private val exposureRepository: ExposureRepository
+    private val exposureRepository: ExposureRepository,
+    private val incomingBridgePayloadMapper: IncomingBridgePayloadMapper
 ) {
     fun execute(
         payload: String,
         onResultActionRequired: (ActionRequiredItem) -> Unit
     ): Completable =
-        Single.fromCallable { clearMapper.toEntity(payload) }
+        Single.fromCallable { incomingBridgePayloadMapper.toClearItem(payload) }
             .flatMapCompletable {
                 deviceRepository.getExposureNotificationStatus()
                     .flatMapCompletable {

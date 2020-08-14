@@ -7,7 +7,7 @@ enum class IncomingBridgeDataType(val code: Int) {
     REQUEST_TEMPORARY_EXPOSURE_KEYS_UPLOAD(43),
     SERVICES_STATUS(51),
     REQUEST_SERVICE_STATUS_CHANGE(52),
-    ;
+    SYSTEM_LANGUAGE(63);
 
     companion object {
         fun valueOf(value: Int): IncomingBridgeDataType =
