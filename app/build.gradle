@@ -6,6 +6,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.google.firebase.crashlytics'
 apply from: '../ktlint.gradle'
+apply from: '../unzipUI.gradle'
 
 android {
     signingConfigs {
@@ -26,8 +27,8 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 62
-        versionName "4.2.3"
+        versionCode 64
+        versionName "4.2.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
