@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "0ed6b017883b8c62b7be914a714348df",
+    "revision": "13c0949d54dc3a88f54d58e700f2222f",
     "url": "./index.html"
   },
   {
-    "revision": "b0e8c93a86bfd8c38593",
+    "revision": "af8d033363dd8dade04b",
     "url": "./static/css/2.fb8a0bac.chunk.css"
   },
   {
-    "revision": "438e6315402a4a1ee08c",
-    "url": "./static/css/main.dc94683e.chunk.css"
+    "revision": "94a1ee0fdc08cdb6cc06",
+    "url": "./static/css/main.2004e42d.chunk.css"
   },
   {
-    "revision": "b0e8c93a86bfd8c38593",
-    "url": "./static/js/2.90da03c6.chunk.js"
+    "revision": "af8d033363dd8dade04b",
+    "url": "./static/js/2.3e3f79e1.chunk.js"
   },
   {
     "revision": "21968521f2ed82ae33d0a85b3c11b74e",
-    "url": "./static/js/2.90da03c6.chunk.js.LICENSE.txt"
+    "url": "./static/js/2.3e3f79e1.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "438e6315402a4a1ee08c",
-    "url": "./static/js/main.7fee643c.chunk.js"
+    "revision": "94a1ee0fdc08cdb6cc06",
+    "url": "./static/js/main.ed86a4e0.chunk.js"
   },
   {
     "revision": "bc5930ccf9738ce88566",
@@ -90,6 +90,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "902df746b0a51a74ddccbc3b4027777b",
     "url": "./static/media/angle-right.902df746.svg"
+  },
+  {
+    "revision": "4e357f0ea7cae2dd978f76da88e9234b",
+    "url": "./static/media/arrow-current-color.4e357f0e.svg"
   },
   {
     "revision": "4e5817e85388534c1153cf7333bec8d3",
@@ -172,8 +176,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/media/menu-boczne-moje-dane_BLUE.7c299515.svg"
   },
   {
-    "revision": "bf8a63cc5b402e87a484458798b40858",
-    "url": "./static/media/menu-boczne-numery-alarm_BLUE.bf8a63cc.svg"
+    "revision": "c59f29dfabdf4909350c85b42eec47ee",
+    "url": "./static/media/menu-boczne-numery-alarm_BLUE.c59f29df.svg"
   },
   {
     "revision": "7682179c84578358106fe1b54daaf250",
@@ -210,14 +214,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "a3776430f669f615c0b350d81754db4f",
     "url": "./static/media/protegosafe_logo_white.a3776430.svg"
-  },
-  {
-    "revision": "05c5b98c105b200b90672d56e5aaee74",
-    "url": "./static/media/przyjazd.05c5b98c.svg"
-  },
-  {
-    "revision": "dead845b526dbe402e77e072cd1f85c1",
-    "url": "./static/media/scanning.dead845b.gif"
   },
   {
     "revision": "05e1e10061c44d1bdaf4fc75b7efdc8b",
@@ -262,6 +258,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "607bd1642d410ca5a55172fd551bc5b0",
     "url": "./static/media/welcome-screen.607bd164.svg"
+  },
+  {
+    "revision": "2dd4abcfe96a4fdd5ee793660bcd099e",
+    "url": "./static/media/wifi.2dd4abcf.gif"
   },
   {
     "revision": "6e17f48b0f0bbdbd0aca2b8f6f29a09f",
