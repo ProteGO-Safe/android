@@ -6,6 +6,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.google.firebase.crashlytics'
 apply from: '../ktlint.gradle'
+apply from: '../unzipUI.gradle'
 
 android {
     signingConfigs {
