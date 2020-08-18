@@ -7,8 +7,6 @@ data class TemporaryExposureKeysUploadRequestBody(
     val temporaryExposureKeys: List<TemporaryExposureKeyRequestData>,
     @SerializedName("platform")
     val platform: String,
-    @SerializedName("deviceVerificationPayload")
-    val deviceVerificationPayload: String,
     @SerializedName("appPackageName")
     val appPackageName: String,
     @SerializedName("regions")
