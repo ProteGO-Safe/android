@@ -22,6 +22,7 @@ import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetSafetyNetAttestationTokenUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetSystemLanguageUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
@@ -50,7 +51,7 @@ val appModule = module {
 }
 
 val useCaseModule = module {
-    factory { OnGetBridgeDataUseCase(get(), get(), get(), get(), get()) }
+    factory { OnGetBridgeDataUseCase(get(), get(), get(), get(), get(), get()) }
     factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
@@ -77,6 +78,7 @@ val useCaseModule = module {
     factory { PrepareMigrationIfRequiredUseCase(get(), get()) }
     factory { GetMigrationUrlUseCase(get()) }
     factory { GetAppVersionNameUseCase(get(), get(), get()) }
+    factory { GetSystemLanguageUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {

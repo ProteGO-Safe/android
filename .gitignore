@@ -20,3 +20,6 @@
 
 # OSX
 .DS_Store
+
+#UI unzipped files
+/app/src/main/assets/ui/
