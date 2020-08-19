@@ -74,7 +74,6 @@ val useCaseModule = module {
             get(),
             get(),
             get(),
-            get(),
             get()
         )
     }
