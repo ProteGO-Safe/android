@@ -7,7 +7,6 @@ import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.exception.UploadException
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
-import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
 import pl.gov.mc.protegosafe.domain.model.ConnectionException
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
@@ -18,7 +17,6 @@ import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedE
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
-import pl.gov.mc.protegosafe.domain.model.toDiagnosisKeyList
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.KeyUploadSystemInfoRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
@@ -27,7 +25,6 @@ import java.lang.Exception
 class UploadTemporaryExposureKeysUseCase(
     private val exposureNotificationRepository: ExposureNotificationRepository,
     private val keyUploadSystemInfoRepository: KeyUploadSystemInfoRepository,
-    private val safetyNetAttestationWrapper: SafetyNetAttestationWrapper,
     private val resultComposer: OutgoingBridgeDataResultComposer,
     private val pinMapper: PinMapper,
     private val temporaryExposureKeysUploadRepository: TemporaryExposureKeysUploadRepository,
@@ -161,21 +158,14 @@ class UploadTemporaryExposureKeysUseCase(
         accessToken: String,
         keys: List<TemporaryExposureKeyItem>
     ): Single<TemporaryExposureKeysUploadRequestItem> =
-        getDeviceVerificationPayload(keys).map {
+        Single.just(
             TemporaryExposureKeysUploadRequestItem(
                 keys,
                 keyUploadSystemInfoRepository.platform,
-                it,
                 keyUploadSystemInfoRepository.appPackageName,
                 keyUploadSystemInfoRepository.regions,
                 accessToken
             )
-        }
-
-    private fun getDeviceVerificationPayload(keys: List<TemporaryExposureKeyItem>): Single<String> =
-        safetyNetAttestationWrapper.attestFor(
-            keys.toDiagnosisKeyList(),
-            keyUploadSystemInfoRepository.regions
         )
 
     private fun getTemporaryExposureKeys(

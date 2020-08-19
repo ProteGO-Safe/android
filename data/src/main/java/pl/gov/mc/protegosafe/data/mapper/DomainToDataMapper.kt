@@ -40,7 +40,6 @@ fun TemporaryExposureKeysUploadRequestItem.toTemporaryExposureKeysUploadRequestB
     TemporaryExposureKeysUploadRequestBody(
         temporaryExposureKeys = keys.toTemporaryExposureKeyRequestDataList(),
         platform = platform,
-        deviceVerificationPayload = deviceVerificationPayload,
         appPackageName = appPackageName,
         regions = regions,
         verificationPayload = verificationPayload
