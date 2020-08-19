@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -21,12 +20,13 @@ import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.ActivityMainBinding
+import pl.gov.mc.protegosafe.ui.common.BaseActivity
 import pl.gov.mc.protegosafe.ui.common.getSafetyNetErrorAlertDialog
 import pl.gov.mc.protegosafe.ui.common.livedata.observe
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private val vm: MainViewModel by viewModel()
     private val appUpdateManager: AppUpdateManager by inject()

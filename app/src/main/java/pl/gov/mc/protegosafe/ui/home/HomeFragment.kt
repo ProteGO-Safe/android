@@ -97,6 +97,7 @@ class HomeFragment : BaseFragment() {
         vm.requestLocation.observe(viewLifecycleOwner, ::requestLocation)
         vm.requestClearData.observe(viewLifecycleOwner, ::requestClearData)
         vm.requestNotifications.observe(viewLifecycleOwner, ::requestNotifications)
+        vm.restartActivity.observe(viewLifecycleOwner, ::restartActivity)
         vm.showConnectionError.observe(viewLifecycleOwner, ::showConnectionError)
     }
 
@@ -258,6 +259,10 @@ class HomeFragment : BaseFragment() {
                 }
             }
         startActivityForResult(settingsIntent, ActivityRequest.ENABLE_NOTIFICATIONS.requestCode)
+    }
+
+    private fun restartActivity() {
+        activity?.recreate()
     }
 
     private fun showConnectionError(error: Exception) {

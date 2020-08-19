@@ -17,6 +17,7 @@ import pl.gov.mc.protegosafe.data.Consts
 import pl.gov.mc.protegosafe.data.KeyUploadSystemInfoRepositoryImpl
 import pl.gov.mc.protegosafe.data.cloud.DiagnosisKeyDownloadService
 import pl.gov.mc.protegosafe.data.cloud.UploadTemporaryExposureKeysService
+import pl.gov.mc.protegosafe.data.db.AppLanguageDataStore
 import pl.gov.mc.protegosafe.data.db.NotificationDataStore
 import pl.gov.mc.protegosafe.data.db.SafetyNetDataStore
 import pl.gov.mc.protegosafe.data.db.SharedPreferencesDelegates
@@ -25,9 +26,9 @@ import pl.gov.mc.protegosafe.data.db.AppVersionDataStore
 import pl.gov.mc.protegosafe.data.db.dao.ExposureDao
 import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.data.mapper.ApiExceptionMapperImpl
-import pl.gov.mc.protegosafe.data.mapper.ClearMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.DiagnosisKeyDownloadConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.ExposureConfigurationMapperImpl
+import pl.gov.mc.protegosafe.data.mapper.IncomingBridgePayloadMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.PinMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RetrofitExceptionMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RiskLevelConfigurationMapperImpl
@@ -45,11 +46,11 @@ import pl.gov.mc.protegosafe.data.repository.TemporaryExposureKeysUploadReposito
 import pl.gov.mc.protegosafe.data.repository.TriageRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.WorkerStateRepositoryImpl
 import pl.gov.mc.protegosafe.domain.model.ApiExceptionMapper
-import pl.gov.mc.protegosafe.domain.model.ClearMapper
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfigurationMapper
+import pl.gov.mc.protegosafe.domain.model.IncomingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
@@ -83,7 +84,6 @@ val dataModule = module {
     single { NotificationDataStore() }
     single { TriageDataStore(get()) }
     single { SharedPreferencesDelegates(get()) }
-    factory<ClearMapper> { ClearMapperImpl() }
     single { Nearby.getExposureNotificationClient(androidApplication()) }
     single<ExposureNotificationRepository> { ExposureNotificationRepositoryImpl(get(), get()) }
     single<RemoteConfigurationRepository> { RemoteConfigurationRepositoryImpl(get(), get(), get()) }
@@ -116,6 +116,8 @@ val dataModule = module {
     single { AppVersionDataStore(get()) }
     single<MigrationRepository> { MigrationRepositoryImpl(get(), get(), get()) }
     single<RetrofitExceptionMapper> { RetrofitExceptionMapperImpl() }
+    single<IncomingBridgePayloadMapper> { IncomingBridgePayloadMapperImpl(get()) }
+    single { AppLanguageDataStore(get()) }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(
@@ -136,13 +138,15 @@ fun provideRetrofit(): Retrofit {
     val client = OkHttpClient.Builder().apply {
         sslSocketFactory(OkHttp3Helper.getSSLSocketFactory(), OkHttp3Helper.getTrustManager())
         addInterceptor(OkHttp3Helper.getPinningInterceptor())
-        addInterceptor(HttpLoggingInterceptor().setLevel(
-            if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BASIC
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
-        ))
+        addInterceptor(
+            HttpLoggingInterceptor().setLevel(
+                if (BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor.Level.BASIC
+                } else {
+                    HttpLoggingInterceptor.Level.NONE
+                }
+            )
+        )
         followSslRedirects(false)
         followRedirects(false)
         connectTimeout(DEFAULT_TIMEOUT_SEC, TimeUnit.SECONDS)
