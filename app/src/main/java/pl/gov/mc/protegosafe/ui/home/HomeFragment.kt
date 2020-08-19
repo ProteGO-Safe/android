@@ -310,6 +310,15 @@ class HomeFragment : BaseFragment() {
             is UploadException.UploadTemporaryExposureKeysError -> {
                 R.string.upload_temporary_exposure_keys_error
             }
+            is UploadException.NoKeysError -> {
+                R.string.upload_temporary_exposure_keys_empty_error
+            }
+            is UploadException.TotalLimitExceededError -> {
+                R.string.upload_temporary_exposure_keys_limit_exceed_error
+            }
+            is UploadException.DailyLimitExceededError -> {
+                R.string.upload_temporary_exposure_keys_day_limit_exceed_error
+            }
             else -> {
                 R.string.no_internet_connection_msg
             }
