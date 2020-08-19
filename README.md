@@ -77,6 +77,9 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.2.4
+Update GIS recommendations
+
 4.2.3
 
 Updated PWA
