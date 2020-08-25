@@ -45,6 +45,12 @@ android {
     kotlinOptions { jvmTarget = "1.8" }
 
     buildTypes {
+        sauceLab {
+            debuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            versionNameSuffix ".sauceLab"
+        }
         debug {
             versionNameSuffix ".debug"
             signingConfig signingConfigs.debug
