@@ -30,6 +30,8 @@ android {
         versionCode 65
         versionName "4.3.0"
 
+        setProperty("archivesBaseName", "protegosafe-${defaultConfig.versionName}-${defaultConfig.versionCode}")
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "false"
@@ -43,6 +45,12 @@ android {
     kotlinOptions { jvmTarget = "1.8" }
 
     buildTypes {
+        sauceLab {
+            debuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            versionNameSuffix ".sauceLab"
+        }
         debug {
             versionNameSuffix ".debug"
             signingConfig signingConfigs.debug
