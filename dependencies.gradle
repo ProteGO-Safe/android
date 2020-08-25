@@ -1,6 +1,6 @@
 def versions = [:]
 versions.kotlin = "1.3.72"
-versions.android_gradle_plugin = "3.6.3"
+versions.android_gradle_plugin = '4.0.1'
 versions.kotlin_gradle_plugin = versions.kotlin
 versions.google_services = "4.3.3"
 versions.navigation_gradle_plugin = "2.2.2"
