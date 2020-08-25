@@ -30,6 +30,8 @@ android {
         versionCode 65
         versionName "4.3.0"
 
+        setProperty("archivesBaseName", "protegosafe-${defaultConfig.versionName}-${defaultConfig.versionCode}")
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "false"
