@@ -65,7 +65,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation project(':exposurenotification')
     implementation deps.jetbrains.kotlin_stdlib
     implementation deps.androidx.appcompat_appcompat
     implementation deps.androidx.core_ktx
