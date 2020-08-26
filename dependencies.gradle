@@ -141,6 +141,7 @@ deps.permissions = permissions
 
 def facebook = [:]
 facebook.stetho = "com.facebook.stetho:stetho:$versions.stetho"
+facebook.stetho_okhttp3 = "com.facebook.stetho:stetho-okhttp3:$versions.stetho"
 deps.facebook = facebook
 
 def hyperion = [:]

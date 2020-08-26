@@ -95,6 +95,9 @@ dependencies {
     //Guava
     implementation deps.google.guava
 
+    //Facebook
+    implementation deps.facebook.stetho_okhttp3
+
     // Retrofit
     implementation deps.retrofit.retrofit
     implementation deps.retrofit.adapter_rxjava2
