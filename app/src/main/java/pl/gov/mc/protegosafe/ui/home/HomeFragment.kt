@@ -12,11 +12,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.ConsoleMessage
-import android.webkit.SslErrorHandler
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -137,6 +133,11 @@ class HomeFragment : BaseFragment() {
         binding.webView.apply {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                settings.forceDark = WebSettings.FORCE_DARK_OFF
+            }
+
+
             webViewClient = ProteGoWebViewClient()
             addJavascriptInterface(
                 NativeBridgeInterface(
