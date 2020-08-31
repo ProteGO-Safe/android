@@ -1,43 +1,94 @@
-name: DEV
+---
 
-on:
-  repository_dispatch:
-    types: [stage, prod] #TODO change to proper event type
+name: DEV BUILD
+on: 
+  workflow_dispatch:
+    inputs:
+      react_run_id:
+        description: 'React Workflow run_id'     
+        required: true
+        default: 'warning'
 
 jobs:
-  build:
-    name: PWA Release Build
+  nightly:
+    name: React Release Build
     if: github.repository_owner != 'ProteGO-Safe'
     runs-on: ubuntu-latest
     env:
       PROTEGO_KEYSTORE_FILE: protegosafe-stage.jks
       PROTEGO_KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
       PROTEGO_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      REACT_RUN_ID: ${{ github.event.inputs.react_run_id }}
+      REACT_TOKEN_SCRIPT: ${{ secrets.REACT_TOKEN_SCRIPT }}
+      REACT_ACTIONS_URL: 'https://api.github.com/repos/SafeSafe-app/pwa/actions/'
 
     steps:
       - name: Clone Repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+
+      - name: Setup Python 3.8  
+        uses: actions/setup-python@v2
         with:
-          ref: dev
+          python-version: 3.8
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 authlib
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Lint with flake8 - Exit on Syntax Errors
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Get Installation Access Token
+        run: |
+          echo "$REACT_TOKEN_SCRIPT" | base64 --decode > getToken && chmod +x getToken;
+          REACT_TOKEN="$(sh -c './getToken')"
+          sleep 3s
+          repoID=$(curl -s \
+          -H "Authorization: Bearer ${REACT_TOKEN}" \
+          -H "Accept: application/vnd.github.machine-man-preview+json" \
+          https://api.github.com/app/installations |jq '.[0].id')
+          sleep 3s
+          JWT=$(curl -s -X POST \
+          -H "Authorization: Bearer ${REACT_TOKEN}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Accept: application/vnd.github.machine-man-preview+json" \
+          https://api.github.com/app/installations/${repoID}/access_tokens |jq '.token')
+          echo "::set-env name=JSON_WEB_TOKEN::${JWT}"
+
+      - name: Remove old ui.zip
+        run: |
+          rm -f ui/ui.zip
+
+      - name: Get React Release Artifact
+        run: |
+          REACT_BUILD_URL=$(curl -s \
+          -H "Authorization: Bearer ${JSON_WEB_TOKEN}" \
+          -H 'Accept: application/vnd.github.v3+json' \
+          ${REACT_ACTIONS_URL}/runs/${REACT_RUN_ID}/artifacts \
+          | jq .artifacts[].archive_download_url)
+          curl -s -L -o ui/ui.zip \
+          -H "Authorization: Bearer ${JSON_WEB_TOKEN}" \
+          -H 'Accept: application/vnd.github.v3+json' \
+          ${REACT_BUILD_URL}
 
       - name: Setup Environment (JDK)
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
 
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+
       - name: Setup Environment (Keystore)
         run: |
           echo "${{ secrets.KEYSTORE }}" > stage.keystore.asc
           gpg -d --passphrase "${{ secrets.KEYSTORE_PASSWORD }}" --batch stage.keystore.asc > $PROTEGO_KEYSTORE_FILE
           cp $PROTEGO_KEYSTORE_FILE app/$PROTEGO_KEYSTORE_FILE
-
-      - name: Remove old UI
-        run: |
-          rm ui/ui.zip
-
-      - name: Download and unpack new PWA artifact
-        run: |
-        #TODO copy new PWA files to /ui/ui.zip
 
       - name: Ktlint
         run: ./gradlew ktlint -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
@@ -48,31 +99,26 @@ jobs:
       - name: Cleanup
         run: ./gradlew clean -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
-      - name: Run Stage Unit Tests
-        if: github.event.event_type == 'stage' #TODO change to proper event type name
-        run: ./gradlew testStageReleaseUnitTest -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
-
-      - name: Run Prod Unit Tests
-        if: github.event.event_type == 'prod' #TODO change to proper event type name
+      - name: Run Unit Tests
         run: ./gradlew testProdReleaseUnitTest -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
       - name: Assemble Stage Debug with Screencast (Signed Stage Keystore)
-        if: github.event.event_type == 'stage' #TODO change to proper event type name
         run: ./gradlew assembleStageDebug -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
       - name: Assemble Stage Release (Signed Stage Keystore)
-        if: github.event.event_type == 'stage' #TODO change to proper event type name
         run: ./gradlew assembleStageRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
-
-      - name: Assemble Prod Release (Signed Stage Keystore)
-        if: github.event.event_type == 'prod' #TODO change to proper event type name
-        run: ./gradlew assembleProdRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
       - name: Upload APKs
         uses: actions/upload-artifact@v2
         with:
-          name: Build
+          name: "${{ steps.get_version.outputs.VERSION }}_apks"
           path: app/build/outputs/apk/*
+
+      - name: Upload Release Candidate Bundle
+        uses: actions/upload-artifact@v2
+        with:
+          name: "${{ steps.get_version.outputs.VERSION }}_bundle"
+          path: app/build/outputs/bundle/*
 
       - name: Upload Mappings
         uses: actions/upload-artifact@v2
