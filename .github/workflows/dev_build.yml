@@ -21,6 +21,8 @@ jobs:
       REACT_RUN_ID: ${{ github.event.inputs.react_run_id }}
       REACT_TOKEN_SCRIPT: ${{ secrets.REACT_TOKEN_SCRIPT }}
       REACT_ACTIONS_URL: 'https://api.github.com/repos/SafeSafe-app/pwa/actions/'
+      PRIVATE_KEY: ${{ secrets.CI_PRIVATE_KEY }}
+      PUBLIC_KEY: ${{ secrets.CI_PUBLIC_KEY }}
 
     steps:
       - name: Clone Repository
@@ -44,7 +46,10 @@ jobs:
 
       - name: Get Installation Access Token
         run: |
-          echo "$REACT_TOKEN_SCRIPT" | base64 --decode > getToken && chmod +x getToken;
+          mkdir -p .ssh;
+          echo "${CI_PRIVATE_KEY}" | base64 --decode > .ssh/private.pem && chmod 0400 .ssh/private.pem;
+          echo "${CI_PUBLIC_KEY}" | base64 --decode > .ssh/public.pem && chmod 0400 .ssh/public.pem;
+          echo "${REACT_TOKEN_SCRIPT}" | base64 --decode > getToken && chmod +x getToken;
           REACT_TOKEN="$(sh -c './getToken')"
           sleep 3s
           repoID=$(curl -s \
