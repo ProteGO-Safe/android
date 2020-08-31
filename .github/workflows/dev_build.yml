@@ -20,7 +20,7 @@ jobs:
       PROTEGO_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       REACT_RUN_ID: ${{ github.event.inputs.react_run_id }}
       REACT_TOKEN_SCRIPT: ${{ secrets.REACT_TOKEN_SCRIPT }}
-      REACT_ACTIONS_URL: 'https://api.github.com/repos/SafeSafe-app/pwa/actions/'
+      REACT_ACTIONS_URL: 'https://api.github.com/repos/SafeSafe-app/pwa/actions'
       PRIVATE_KEY: ${{ secrets.CI_PRIVATE_KEY }}
       PUBLIC_KEY: ${{ secrets.CI_PUBLIC_KEY }}
 
