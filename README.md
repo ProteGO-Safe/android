@@ -1,10 +1,10 @@
-# ProteGO Safe Android app
+# STOP COVID - ProteGO Safe Android app
 
 ![Logo](./image.png "ProtegoSafe")
 
 ## Project overview
 
-This is an Android application for [ProteGO Safe project](https://github.com/ProteGO-Safe/specs) and it implements two main features:
+This is an Android application for [STOP COVID - ProteGO Safe project](https://github.com/ProteGO-Safe/specs) and it implements two main features:
 * User daily triage - //TODO description to be provided or linked to main documentation//
 * Contact tracing - module that is fully based on [Exposure Notification API](https://www.google.com/covid19/exposurenotifications/) provided by Google and Apple and it's goal is to inform people of potential exposure to COVID-19
 
@@ -76,6 +76,16 @@ Dev: ./app/src/dev/google-services.json
 ---
 
 ## ChangeLog
+
+4.3.0
+
+Updated app name
+Updated UI
+Added validation of Temporary Exposure Keys before upload
+
+4.2.4
+
+Updated GIS recommendations
 
 4.2.3
 
