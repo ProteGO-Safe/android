@@ -9,6 +9,7 @@ sealed class ActionRequiredItem {
     object TemporaryExposureKeysPermissionGranted : ActionRequiredItem()
     object SendTemporaryExposureKeysUploadFailure : ActionRequiredItem()
     object ClearExposureNotificationData : ActionRequiredItem()
+    object RestartActivity : ActionRequiredItem()
     data class SendTemporaryExposureKeysUploadResult(val dataJson: String) : ActionRequiredItem() {
         val dataType = OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code
     }

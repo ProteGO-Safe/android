@@ -56,6 +56,9 @@ class HomeViewModel(
     private val _requestClearData = SingleLiveEvent<Unit>()
     val requestClearData: LiveData<Unit> = _requestClearData
 
+    private val _restartActivity = SingleLiveEvent<Unit>()
+    val restartActivity: LiveData<Unit> = _restartActivity
+
     private val _showUploadError = MutableLiveData<Exception>()
     val showConnectionError: LiveData<Exception> = _showUploadError
 
@@ -192,6 +195,9 @@ class HomeViewModel(
             }
             is ActionRequiredItem.TemporaryExposureKeysPermissionGranted -> {
                 onTemporaryExposureKeysAccessGranted()
+            }
+            is ActionRequiredItem.RestartActivity -> {
+                _restartActivity.postValue(Unit)
             }
         }
     }

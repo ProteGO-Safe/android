@@ -38,7 +38,7 @@ jobs:
         run: ./gradlew ktlint -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
       - name: Install NDK
-        run: echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
+        run: echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;21.0.6113669" --sdk_root=${ANDROID_SDK_ROOT}
 
       - name: Cleanup
         run: ./gradlew clean -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
@@ -46,11 +46,14 @@ jobs:
       - name: Run Unit Tests
         run: ./gradlew testProdReleaseUnitTest -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
-      - name: Assemble Stage Debug with Screencast (Signed Stage Keystore)
+      - name: Assemble Stage Debug (Signed Stage Keystore)
         run: ./gradlew assembleStageDebug -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
       - name: Assemble Stage Release (Signed Stage Keystore)
         run: ./gradlew assembleStageRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
+      - name: Assemble Stage SauceLab (Signed Stage Keystore)
+        run: ./gradlew assembleStageSauceLab -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
       - name: Assemble Prod Release (Signed Stage Keystore)
         run: ./gradlew assembleProdRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS

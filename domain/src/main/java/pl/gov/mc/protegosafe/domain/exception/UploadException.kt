@@ -7,4 +7,11 @@ sealed class UploadException(
     object PinVerificationFailed : UploadException()
     object UploadTemporaryExposureKeysError : UploadException()
     object GetTemporaryExposureKeysError : UploadException()
+    object NoKeysError : UploadException()
+    object TotalLimitExceededError : UploadException() {
+        const val LIMIT = 30
+    }
+    object DailyLimitExceededError : UploadException() {
+        const val LIMIT = 3
+    }
 }

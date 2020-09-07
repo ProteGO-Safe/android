@@ -29,6 +29,7 @@ android {
     kotlinOptions { jvmTarget = "1.8" }
 
     buildTypes {
+        sauceLab { }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -64,7 +65,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation project(':exposurenotification')
     implementation deps.jetbrains.kotlin_stdlib
     implementation deps.androidx.appcompat_appcompat
     implementation deps.androidx.core_ktx
@@ -93,6 +94,9 @@ dependencies {
 
     //Guava
     implementation deps.google.guava
+
+    //Facebook
+    implementation deps.facebook.stetho_okhttp3
 
     // Retrofit
     implementation deps.retrofit.retrofit
