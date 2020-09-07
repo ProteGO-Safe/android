@@ -27,8 +27,10 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 64
-        versionName "4.2.4"
+        versionCode 65
+        versionName "4.3.0"
+
+        setProperty("archivesBaseName", "protegosafe-${defaultConfig.versionName}-${defaultConfig.versionCode}")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -43,6 +45,12 @@ android {
     kotlinOptions { jvmTarget = "1.8" }
 
     buildTypes {
+        sauceLab {
+            debuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            versionNameSuffix ".sauceLab"
+        }
         debug {
             versionNameSuffix ".debug"
             signingConfig signingConfigs.debug
