@@ -80,7 +80,9 @@ Dev: ./app/src/dev/google-services.json
 4.3.0
 
 Updated app name
+
 Updated UI
+
 Added validation of Temporary Exposure Keys before upload
 
 4.2.4
@@ -90,7 +92,9 @@ Updated GIS recommendations
 4.2.3
 
 Updated PWA
+
 Passed app version to PWA
+
 Updated certification pinning
 
 4.2.2
@@ -100,16 +104,23 @@ Updated PWA
 4.2.1
 
 Increased connection timeouts
+
 Handled upload errors
+
 Updated PWA
 
 4.2.0
 
 PWA GUI migrated to offline version (local assets)
+
 Migration of PWA data from previous versions added
+
 Improved device verification check (missing Google Play services handled properly)
+
 Risk level thresholds added as configuration
+
 VPN connection problem fixed (still valid for keys upload)
+
 Improved download files process (omitting not existing files)
 
 4.1.1
