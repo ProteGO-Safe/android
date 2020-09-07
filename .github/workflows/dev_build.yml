@@ -1,5 +1,4 @@
 ---
-
 name: DEV BUILD
 on: 
   workflow_dispatch:
@@ -10,7 +9,7 @@ on:
         default: 'warning'
 
 jobs:
-  dev:
+  nightly:
     name: React Release Build
     if: github.repository_owner != 'ProteGO-Safe'
     runs-on: ubuntu-latest
@@ -20,7 +19,6 @@ jobs:
       PROTEGO_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       REACT_RUN_ID: ${{ github.event.inputs.react_run_id }}
       REACT_TOKEN_SCRIPT: ${{ secrets.REACT_TOKEN_SCRIPT }}
-      REACT_ACTIONS_URL: 'https://api.github.com/repos/SafeSafe-app/pwa/actions'
       PRIVATE_KEY: ${{ secrets.CI_PRIVATE_KEY }}
       PUBLIC_KEY: ${{ secrets.CI_PUBLIC_KEY }}
 
@@ -41,39 +39,22 @@ jobs:
 
       - name: Get Installation Access Token
         run: |
-          mkdir -p .ssh;
-          echo "${PRIVATE_KEY}" | base64 --decode > .ssh/private.pem && chmod 0400 .ssh/private.pem;
-          echo "${PUBLIC_KEY}" | base64 --decode > .ssh/public.pem && chmod 0400 .ssh/public.pem;
-          echo "${REACT_TOKEN_SCRIPT}" | base64 --decode > getToken && chmod +x getToken;
-          REACT_TOKEN="$(sh -c './getToken')"
-          sleep 3s
-          repoID=$(curl -s \
-          -H "Authorization: Bearer ${REACT_TOKEN}" \
-          -H "Accept: application/vnd.github.machine-man-preview+json" \
-          https://api.github.com/app/installations |jq '.[0].id')
-          sleep 3s
-          JWT=$(curl -s -X POST \
-          -H "Authorization: Bearer ${REACT_TOKEN}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Accept: application/vnd.github.machine-man-preview+json" \
-          https://api.github.com/app/installations/${repoID}/access_tokens |jq '.token')
-          echo "::set-env name=JSON_WEB_TOKEN::${JWT}"
-
-      - name: Remove old ui.zip
-        run: |
-          rm -f ui/ui.zip
-
-      - name: Get React Release Artifact ui.zip
-        run: |
-          REACT_BUILD_URL=$(curl -s \
-          -H "Authorization: Bearer ${JSON_WEB_TOKEN}" \
-          -H 'Accept: application/vnd.github.v3+json' \
-          ${REACT_ACTIONS_URL}/runs/${REACT_RUN_ID}/artifacts \
-          | jq .artifacts[].archive_download_url)
-          curl -s -L -o ui/ui.zip \
-          -H "Authorization: Bearer ${JSON_WEB_TOKEN}" \
-          -H 'Accept: application/vnd.github.v3+json' \
-          ${REACT_BUILD_URL}
+          mkdir -p .ssh ;
+          echo "${PRIVATE_KEY}" | base64 --decode > .ssh/private.pem && chmod 0400 .ssh/private.pem ;
+          echo "${PUBLIC_KEY}" | base64 --decode > .ssh/public.pem && chmod 0400 .ssh/public.pem ;
+          echo "${REACT_TOKEN_SCRIPT}" | base64 --decode > getToken && chmod +x getToken ;
+          REACT_TOKEN="$(sh -c './getToken')" ;
+          repoID=$(curl -s -H "Authorization: Bearer ${REACT_TOKEN}" -H "Accept: application/vnd.github.machine-man-preview+json" https://api.github.com/app/installations |jq '.[0].id' |sed 's/"//g') ;
+          JWT=$(curl -s -X POST -H "Authorization: Bearer ${REACT_TOKEN}" -H "Accept: application/vnd.github.v3+json" -H "Accept: application/vnd.github.machine-man-preview+json" https://api.github.com/app/installations/${repoID}/access_tokens |jq '.token' |sed 's/"//g') ;
+          curl -s -H "Authorization: token ${JWT}" -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/SafeSafe-app/pwa/actions/runs/${REACT_RUN_ID}/artifacts ;
+          rm -f ui/ui.zip ;
+          REACT_BUILD_URL=$(curl -s -H "Authorization: token ${JWT}" -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/SafeSafe-app/pwa/actions/runs/${REACT_RUN_ID}/artifacts |jq '.artifacts[].archive_download_url' |sed 's/"//g') ;
+          if [ ! -z $REACT_BUILD_URL ]; then 
+            curl -s -L -o ui/ui.zip -H "Authorization: Bearer ${JWT}" -H 'Accept: application/vnd.github.v3+json' ${REACT_BUILD_URL};
+            echo "Finished downloading artifact from React run_id=${REACT_RUN_ID}";
+          else
+            echo "NO ARTIFACT FOUND IN RUN # ${REACT_RUN_ID}";
+          fi;
 
       - name: Setup Environment (JDK)
         uses: actions/setup-java@v1
