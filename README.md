@@ -85,6 +85,8 @@ Updated UI
 
 Added validation of Temporary Exposure Keys before upload
 
+Getting and setting application language/locale (not supported by UI yet)
+
 4.2.4
 
 Updated GIS recommendations
