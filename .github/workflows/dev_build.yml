@@ -37,7 +37,7 @@ jobs:
           pip install authlib
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Get Installation Access Token
+      - name: Get specified UI artifact
         run: |
           mkdir -p .ssh ;
           echo "${PRIVATE_KEY}" | base64 --decode > .ssh/private.pem && chmod 0400 .ssh/private.pem ;
