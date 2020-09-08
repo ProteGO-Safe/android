@@ -22,19 +22,17 @@ fun getExposureLastValidDate(): Date =
         .toInstant(OffsetDateTime.now().offset)
         .let { DateTimeUtils.toDate(it) }
 
-fun calcRollingPeriod(rollingStartNumber: Int): Int {
-    val tekStartDate =
-        Date(rollingStartNumber * MINUTES_IN_HOUR * EXPOSURE_TEK_PERIOD * MILLIS_IN_SEC)
-    val currentDay = LocalDateTime.now()
+fun TemporaryExposureKeyItem.getDayStartRollingNumber(): Long {
+    val instant = DateTimeUtils.toInstant(
+        Date(this.rollingPeriod * MINUTES_IN_HOUR * EXPOSURE_TEK_PERIOD * MILLIS_IN_SEC)
+    )
+
+    return LocalDateTime.ofInstant(instant, OffsetDateTime.now().offset)
         .withHour(START_TIME_VALUE)
         .withMinute(START_TIME_VALUE)
         .withSecond(START_TIME_VALUE)
         .withNano(START_TIME_VALUE)
         .toInstant(OffsetDateTime.now().offset)
         .let { DateTimeUtils.toDate(it) }
-    return if (!tekStartDate.before(currentDay)) {
-        ((System.currentTimeMillis() - tekStartDate.time) / MINUTES_IN_HOUR / EXPOSURE_TEK_PERIOD / MILLIS_IN_SEC - 1).toInt()
-    } else {
-        TemporaryExposureKeyItem.ROLLING_PERIOD_MAX
-    }
+        .let { it.time / MINUTES_IN_HOUR / EXPOSURE_TEK_PERIOD / MILLIS_IN_SEC }
 }

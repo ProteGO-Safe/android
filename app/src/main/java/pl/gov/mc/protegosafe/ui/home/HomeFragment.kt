@@ -97,6 +97,7 @@ class HomeFragment : BaseFragment() {
         vm.requestLocation.observe(viewLifecycleOwner, ::requestLocation)
         vm.requestClearData.observe(viewLifecycleOwner, ::requestClearData)
         vm.requestNotifications.observe(viewLifecycleOwner, ::requestNotifications)
+        vm.restartActivity.observe(viewLifecycleOwner, ::restartActivity)
         vm.showConnectionError.observe(viewLifecycleOwner, ::showConnectionError)
     }
 
@@ -260,6 +261,10 @@ class HomeFragment : BaseFragment() {
         startActivityForResult(settingsIntent, ActivityRequest.ENABLE_NOTIFICATIONS.requestCode)
     }
 
+    private fun restartActivity() {
+        activity?.recreate()
+    }
+
     private fun showConnectionError(error: Exception) {
         binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
             binding.webView.visibility = View.VISIBLE
@@ -304,6 +309,15 @@ class HomeFragment : BaseFragment() {
             }
             is UploadException.UploadTemporaryExposureKeysError -> {
                 R.string.upload_temporary_exposure_keys_error
+            }
+            is UploadException.NoKeysError -> {
+                R.string.upload_temporary_exposure_keys_empty_error
+            }
+            is UploadException.TotalLimitExceededError -> {
+                R.string.upload_temporary_exposure_keys_limit_exceed_error
+            }
+            is UploadException.DailyLimitExceededError -> {
+                R.string.upload_temporary_exposure_keys_day_limit_exceed_error
             }
             else -> {
                 R.string.no_internet_connection_msg

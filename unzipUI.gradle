@@ -1,0 +1,8 @@
+task unzipUI(type: Copy) {
+    def zipFile = file('../ui/ui.zip')
+    def outputDir = file('src/main/assets/ui')
+
+    from zipTree(zipFile)
+    into outputDir
+}
+preBuild.dependsOn unzipUI

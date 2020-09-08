@@ -18,10 +18,12 @@ import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUse
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetSafetyNetAttestationTokenUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetSystemLanguageUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
@@ -30,6 +32,7 @@ import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveMatchedTokenUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveNotificationDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveTriageCompletedUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SetAppLanguageUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StartExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StopExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
@@ -46,12 +49,12 @@ val appModule = module {
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }
     single<AppUpdateManager> { AppUpdateManagerFactory.create(androidContext()) }
-    single<AppRepository> { AppRepositoryImpl() }
+    single<AppRepository> { AppRepositoryImpl(get()) }
 }
 
 val useCaseModule = module {
-    factory { OnGetBridgeDataUseCase(get(), get(), get(), get(), get()) }
-    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get()) }
+    factory { OnGetBridgeDataUseCase(get(), get(), get(), get(), get(), get()) }
+    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
@@ -63,10 +66,19 @@ val useCaseModule = module {
     factory { ProvideDiagnosisKeysUseCase(get(), get(), get()) }
     factory { GetSafetyNetAttestationTokenUseCase(get(), get()) }
     factory {
-        UploadTemporaryExposureKeysUseCase(get(), get(), get(), get(), get(), get(), get(), get(), get())
+        UploadTemporaryExposureKeysUseCase(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
     }
     factory { UploadTemporaryExposureKeysWithCachedPayloadUseCase(get(), get(), get()) }
-    factory { SaveTriageCompletedUseCase(get()) }
+    factory { SaveTriageCompletedUseCase(get(), get()) }
     factory { ComposeAppLifecycleStateBrideDataUseCase(get()) }
     factory { SaveMatchedTokenUseCase(get(), get()) }
     factory { StorePendingActivityResultUseCase(get(), get()) }
@@ -77,6 +89,9 @@ val useCaseModule = module {
     factory { PrepareMigrationIfRequiredUseCase(get(), get()) }
     factory { GetMigrationUrlUseCase(get()) }
     factory { GetAppVersionNameUseCase(get(), get(), get()) }
+    factory { GetSystemLanguageUseCase(get(), get(), get()) }
+    factory { SetAppLanguageUseCase(get(), get(), get()) }
+    factory { GetLocaleUseCase(get()) }
 }
 
 val viewModelModule = module {

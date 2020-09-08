@@ -6,7 +6,8 @@ enum class OutgoingBridgeDataType(val code: Int) {
     TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS(43),
     SERVICES_STATUS(51),
     ANALYZE_RESULT(61),
-    APP_VERSION(62);
+    APP_VERSION(62),
+    SYSTEM_LANGUAGE(63);
 
     companion object {
         fun valueOf(value: Int): OutgoingBridgeDataType =
