@@ -77,6 +77,10 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.3.1
+
+Updated UI
+
 4.3.0
 
 Updated app name
