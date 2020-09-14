@@ -95,12 +95,6 @@ jobs:
           name: "${{ steps.get_version.outputs.VERSION }}_apks"
           path: app/build/outputs/apk/*
 
-      - name: Upload Release Candidate Bundle
-        uses: actions/upload-artifact@v2
-        with:
-          name: "${{ steps.get_version.outputs.VERSION }}_bundle"
-          path: app/build/outputs/bundle/*
-
       - name: Upload Mappings
         uses: actions/upload-artifact@v2
         with:
