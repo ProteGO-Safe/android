@@ -89,14 +89,11 @@ jobs:
       - name: Assemble Stage Release (Signed Stage Keystore)
         run: ./gradlew assembleStageRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
+      - name: Assemble Stage SauceLab (Signed Stage Keystore)
+        run: ./gradlew assembleStageSauceLab -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
       - name: Upload APKs
         uses: actions/upload-artifact@v2
         with:
           name: "${{ steps.get_version.outputs.VERSION }}_apks"
           path: app/build/outputs/apk/*
-
-      - name: Upload Mappings
-        uses: actions/upload-artifact@v2
-        with:
-          name: mapping
-          path: app/build/outputs/mapping/**/mapping.txt
