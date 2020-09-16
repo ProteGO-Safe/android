@@ -59,7 +59,7 @@ class HomeViewModel(
     private val _restartActivity = SingleLiveEvent<Unit>()
     val restartActivity: LiveData<Unit> = _restartActivity
 
-    private val _showUploadError = MutableLiveData<Exception>()
+    private val _showUploadError = SingleLiveEvent<Exception>()
     val showConnectionError: LiveData<Exception> = _showUploadError
 
     private val _requestExposureNotificationPermission =
