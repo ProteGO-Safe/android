@@ -9,7 +9,6 @@ import pl.gov.mc.protegosafe.data.mapper.toExposureDto
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
-import timber.log.Timber
 
 class ExposureRepositoryImpl(
     private val exposureDao: ExposureDao
@@ -21,7 +20,6 @@ class ExposureRepositoryImpl(
     }
 
     override fun upsert(exposure: ExposureItem): Completable {
-        Timber.d("Save exposure: $exposure")
         return exposureDao.upsert(exposure.toExposureDto())
     }
 
