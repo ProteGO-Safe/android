@@ -77,6 +77,12 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.4.0
+
+Added translations for English and Ukrainian languages
+
+Updated UI
+
 4.3.1
 
 Updated UI

@@ -123,7 +123,7 @@ class HomeFragment : BaseFragment() {
             settings.domStorageEnabled = true
             webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
-                    binding.webView.evaluateJavascript(DUMP_PWA_SCRIPT) { dump ->
+                    binding.webView.evaluateJavascript(DUMP_UI_COMMAND) { dump ->
                         pwaDump = dump
                         setUpWebView()
                     }
@@ -281,11 +281,12 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun requestClearData() {
-        val intent = Intent(ACTION_EXPOSURE_NOTIFICATION_SETTINGS)
-        startActivityForResult(
-            intent,
-            ActivityRequest.CLEAR_EXPOSURE_NOTIFICATION_DATA.requestCode
-        )
+        binding.webView.evaluateJavascript(CLEAR_UI_COMMAND) {
+            startActivityForResult(
+                Intent(ACTION_EXPOSURE_NOTIFICATION_SETTINGS),
+                ActivityRequest.CLEAR_EXPOSURE_NOTIFICATION_DATA.requestCode
+            )
+        }
     }
 
     private fun manageWebView(resumed: Boolean) {
@@ -333,4 +334,5 @@ class HomeFragment : BaseFragment() {
 
 private const val ACTION_EXPOSURE_NOTIFICATION_SETTINGS =
     "com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS"
-private const val DUMP_PWA_SCRIPT = "localStorage.getItem(\"persist:root\");"
+private const val DUMP_UI_COMMAND = "localStorage.getItem(\"persist:root\");"
+private const val CLEAR_UI_COMMAND = "localStorage.clear()"
