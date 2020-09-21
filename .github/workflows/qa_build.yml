@@ -50,9 +50,3 @@ jobs:
         with:
           name: "apk_stage_debug"
           path: app/build/outputs/apk/*
-
-      - name: Upload Mappings
-        uses: actions/upload-artifact@v2
-        with:
-          name: mapping
-          path: app/build/outputs/mapping/**/mapping.txt
