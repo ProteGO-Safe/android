@@ -4,7 +4,7 @@ versions.android_gradle_plugin = '4.0.1'
 versions.kotlin_gradle_plugin = versions.kotlin
 versions.google_services = "4.3.3"
 versions.navigation_gradle_plugin = "2.2.2"
-versions.crashlytics_gradle_plugin = "2.0.0"
+versions.crashlytics_gradle_plugin = "2.3.0"
 versions.fabric_gradle_plugin = "1.31.2"
 versions.license_tools_gradle_plugin = "1.2.2"
 versions.license_gradle_plugin = "0.8.70"
@@ -38,7 +38,7 @@ versions.safetynet = "17.0.0"
 versions.guava = "29.0-android"
 
 versions.firebase_messaging = "20.2.0"
-versions.firebase_crashlytics = "17.0.0"
+versions.firebase_crashlytics = "17.2.1"
 versions.firebase_config_ktx = "19.1.4"
 
 versions.rxjava = "2.2.18"
