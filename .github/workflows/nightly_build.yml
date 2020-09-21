@@ -52,13 +52,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload APK
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: app
           path: app/build/outputs/apk/*
-
-      - name: Upload Mapping
-        uses: actions/upload-artifact@v1
-        with:
-          name: mapping
-          path: app/build/outputs/mapping/**/mapping.txt
