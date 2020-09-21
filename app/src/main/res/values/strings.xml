@@ -1,25 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="general_notification_channel_name">Wiadomości ProteGO Safe</string>
-    <string name="no_internet_connection_msg">Sprawdź połączenie z Internetem</string>
-    <string name="not_secure_connection_msg">Połączenie nie jest bezpieczne</string>
-    <string name="no_internet_connection_retry">Spróbuj ponownie</string>
-    <string name="no_internet_connection_cancel">Anuluj</string>
-
-    <string name="pin_verification_error">Wystąpił błąd weryfikacji kodu PIN</string>
-
-    <string name="upload_temporary_exposure_keys_error">Wystąpił błąd przesyłania danych</string>
-    <string name="upload_temporary_exposure_keys_empty_error">Aktualnie aplikacja nie posiada żadnych danych do udostępnienia. Skontaktuj się z Centrum Kontaktu aby zgłosić problem.</string>
-    <string name="upload_temporary_exposure_keys_limit_exceed_error">Aplikacja posiada zbyt dużą ilość danych do udostępnienia. Skontaktuj się z Centrum Kontaktu aby zgłosić problem.</string>
-    <string name="upload_temporary_exposure_keys_day_limit_exceed_error">Zbyt duża ilość kluczy wysłanych jednego dnia. Skontaktuj się z Centrum Kontaktu aby zgłosić problem</string>
-
-    <string name="get_temporary_exposure_keys_error">Wystąpił błąd przy próbie pobierania Twoich dziennych kluczy</string>
-
-    <string name="safetynet_dialog_title">Wystąpił problem</string>
-    <string name="safetynet_dialog_verification_error">Twoje urządzenie nie mogło zostać pozytywnie zweryfikowane</string>
-
-    <string name="common_ok">OK</string>
-
-    <string name="debug_write_store_rationale">Testowa wersja aplikacji potrzebuje uprawnienia do zapisu logów śledzenia urządzeń.</string>
-
-    <string name="data_migration_in_progress">Trwa migracja danych</string>
+    <string name="general_notification_channel_name">"Wiadomości STOP COVID - ProteGO Safe"</string>
+    <string name="no_internet_connection_msg">"Sprawdź połączenie z Internetem"</string>
+    <string name="not_secure_connection_msg">"Połączenie nie jest bezpieczne"</string>
+    <string name="no_internet_connection_retry">"Spróbuj ponownie"</string>
+    <string name="no_internet_connection_cancel">"Anuluj"</string>
+    <string name="pin_verification_error">"Wystąpił błąd weryfikacji kodu PIN"</string>
+    <string name="upload_temporary_exposure_keys_error">"Wystąpił błąd przesyłania danych"</string>
+    <string name="upload_temporary_exposure_keys_empty_error">"Aktualnie aplikacja nie posiada żadnych danych do udostępnienia. Skontaktuj się z Centrum Kontaktu aby zgłosić problem."</string>
+    <string name="upload_temporary_exposure_keys_limit_exceed_error">"Aplikacja posiada zbyt dużą ilość danych do udostępnienia. Skontaktuj się z Centrum Kontaktu aby zgłosić problem."</string>
+    <string name="upload_temporary_exposure_keys_day_limit_exceed_error">"Zbyt duża ilość kluczy wysłanych jednego dnia. Skontaktuj się z Centrum Kontaktu aby zgłosić problem"</string>
+    <string name="get_temporary_exposure_keys_error">"Wystąpił błąd przy próbie pobierania Twoich dziennych kluczy"</string>
+    <string name="safetynet_dialog_title">"Wystąpił problem"</string>
+    <string name="safetynet_dialog_verification_error">"Twoje urządzenie nie mogło zostać pozytywnie zweryfikowane"</string>
+    <string name="common_ok">"OK"</string>
+    <string name="debug_write_store_rationale">"Testowa wersja aplikacji potrzebuje uprawnienia do zapisu logów śledzenia urządzeń."</string>
+    <string name="data_migration_in_progress">"Trwa migracja danych"</string>
 </resources>

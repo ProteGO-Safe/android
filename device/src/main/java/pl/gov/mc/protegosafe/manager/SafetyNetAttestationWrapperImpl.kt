@@ -41,14 +41,12 @@ class SafetyNetAttestationWrapperImpl(
     }
 
     private fun parseSafetyNetResult(nonce: String, jwsResult: String): SafetyNetResult {
-        Timber.d("parseSafetyNetResult: jwsResult = [$jwsResult]")
         try {
             val jwsData = String(extractJwsData(jwsResult))
             val attestationStatement: AttestationData = Gson().fromJson(
                 jwsData,
                 AttestationData::class.java
             )
-            Timber.d("parseSafetyNetResult: attestationStatement = [$attestationStatement]")
             return if (isNonceSame(nonce, attestationStatement.nonce) &&
                 attestationStatement.ctsProfileMatch &&
                 attestationStatement.basicIntegrity

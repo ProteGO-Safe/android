@@ -10,6 +10,8 @@ jobs:
       PROTEGO_KEYSTORE_DEBUG_FILE: protegosafe-debug.jks
       PROTEGO_KEYSTORE_DEBUG_ALIAS: ${{ secrets.DEBUG_KEYSTORE_ALIAS }}
       PROTEGO_KEYSTORE_DEBUG_PASSWORD: ${{ secrets.DEBUG_KEYSTORE_STORE_PASSWORD }}
+      POEDITOR_PROJECT_ID: ${{ secrets.POEDITOR_PROJECT_ID }}
+      POEDITOR_PROJECT_TOKEN: ${{ secrets.POEDITOR_PROJECT_TOKEN }}
 
     steps:
       - name: Clone Repository
@@ -39,3 +41,7 @@ jobs:
 
       - name: Assemble Application
         run: ./gradlew assembleDebug -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_DEBUG_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_DEBUG_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_DEBUG_ALIAS
+
+      - name: Upload PL locale
+        if: github.repository_owner != 'ProteGO-Safe'
+        run: ./locales/scripts/upload_pl.sh -i $POEDITOR_PROJECT_ID -t $POEDITOR_PROJECT_TOKEN
