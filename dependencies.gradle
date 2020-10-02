@@ -19,7 +19,7 @@ versions.lifecycle = "2.2.0"
 versions.legacy = "1.0.0"
 versions.material = "1.2.0-alpha06"
 versions.work_rxjava2 = "2.3.4"
-versions.security_crypto = "1.0.0-rc02"
+versions.security_crypto = "1.0.0-rc03"
 versions.preference = "1.1.1"
 
 versions.koin = "2.1.5"
