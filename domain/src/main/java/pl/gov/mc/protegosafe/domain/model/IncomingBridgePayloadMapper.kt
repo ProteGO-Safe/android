@@ -11,4 +11,6 @@ interface IncomingBridgePayloadMapper {
     fun toLanguageISO(payload: String): String
 
     fun toChangeStatusRequestItemList(payload: String): List<ChangeStatusRequestItem>
+
+    fun toCloseAppItem(payload: String): CloseAppItem
 }
