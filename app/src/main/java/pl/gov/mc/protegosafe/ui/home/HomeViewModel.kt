@@ -183,12 +183,7 @@ class HomeViewModel(
                 onBridgeData(actionRequired.dataType, actionRequired.dataJson)
             }
             is ActionRequiredItem.SendTemporaryExposureKeysUploadFailure -> {
-                onBridgeData(
-                    OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code,
-                    outgoingBridgeDataResultComposer.composeTemporaryExposureKeysUploadResult(
-                        TemporaryExposureKeysUploadState.FAILURE
-                    )
-                )
+                sendUploadCanceled()
             }
             is ActionRequiredItem.ExposureNotificationPermissionGranted -> {
                 onExposureNotificationPermissionGranted()
