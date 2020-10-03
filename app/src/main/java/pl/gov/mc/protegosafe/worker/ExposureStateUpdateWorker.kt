@@ -1,10 +1,10 @@
 package pl.gov.mc.protegosafe.worker
 
 import android.content.Context
-import androidx.work.RxWorker
+import androidx.work.rxjava3.RxWorker
 import androidx.work.WorkerParameters
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import pl.gov.mc.protegosafe.Consts

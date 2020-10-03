@@ -1,6 +1,6 @@
 package pl.gov.mc.protegosafe.domain.manager
 
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKey
 import pl.gov.mc.protegosafe.domain.model.SafetyNetResult
 

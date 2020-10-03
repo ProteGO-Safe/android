@@ -68,7 +68,7 @@ dependencies {
     implementation deps.rx.rxandroid
 
     // RxWorker
-    implementation deps.androidx.work_rxjava2
+    implementation deps.androidx.work_rxjava3
 
     implementation deps.google.gson
     implementation deps.google.guava

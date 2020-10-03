@@ -5,7 +5,7 @@ import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
-import androidx.work.RxWorker
+import androidx.work.rxjava3.RxWorker
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler

@@ -101,7 +101,7 @@ dependencies {
 
     // Retrofit
     implementation deps.retrofit.retrofit
-    implementation deps.retrofit.adapter_rxjava2
+    implementation deps.retrofit.adapter_rxjava3
     implementation deps.retrofit.converter_gson
     implementation deps.retrofit.logging_interceptor
 

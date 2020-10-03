@@ -68,7 +68,7 @@ import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadReposi
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 import pl.gov.mc.protegosafe.domain.repository.WorkerStateRepository
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -157,7 +157,7 @@ fun provideRetrofit(): Retrofit {
 
     return Retrofit.Builder()
         .baseUrl(Consts.BASE_URL_FORMAT)
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()

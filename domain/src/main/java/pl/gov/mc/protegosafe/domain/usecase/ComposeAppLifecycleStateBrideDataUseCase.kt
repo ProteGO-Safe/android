@@ -1,6 +1,6 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 

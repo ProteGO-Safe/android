@@ -1,6 +1,6 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
-import io.reactivex.Completable
+import io.reactivex.rxjava3.core.Completable
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.WorkerStateRepository
 import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler

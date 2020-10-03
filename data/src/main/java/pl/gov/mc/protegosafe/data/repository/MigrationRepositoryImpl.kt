@@ -2,7 +2,7 @@ package pl.gov.mc.protegosafe.data.repository
 
 import android.content.Context
 import android.content.SharedPreferences
-import io.reactivex.Completable
+import io.reactivex.rxjava3.core.Completable
 import pl.gov.mc.protegosafe.data.db.AppVersionDataStore
 import pl.gov.mc.protegosafe.data.db.SHARED_PREFS_SAFETYNET_IS_DEVICE_CHECKED
 import pl.gov.mc.protegosafe.domain.repository.MigrationRepository

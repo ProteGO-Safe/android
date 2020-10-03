@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.android.gms.safetynet.SafetyNet
 import com.google.common.io.BaseEncoding
 import com.google.gson.Gson
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import pl.gov.mc.protegosafe.domain.extension.toSHA256
 import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKey

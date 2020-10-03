@@ -1,7 +1,7 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.Date
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.extension.getExposureLastValidDate
@@ -23,7 +23,7 @@ class GetAnalyzeResultUseCase(
             .map { listOfExposures ->
                 listOfExposures
                     .filter { !Date(it.date).before(getExposureLastValidDate()) }
-                    .maxBy { it.riskScore }
+                    .maxByOrNull { it.riskScore }
                     ?: ExposureItem(
                         System.currentTimeMillis(),
                         NO_EXPOSURE_DEFAULT_VALUE,

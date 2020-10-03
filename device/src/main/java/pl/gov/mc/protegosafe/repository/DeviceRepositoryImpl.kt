@@ -7,7 +7,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationStatusItem
 import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository

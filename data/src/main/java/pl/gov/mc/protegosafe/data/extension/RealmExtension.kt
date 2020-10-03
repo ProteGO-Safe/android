@@ -1,10 +1,10 @@
 import android.os.HandlerThread
 import android.os.Looper
 import android.os.Process
-import io.reactivex.Completable
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposables
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmQuery
@@ -87,7 +87,7 @@ internal fun <T : RealmModel> performSingleQuery(
         }
 
         emitter.setDisposable(
-            Disposables.fromAction {
+            Disposable.fromAction {
                 result.removeAllChangeListeners()
                 realm.close()
                 if (isRealmThread()) {

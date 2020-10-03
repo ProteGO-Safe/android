@@ -3,8 +3,8 @@ package pl.gov.mc.protegosafe.data.repository
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import pl.gov.mc.protegosafe.data.R
 import pl.gov.mc.protegosafe.data.extension.toCompletable
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration

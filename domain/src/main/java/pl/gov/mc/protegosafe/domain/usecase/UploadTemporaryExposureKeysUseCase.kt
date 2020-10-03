@@ -1,8 +1,8 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
-import io.reactivex.Completable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.exception.UploadException
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
@@ -102,7 +102,7 @@ class UploadTemporaryExposureKeysUseCase(
             .sortedBy { it.rollingPeriod }
             .groupBy { it.getDayStartRollingNumber() }
             .map { it.value.size }
-            .max()
+            .maxOrNull()
             ?.let { it <= UploadException.DailyLimitExceededError.LIMIT }
             ?: true
     }

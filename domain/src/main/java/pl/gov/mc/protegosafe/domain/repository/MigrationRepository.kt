@@ -1,6 +1,6 @@
 package pl.gov.mc.protegosafe.domain.repository
 
-import io.reactivex.Completable
+import io.reactivex.rxjava3.core.Completable
 
 interface MigrationRepository {
     enum class LastAppVersion(val url: String) {

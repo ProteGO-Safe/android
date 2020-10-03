@@ -21,7 +21,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.api.ApiException
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.kotlin.addTo
 import kotlinx.android.synthetic.main.view_connection_error.view.button_cancel
 import kotlinx.android.synthetic.main.view_connection_error.view.button_check_internet_connection
 import kotlinx.android.synthetic.main.view_connection_error.view.text_view_connection_error

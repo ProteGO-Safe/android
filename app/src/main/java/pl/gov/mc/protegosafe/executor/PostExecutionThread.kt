@@ -1,7 +1,7 @@
 package pl.gov.mc.protegosafe.executor
 
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 
 class PostExecutionThread : PostExecutionThread {

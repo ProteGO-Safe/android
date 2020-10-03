@@ -112,7 +112,7 @@ dependencies {
     implementation deps.androidx.legacy
     kapt deps.androidx.lifecycle_compiler
     // RxWorker
-    implementation deps.androidx.work_rxjava2
+    implementation deps.androidx.work_rxjava3
 
     // Material
     implementation deps.google.material

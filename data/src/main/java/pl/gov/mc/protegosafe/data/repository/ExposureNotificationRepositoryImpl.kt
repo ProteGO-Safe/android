@@ -2,8 +2,8 @@ package pl.gov.mc.protegosafe.data.repository
 
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import com.google.android.gms.nearby.exposurenotification.ExposureNotificationClient
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import java.io.File
 import java.security.SecureRandom
 import pl.gov.mc.protegosafe.data.extension.toBase64
