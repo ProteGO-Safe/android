@@ -7,7 +7,7 @@ sealed class ActionRequiredItem {
     object SendServicesStatus : ActionRequiredItem()
     object ExposureNotificationPermissionGranted : ActionRequiredItem()
     object TemporaryExposureKeysPermissionGranted : ActionRequiredItem()
-    object SendTemporaryExposureKeysUploadFailure : ActionRequiredItem()
+    object TemporaryExposureKeysPermissionDenied : ActionRequiredItem()
     object ClearExposureNotificationData : ActionRequiredItem()
     object RestartActivity : ActionRequiredItem()
     object CloseApp : ActionRequiredItem()
