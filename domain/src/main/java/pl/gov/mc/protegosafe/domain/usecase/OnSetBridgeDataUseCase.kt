@@ -13,7 +13,8 @@ class OnSetBridgeDataUseCase(
     private val changeServiceStatusUseCase: ChangeServiceStatusUseCase,
     private val clearExposureNotificationDataUseCase: ClearExposureNotificationDataUseCase,
     private val uploadTemporaryExposureKeysUseCase: UploadTemporaryExposureKeysUseCase,
-    private val setAppLanguageUseCase: SetAppLanguageUseCase
+    private val setAppLanguageUseCase: SetAppLanguageUseCase,
+    private val closeAppUseCase: CloseAppUseCase
 ) {
     fun execute(input: IncomingBridgeDataItem, onResultActionRequired: (ActionRequiredItem) -> Unit): Completable =
         when (input.type) {
@@ -34,6 +35,9 @@ class OnSetBridgeDataUseCase(
             }
             IncomingBridgeDataType.SYSTEM_LANGUAGE -> {
                 setAppLanguageUseCase.execute(input.payload, onResultActionRequired)
+            }
+            IncomingBridgeDataType.CLOSE_APPLICATION -> {
+                closeAppUseCase.execute(input.payload, onResultActionRequired)
             }
             else -> throw IllegalStateException("Illegal input type")
         }

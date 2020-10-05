@@ -59,6 +59,9 @@ class HomeViewModel(
     private val _restartActivity = SingleLiveEvent<Unit>()
     val restartActivity: LiveData<Unit> = _restartActivity
 
+    private val _closeApplication = SingleLiveEvent<Unit>()
+    val closeApplication: LiveData<Unit> = _closeApplication
+
     private val _showUploadError = SingleLiveEvent<Exception>()
     val showConnectionError: LiveData<Exception> = _showUploadError
 
@@ -198,6 +201,9 @@ class HomeViewModel(
             }
             is ActionRequiredItem.RestartActivity -> {
                 _restartActivity.postValue(Unit)
+            }
+            is ActionRequiredItem.CloseApp -> {
+                _closeApplication.postValue(Unit)
             }
         }
     }
