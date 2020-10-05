@@ -28,7 +28,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 69
-        versionName "4.4.0"
+        versionName "4.5.0-DEV"
 
         setProperty("archivesBaseName", "protegosafe-${defaultConfig.versionName}-${defaultConfig.versionCode}")
 

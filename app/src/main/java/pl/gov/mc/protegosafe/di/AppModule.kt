@@ -14,6 +14,7 @@ import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ClearExposureNotificationDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.CloseAppUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
@@ -54,7 +55,7 @@ val appModule = module {
 
 val useCaseModule = module {
     factory { OnGetBridgeDataUseCase(get(), get(), get(), get(), get(), get()) }
-    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get()) }
+    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
@@ -92,6 +93,7 @@ val useCaseModule = module {
     factory { GetSystemLanguageUseCase(get(), get(), get()) }
     factory { SetAppLanguageUseCase(get(), get(), get()) }
     factory { GetLocaleUseCase(get()) }
+    factory { CloseAppUseCase(get(), get()) }
 }
 
 val viewModelModule = module {

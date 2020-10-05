@@ -3,10 +3,12 @@ package pl.gov.mc.protegosafe.data.mapper
 import com.google.gson.Gson
 import pl.gov.mc.protegosafe.data.model.AppLanguageData
 import pl.gov.mc.protegosafe.data.model.ClearData
+import pl.gov.mc.protegosafe.data.model.CloseAppData
 import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.domain.model.ChangeServiceStatusRequestMapper
 import pl.gov.mc.protegosafe.domain.model.ChangeStatusRequestItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
+import pl.gov.mc.protegosafe.domain.model.CloseAppItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.TriageItem
 
@@ -28,5 +30,9 @@ class IncomingBridgePayloadMapperImpl(
 
     override fun toChangeStatusRequestItemList(payload: String): List<ChangeStatusRequestItem> {
         return changeServiceStatusRequestMapper.toDomain(payload)
+    }
+
+    override fun toCloseAppItem(payload: String): CloseAppItem {
+        return Gson().fromJson(payload, CloseAppData::class.java).toEntity()
     }
 }

@@ -98,6 +98,7 @@ class HomeFragment : BaseFragment() {
         vm.requestClearData.observe(viewLifecycleOwner, ::requestClearData)
         vm.requestNotifications.observe(viewLifecycleOwner, ::requestNotifications)
         vm.restartActivity.observe(viewLifecycleOwner, ::restartActivity)
+        vm.closeApplication.observe(viewLifecycleOwner, ::closeApplication)
         vm.showConnectionError.observe(viewLifecycleOwner, ::showError)
     }
 
@@ -263,6 +264,10 @@ class HomeFragment : BaseFragment() {
 
     private fun restartActivity() {
         activity?.recreate()
+    }
+
+    private fun closeApplication() {
+        activity?.finish()
     }
 
     private fun showError(error: Exception) {
