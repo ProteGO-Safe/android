@@ -98,7 +98,7 @@ class HomeFragment : BaseFragment() {
         vm.requestClearData.observe(viewLifecycleOwner, ::requestClearData)
         vm.requestNotifications.observe(viewLifecycleOwner, ::requestNotifications)
         vm.restartActivity.observe(viewLifecycleOwner, ::restartActivity)
-        vm.showConnectionError.observe(viewLifecycleOwner, ::showConnectionError)
+        vm.showConnectionError.observe(viewLifecycleOwner, ::showError)
     }
 
     private fun setupPWA() {
@@ -265,17 +265,17 @@ class HomeFragment : BaseFragment() {
         activity?.recreate()
     }
 
-    private fun showConnectionError(error: Exception) {
+    private fun showError(error: Exception) {
         binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
             binding.webView.visibility = View.VISIBLE
             vm.onUploadRetry()
         }
         binding.missingConnectionLayout.button_cancel.setOnClickListener {
-            vm.sendUploadCanceled()
+            vm.onUploadCanceled()
             binding.webView.visibility = View.VISIBLE
         }
         binding.missingConnectionLayout.text_view_connection_error.setText(
-            getConnectionErrorText(error)
+            getErrorText(error)
         )
         binding.webView.visibility = View.INVISIBLE
     }
@@ -300,7 +300,7 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun getConnectionErrorText(error: Exception): Int {
+    private fun getErrorText(error: Exception): Int {
         return when (error) {
             is UploadException.GetTemporaryExposureKeysError -> {
                 R.string.get_temporary_exposure_keys_error

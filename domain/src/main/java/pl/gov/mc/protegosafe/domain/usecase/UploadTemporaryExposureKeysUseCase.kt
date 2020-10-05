@@ -171,7 +171,7 @@ class UploadTemporaryExposureKeysUseCase(
         onResultActionRequired: (ActionRequiredItem) -> Unit
     ): Completable {
         val state = if (error is NoInternetConnectionException) {
-            TemporaryExposureKeysUploadState.OTHER
+            TemporaryExposureKeysUploadState.CANCELED
         } else {
             TemporaryExposureKeysUploadState.FAILURE
         }

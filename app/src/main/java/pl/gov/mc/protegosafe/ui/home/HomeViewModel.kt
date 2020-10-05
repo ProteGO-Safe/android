@@ -102,12 +102,14 @@ class HomeViewModel(
         uploadTemporaryExposureKeysWithCachedPayload()
     }
 
-    fun sendUploadCanceled() {
+    fun onUploadCanceled() {
+        sendUploadStatus(TemporaryExposureKeysUploadState.CANCELED)
+    }
+
+    private fun sendUploadStatus(status: TemporaryExposureKeysUploadState) {
         onBridgeData(
             OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code,
-            outgoingBridgeDataResultComposer.composeTemporaryExposureKeysUploadResult(
-                TemporaryExposureKeysUploadState.OTHER
-            )
+            outgoingBridgeDataResultComposer.composeTemporaryExposureKeysUploadResult(status)
         )
     }
 
@@ -182,8 +184,8 @@ class HomeViewModel(
             is ActionRequiredItem.SendTemporaryExposureKeysUploadResult -> {
                 onBridgeData(actionRequired.dataType, actionRequired.dataJson)
             }
-            is ActionRequiredItem.SendTemporaryExposureKeysUploadFailure -> {
-                sendUploadCanceled()
+            is ActionRequiredItem.TemporaryExposureKeysPermissionDenied -> {
+                sendUploadStatus(TemporaryExposureKeysUploadState.ACCESS_DENIED)
             }
             is ActionRequiredItem.ExposureNotificationPermissionGranted -> {
                 onExposureNotificationPermissionGranted()
