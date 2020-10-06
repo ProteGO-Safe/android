@@ -102,7 +102,7 @@ class UploadTemporaryExposureKeysUseCase(
             .sortedBy { it.rollingPeriod }
             .groupBy { it.getDayStartRollingNumber() }
             .map { it.value.size }
-            .max()
+            .maxOrNull()
             ?.let { it <= UploadException.DailyLimitExceededError.LIMIT }
             ?: true
     }

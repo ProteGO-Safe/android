@@ -23,7 +23,7 @@ class GetAnalyzeResultUseCase(
             .map { listOfExposures ->
                 listOfExposures
                     .filter { !Date(it.date).before(getExposureLastValidDate()) }
-                    .maxBy { it.riskScore }
+                    .maxByOrNull { it.riskScore }
                     ?: ExposureItem(
                         System.currentTimeMillis(),
                         NO_EXPOSURE_DEFAULT_VALUE,

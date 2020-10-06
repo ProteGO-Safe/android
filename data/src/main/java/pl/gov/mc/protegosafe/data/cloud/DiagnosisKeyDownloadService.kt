@@ -5,7 +5,8 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.annotations.CheckReturnValue
 import okhttp3.ResponseBody
-import okio.Okio
+import okio.buffer
+import okio.sink
 import pl.gov.mc.protegosafe.data.BuildConfig
 import retrofit2.Response
 import retrofit2.http.GET
@@ -32,7 +33,7 @@ fun DiagnosisKeyDownloadService.downloadToFile(fileName: String, file: File): Co
 private fun saveToFile(response: Response<ResponseBody>, file: File): Completable {
     return Completable.fromCallable {
 
-        Okio.buffer(Okio.sink(file)).use { sink ->
+        file.sink().buffer().use { sink ->
             sink.writeAll(response.body()!!.source())
         }
         return@fromCallable Completable.complete()
