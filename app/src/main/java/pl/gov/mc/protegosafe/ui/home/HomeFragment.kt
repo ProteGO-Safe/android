@@ -104,16 +104,19 @@ class HomeFragment : BaseFragment() {
 
     private fun setupPWA() {
         get<GetMigrationUrlUseCase>().execute()
-            .subscribe({ url ->
-                if (url.isBlank()) {
+            .subscribe(
+                { url ->
+                    if (url.isBlank()) {
+                        setUpWebView()
+                    } else {
+                        startPwaMigration(url)
+                    }
+                },
+                {
+                    Timber.e(it, "Migration can not be performed")
                     setUpWebView()
-                } else {
-                    startPwaMigration(url)
                 }
-            }, {
-                Timber.e(it, "Migration can not be performed")
-                setUpWebView()
-            }).addTo(disposables)
+            ).addTo(disposables)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -144,7 +147,8 @@ class HomeFragment : BaseFragment() {
                 NativeBridgeInterface(
                     vm::setBridgeData,
                     vm::getBridgeData
-                ), NativeBridgeInterface.NATIVE_BRIDGE_NAME
+                ),
+                NativeBridgeInterface.NATIVE_BRIDGE_NAME
             )
             loadUrl(urlProvider.getWebUrl())
             if (BuildConfig.DEBUG) {
@@ -169,7 +173,8 @@ class HomeFragment : BaseFragment() {
                         activity?.finish()
                     }
                 }
-            })
+            }
+        )
 
         vm.javascriptCode.observe(viewLifecycleOwner, ::runJavascript)
     }
@@ -217,8 +222,11 @@ class HomeFragment : BaseFragment() {
         binding.webView.evaluateJavascript(script, null)
     }
 
-    private fun requestExposureNotificationPermission(exception: ExposureNotificationActionNotResolvedException) {
-        webViewTimber().d("Request exposure notification permission: ${exception.resolutionRequest}")
+    private fun requestExposureNotificationPermission(
+        exception: ExposureNotificationActionNotResolvedException
+    ) {
+        webViewTimber()
+            .d("Request exposure notification permission: ${exception.resolutionRequest}")
         when (val apiException = exception.apiException) {
             is ApiException -> {
                 startIntentSenderForResult(

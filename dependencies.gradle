@@ -50,7 +50,7 @@ versions.play_services_tasks = "17.2.0"
 versions.play_core = "1.8.2"
 versions.play_core_ktx = "1.8.1"
 
-versions.ktlint = "0.36.0"
+versions.ktlint = "0.39.0"
 
 versions.retrofit = "2.9.0"
 versions.logging_interceptor = "4.9.0"

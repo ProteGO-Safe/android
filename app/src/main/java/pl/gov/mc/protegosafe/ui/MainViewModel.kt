@@ -35,13 +35,16 @@ class MainViewModel(
     private fun checkDeviceRooted() {
         Timber.d("checkDeviceRooted")
         checkDeviceRootedUseCase.execute()
-            .subscribe({
-                if (it == SafetyNetResult.Failure.SafetyError) {
-                    _showSafetyNetProblem.postValue(Unit)
+            .subscribe(
+                {
+                    if (it == SafetyNetResult.Failure.SafetyError) {
+                        _showSafetyNetProblem.postValue(Unit)
+                    }
+                },
+                {
+                    Timber.e(it, "SafetyNetError")
                 }
-            }, {
-                Timber.e(it, "SafetyNetError")
-            }).addTo(disposables)
+            ).addTo(disposables)
     }
 
     private fun checkForApplicationUpdates() {

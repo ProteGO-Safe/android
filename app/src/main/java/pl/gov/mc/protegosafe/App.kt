@@ -62,12 +62,15 @@ class App : Application(), KoinComponent {
     private fun prepareMigrationIfRequired() {
         get<PrepareMigrationIfRequiredUseCase>().execute(
             pl.gov.mc.protegosafe.BuildConfig.VERSION_NAME
-        ).subscribe({
-            removeAllOpenTraceData()
-            encryptSharedPrefsIfNeeded()
-        }, {
-            Timber.e(it, "PrepareMigrationIfRequiredUseCase: failed")
-        }).addTo(disposables)
+        ).subscribe(
+            {
+                removeAllOpenTraceData()
+                encryptSharedPrefsIfNeeded()
+            },
+            {
+                Timber.e(it, "PrepareMigrationIfRequiredUseCase: failed")
+            }
+        ).addTo(disposables)
     }
 
     private fun initializePinning() {
@@ -132,12 +135,14 @@ class App : Application(), KoinComponent {
     private fun initializeFcm() {
         FirebaseApp.initializeApp(this)
         FirebaseInstanceId.getInstance().instanceId
-            .addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Timber.w(task.exception, "Couldn't get FCM token")
-                    return@OnCompleteListener
+            .addOnCompleteListener(
+                OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Timber.w(task.exception, "Couldn't get FCM token")
+                        return@OnCompleteListener
+                    }
                 }
-            })
+            )
 
         BuildConfig.MAIN_TOPIC.let {
             FirebaseMessaging.getInstance().subscribeToTopic(it)

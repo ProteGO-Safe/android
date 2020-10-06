@@ -41,8 +41,8 @@ class MigrationRepositoryImpl(
             version3SharedPrefs.contains(VERSION_3_INDICATOR) -> {
                 MigrationRepository.LastAppVersion.VERSION_3
             }
-            sharedPreferences.contains(SHARED_PREFS_SAFETYNET_IS_DEVICE_CHECKED)
-                    && appVersionDataStore.currentVersionName.isBlank() -> {
+            sharedPreferences.contains(SHARED_PREFS_SAFETYNET_IS_DEVICE_CHECKED) &&
+                appVersionDataStore.currentVersionName.isBlank() -> {
                 MigrationRepository.LastAppVersion.VERSION_4_1
             }
             else -> {
