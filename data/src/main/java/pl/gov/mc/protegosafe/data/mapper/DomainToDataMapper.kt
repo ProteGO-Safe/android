@@ -3,10 +3,12 @@ package pl.gov.mc.protegosafe.data.mapper
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import io.realm.RealmList
 import pl.gov.mc.protegosafe.data.extension.toBase64
+import pl.gov.mc.protegosafe.data.model.DistrictData
 import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeyRequestData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeysUploadRequestBody
+import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
@@ -68,4 +70,16 @@ fun VoivodeshipItem.toVoivodeshipDto() = VoivodeshipDto(
     districts = districts
         .map { it.toDistrictDto() }
         .toCollection(RealmList<DistrictDto>())
+)
+
+fun DistrictItem.toDistrictData() = DistrictData(
+    id = id,
+    name = name,
+    state = state.value
+)
+
+fun VoivodeshipItem.toVoivodeshipData() = VoivodeshipData(
+    id = id,
+    name = name,
+    districts = districts.map { it.toDistrictData() }
 )

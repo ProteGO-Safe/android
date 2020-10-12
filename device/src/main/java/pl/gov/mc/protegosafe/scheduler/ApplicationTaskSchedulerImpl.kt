@@ -99,7 +99,7 @@ class ApplicationTaskSchedulerImpl(
 
         workManager.enqueueUniquePeriodicWork(
             UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME,
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.KEEP,
             workRequest
         )
     }
