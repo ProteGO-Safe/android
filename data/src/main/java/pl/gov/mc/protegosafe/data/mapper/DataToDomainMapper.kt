@@ -12,6 +12,7 @@ import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.CovidInfoResponseData
+import pl.gov.mc.protegosafe.data.model.DistrictActionData
 import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.RiskLevelConfigurationData
 import pl.gov.mc.protegosafe.data.model.TriageData
@@ -21,6 +22,7 @@ import pl.gov.mc.protegosafe.domain.CovidInfoItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.CloseAppItem
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration
+import pl.gov.mc.protegosafe.domain.model.DistrictActionItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.DistrictRestrictionStateItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
@@ -146,4 +148,9 @@ fun VoivodeshipDto.toEntity() = VoivodeshipItem(
     id = id,
     name = name,
     districts = districts.map { it.toEntity() }
+)
+
+fun DistrictActionData.toEntity() = DistrictActionItem(
+    type = DistrictActionItem.ActionType.valueOf(type),
+    districtId = districtId
 )

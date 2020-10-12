@@ -25,6 +25,10 @@ class RealmMigrations : RealmMigration {
             ?.addField("id", Int::class.java, FieldAttribute.PRIMARY_KEY)
             ?.addField("name", String::class.java, FieldAttribute.REQUIRED)
             ?.addRealmListField("districts", realmSchema.get("DistrictDto")!!)
+
+        realmSchema.create("SubscribedDistrictDto")
+            ?.addField("id", Int::class.java, FieldAttribute.PRIMARY_KEY)
+            ?.addField("updated", Long::class.java)
     }
 
     companion object {

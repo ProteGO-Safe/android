@@ -3,6 +3,7 @@ package pl.gov.mc.protegosafe.domain.repository
 import io.reactivex.Completable
 import io.reactivex.Single
 import pl.gov.mc.protegosafe.domain.CovidInfoItem
+import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 
 interface CovidInfoRepository {
@@ -11,4 +12,7 @@ interface CovidInfoRepository {
     fun getCovidInfoUpdateTimestamp(): Single<Long>
     fun syncDistrictsRestrictionsWithDb(voivodeships: List<VoivodeshipItem>): Completable
     fun getDistrictsRestrictions(): Single<List<VoivodeshipItem>>
+    fun addDistrictToSubscribed(districtId: Int): Completable
+    fun deleteDistrictFromSubscribed(districtId: Int): Completable
+    fun getSortedSubscribedDistricts(): Single<List<DistrictItem>>
 }

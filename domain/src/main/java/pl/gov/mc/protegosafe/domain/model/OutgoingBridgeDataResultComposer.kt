@@ -14,4 +14,5 @@ interface OutgoingBridgeDataResultComposer {
         voivodeships: List<VoivodeshipItem>,
         updated: Long
     ): String
+    fun composeSubscribedDistrictsResult(subscribedDistricts: List<DistrictItem>): String
 }

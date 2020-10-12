@@ -27,12 +27,13 @@ import pl.gov.mc.protegosafe.data.db.TriageDataStore
 import pl.gov.mc.protegosafe.data.db.AppVersionDataStore
 import pl.gov.mc.protegosafe.data.db.CovidInfoDataStore
 import pl.gov.mc.protegosafe.data.db.dao.ExposureDao
-import pl.gov.mc.protegosafe.data.db.dao.RestrictionsDao
+import pl.gov.mc.protegosafe.data.db.dao.CovidInfoDao
 import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.data.mapper.ApiExceptionMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.DiagnosisKeyDownloadConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.ExposureConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.IncomingBridgePayloadMapperImpl
+import pl.gov.mc.protegosafe.data.mapper.OutgoingBridgePayloadMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.PinMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RetrofitExceptionMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RiskLevelConfigurationMapperImpl
@@ -56,6 +57,7 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgePayloadMapper
+import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
@@ -129,8 +131,9 @@ val dataModule = module {
     single<IncomingBridgePayloadMapper> { IncomingBridgePayloadMapperImpl(get()) }
     single { AppLanguageDataStore(get()) }
     single<CovidInfoRepository> { CovidInfoRepositoryImpl(get(), get(), get()) }
-    single { RestrictionsDao() }
+    single { CovidInfoDao() }
     single { CovidInfoDataStore(get()) }
+    single<OutgoingBridgePayloadMapper> { OutgoingBridgePayloadMapperImpl() }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(
