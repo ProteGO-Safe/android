@@ -7,14 +7,22 @@ import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.model.ClearData
 import pl.gov.mc.protegosafe.data.model.CloseAppData
 import pl.gov.mc.protegosafe.data.model.DiagnosisKeyDownloadConfigurationData
+import pl.gov.mc.protegosafe.data.model.DistrictData
+import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
+import pl.gov.mc.protegosafe.data.model.CovidInfoResponseData
 import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.RiskLevelConfigurationData
 import pl.gov.mc.protegosafe.data.model.TriageData
+import pl.gov.mc.protegosafe.data.model.VoivodeshipData
+import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
+import pl.gov.mc.protegosafe.domain.CovidInfoItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.CloseAppItem
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration
+import pl.gov.mc.protegosafe.domain.model.DistrictItem
+import pl.gov.mc.protegosafe.domain.model.DistrictRestrictionStateItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureInformationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
@@ -25,6 +33,7 @@ import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.TriageItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
+import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 
 private const val FCM_NOTIFICATION_TITLE_KEY = "title"
 private const val FCM_NOTIFICATION_CONTENT_KEY = "content"
@@ -69,6 +78,23 @@ fun DiagnosisKeyDownloadConfigurationData.toEntity() = DiagnosisKeyDownloadConfi
 
 fun PinData.toEntity() = PinItem(pin = pin)
 
+fun DistrictData.toEntity() = DistrictItem(
+    id = id,
+    name = name,
+    state = DistrictRestrictionStateItem.valueOf(state)
+)
+
+fun VoivodeshipData.toEntity() = VoivodeshipItem(
+    id = id,
+    name = name,
+    districts = districts.map { it.toEntity() }
+)
+
+fun CovidInfoResponseData.toEntity() = CovidInfoItem(
+    lastUpdate = update,
+    voivodeships = voivodeships.map { it.toEntity() }
+)
+
 /**
  * Map Temporary Exposure Key to entity model.
  * Function contains fix for known Exposure Notification API issue!
@@ -108,4 +134,16 @@ fun RiskLevelConfigurationData.toEntity() = RiskLevelConfigurationItem(
     maxNoRiskScore = maxNoRiskScore,
     maxLowRiskScore = maxLowRiskScore,
     maxMiddleRiskScore = maxMiddleRiskScore
+)
+
+fun DistrictDto.toEntity() = DistrictItem(
+    id = id,
+    name = name,
+    state = DistrictRestrictionStateItem.valueOf(state)
+)
+
+fun VoivodeshipDto.toEntity() = VoivodeshipItem(
+    id = id,
+    name = name,
+    districts = districts.map { it.toEntity() }
 )

@@ -1,0 +1,14 @@
+package pl.gov.mc.protegosafe.domain.repository
+
+import io.reactivex.Completable
+import io.reactivex.Single
+import pl.gov.mc.protegosafe.domain.CovidInfoItem
+import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
+
+interface CovidInfoRepository {
+    fun getCovidInfo(): Single<CovidInfoItem>
+    fun saveCovidInfoUpdateTimestamp(timestamp: Long): Completable
+    fun getCovidInfoUpdateTimestamp(): Single<Long>
+    fun syncDistrictsRestrictionsWithDb(voivodeships: List<VoivodeshipItem>): Completable
+    fun getDistrictsRestrictions(): Single<List<VoivodeshipItem>>
+}

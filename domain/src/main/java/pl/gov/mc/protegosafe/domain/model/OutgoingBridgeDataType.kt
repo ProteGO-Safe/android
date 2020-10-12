@@ -7,7 +7,11 @@ enum class OutgoingBridgeDataType(val code: Int) {
     SERVICES_STATUS(51),
     ANALYZE_RESULT(61),
     APP_VERSION(62),
-    SYSTEM_LANGUAGE(63);
+    SYSTEM_LANGUAGE(63),
+    DISTRICTS_STATUS(70),
+    GET_DISTRICTS(71),
+    DISTRICT_ACTION(72),
+    GET_SUBSCRIBED_DISTRICTS(73);
 
     companion object {
         fun valueOf(value: Int): OutgoingBridgeDataType =

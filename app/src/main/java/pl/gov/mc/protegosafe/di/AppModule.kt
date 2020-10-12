@@ -18,6 +18,7 @@ import pl.gov.mc.protegosafe.domain.usecase.CloseAppUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateDistrictsRestrictionsUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
@@ -39,6 +40,7 @@ import pl.gov.mc.protegosafe.domain.usecase.StopExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsUseCase
 import pl.gov.mc.protegosafe.ui.MainViewModel
 import pl.gov.mc.protegosafe.ui.common.PushNotifierImpl
 import pl.gov.mc.protegosafe.ui.home.HomeViewModel
@@ -94,6 +96,8 @@ val useCaseModule = module {
     factory { SetAppLanguageUseCase(get(), get(), get()) }
     factory { GetLocaleUseCase(get()) }
     factory { CloseAppUseCase(get(), get()) }
+    factory { UpdateDistrictsRestrictionsUseCase(get(), get()) }
+    factory { GetDistrictsRestrictionsUseCase(get(), get()) }
 }
 
 val viewModelModule = module {
