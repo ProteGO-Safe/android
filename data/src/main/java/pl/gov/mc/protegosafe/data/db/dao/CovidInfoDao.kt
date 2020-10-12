@@ -4,11 +4,31 @@ import doTransaction
 import io.reactivex.Completable
 import io.reactivex.Single
 import pl.gov.mc.protegosafe.data.model.DistrictDto
+import pl.gov.mc.protegosafe.data.model.SubscribedDistrictDto
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import queryAllAsSingle
 import singleQuery
+import timber.log.Timber
 
-open class RestrictionsDao {
+open class CovidInfoDao {
+
+    fun addToSubscribedDistricts(subscribedDistrictDto: SubscribedDistrictDto): Completable {
+        return doTransaction {
+            it.copyToRealmOrUpdate(subscribedDistrictDto)
+        }
+    }
+
+    fun deleteDistrictFromSubscribed(districtId: Int): Completable {
+        return doTransaction { realm ->
+            realm.where(SubscribedDistrictDto::class.java).findAll()
+                .firstOrNull { it.id == districtId }?.deleteFromRealm()
+                ?: Timber.d("Nothing to delete")
+        }
+    }
+
+    fun getSubscribedDistrictsIds(): Single<List<SubscribedDistrictDto>> {
+        return queryAllAsSingle()
+    }
 
     fun getAllVoivodeshipsRestrictions(): Single<List<VoivodeshipDto>> {
         return queryAllAsSingle()

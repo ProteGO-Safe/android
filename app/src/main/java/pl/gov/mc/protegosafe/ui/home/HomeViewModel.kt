@@ -96,7 +96,7 @@ class HomeViewModel(
     }
 
     fun getBridgeData(dataType: Int, data: String, requestId: String) {
-        onGetBridgeDataUseCase.execute(OutgoingBridgeDataType.valueOf(dataType))
+        onGetBridgeDataUseCase.execute(OutgoingBridgeDataType.valueOf(dataType), data)
             .subscribe(
                 {
                     webViewTimber().d("getBridgeData: $dataType output: $it")

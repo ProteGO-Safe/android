@@ -41,6 +41,8 @@ import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUseCase
 import pl.gov.mc.protegosafe.ui.MainViewModel
 import pl.gov.mc.protegosafe.ui.common.PushNotifierImpl
 import pl.gov.mc.protegosafe.ui.home.HomeViewModel
@@ -56,7 +58,20 @@ val appModule = module {
 }
 
 val useCaseModule = module {
-    factory { OnGetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory {
+        OnGetBridgeDataUseCase(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
@@ -98,6 +113,8 @@ val useCaseModule = module {
     factory { CloseAppUseCase(get(), get()) }
     factory { UpdateDistrictsRestrictionsUseCase(get(), get()) }
     factory { GetDistrictsRestrictionsResultUseCase(get(), get(), get()) }
+    factory { HandleDistrictActionUseCase(get(), get(), get()) }
+    factory { GetSubscribedDistrictsResultUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {

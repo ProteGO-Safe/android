@@ -1,8 +1,10 @@
 package pl.gov.mc.protegosafe.data.model
 
 import pl.gov.mc.protegosafe.data.extension.toJson
+import pl.gov.mc.protegosafe.data.mapper.toDistrictDto
 import pl.gov.mc.protegosafe.data.mapper.toVoivodeshipData
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
+import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
@@ -53,5 +55,9 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
             updated,
             voivodeships.map { it.toVoivodeshipData() }
         ).toJson()
+    }
+
+    override fun composeSubscribedDistrictsResult(subscribedDistricts: List<DistrictItem>): String {
+        return SubscribedDistrictsResult(subscribedDistricts.map { it.toDistrictDto() }).toJson()
     }
 }

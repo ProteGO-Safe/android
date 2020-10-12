@@ -5,6 +5,8 @@ import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateDistrictsRestrictionsUseCase
 
 class OnGetBridgeDataUseCase(
@@ -15,11 +17,14 @@ class OnGetBridgeDataUseCase(
     private val getSystemLanguageUseCase: GetSystemLanguageUseCase,
     private val getDistrictsRestrictionsResultUseCase: GetDistrictsRestrictionsResultUseCase,
     private val updateDistrictsRestrictionsUseCase: UpdateDistrictsRestrictionsUseCase,
+    private val handleDistrictActionUseCase: HandleDistrictActionUseCase,
+    private val getSubscribedDistrictsResultUseCase: GetSubscribedDistrictsResultUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
     fun execute(
-        type: OutgoingBridgeDataType
+        type: OutgoingBridgeDataType,
+        data: String?
     ): Single<String> {
         return when (type) {
             OutgoingBridgeDataType.NOTIFICATION_DATA -> {
@@ -43,6 +48,14 @@ class OnGetBridgeDataUseCase(
             OutgoingBridgeDataType.UPDATE_DISTRICTS_STATUSES -> {
                 updateAndGetDistrictsRestrictionsResult()
             }
+            OutgoingBridgeDataType.DISTRICT_ACTION -> {
+                data?.let {
+                    handleDistrictActionAndGetSubscribedDistrictResult(it)
+                } ?: throw IllegalArgumentException()
+            }
+            OutgoingBridgeDataType.GET_SUBSCRIBED_DISTRICTS -> {
+                getSubscribedDistrictsResultUseCase.execute()
+            }
             else -> {
                 throw IllegalArgumentException("OutgoingBridgeDataType has wrong value")
             }
@@ -54,5 +67,10 @@ class OnGetBridgeDataUseCase(
     private fun updateAndGetDistrictsRestrictionsResult(): Single<String> {
         return updateDistrictsRestrictionsUseCase.execute()
             .andThen(getDistrictsRestrictionsResultUseCase.execute())
+    }
+
+    private fun handleDistrictActionAndGetSubscribedDistrictResult(payload: String): Single<String> {
+        return handleDistrictActionUseCase.execute(payload)
+            .andThen(getSubscribedDistrictsResultUseCase.execute())
     }
 }
