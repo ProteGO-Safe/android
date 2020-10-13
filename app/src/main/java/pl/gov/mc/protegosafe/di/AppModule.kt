@@ -7,7 +7,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.AppRepositoryImpl
-import pl.gov.mc.protegosafe.domain.PushNotifier
+import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.repository.AppRepository
 import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
@@ -43,13 +43,14 @@ import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCache
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.NotifyDistrictsUpdatedUseCase
 import pl.gov.mc.protegosafe.ui.MainViewModel
-import pl.gov.mc.protegosafe.ui.common.PushNotifierImpl
+import pl.gov.mc.protegosafe.ui.common.NotifierImpl
 import pl.gov.mc.protegosafe.ui.home.HomeViewModel
 import pl.gov.mc.protegosafe.ui.home.WebUrlProvider
 
 val appModule = module {
-    factory<PushNotifier> { PushNotifierImpl(get()) }
+    factory<Notifier> { NotifierImpl(get()) }
     factory { WebUrlProvider(get()) }
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }
@@ -111,10 +112,11 @@ val useCaseModule = module {
     factory { SetAppLanguageUseCase(get(), get(), get()) }
     factory { GetLocaleUseCase(get()) }
     factory { CloseAppUseCase(get(), get()) }
-    factory { UpdateDistrictsRestrictionsUseCase(get(), get()) }
+    factory { UpdateDistrictsRestrictionsUseCase(get(), get(), get()) }
     factory { GetDistrictsRestrictionsResultUseCase(get(), get(), get()) }
     factory { HandleDistrictActionUseCase(get(), get(), get()) }
     factory { GetSubscribedDistrictsResultUseCase(get(), get(), get()) }
+    factory { NotifyDistrictsUpdatedUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {

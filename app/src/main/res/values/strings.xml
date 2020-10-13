@@ -16,4 +16,19 @@
     <string name="common_ok">"OK"</string>
     <string name="debug_write_store_rationale">"Testowa wersja aplikacji potrzebuje uprawnienia do zapisu logów śledzenia urządzeń."</string>
     <string name="data_migration_in_progress">"Trwa migracja danych"</string>
+
+    <string name="changes_in_districts">Zmiany w statusach powiatów</string>
+    <string name="no_changes_in_subscribed_districts">W powiatach, które obserwujesz nie wprowadzono zmian statusu.</string>
+    <string name="changes_in_subscribed_districts">Zmiany w statusach powiatów.</string>
+    <string name="changes_in_districts_info">Żeby być na bieżąco z zasadami bezpieczeństwa, wybierz interesujące Cię powiaty i otrzymuj powiadomienia o zmianach.</string>
+    <string name="no_changes_in_subscribed_districts_info">Zmiany w zasadach bezpieczeństwa nie dotyczą powiatów, które obserwujesz.</string>
+    <string name="changes_in_subscribed_district_info_with_params">W powiecie, który obserwujesz wprowadzono zmiany:%2$s.</string>
+    <string name="changes_in_subscribed_districts_info_with_params">W %1$s powiatach, które obserwujesz wprowadzono zmiany:%2$s.</string>
+    <string name="changed_district_info_with_params">powiat %1$s – status %2$s</string>
+
+    <string-array name="district_restriction_colors">
+        <item>neutralny</item>
+        <item>żółty</item>
+        <item>czerwony</item>
+    </string-array>
 </resources>

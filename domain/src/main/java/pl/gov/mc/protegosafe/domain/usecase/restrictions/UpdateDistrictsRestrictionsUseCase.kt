@@ -9,15 +9,32 @@ import pl.gov.mc.protegosafe.domain.repository.CovidInfoRepository
 
 class UpdateDistrictsRestrictionsUseCase(
     private val covidInfoRepository: CovidInfoRepository,
-    private val postExecutionThread: PostExecutionThread,
+    private val notifyDistrictsUpdatedUseCase: NotifyDistrictsUpdatedUseCase,
+    private val postExecutionThread: PostExecutionThread
 ) {
     fun execute(): Completable {
         return covidInfoRepository.getCovidInfo()
             .flatMapCompletable { covidInfo ->
-                syncWithDbAndSaveTimestamp(covidInfo)
+                notifyUserAboutDistrictsUpdate(covidInfo)
+                    .andThen(syncWithDbAndSaveTimestamp(covidInfo))
             }
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
+    }
+
+    private fun notifyUserAboutDistrictsUpdate(covidInfo: CovidInfoItem): Completable {
+        return covidInfoRepository.getCovidInfoUpdateTimestamp()
+            .flatMapCompletable { updateTimestamp ->
+                if (updateTimestamp == 0L) {
+                    Completable.complete()
+                } else {
+                    notifyDistrictsUpdatedUseCase.execute(
+                        covidInfo.voivodeships
+                            .map { it.districts }
+                            .flatten()
+                    )
+                }
+            }
     }
 
     private fun syncWithDbAndSaveTimestamp(covidInfo: CovidInfoItem): Completable {
