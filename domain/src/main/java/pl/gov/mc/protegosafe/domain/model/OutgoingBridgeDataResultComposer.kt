@@ -9,4 +9,5 @@ interface OutgoingBridgeDataResultComposer {
     ): String
     fun composeAppVersionNameResult(versionName: String): String
     fun composeSystemLanguageResult(languageISO: String): String
+    fun composeFontScaleResult(fontScale: Float): String
 }
