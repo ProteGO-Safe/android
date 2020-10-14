@@ -10,6 +10,7 @@ import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
+import pl.gov.mc.protegosafe.domain.model.DistrictRestrictionStateItem
 import pl.gov.mc.protegosafe.domain.model.DistrictsUpdatedNotificationType
 import pl.gov.mc.protegosafe.ui.MainActivity
 import timber.log.Timber
@@ -27,10 +28,10 @@ class NotifierImpl(private val context: Context) : Notifier {
             ?: Timber.d("Show notification failed")
     }
 
-    override fun showDistrictsUpdatedNotification(notificationTypeType: DistrictsUpdatedNotificationType) {
+    override fun showDistrictsUpdatedNotification(notificationType: DistrictsUpdatedNotificationType) {
         notificationManager?.notify(
             Random().nextInt(),
-            when (notificationTypeType) {
+            when (notificationType) {
                 is DistrictsUpdatedNotificationType.EmptySubscribedDistrictsList -> {
                     createNotification(
                         context.getString(R.string.changes_in_districts_notification_title),
@@ -46,7 +47,7 @@ class NotifierImpl(private val context: Context) : Notifier {
                 is DistrictsUpdatedNotificationType.DistrictsUpdated -> {
                     createNotification(
                         context.getString(R.string.changes_in_districts_notification_title),
-                        prepareDistrictsUpdatedNotificationContent(notificationTypeType.districts)
+                        prepareDistrictsUpdatedNotificationContent(notificationType.districts)
                     )
                 }
             }
@@ -79,9 +80,8 @@ class NotifierImpl(private val context: Context) : Notifier {
                 NotificationCompat.BigTextStyle()
                     .bigText(content)
             )
-            .build().apply {
-                flags = NotificationCompat.FLAG_AUTO_CANCEL
-            }
+            .setAutoCancel(true)
+            .build()
     }
 
     private fun prepareDistrictsUpdatedNotificationContent(updatedDistricts: List<DistrictItem>): String {
@@ -95,15 +95,32 @@ class NotifierImpl(private val context: Context) : Notifier {
             val updateDistrictInfo = context.getString(
                 R.string.changed_district_info_with_params,
                 it.name,
-                context.resources
-                    .getStringArray(R.array.district_restriction_colors)[it.state.value]
+                getDistrictRestrictionZoneName(it.state)
             )
             updatedDistrictsInfo.append(" ").append(updateDistrictInfo).append(",")
         }
         return context.getString(
             notificationContentRes,
-            updatedDistricts.size.toString(),
+            updatedDistricts.size,
             updatedDistrictsInfo.dropLastWhile { it == ',' }
+        )
+    }
+
+    private fun getDistrictRestrictionZoneName(
+        districtRestrictionState: DistrictRestrictionStateItem
+    ): String {
+        return context.getString(
+            when (districtRestrictionState) {
+                DistrictRestrictionStateItem.NEUTRAL -> {
+                    R.string.district_restriction_zone_neutral
+                }
+                DistrictRestrictionStateItem.YELLOW -> {
+                    R.string.district_restriction_zone_yellow
+                }
+                DistrictRestrictionStateItem.RED -> {
+                    R.string.district_restriction_zone_red
+                }
+            }
         )
     }
 }

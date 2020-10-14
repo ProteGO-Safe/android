@@ -23,10 +23,7 @@
     <string name="changes_in_subscribed_district_info_with_params">W 1 powiecie, który obserwujesz wprowadzono zmiany:%2$s.</string>
     <string name="changes_in_subscribed_districts_info_with_params">W %1$d powiatach, które obserwujesz wprowadzono zmiany:%2$s.</string>
     <string name="changed_district_info_with_params">powiat %1$s – strefa %2$s</string>
-
-    <string-array name="district_restriction_colors">
-        <item>neutralna</item>
-        <item>żółta</item>
-        <item>czerwona</item>
-    </string-array>
+    <string name="district_restriction_zone_neutral">neutralna</string>
+    <string name="district_restriction_zone_yellow">żółta</string>
+    <string name="district_restriction_zone_red">czerwona</string>
 </resources>
