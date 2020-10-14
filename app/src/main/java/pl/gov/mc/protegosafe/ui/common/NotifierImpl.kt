@@ -33,19 +33,19 @@ class NotifierImpl(private val context: Context) : Notifier {
             when (notificationTypeType) {
                 is DistrictsUpdatedNotificationType.EmptySubscribedDistrictsList -> {
                     createNotification(
-                        context.getString(R.string.changes_in_districts),
+                        context.getString(R.string.changes_in_districts_notification_title),
                         context.getString(R.string.changes_in_districts_info),
                     )
                 }
                 is DistrictsUpdatedNotificationType.NoDistrictsUpdated -> {
                     createNotification(
-                        context.getString(R.string.no_changes_in_subscribed_districts),
+                        context.getString(R.string.changes_in_districts_notification_title),
                         context.getString(R.string.no_changes_in_subscribed_districts_info)
                     )
                 }
                 is DistrictsUpdatedNotificationType.DistrictsUpdated -> {
                     createNotification(
-                        context.getString(R.string.changes_in_districts),
+                        context.getString(R.string.changes_in_districts_notification_title),
                         prepareDistrictsUpdatedNotificationContent(notificationTypeType.districts)
                     )
                 }
