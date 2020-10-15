@@ -84,8 +84,8 @@ class ApplicationTaskSchedulerImpl(
         Timber.i("scheduleUpdateDistrictsRestrictionsTask")
         val workRequest = PeriodicWorkRequest.Builder(
             updateDistrictsRestrictionsWorker,
-            1,
-            TimeUnit.DAYS
+            REPEAT_INTERVAL,
+            TimeUnit.HOURS
         ).setConstraints(
             Constraints.Builder()
                 .setRequiresBatteryNotLow(true)
