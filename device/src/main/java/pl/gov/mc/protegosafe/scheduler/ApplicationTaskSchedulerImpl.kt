@@ -85,7 +85,7 @@ class ApplicationTaskSchedulerImpl(
         val workRequest = PeriodicWorkRequest.Builder(
             updateDistrictsRestrictionsWorker,
             REPEAT_INTERVAL,
-            TimeUnit.HOURS
+            REPEAT_INTERVAL_TIME_UNIT
         ).setConstraints(
             Constraints.Builder()
                 .setRequiresBatteryNotLow(true)
