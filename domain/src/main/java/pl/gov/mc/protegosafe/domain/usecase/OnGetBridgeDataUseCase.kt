@@ -66,6 +66,7 @@ class OnGetBridgeDataUseCase(
 
     private fun updateAndGetDistrictsRestrictionsResult(): Single<String> {
         return updateDistrictsRestrictionsUseCase.execute()
+            .onErrorComplete()
             .andThen(getDistrictsRestrictionsResultUseCase.execute())
     }
 
