@@ -5,6 +5,7 @@ import com.google.android.gms.nearby.exposurenotification.ExposureSummary
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.model.ClearData
+import pl.gov.mc.protegosafe.data.model.CloseAppData
 import pl.gov.mc.protegosafe.data.model.DiagnosisKeyDownloadConfigurationData
 import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
@@ -12,6 +13,7 @@ import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.RiskLevelConfigurationData
 import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.domain.model.ClearItem
+import pl.gov.mc.protegosafe.domain.model.CloseAppItem
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureInformationItem
@@ -43,6 +45,8 @@ fun Map<String, String>.toNotificationDataItem(topic: String?) = PushNotificatio
 fun TriageData.toEntity() = TriageItem(timestamp = timestamp)
 
 fun ClearData.toEntity() = ClearItem(clearBtData = clearBtData)
+
+fun CloseAppData.toEntity() = CloseAppItem(turnOff = turnOff)
 
 fun ExposureConfigurationItemData.toEntity() = ExposureConfigurationItem(
     minimumRiskScore = minimumRiskScore,

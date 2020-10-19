@@ -15,4 +15,6 @@ interface AppRepository {
     fun setAppLanguage(languageISO: String): Completable
 
     fun getLocale(): Locale
+
+    fun getFontScale(): Single<Float>
 }

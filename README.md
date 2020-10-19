@@ -77,6 +77,16 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.5.0
+
+Added closing app on UI request
+
+Upgraded gradle and gradle dependencies
+
+Added response "ACCESS_DENIED" code(5) when user denied sharing TEKs
+
+Updated UI
+
 4.4.0
 
 Added translations for English and Ukrainian languages

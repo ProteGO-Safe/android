@@ -59,6 +59,9 @@ class HomeViewModel(
     private val _restartActivity = SingleLiveEvent<Unit>()
     val restartActivity: LiveData<Unit> = _restartActivity
 
+    private val _closeApplication = SingleLiveEvent<Unit>()
+    val closeApplication: LiveData<Unit> = _closeApplication
+
     private val _showUploadError = SingleLiveEvent<Exception>()
     val showConnectionError: LiveData<Exception> = _showUploadError
 
@@ -72,7 +75,8 @@ class HomeViewModel(
             IncomingBridgeDataItem(
                 type = IncomingBridgeDataType.valueOf(dataType),
                 payload = dataJson
-            ), ::onResultActionRequired
+            ),
+            ::onResultActionRequired
         ).subscribeBy(
             onComplete = { Timber.d("OnSetBridgeData executed") },
             onError = { error -> handleError(error) }
@@ -81,33 +85,41 @@ class HomeViewModel(
 
     fun onActivityResult(activityResult: ActivityResult) {
         storePendingActivityResultUseCase.execute(activityResult)
-            .subscribe({
-                Timber.d("Storing pending activity result finished")
-            }, {
-                Timber.e(it, "Storing pending activity result  failed")
-            }).addTo(disposables)
+            .subscribe(
+                {
+                    Timber.d("Storing pending activity result finished")
+                },
+                {
+                    Timber.e(it, "Storing pending activity result  failed")
+                }
+            ).addTo(disposables)
     }
 
     fun getBridgeData(dataType: Int, data: String, requestId: String) {
         onGetBridgeDataUseCase.execute(OutgoingBridgeDataType.valueOf(dataType))
-            .subscribe({
-                webViewTimber().d("getBridgeData: $dataType output: $it")
-                bridgeDataResponse(it, dataType, requestId)
-            }, {
-                Timber.e(it, "getBridgeData failed")
-            }).addTo(disposables)
+            .subscribe(
+                {
+                    webViewTimber().d("getBridgeData: $dataType output: $it")
+                    bridgeDataResponse(it, dataType, requestId)
+                },
+                {
+                    Timber.e(it, "getBridgeData failed")
+                }
+            ).addTo(disposables)
     }
 
     fun onUploadRetry() {
         uploadTemporaryExposureKeysWithCachedPayload()
     }
 
-    fun sendUploadCanceled() {
+    fun onUploadCanceled() {
+        sendUploadStatus(TemporaryExposureKeysUploadState.CANCELED)
+    }
+
+    private fun sendUploadStatus(status: TemporaryExposureKeysUploadState) {
         onBridgeData(
             OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code,
-            outgoingBridgeDataResultComposer.composeTemporaryExposureKeysUploadResult(
-                TemporaryExposureKeysUploadState.OTHER
-            )
+            outgoingBridgeDataResultComposer.composeTemporaryExposureKeysUploadResult(status)
         )
     }
 
@@ -136,30 +148,39 @@ class HomeViewModel(
 
     private fun uploadTemporaryExposureKeysWithCachedPayload() {
         uploadTemporaryExposureKeysWithCachedPayloadUseCase.execute(::onResultActionRequired)
-            .subscribe({
-                Timber.d("Temporary exposure keys upload with cached payload finished")
-            }, {
-                handleError(it)
-            }).addTo(disposables)
+            .subscribe(
+                {
+                    Timber.d("Temporary exposure keys upload with cached payload finished")
+                },
+                {
+                    handleError(it)
+                }
+            ).addTo(disposables)
     }
 
     private fun onExposureNotificationPermissionGranted() {
         startExposureNotificationUseCase.execute()
-            .subscribe({
-                Timber.d("Exposure Notification started")
-                onResultActionRequired(ActionRequiredItem.SendServicesStatus)
-            }, {
-                Timber.d(it, "Starting Exposure Notification failed")
-            }).addTo(disposables)
+            .subscribe(
+                {
+                    Timber.d("Exposure Notification started")
+                    onResultActionRequired(ActionRequiredItem.SendServicesStatus)
+                },
+                {
+                    Timber.d(it, "Starting Exposure Notification failed")
+                }
+            ).addTo(disposables)
     }
 
     fun processPendingActivityResult() {
         processPendingActivityResultUseCase.execute(::onResultActionRequired)
-            .subscribe({
-                Timber.d("processing pending activity result success")
-            }, {
-                Timber.e(it, "processing pending activity result failed")
-            }).addTo(disposables)
+            .subscribe(
+                {
+                    Timber.d("processing pending activity result success")
+                },
+                {
+                    Timber.e(it, "processing pending activity result failed")
+                }
+            ).addTo(disposables)
     }
 
     private fun onResultActionRequired(actionRequired: ActionRequiredItem) {
@@ -182,13 +203,8 @@ class HomeViewModel(
             is ActionRequiredItem.SendTemporaryExposureKeysUploadResult -> {
                 onBridgeData(actionRequired.dataType, actionRequired.dataJson)
             }
-            is ActionRequiredItem.SendTemporaryExposureKeysUploadFailure -> {
-                onBridgeData(
-                    OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code,
-                    outgoingBridgeDataResultComposer.composeTemporaryExposureKeysUploadResult(
-                        TemporaryExposureKeysUploadState.FAILURE
-                    )
-                )
+            is ActionRequiredItem.TemporaryExposureKeysPermissionDenied -> {
+                sendUploadStatus(TemporaryExposureKeysUploadState.ACCESS_DENIED)
             }
             is ActionRequiredItem.ExposureNotificationPermissionGranted -> {
                 onExposureNotificationPermissionGranted()
@@ -199,6 +215,9 @@ class HomeViewModel(
             is ActionRequiredItem.RestartActivity -> {
                 _restartActivity.postValue(Unit)
             }
+            is ActionRequiredItem.CloseApp -> {
+                _closeApplication.postValue(Unit)
+            }
         }
     }
 
@@ -208,21 +227,27 @@ class HomeViewModel(
             sendServicesStatus()
         }
         composeAppLifecycleStateBrideDataUseCase.execute(state)
-            .subscribe({
-                onBridgeData(OutgoingBridgeDataType.APP_LIFECYCLE_STATE.code, it)
-            }, {
-                Timber.e(it, "onAppLifecycleStateChanged failed")
-            }).addTo(disposables)
+            .subscribe(
+                {
+                    onBridgeData(OutgoingBridgeDataType.APP_LIFECYCLE_STATE.code, it)
+                },
+                {
+                    Timber.e(it, "onAppLifecycleStateChanged failed")
+                }
+            ).addTo(disposables)
     }
 
     private fun sendServicesStatus() {
         Timber.d("onBluetoothEnable")
         servicesStatusUseCase.execute()
-            .subscribe({
-                onBridgeData(OutgoingBridgeDataType.SERVICES_STATUS.code, it)
-            }, {
-                Timber.e(it, "sendServicesStatus failed")
-            }).addTo(disposables)
+            .subscribe(
+                {
+                    onBridgeData(OutgoingBridgeDataType.SERVICES_STATUS.code, it)
+                },
+                {
+                    Timber.e(it, "sendServicesStatus failed")
+                }
+            ).addTo(disposables)
     }
 
     private fun bridgeDataResponse(body: String, dataType: Int, requestId: String) {

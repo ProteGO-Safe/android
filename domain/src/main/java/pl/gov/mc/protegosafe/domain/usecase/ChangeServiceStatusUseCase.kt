@@ -30,8 +30,8 @@ class ChangeServiceStatusUseCase(
                 val requireActionsList = arrayListOf<Completable>()
                 it.forEach { request ->
                     requireActionsList.add(getActions(request))
-            }
-            return@map requireActionsList.asIterable()
+                }
+                return@map requireActionsList.asIterable()
             }
             .flatMapCompletable { listOfRequests ->
                 return@flatMapCompletable Completable.merge(listOfRequests)

@@ -102,7 +102,7 @@ class UploadTemporaryExposureKeysUseCase(
             .sortedBy { it.rollingPeriod }
             .groupBy { it.getDayStartRollingNumber() }
             .map { it.value.size }
-            .max()
+            .maxOrNull()
             ?.let { it <= UploadException.DailyLimitExceededError.LIMIT }
             ?: true
     }
@@ -171,7 +171,7 @@ class UploadTemporaryExposureKeysUseCase(
         onResultActionRequired: (ActionRequiredItem) -> Unit
     ): Completable {
         val state = if (error is NoInternetConnectionException) {
-            TemporaryExposureKeysUploadState.OTHER
+            TemporaryExposureKeysUploadState.CANCELED
         } else {
             TemporaryExposureKeysUploadState.FAILURE
         }

@@ -86,28 +86,31 @@ class MainActivity : BaseActivity() {
     }
 
     private fun listenForUpdateEvents() {
-        vm.appUpdateInfoEvent.observe(this, Observer { appUpdateInfo ->
-            when (appUpdateInfo.updateAvailability()) {
-                UpdateAvailability.UPDATE_AVAILABLE -> {
-                    Timber.d("UpdateAvailability is UPDATE_AVAILABLE")
-                    if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+        vm.appUpdateInfoEvent.observe(
+            this,
+            Observer { appUpdateInfo ->
+                when (appUpdateInfo.updateAvailability()) {
+                    UpdateAvailability.UPDATE_AVAILABLE -> {
+                        Timber.d("UpdateAvailability is UPDATE_AVAILABLE")
+                        if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                            startUpdateFlow(appUpdateInfo)
+                        } else {
+                            Timber.d("IMMEDIATE update type is not allowed")
+                        }
+                    }
+                    UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
+                        Timber.d("UpdateAvailability is DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS")
                         startUpdateFlow(appUpdateInfo)
-                    } else {
-                        Timber.d("IMMEDIATE update type is not allowed")
+                    }
+                    UpdateAvailability.UNKNOWN -> {
+                        Timber.d("UpdateAvailability is UNKNOWN")
+                    }
+                    UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
+                        Timber.d("UpdateAvailability is UPDATE_NOT_AVAILABLE")
                     }
                 }
-                UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
-                    Timber.d("UpdateAvailability is DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS")
-                    startUpdateFlow(appUpdateInfo)
-                }
-                UpdateAvailability.UNKNOWN -> {
-                    Timber.d("UpdateAvailability is UNKNOWN")
-                }
-                UpdateAvailability.UPDATE_NOT_AVAILABLE -> {
-                    Timber.d("UpdateAvailability is UPDATE_NOT_AVAILABLE")
-                }
             }
-        })
+        )
     }
 
     private fun startUpdateFlow(appUpdateInfo: AppUpdateInfo) {

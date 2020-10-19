@@ -94,8 +94,7 @@ class DiagnosisKeyRepositoryImpl(
         return _latestProcessedDiagnosisKeyTimestamp
     }
 
-    private fun getFilteredDiagnosisKeysFilesNames(createdAfter: Long):
-            Single<List<String>> {
+    private fun getFilteredDiagnosisKeysFilesNames(createdAfter: Long): Single<List<String>> {
         Timber.d("getDiagnosisKeysFilesStorageReferences")
 
         return getDiagnosisKeysFiles()
