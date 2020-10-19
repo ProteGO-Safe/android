@@ -32,3 +32,5 @@
 | Oleksandr Katrych   | [OKatrych](https://github.com/OKatrych)                  | android        |
 | Wojciech Brydak     | [wbrydak](https://github.com/wbrydak)                    | specs          |
 | Damian Klimas       | [D4mK](https://github.com/D4mK)                          | specs, legal   |
+| Kamil Gałuszka      | [galuszkak](https://github.com/galuszkak)                | android, web   |
+| Piotr Konieczny     | [piotr-cz](https://github.com/piotr-cz)                  | web            |
