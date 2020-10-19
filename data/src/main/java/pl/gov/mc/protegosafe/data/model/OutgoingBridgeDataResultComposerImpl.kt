@@ -42,6 +42,10 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
         return SystemLanguageResult(languageISO).toJson()
     }
 
+    override fun composeFontScaleResult(fontScale: Float): String {
+        return FontScaleResult(fontScale).toJson()
+    }
+
     override fun composeDistrictsRestrictionsResult(
         voivodeships: List<VoivodeshipItem>,
         updated: Long

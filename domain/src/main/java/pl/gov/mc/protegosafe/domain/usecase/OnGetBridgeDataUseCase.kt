@@ -15,6 +15,7 @@ class OnGetBridgeDataUseCase(
     private val getAnalyzeResultUseCase: GetAnalyzeResultUseCase,
     private val getAppVersionNameUseCase: GetAppVersionNameUseCase,
     private val getSystemLanguageUseCase: GetSystemLanguageUseCase,
+    private val getFontScaleUseCase: GetFontScaleUseCase,
     private val getDistrictsRestrictionsResultUseCase: GetDistrictsRestrictionsResultUseCase,
     private val updateDistrictsRestrictionsUseCase: UpdateDistrictsRestrictionsUseCase,
     private val handleDistrictActionUseCase: HandleDistrictActionUseCase,
@@ -41,6 +42,9 @@ class OnGetBridgeDataUseCase(
             }
             OutgoingBridgeDataType.SYSTEM_LANGUAGE -> {
                 getSystemLanguageUseCase.execute()
+            }
+            OutgoingBridgeDataType.GET_FONT_SCALE -> {
+                getFontScaleUseCase.execute()
             }
             OutgoingBridgeDataType.DISTRICTS_STATUS -> {
                 getDistrictsRestrictionsResultUseCase.execute()

@@ -8,6 +8,7 @@ enum class OutgoingBridgeDataType(val code: Int) {
     ANALYZE_RESULT(61),
     APP_VERSION(62),
     SYSTEM_LANGUAGE(63),
+    GET_FONT_SCALE(65),
     DISTRICTS_STATUS(70),
     UPDATE_DISTRICTS_STATUSES(71),
     DISTRICT_ACTION(72),
