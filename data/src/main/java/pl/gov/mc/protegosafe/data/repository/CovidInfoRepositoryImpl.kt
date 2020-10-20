@@ -13,6 +13,7 @@ import pl.gov.mc.protegosafe.domain.CovidInfoItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 import pl.gov.mc.protegosafe.domain.repository.CovidInfoRepository
+import kotlin.random.Random
 
 class CovidInfoRepositoryImpl(
     private val covidInfoService: CovidInfoService,
@@ -21,7 +22,7 @@ class CovidInfoRepositoryImpl(
 ) : CovidInfoRepository {
 
     override fun getCovidInfo(): Single<CovidInfoItem> {
-        return covidInfoService.getCovidInfo()
+        return covidInfoService.getCovidInfo(Random.nextInt().toString())
             .map { it.toEntity() }
     }
 
