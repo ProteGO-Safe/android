@@ -19,7 +19,7 @@ interface AppRepository {
     fun getFontScale(): Single<Float>
 
     /**
-     * Delete all data from Shared Preferences and Realm Database
+     * Delete Realm database and clear Shared Preferences
      */
     fun clearAppData(): Completable
 
