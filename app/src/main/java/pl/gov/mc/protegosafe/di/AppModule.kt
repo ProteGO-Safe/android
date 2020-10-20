@@ -13,7 +13,7 @@ import pl.gov.mc.protegosafe.domain.repository.AppRepository
 import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
-import pl.gov.mc.protegosafe.domain.usecase.ClearExposureNotificationDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.ClearDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CloseAppUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
@@ -56,7 +56,7 @@ val appModule = module {
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }
     single<AppUpdateManager> { AppUpdateManagerFactory.create(androidContext()) }
-    single<AppRepository> { AppRepositoryImpl(get(), androidContext()) }
+    single<AppRepository> { AppRepositoryImpl(get(), get(), get(), androidContext()) }
 }
 
 val useCaseModule = module {
@@ -83,7 +83,7 @@ val useCaseModule = module {
     factory { StopExposureNotificationUseCase(get(), get(), get()) }
     factory { GetServicesStatusUseCase(get()) }
     factory { ChangeServiceStatusUseCase(get(), get(), get()) }
-    factory { ClearExposureNotificationDataUseCase(get(), get(), get()) }
+    factory { ClearDataUseCase(get(), get(), get(), get()) }
     factory { ProvideDiagnosisKeysUseCase(get(), get(), get()) }
     factory { GetSafetyNetAttestationTokenUseCase(get(), get()) }
     factory {

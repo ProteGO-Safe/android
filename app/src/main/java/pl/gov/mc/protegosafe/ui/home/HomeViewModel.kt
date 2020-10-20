@@ -197,7 +197,7 @@ class HomeViewModel(
             is ActionRequiredItem.RequestEnableNotifications -> {
                 _requestNotifications.postValue(Unit)
             }
-            is ActionRequiredItem.ClearExposureNotificationData -> {
+            is ActionRequiredItem.ClearData -> {
                 _requestClearData.postValue(Unit)
             }
             is ActionRequiredItem.SendTemporaryExposureKeysUploadResult -> {

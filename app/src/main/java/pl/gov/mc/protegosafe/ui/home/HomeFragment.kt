@@ -295,11 +295,15 @@ class HomeFragment : BaseFragment() {
 
     private fun requestClearData() {
         binding.webView.evaluateJavascript(CLEAR_UI_COMMAND) {
-            startActivityForResult(
-                Intent(ACTION_EXPOSURE_NOTIFICATION_SETTINGS),
-                ActivityRequest.CLEAR_EXPOSURE_NOTIFICATION_DATA.requestCode
-            )
+            openExposureNotificationSettings()
         }
+    }
+
+    private fun openExposureNotificationSettings() {
+        startActivityForResult(
+            Intent(ACTION_EXPOSURE_NOTIFICATION_SETTINGS),
+            ActivityRequest.CLEAR_EXPOSURE_NOTIFICATION_DATA.requestCode
+        )
     }
 
     private fun manageWebView(resumed: Boolean) {

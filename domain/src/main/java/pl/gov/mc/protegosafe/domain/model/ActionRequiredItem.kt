@@ -8,7 +8,7 @@ sealed class ActionRequiredItem {
     object ExposureNotificationPermissionGranted : ActionRequiredItem()
     object TemporaryExposureKeysPermissionGranted : ActionRequiredItem()
     object TemporaryExposureKeysPermissionDenied : ActionRequiredItem()
-    object ClearExposureNotificationData : ActionRequiredItem()
+    object ClearData : ActionRequiredItem()
     object RestartActivity : ActionRequiredItem()
     object CloseApp : ActionRequiredItem()
     data class SendTemporaryExposureKeysUploadResult(val dataJson: String) : ActionRequiredItem() {

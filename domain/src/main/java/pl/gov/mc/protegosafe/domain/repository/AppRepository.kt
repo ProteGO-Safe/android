@@ -17,4 +17,11 @@ interface AppRepository {
     fun getLocale(): Locale
 
     fun getFontScale(): Single<Float>
+
+    /**
+     * Delete all data from Shared Preferences and Realm Database
+     */
+    fun clearAppData(): Completable
+
+    fun createRealmDatabase(): Completable
 }

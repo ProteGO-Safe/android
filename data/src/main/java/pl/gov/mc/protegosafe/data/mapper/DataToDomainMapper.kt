@@ -55,7 +55,7 @@ fun Map<String, String>.toNotificationDataItem(topic: String?) = PushNotificatio
 
 fun TriageData.toEntity() = TriageItem(timestamp = timestamp)
 
-fun ClearData.toEntity() = ClearItem(clearBtData = clearBtData)
+fun ClearData.toEntity() = ClearItem(clearAll = clearAll)
 
 fun CloseAppData.toEntity() = CloseAppItem(turnOff = turnOff)
 
