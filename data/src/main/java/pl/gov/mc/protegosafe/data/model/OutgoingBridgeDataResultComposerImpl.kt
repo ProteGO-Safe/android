@@ -31,4 +31,8 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
     override fun composeSystemLanguageResult(languageISO: String): String {
         return SystemLanguageResult(languageISO).toJson()
     }
+
+    override fun composeFontScaleResult(fontScale: Float): String {
+        return FontScaleResult(fontScale).toJson()
+    }
 }

@@ -13,17 +13,21 @@ class InternetConnectionManagerImpl(private val context: Context) : InternetConn
     override fun getInternetConnectionStatus(): InternetConnectionStatus {
         var result = InternetConnectionStatus.NONE
 
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
-                as ConnectivityManager?
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             connectivityManager?.run {
                 connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)?.run {
-                    if (hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                        result = InternetConnectionStatus.WIFI
-                    } else if (hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                        result = InternetConnectionStatus.MOBILE_DATA
-                    } else if (hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
-                        result = InternetConnectionStatus.VPN
+                    when {
+                        hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                            result = InternetConnectionStatus.WIFI
+                        }
+                        hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                            result = InternetConnectionStatus.MOBILE_DATA
+                        }
+                        hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> {
+                            result = InternetConnectionStatus.VPN
+                        }
                     }
                 }
             }

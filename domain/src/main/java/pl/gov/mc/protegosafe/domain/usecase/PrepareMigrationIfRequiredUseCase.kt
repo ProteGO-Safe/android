@@ -11,11 +11,13 @@ class PrepareMigrationIfRequiredUseCase(
 ) {
     fun execute(currentVersionName: String): Completable {
         return migrationRepository.prepareMigrationUrlIfRequired()
-            .andThen(Completable.fromAction {
-                migrationRepository.updateCurrentVersion(
-                    currentVersionName
-                )
-            })
+            .andThen(
+                Completable.fromAction {
+                    migrationRepository.updateCurrentVersion(
+                        currentVersionName
+                    )
+                }
+            )
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
     }

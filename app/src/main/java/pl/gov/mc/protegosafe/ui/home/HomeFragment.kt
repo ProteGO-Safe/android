@@ -98,21 +98,25 @@ class HomeFragment : BaseFragment() {
         vm.requestClearData.observe(viewLifecycleOwner, ::requestClearData)
         vm.requestNotifications.observe(viewLifecycleOwner, ::requestNotifications)
         vm.restartActivity.observe(viewLifecycleOwner, ::restartActivity)
-        vm.showConnectionError.observe(viewLifecycleOwner, ::showConnectionError)
+        vm.closeApplication.observe(viewLifecycleOwner, ::closeApplication)
+        vm.showConnectionError.observe(viewLifecycleOwner, ::showError)
     }
 
     private fun setupPWA() {
         get<GetMigrationUrlUseCase>().execute()
-            .subscribe({ url ->
-                if (url.isBlank()) {
+            .subscribe(
+                { url ->
+                    if (url.isBlank()) {
+                        setUpWebView()
+                    } else {
+                        startPwaMigration(url)
+                    }
+                },
+                {
+                    Timber.e(it, "Migration can not be performed")
                     setUpWebView()
-                } else {
-                    startPwaMigration(url)
                 }
-            }, {
-                Timber.e(it, "Migration can not be performed")
-                setUpWebView()
-            }).addTo(disposables)
+            ).addTo(disposables)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -143,7 +147,8 @@ class HomeFragment : BaseFragment() {
                 NativeBridgeInterface(
                     vm::setBridgeData,
                     vm::getBridgeData
-                ), NativeBridgeInterface.NATIVE_BRIDGE_NAME
+                ),
+                NativeBridgeInterface.NATIVE_BRIDGE_NAME
             )
             loadUrl(urlProvider.getWebUrl())
             if (BuildConfig.DEBUG) {
@@ -168,7 +173,8 @@ class HomeFragment : BaseFragment() {
                         activity?.finish()
                     }
                 }
-            })
+            }
+        )
 
         vm.javascriptCode.observe(viewLifecycleOwner, ::runJavascript)
     }
@@ -216,8 +222,11 @@ class HomeFragment : BaseFragment() {
         binding.webView.evaluateJavascript(script, null)
     }
 
-    private fun requestExposureNotificationPermission(exception: ExposureNotificationActionNotResolvedException) {
-        webViewTimber().d("Request exposure notification permission: ${exception.resolutionRequest}")
+    private fun requestExposureNotificationPermission(
+        exception: ExposureNotificationActionNotResolvedException
+    ) {
+        webViewTimber()
+            .d("Request exposure notification permission: ${exception.resolutionRequest}")
         when (val apiException = exception.apiException) {
             is ApiException -> {
                 startIntentSenderForResult(
@@ -265,17 +274,21 @@ class HomeFragment : BaseFragment() {
         activity?.recreate()
     }
 
-    private fun showConnectionError(error: Exception) {
+    private fun closeApplication() {
+        activity?.finish()
+    }
+
+    private fun showError(error: Exception) {
         binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
             binding.webView.visibility = View.VISIBLE
             vm.onUploadRetry()
         }
         binding.missingConnectionLayout.button_cancel.setOnClickListener {
-            vm.sendUploadCanceled()
+            vm.onUploadCanceled()
             binding.webView.visibility = View.VISIBLE
         }
         binding.missingConnectionLayout.text_view_connection_error.setText(
-            getConnectionErrorText(error)
+            getErrorText(error)
         )
         binding.webView.visibility = View.INVISIBLE
     }
@@ -300,7 +313,7 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun getConnectionErrorText(error: Exception): Int {
+    private fun getErrorText(error: Exception): Int {
         return when (error) {
             is UploadException.GetTemporaryExposureKeysError -> {
                 R.string.get_temporary_exposure_keys_error

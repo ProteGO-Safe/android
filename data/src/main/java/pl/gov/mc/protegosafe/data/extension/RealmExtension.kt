@@ -86,13 +86,15 @@ internal fun <T : RealmModel> performSingleQuery(
             emitter.onSuccess(realm.copyFromRealm(it))
         }
 
-        emitter.setDisposable(Disposables.fromAction {
-            result.removeAllChangeListeners()
-            realm.close()
-            if (isRealmThread()) {
-                looper?.thread?.interrupt()
+        emitter.setDisposable(
+            Disposables.fromAction {
+                result.removeAllChangeListeners()
+                realm.close()
+                if (isRealmThread()) {
+                    looper?.thread?.interrupt()
+                }
             }
-        })
+        )
     }.subscribeOn(AndroidSchedulers.from(looper))
         .unsubscribeOn(AndroidSchedulers.from(looper))
 }

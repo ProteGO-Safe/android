@@ -38,32 +38,38 @@ class RemoteConfigurationRepositoryImpl(
     override fun getExposureConfigurationItem(): Single<ExposureConfigurationItem> {
         Timber.d("getExposureConfigurationItem")
         return setUpConfigSettingsIfNeeded()
-            .andThen(Single.fromCallable {
-                _remoteConfig.getString(EXPOSURE_CONFIGURATION).let { configurationJson ->
-                    exposureConfigurationMapper.toEntity(configurationJson)
+            .andThen(
+                Single.fromCallable {
+                    _remoteConfig.getString(EXPOSURE_CONFIGURATION).let { configurationJson ->
+                        exposureConfigurationMapper.toEntity(configurationJson)
+                    }
                 }
-            })
+            )
     }
 
     override fun getDiagnosisKeyDownloadConfiguration(): Single<DiagnosisKeyDownloadConfiguration> {
         Timber.d("getDiagnosisKeyDownloadConfiguration")
         return setUpConfigSettingsIfNeeded()
-            .andThen(Single.fromCallable {
-                _remoteConfig.getString(DIAGNOSIS_KEY_DOWNLOAD_CONFIGURATION)
-                    .let { configurationJson ->
-                        diagnosisKeyDownloadConfigurationMapper.toEntity(configurationJson)
-                    }
-            })
+            .andThen(
+                Single.fromCallable {
+                    _remoteConfig.getString(DIAGNOSIS_KEY_DOWNLOAD_CONFIGURATION)
+                        .let { configurationJson ->
+                            diagnosisKeyDownloadConfigurationMapper.toEntity(configurationJson)
+                        }
+                }
+            )
     }
 
     override fun getRiskLevelConfiguration(): Single<RiskLevelConfigurationItem> {
         Timber.d("getExposureConfigurationItem")
         return setUpConfigSettingsIfNeeded()
-            .andThen(Single.fromCallable {
-                _remoteConfig.getString(RISK_LEVEL_CONFIGURATION).let { configurationJson ->
-                    riskLevelConfigurationMapper.toEntity(configurationJson)
+            .andThen(
+                Single.fromCallable {
+                    _remoteConfig.getString(RISK_LEVEL_CONFIGURATION).let { configurationJson ->
+                        riskLevelConfigurationMapper.toEntity(configurationJson)
+                    }
                 }
-            })
+            )
     }
 
     private fun setUpConfigSettingsIfNeeded() = Completable.defer {
@@ -76,9 +82,11 @@ class RemoteConfigurationRepositoryImpl(
          * fetched more than this many seconds ago, configs are served from the backend instead
          * of local storage.
          */
-        return@defer _remoteConfig.setConfigSettingsAsync(remoteConfigSettings {
-            minimumFetchIntervalInSeconds = TimeUnit.HOURS.toSeconds(1)
-        })
+        return@defer _remoteConfig.setConfigSettingsAsync(
+            remoteConfigSettings {
+                minimumFetchIntervalInSeconds = TimeUnit.HOURS.toSeconds(1)
+            }
+        )
             .toCompletable()
             .andThen(_remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults).toCompletable())
             .doOnComplete { areDefaultSettingsSetUp.set(true) }

@@ -11,6 +11,7 @@ class OnGetBridgeDataUseCase(
     private val getAnalyzeResultUseCase: GetAnalyzeResultUseCase,
     private val getAppVersionNameUseCase: GetAppVersionNameUseCase,
     private val getSystemLanguageUseCase: GetSystemLanguageUseCase,
+    private val getFontScaleUseCase: GetFontScaleUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -32,6 +33,9 @@ class OnGetBridgeDataUseCase(
             }
             OutgoingBridgeDataType.SYSTEM_LANGUAGE -> {
                 getSystemLanguageUseCase.execute()
+            }
+            OutgoingBridgeDataType.GET_FONT_SCALE -> {
+                getFontScaleUseCase.execute()
             }
             else -> {
                 throw IllegalArgumentException("OutgoingBridgeDataType has wrong value")

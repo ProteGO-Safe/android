@@ -49,7 +49,7 @@ class ProcessPendingActivityResultUseCase(
                 if (activityResult.isResultOk) {
                     ActionRequiredItem.TemporaryExposureKeysPermissionGranted
                 } else {
-                    ActionRequiredItem.SendTemporaryExposureKeysUploadFailure
+                    ActionRequiredItem.TemporaryExposureKeysPermissionDenied
                 }
             }
             ActivityRequest.UNKNOWN -> {

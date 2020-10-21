@@ -141,11 +141,13 @@ fun provideRetrofit(): Retrofit {
         sslSocketFactory(OkHttp3Helper.getSSLSocketFactory(), OkHttp3Helper.getTrustManager())
         addInterceptor(OkHttp3Helper.getPinningInterceptor())
         if (BuildConfig.DEBUG) {
-            addInterceptor(HttpLoggingInterceptor {
-                Timber.tag("OkHttp").d(it)
-            }.apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
+            addInterceptor(
+                HttpLoggingInterceptor {
+                    Timber.tag("OkHttp").d(it)
+                }.apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            )
             addNetworkInterceptor(StethoInterceptor())
         }
         followSslRedirects(false)

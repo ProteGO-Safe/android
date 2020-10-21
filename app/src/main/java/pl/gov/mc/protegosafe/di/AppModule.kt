@@ -14,10 +14,12 @@ import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ClearExposureNotificationDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.CloseAppUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetFontScaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
@@ -49,12 +51,12 @@ val appModule = module {
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }
     single<AppUpdateManager> { AppUpdateManagerFactory.create(androidContext()) }
-    single<AppRepository> { AppRepositoryImpl(get()) }
+    single<AppRepository> { AppRepositoryImpl(get(), androidContext()) }
 }
 
 val useCaseModule = module {
-    factory { OnGetBridgeDataUseCase(get(), get(), get(), get(), get(), get()) }
-    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get()) }
+    factory { OnGetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get()) }
+    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
@@ -92,6 +94,8 @@ val useCaseModule = module {
     factory { GetSystemLanguageUseCase(get(), get(), get()) }
     factory { SetAppLanguageUseCase(get(), get(), get()) }
     factory { GetLocaleUseCase(get()) }
+    factory { GetFontScaleUseCase(get(), get(), get()) }
+    factory { CloseAppUseCase(get(), get()) }
 }
 
 val viewModelModule = module {
