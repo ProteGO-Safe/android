@@ -13,6 +13,7 @@ import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.CovidInfoResponseData
 import pl.gov.mc.protegosafe.data.model.DistrictActionData
+import pl.gov.mc.protegosafe.data.model.freecovidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.RiskLevelConfigurationData
 import pl.gov.mc.protegosafe.data.model.TriageData
@@ -29,6 +30,8 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureInformationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.ExposureSummaryItem
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
+import pl.gov.mc.protegosafe.domain.model.FreeCovidTestSubscriptionStatus
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
@@ -153,4 +156,11 @@ fun VoivodeshipDto.toEntity() = VoivodeshipItem(
 fun DistrictActionData.toEntity() = DistrictActionItem(
     type = DistrictActionItem.ActionType.valueOf(type),
     districtId = districtId
+)
+
+fun TestSubscriptionDto.toEntity() = TestSubscriptionItem(
+    guid = guid,
+    status = FreeCovidTestSubscriptionStatus.valueOf(status),
+    accessToken = accessToken,
+    updated = updated
 )

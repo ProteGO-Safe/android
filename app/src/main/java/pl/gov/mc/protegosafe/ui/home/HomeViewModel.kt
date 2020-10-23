@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import pl.gov.mc.protegosafe.data.extension.toJson
+import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.exception.UploadException
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
@@ -103,6 +105,7 @@ class HomeViewModel(
                     bridgeDataResponse(it, dataType, requestId)
                 },
                 {
+                    handleError(it)
                     Timber.e(it, "getBridgeData failed")
                 }
             ).addTo(disposables)

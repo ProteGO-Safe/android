@@ -4,6 +4,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
+import pl.gov.mc.protegosafe.domain.usecase.freecovidtest.UploadTestPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUseCase
@@ -20,12 +21,13 @@ class OnGetBridgeDataUseCase(
     private val updateDistrictsRestrictionsUseCase: UpdateDistrictsRestrictionsUseCase,
     private val handleDistrictActionUseCase: HandleDistrictActionUseCase,
     private val getSubscribedDistrictsResultUseCase: GetSubscribedDistrictsResultUseCase,
+    private val uploadTestPinUseCase: UploadTestPinUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
     fun execute(
         type: OutgoingBridgeDataType,
-        data: String?
+        data: String?,
     ): Single<String> {
         return when (type) {
             OutgoingBridgeDataType.NOTIFICATION_DATA -> {
@@ -59,6 +61,11 @@ class OnGetBridgeDataUseCase(
             }
             OutgoingBridgeDataType.GET_SUBSCRIBED_DISTRICTS -> {
                 getSubscribedDistrictsResultUseCase.execute()
+            }
+            OutgoingBridgeDataType.UPLOAD_FREE_COVID_TEST_PIN -> {
+                data?.let {
+                    uploadTestPinUseCase.execute(it)
+                } ?: throw IllegalArgumentException()
             }
             else -> {
                 throw IllegalArgumentException("OutgoingBridgeDataType has wrong value")
