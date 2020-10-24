@@ -40,12 +40,12 @@ open class CovidTestDao {
 
     fun getTestSubscriptionPin(): Single<TestSubscriptionPinDto> {
         return singleQuery<TestSubscriptionPinDto>()
-            .map { it.firstOrNull() }
+            .map { it.firstOrNull() ?: TestSubscriptionPinDto() }
     }
 
-    fun updateTestPin(testSubscriptionPin: TestSubscriptionPinDto): Completable {
+    fun updateTestPin(testPin: String): Completable {
         return doTransaction {
-            it.copyToRealmOrUpdate(testSubscriptionPin)
+            it.copyToRealmOrUpdate(TestSubscriptionPinDto(testPin = testPin))
         }
     }
 }

@@ -23,7 +23,10 @@ class UploadTestPinUseCase(
         return checkInternet()
             .flatMap {
                 if (it.isConnected()) {
-                    startUpload(payload)
+                    parsePayload(payload)
+                        .flatMap { pinItem ->
+                            startUpload(pinItem.pin)
+                        }
                 } else {
                     throw NoInternetConnectionException()
                 }
@@ -32,13 +35,11 @@ class UploadTestPinUseCase(
             .observeOn(postExecutionThread.scheduler)
     }
 
-    private fun startUpload(payload: String): Single<String> {
-        return parsePayload(payload)
-            .flatMap {
-                covidTestRepository.getTestSubscriptionAccessToken(it.pin)
-            }
+    private fun startUpload(pin: String): Single<String> {
+        return covidTestRepository.getTestSubscriptionAccessToken(pin)
             .flatMapCompletable {
                 covidTestRepository.saveTestSubscriptionAccessToken(it)
+                    .andThen(covidTestRepository.saveTestSubscriptionPin(pin))
             }
             .andThen(
                 Single.fromCallable {

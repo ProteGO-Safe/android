@@ -58,16 +58,8 @@ class CovidTestRepositoryImpl(
             .map { it.testPin }
     }
 
-    override fun updateTestSubscriptionPin(testPin: String): Completable {
-        return covidTestDao.getTestSubscriptionPin()
-            .map {
-                it.testPin = testPin
-
-                it
-            }
-            .flatMapCompletable {
-                covidTestDao.updateTestPin(it)
-            }
+    override fun saveTestSubscriptionPin(testPin: String): Completable {
+        return covidTestDao.updateTestPin(testPin)
     }
 
     private fun getTestSubscription(): Single<TestSubscriptionItem> {
