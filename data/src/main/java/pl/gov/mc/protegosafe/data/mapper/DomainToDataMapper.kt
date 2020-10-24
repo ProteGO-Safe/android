@@ -6,6 +6,7 @@ import pl.gov.mc.protegosafe.data.extension.toBase64
 import pl.gov.mc.protegosafe.data.model.DistrictData
 import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ExposureDto
+import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeyRequestData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeysUploadRequestBody
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
@@ -13,6 +14,7 @@ import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
+import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
@@ -83,3 +85,10 @@ fun VoivodeshipItem.toVoivodeshipData() = VoivodeshipData(
     name = name,
     districts = districts.map { it.toDistrictData() }
 )
+
+fun RiskLevelItem.toRiskLevelData() = when (this) {
+    RiskLevelItem.NO_RISK -> RiskLevelData.NO_RISK
+    RiskLevelItem.LOW_RISK -> RiskLevelData.LOW_RISK
+    RiskLevelItem.MIDDLE_RISK -> RiskLevelData.MIDDLE_RISK
+    RiskLevelItem.HIGH_RISK -> RiskLevelData.HIGH_RISK
+}

@@ -8,4 +8,5 @@ interface CovidTestRepository {
     fun saveTestSubscriptionAccessToken(accessToken: String): Completable
     fun getTestSubscriptionPin(): Single<String>
     fun updateTestSubscriptionPin(testPin: String): Completable
+    fun clearCovidTestData(): Completable
 }

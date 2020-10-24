@@ -2,13 +2,13 @@ package pl.gov.mc.protegosafe.data.model
 
 import pl.gov.mc.protegosafe.data.extension.toJson
 import pl.gov.mc.protegosafe.data.mapper.toDistrictDto
+import pl.gov.mc.protegosafe.data.mapper.toRiskLevelData
 import pl.gov.mc.protegosafe.data.mapper.toVoivodeshipData
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
-import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.ResultStatus
-import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
+import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 
@@ -21,13 +21,9 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
         AppLifecycleStateResult(state.code).toJson()
 
     override fun composeAnalyzeResult(
-        riskLevelConfigurationItem: RiskLevelConfigurationItem,
-        exposure: ExposureItem
+        riskLevelItem: RiskLevelItem
     ): String = AnalyzeResultData(
-        RiskLevelData.fromRiskScore(
-            riskLevelConfigurationItem,
-            exposure.riskScore
-        ).value
+        riskLevelItem.toRiskLevelData().value
     ).toJson()
 
     override fun composeAppVersionNameResult(versionName: String): String {

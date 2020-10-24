@@ -6,6 +6,7 @@ import io.reactivex.Single
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionPinDto
 import singleQuery
+import timber.log.Timber
 
 open class CovidTestDao {
 
@@ -46,6 +47,29 @@ open class CovidTestDao {
     fun updateTestPin(testSubscriptionPin: TestSubscriptionPinDto): Completable {
         return doTransaction {
             it.copyToRealmOrUpdate(testSubscriptionPin)
+        }
+    }
+
+    fun clearCovidTestData(): Completable {
+        Timber.d("Clearing all Covid Test data")
+        return removeTestSubscription()
+            .andThen(removeTestSubscriptionPin())
+    }
+
+    private fun removeTestSubscription(): Completable {
+        return doTransaction {
+            it.where(TestSubscriptionDto::class.java).findAll().forEach { subscriptionDto ->
+                subscriptionDto.deleteFromRealm()
+            }
+        }
+    }
+
+    private fun removeTestSubscriptionPin(): Completable {
+        return doTransaction {
+            it.where(TestSubscriptionPinDto::class.java).findAll()
+                .forEach { subscriptionPinDto ->
+                    subscriptionPinDto.deleteFromRealm()
+                }
         }
     }
 }

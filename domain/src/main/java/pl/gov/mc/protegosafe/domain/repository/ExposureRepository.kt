@@ -4,6 +4,8 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import java.util.Date
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
+import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
+import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 
 interface ExposureRepository {
 
@@ -27,4 +29,9 @@ interface ExposureRepository {
      * Delete all records from token table
      */
     fun nukeDb(): Completable
+
+    fun getRiskLevel(
+        riskLevelConfigurationItem: RiskLevelConfigurationItem,
+        exposure: ExposureItem
+    ): Single<RiskLevelItem>
 }
