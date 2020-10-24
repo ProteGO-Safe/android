@@ -1,5 +1,6 @@
 package pl.gov.mc.protegosafe.domain.repository
 
+import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 
@@ -20,12 +21,13 @@ interface DiagnosisKeyRepository {
      *
      * @param timestamp Unix epoch time in seconds
      */
-    fun setLatestProcessedDiagnosisKeyTimestamp(timestamp: Long)
+    fun setLatestProcessedDiagnosisKeyTimestamp(timestamp: Long): Completable
 
     /**
      * Gets the latest processed Diagnosis Key file timestamps.
      *
      *  @return The latest processed Diagnosis Key file timestamps in Unix epoch time in seconds
+     *  or 0L as default value
      */
-    fun getLatestProcessedDiagnosisKeyTimestamp(): Long
+    fun getLatestProcessedDiagnosisKeyTimestamp(): Single<Long>
 }
