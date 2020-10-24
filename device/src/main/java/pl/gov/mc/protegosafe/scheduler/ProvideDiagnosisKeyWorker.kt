@@ -32,26 +32,26 @@ class ProvideDiagnosisKeyWorker(
                 Timber.w("Exposure notifications isn't running")
                 Single.just(Result.failure())
             } else {
-                diagnosisKeyRepository.getDiagnosisKeys(
-                    diagnosisKeyRepository.getLatestProcessedDiagnosisKeyTimestamp()
-                ).flatMap { diagnosisKeyFiles ->
-                    if (diagnosisKeyFiles.isEmpty()) {
-                        Timber.i("No new diagnosis keys to provide.")
-                        Single.just(Result.success())
-                    } else {
-                        Timber.d("There are new diagnosis keys to provide: $diagnosisKeyFiles")
-                        getExposureConfiguration().flatMap { exposureConfiguration ->
-                            Timber.d("getExposureConfiguration() = $exposureConfiguration")
-                            provideDiagnosisKeysUseCase.execute(
-                                files = diagnosisKeyFiles,
-                                exposureConfigurationItem = exposureConfiguration
-                            ).toSingleDefault(Result.success())
+                diagnosisKeyRepository.getLatestProcessedDiagnosisKeyTimestamp()
+                    .flatMap { diagnosisKeyRepository.getDiagnosisKeys(it) }
+                    .flatMap { diagnosisKeyFiles ->
+                        if (diagnosisKeyFiles.isEmpty()) {
+                            Timber.i("No new diagnosis keys to provide.")
+                            Single.just(Result.success())
+                        } else {
+                            Timber.d("There are new diagnosis keys to provide: $diagnosisKeyFiles")
+                            getExposureConfiguration().flatMap { exposureConfiguration ->
+                                Timber.d("getExposureConfiguration() = $exposureConfiguration")
+                                provideDiagnosisKeysUseCase.execute(
+                                    files = diagnosisKeyFiles,
+                                    exposureConfigurationItem = exposureConfiguration
+                                ).toSingleDefault(Result.success())
+                            }
                         }
+                    }.onErrorResumeNext {
+                        Timber.d(it, "ProvideDiagnosisKeyWorker")
+                        Single.just(Result.retry())
                     }
-                }.onErrorResumeNext {
-                    Timber.d(it, "ProvideDiagnosisKeyWorker")
-                    Single.just(Result.retry())
-                }
             }
         }
     }
