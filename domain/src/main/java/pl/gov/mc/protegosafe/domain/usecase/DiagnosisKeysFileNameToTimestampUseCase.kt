@@ -4,7 +4,7 @@ class DiagnosisKeysFileNameToTimestampUseCase {
     companion object {
         /*
          * Regular expression for diagnosis keys file names that have the following format:
-         * "/1602849600-1602864000-00001.zip", where "1589918499" is a timestamp with file creation time in
+         * "/1602849600-1602864000-00001.zip", where "1602864000" is a timestamp with file creation time in
          * Unix epoch in seconds and "00001" is key version.
          */
         private val DIAGNOSIS_KEYS_FILE_NAME_REGEX = "/?([0-9]{10})-([0-9]{5}).zip".toRegex()
