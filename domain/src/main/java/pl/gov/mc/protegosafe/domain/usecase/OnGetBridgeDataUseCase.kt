@@ -62,7 +62,7 @@ class OnGetBridgeDataUseCase(
             OutgoingBridgeDataType.GET_SUBSCRIBED_DISTRICTS -> {
                 getSubscribedDistrictsResultUseCase.execute()
             }
-            OutgoingBridgeDataType.UPLOAD_FREE_COVID_TEST_PIN -> {
+            OutgoingBridgeDataType.UPLOAD_COVID_TEST_PIN -> {
                 data?.let {
                     uploadTestPinUseCase.execute(it)
                 } ?: throw IllegalArgumentException()
