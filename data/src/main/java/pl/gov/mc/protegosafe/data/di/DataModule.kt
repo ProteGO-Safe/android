@@ -29,6 +29,7 @@ import pl.gov.mc.protegosafe.data.db.AppVersionDataStore
 import pl.gov.mc.protegosafe.data.db.CovidInfoDataStore
 import pl.gov.mc.protegosafe.data.db.dao.ExposureDao
 import pl.gov.mc.protegosafe.data.db.dao.CovidInfoDao
+import pl.gov.mc.protegosafe.data.db.dao.DiagnosisKeyDao
 import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.data.mapper.ApiExceptionMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.DiagnosisKeyDownloadConfigurationMapperImpl
@@ -141,6 +142,7 @@ val dataModule = module {
     single { CovidInfoDao() }
     single { CovidInfoDataStore(get()) }
     single<OutgoingBridgePayloadMapper> { OutgoingBridgePayloadMapperImpl() }
+    single { DiagnosisKeyDao() }
     single { CovidTestDao() }
     single<CovidTestRepository> { CovidTestRepositoryImpl(get(), get(), get()) }
 }

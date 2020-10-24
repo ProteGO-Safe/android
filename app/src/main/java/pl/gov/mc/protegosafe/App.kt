@@ -18,8 +18,6 @@ import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
 import org.koin.core.get
 import org.koin.core.inject
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.OffsetDateTime
 import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.data.di.dataModule
@@ -29,7 +27,6 @@ import pl.gov.mc.protegosafe.di.deviceModule
 import pl.gov.mc.protegosafe.di.useCaseModule
 import pl.gov.mc.protegosafe.di.viewModelModule
 import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository
-import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import timber.log.Timber
@@ -57,7 +54,6 @@ class App : Application(), KoinComponent {
         initializeThreeTenABP()
         scheduleRemoveOldExposuresTask()
         scheduleUpdateDistrictsRestrictionsTask()
-        setTemporaryExposureKeysDownloadTimestampIfEmpty()
     }
 
     private fun prepareMigrationIfRequired() {
@@ -124,16 +120,6 @@ class App : Application(), KoinComponent {
     private fun initializeLogging() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-        }
-    }
-
-    private fun setTemporaryExposureKeysDownloadTimestampIfEmpty() {
-        get<DiagnosisKeyRepository>().apply {
-            if (getLatestProcessedDiagnosisKeyTimestamp() == 0L) {
-                setLatestProcessedDiagnosisKeyTimestamp(
-                    LocalDateTime.now().toInstant(OffsetDateTime.now().offset).epochSecond
-                )
-            }
         }
     }
 

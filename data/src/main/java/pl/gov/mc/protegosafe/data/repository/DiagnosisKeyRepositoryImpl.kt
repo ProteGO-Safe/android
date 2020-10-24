@@ -6,7 +6,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.data.cloud.DiagnosisKeyDownloadService
 import pl.gov.mc.protegosafe.data.cloud.downloadToFile
-import pl.gov.mc.protegosafe.data.db.SharedPreferencesDelegates
+import pl.gov.mc.protegosafe.data.db.dao.DiagnosisKeyDao
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
@@ -21,19 +21,14 @@ class DiagnosisKeyRepositoryImpl(
     private val diagnosisKeyDownloadService: DiagnosisKeyDownloadService,
     private val remoteConfigurationRepository: RemoteConfigurationRepository,
     private val internetConnectionManager: InternetConnectionManager,
-    sharedPreferencesDelegates: SharedPreferencesDelegates
+    private val diagnosisKeyDao: DiagnosisKeyDao
 ) : DiagnosisKeyRepository {
 
     companion object {
         private const val DIAGNOSIS_KEYS_DOWNLOAD_DIRECTORY = "DiagnosisKeys"
-        private const val LATEST_PROCESSED_DIAGNOSIS_KEY_TIMESTAMP_PREF_KEY =
-            "LATEST_PROCESSED_DIAGNOSIS_KEY_TIMESTAMP_PREF_KEY"
     }
 
     private val _downloadDirectory = initDownloadDirectory()
-    private var _latestProcessedDiagnosisKeyTimestamp by sharedPreferencesDelegates.longPref(
-        LATEST_PROCESSED_DIAGNOSIS_KEY_TIMESTAMP_PREF_KEY, 0
-    )
 
     override fun getDiagnosisKeys(createdAfter: Long): Single<List<File>> {
         Timber.d("getDiagnosisKeys, createdAfter: $createdAfter")
@@ -84,31 +79,58 @@ class DiagnosisKeyRepositoryImpl(
             }
     }
 
-    override fun setLatestProcessedDiagnosisKeyTimestamp(timestamp: Long) {
+    override fun setLatestProcessedDiagnosisKeyTimestamp(timestamp: Long): Completable {
         Timber.d("setLatestProcessedDiagnosisKeyTimestamp")
-        _latestProcessedDiagnosisKeyTimestamp = timestamp
+        return diagnosisKeyDao.updateLatestProcessedDiagnosisKeyTimestamp(timestamp)
     }
 
-    override fun getLatestProcessedDiagnosisKeyTimestamp(): Long {
+    override fun getLatestProcessedDiagnosisKeyTimestamp(): Single<Long> {
         Timber.d("getLatestProcessedDiagnosisKeyTimestamp")
-        return _latestProcessedDiagnosisKeyTimestamp
+        return diagnosisKeyDao.getLatestProcessedDiagnosisKeyTimestamp()
     }
 
     private fun getFilteredDiagnosisKeysFilesNames(createdAfter: Long): Single<List<String>> {
         Timber.d("getDiagnosisKeysFilesStorageReferences")
 
         return getDiagnosisKeysFiles()
-            .observeOn(Schedulers.io())
-            .map { listResult ->
-                return@map listResult.filter { item ->
-                    require(item.isNotBlank())
-                    DiagnosisKeysFileNameToTimestampUseCase().execute(item)
-                        ?.let { fileTimestamp ->
-                            require(fileTimestamp > 0)
-                            fileTimestamp > createdAfter
-                        } ?: false
+            .flatMap { listResult ->
+                if (createdAfter == 0L) {
+                    setInitialDiagnosisKeysDownloadTimestamp(listResult)
+                        .toSingleDefault(emptyList())
+                } else {
+                    Single.fromCallable {
+                        getNotProcessedFileList(createdAfter, listResult)
+                    }
                 }
             }
+    }
+
+    private fun setInitialDiagnosisKeysDownloadTimestamp(listResult: List<String>): Completable {
+        return Single.just(listResult)
+            .map {
+                listResult.map {
+                    DiagnosisKeysFileNameToTimestampUseCase().execute(it)
+                }.maxByOrNull {
+                    it ?: 0L
+                } ?: 0L
+            }
+            .flatMapCompletable {
+                setLatestProcessedDiagnosisKeyTimestamp(it)
+            }
+    }
+
+    private fun getNotProcessedFileList(
+        createdAfter: Long,
+        listResult: List<String>
+    ): List<String> {
+        return listResult.filter { item ->
+            require(item.isNotBlank())
+            DiagnosisKeysFileNameToTimestampUseCase().execute(item)
+                ?.let { fileTimestamp ->
+                    require(fileTimestamp > 0)
+                    fileTimestamp > createdAfter
+                } ?: false
+        }
     }
 
     private fun getDiagnosisKeysFiles(): Single<List<String>> {
