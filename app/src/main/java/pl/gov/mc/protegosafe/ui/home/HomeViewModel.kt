@@ -103,6 +103,7 @@ class HomeViewModel(
                     bridgeDataResponse(it, dataType, requestId)
                 },
                 {
+                    handleError(it)
                     Timber.e(it, "getBridgeData failed")
                 }
             ).addTo(disposables)

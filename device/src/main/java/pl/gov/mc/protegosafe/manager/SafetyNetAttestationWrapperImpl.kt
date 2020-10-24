@@ -5,7 +5,6 @@ import com.google.android.gms.safetynet.SafetyNet
 import com.google.common.io.BaseEncoding
 import com.google.gson.Gson
 import io.reactivex.Single
-import pl.gov.mc.protegosafe.domain.extension.toSHA256
 import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKey
 import pl.gov.mc.protegosafe.domain.model.SafetyNetResult
@@ -21,16 +20,15 @@ class SafetyNetAttestationWrapperImpl(
 
     private val _base64: BaseEncoding = BaseEncoding.base64()
 
+    override fun getTokenFor(byteArray: ByteArray): Single<String> {
+        val nonce = _base64.encode(byteArray)
+        return safetyNetAttestationFor(nonce)
+    }
+
     override fun attestFor(byteArray: ByteArray): Single<SafetyNetResult> {
         val nonce = _base64.encode(byteArray)
         return safetyNetAttestationFor(nonce)
             .map { parseSafetyNetResult(nonce, it) }
-    }
-
-    override fun attestFor(keys: List<DiagnosisKey>, regions: List<String>): Single<String> {
-        val cleartext: String = cleartextFor(keys, regions)
-        val nonce: String = _base64.omitPadding().encode(cleartext.toSHA256())
-        return safetyNetAttestationFor(nonce)
     }
 
     private fun safetyNetAttestationFor(nonce: String): Single<String> {
