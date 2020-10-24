@@ -40,7 +40,7 @@ import pl.gov.mc.protegosafe.domain.usecase.StopExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
-import pl.gov.mc.protegosafe.domain.usecase.freecovidtest.UploadTestPinUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.UploadTestPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUseCase

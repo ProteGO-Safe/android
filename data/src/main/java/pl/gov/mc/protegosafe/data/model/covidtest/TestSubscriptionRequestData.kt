@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.data.model.freecovidtest
+package pl.gov.mc.protegosafe.data.model.covidtest
 
 import com.google.gson.annotations.SerializedName
 

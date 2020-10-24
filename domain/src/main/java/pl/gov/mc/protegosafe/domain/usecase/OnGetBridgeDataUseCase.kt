@@ -4,7 +4,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
-import pl.gov.mc.protegosafe.domain.usecase.freecovidtest.UploadTestPinUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.UploadTestPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUseCase

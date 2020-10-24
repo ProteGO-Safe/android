@@ -3,20 +3,20 @@ package pl.gov.mc.protegosafe.data.repository
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import pl.gov.mc.protegosafe.data.cloud.FreeCovidTestService
+import pl.gov.mc.protegosafe.data.cloud.CovidTestService
 import pl.gov.mc.protegosafe.data.mapper.toEntity
-import pl.gov.mc.protegosafe.data.model.freecovidtest.TestSubscriptionRequestData
-import pl.gov.mc.protegosafe.data.db.dao.FreeCovidTestDao
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionRequestData
+import pl.gov.mc.protegosafe.data.db.dao.CovidTestDao
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
-import pl.gov.mc.protegosafe.domain.repository.FreeCovidTestRepository
+import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
 import pl.gov.mc.protegosafe.domain.repository.SafetyNetRepository
 import java.util.UUID
 
-class FreeCovidTestRepositoryImpl(
-    private val freeCovidTestDao: FreeCovidTestDao,
-    private val freeCovidTestService: FreeCovidTestService,
+class CovidTestRepositoryImpl(
+    private val covidTestDao: CovidTestDao,
+    private val covidTestService: CovidTestService,
     private val safetyNetRepository: SafetyNetRepository,
-) : FreeCovidTestRepository {
+) : CovidTestRepository {
 
     override fun getTestSubscriptionAccessToken(testPin: String): Single<String> {
         return getTestSubscription()
@@ -31,7 +31,7 @@ class FreeCovidTestRepositoryImpl(
             }
             .observeOn(Schedulers.io())
             .flatMap { createSubscriptionRequest ->
-                freeCovidTestService.createSubscription(
+                covidTestService.createSubscription(
                     createSubscriptionRequest.safetynetToken,
                     createSubscriptionRequest.testSubscriptionRequestData
                 )
@@ -41,7 +41,7 @@ class FreeCovidTestRepositoryImpl(
     }
 
     override fun saveTestSubscriptionAccessToken(accessToken: String): Completable {
-        return freeCovidTestDao.getTestSubscription()
+        return covidTestDao.getTestSubscription()
             .map {
                 it.accessToken = accessToken
                 it.updated = System.currentTimeMillis()
@@ -49,29 +49,29 @@ class FreeCovidTestRepositoryImpl(
                 it
             }
             .flatMapCompletable {
-                freeCovidTestDao.updateTestSubscription(it)
+                covidTestDao.updateTestSubscription(it)
             }
     }
 
     override fun getTestSubscriptionPin(): Single<String> {
-        return freeCovidTestDao.getTestSubscriptionPin()
+        return covidTestDao.getTestSubscriptionPin()
             .map { it.testPin }
     }
 
     override fun updateTestSubscriptionPin(testPin: String): Completable {
-        return freeCovidTestDao.getTestSubscriptionPin()
+        return covidTestDao.getTestSubscriptionPin()
             .map {
                 it.testPin = testPin
 
                 it
             }
             .flatMapCompletable {
-                freeCovidTestDao.updateTestPin(it)
+                covidTestDao.updateTestPin(it)
             }
     }
 
     private fun getTestSubscription(): Single<TestSubscriptionItem> {
-        return freeCovidTestDao.getTestSubscription()
+        return covidTestDao.getTestSubscription()
             .map { it.toEntity() }
     }
 

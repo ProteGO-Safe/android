@@ -1,6 +1,5 @@
-package pl.gov.mc.protegosafe.domain.usecase.freecovidtest
+package pl.gov.mc.protegosafe.domain.usecase.covidtest
 
-import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
@@ -10,11 +9,11 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.ResultStatus
-import pl.gov.mc.protegosafe.domain.repository.FreeCovidTestRepository
+import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
 import java.net.UnknownHostException
 
 class UploadTestPinUseCase(
-    private val freeCovidTestRepository: FreeCovidTestRepository,
+    private val covidTestRepository: CovidTestRepository,
     private val payloadMapper: OutgoingBridgePayloadMapper,
     private val internetConnectionManager: InternetConnectionManager,
     private val resultComposer: OutgoingBridgeDataResultComposer,
@@ -36,10 +35,10 @@ class UploadTestPinUseCase(
     private fun startUpload(payload: String): Single<String> {
         return parsePayload(payload)
             .flatMap {
-                freeCovidTestRepository.getTestSubscriptionAccessToken(it.pin)
+                covidTestRepository.getTestSubscriptionAccessToken(it.pin)
             }
             .flatMapCompletable {
-                freeCovidTestRepository.saveTestSubscriptionAccessToken(it)
+                covidTestRepository.saveTestSubscriptionAccessToken(it)
             }
             .andThen(
                 Single.fromCallable {
@@ -67,9 +66,5 @@ class UploadTestPinUseCase(
         return Single.fromCallable {
             payloadMapper.toPinItem(payload)
         }
-    }
-
-    private fun saveTestPin(testPin: String): Completable {
-        return freeCovidTestRepository.updateTestSubscriptionPin(testPin)
     }
 }
