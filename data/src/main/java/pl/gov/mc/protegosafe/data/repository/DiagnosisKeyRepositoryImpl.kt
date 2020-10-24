@@ -100,15 +100,38 @@ class DiagnosisKeyRepositoryImpl(
         return getDiagnosisKeysFiles()
             .observeOn(Schedulers.io())
             .map { listResult ->
-                return@map listResult.filter { item ->
-                    require(item.isNotBlank())
-                    DiagnosisKeysFileNameToTimestampUseCase().execute(item)
-                        ?.let { fileTimestamp ->
-                            require(fileTimestamp > 0)
-                            fileTimestamp > createdAfter
-                        } ?: false
+                if (createdAfter == 0L) {
+                    setInitialDiagnosisKeysDownloadTimestamp(listResult)
+
+                    emptyList() // Don't process any data on init
+                } else {
+                    getNotProcessedFileList(createdAfter, listResult)
                 }
             }
+    }
+
+    private fun setInitialDiagnosisKeysDownloadTimestamp(listResult: List<String>) {
+        listResult.map {
+            DiagnosisKeysFileNameToTimestampUseCase().execute(it)
+        }.maxByOrNull {
+            it ?: 0
+        }?.let {
+            setLatestProcessedDiagnosisKeyTimestamp(it)
+        }
+    }
+
+    private fun getNotProcessedFileList(
+        createdAfter: Long,
+        listResult: List<String>
+    ): List<String> {
+        return listResult.filter { item ->
+            require(item.isNotBlank())
+            DiagnosisKeysFileNameToTimestampUseCase().execute(item)
+                ?.let { fileTimestamp ->
+                    require(fileTimestamp > 0)
+                    fileTimestamp > createdAfter
+                } ?: false
+        }
     }
 
     private fun getDiagnosisKeysFiles(): Single<List<String>> {
