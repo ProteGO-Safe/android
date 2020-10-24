@@ -10,7 +10,7 @@ import retrofit2.http.POST
 
 interface CovidTestService {
 
-    @POST("${BuildConfig.FREE_COVID_TEST_URL}createSubscription")
+    @POST("${BuildConfig.COVID_TEST_URL}createSubscription")
     fun createSubscription(
         @Header(SAFETY_TOKEN_HEADER) safetynetToken: String,
         @Body testSubscriptionRequestData: TestSubscriptionRequestData,
