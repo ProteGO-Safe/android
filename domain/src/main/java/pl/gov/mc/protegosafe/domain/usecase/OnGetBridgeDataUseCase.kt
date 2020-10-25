@@ -5,6 +5,7 @@ import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.GetTestSubscriptionPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.GetTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.UploadTestSubscriptionPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
@@ -25,6 +26,7 @@ class OnGetBridgeDataUseCase(
     private val getSubscribedDistrictsResultUseCase: GetSubscribedDistrictsResultUseCase,
     private val uploadTestSubscriptionPinUseCase: UploadTestSubscriptionPinUseCase,
     private val getTestSubscriptionStatusUseCase: GetTestSubscriptionStatusUseCase,
+    private val getTestSubscriptionPinUseCase: GetTestSubscriptionPinUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -73,6 +75,9 @@ class OnGetBridgeDataUseCase(
             }
             OutgoingBridgeDataType.GET_COVID_TEST_SUBSCRIPTION_STATUS -> {
                 getTestSubscriptionStatusUseCase.execute(onResultActionRequired)
+            }
+            OutgoingBridgeDataType.GET_COVID_TEST_SUBSCRIPTION_PIN -> {
+                getTestSubscriptionPinUseCase.execute()
             }
             else -> {
                 throw IllegalArgumentException("OutgoingBridgeDataType has wrong value")

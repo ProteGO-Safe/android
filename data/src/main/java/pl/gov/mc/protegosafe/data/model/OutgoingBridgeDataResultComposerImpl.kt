@@ -1,7 +1,8 @@
 package pl.gov.mc.protegosafe.data.model
 
+import com.google.gson.GsonBuilder
 import pl.gov.mc.protegosafe.data.extension.toJson
-import pl.gov.mc.protegosafe.data.mapper.toDistrictDto
+import pl.gov.mc.protegosafe.data.mapper.toDistrictData
 import pl.gov.mc.protegosafe.data.mapper.toTestSubscriptionStatusData
 import pl.gov.mc.protegosafe.data.mapper.toRiskLevelData
 import pl.gov.mc.protegosafe.data.mapper.toVoivodeshipData
@@ -56,7 +57,7 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
     }
 
     override fun composeSubscribedDistrictsResult(subscribedDistricts: List<DistrictItem>): String {
-        return SubscribedDistrictsResult(subscribedDistricts.map { it.toDistrictDto() }).toJson()
+        return SubscribedDistrictsResult(subscribedDistricts.map { it.toDistrictData() }).toJson()
     }
 
     override fun composeUploadTestPinResult(resultStatus: ResultStatus): String {
@@ -67,5 +68,18 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
         testSubscriptionItem: TestSubscriptionItem?
     ): String {
         return testSubscriptionItem?.toTestSubscriptionStatusData()?.toJson() ?: ""
+    }
+
+    override fun composeTestSubscriptionPinResult(pin: String): String {
+        return GsonBuilder().serializeNulls().create()
+            .toJson(
+                TestSubscriptionPinData(
+                    if (pin.isEmpty()) {
+                        null
+                    } else {
+                        pin
+                    }
+                )
+            )
     }
 }
