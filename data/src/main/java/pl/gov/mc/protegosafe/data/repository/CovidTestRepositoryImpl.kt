@@ -1,12 +1,18 @@
 package pl.gov.mc.protegosafe.data.repository
 
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.data.cloud.CovidTestService
 import pl.gov.mc.protegosafe.data.mapper.toEntity
-import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionRequestData
+import pl.gov.mc.protegosafe.data.model.covidtest.CreateTestSubscriptionRequestData
 import pl.gov.mc.protegosafe.data.db.dao.CovidTestDao
+import pl.gov.mc.protegosafe.data.mapper.toTestSubscriptionDto
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionCreateRequest
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusRequest
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusRequestBody
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionStatus
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
 import pl.gov.mc.protegosafe.domain.repository.SafetyNetRepository
@@ -18,39 +24,68 @@ class CovidTestRepositoryImpl(
     private val safetyNetRepository: SafetyNetRepository,
 ) : CovidTestRepository {
 
-    override fun getTestSubscriptionAccessToken(testPin: String): Single<String> {
-        return getTestSubscription()
-            .zipWith(getSafetynetToken()) { testSubscription, safetynetToken ->
-                CreateSubscriptionRequest(
+    override fun getTestSubscription(testPin: String, guid: String): Single<TestSubscriptionItem> {
+        return getSafetynetToken()
+            .observeOn(Schedulers.io())
+            .map { safetynetToken ->
+                TestSubscriptionCreateRequest(
                     safetynetToken = safetynetToken,
-                    testSubscriptionRequestData = getCreateSubscriptionRequestData(
-                        testPin = testPin,
-                        guid = testSubscription.guid
+                    createTestSubscriptionRequestData = CreateTestSubscriptionRequestData(
+                        code = testPin,
+                        guid = guid
+                    )
+                )
+            }
+            .flatMap { createSubscriptionRequest ->
+                covidTestService.createSubscription(
+                    createSubscriptionRequest.safetynetToken,
+                    createSubscriptionRequest.createTestSubscriptionRequestData
+                )
+            }.map {
+                TestSubscriptionItem(
+                    guid = guid,
+                    accessToken = it.token
+                )
+            }
+    }
+
+    override fun updateTestSubscriptionStatus(
+        testSubscription: TestSubscriptionItem
+    ): Single<TestSubscriptionItem> {
+        return getSafetynetToken()
+            .observeOn(Schedulers.io())
+            .map { safetynetToken ->
+                TestSubscriptionStatusRequest(
+                    accessToken = testSubscription.accessToken,
+                    safetynetToken = safetynetToken,
+                    testSubscriptionStatusRequestBody = TestSubscriptionStatusRequestBody(
+                        testSubscription.guid
                     )
                 )
             }
             .observeOn(Schedulers.io())
-            .flatMap { createSubscriptionRequest ->
-                covidTestService.createSubscription(
-                    createSubscriptionRequest.safetynetToken,
-                    createSubscriptionRequest.testSubscriptionRequestData
+            .flatMap {
+                covidTestService.getSubscriptionStatus(
+                    accessToken = it.accessToken,
+                    safetynetToken = it.safetynetToken,
+                    testSubscriptionStatusRequestBody = it.testSubscriptionStatusRequestBody
                 )
             }.map {
-                it.token
+                TestSubscriptionItem(
+                    guid = it.guid,
+                    accessToken = testSubscription.accessToken,
+                    status = TestSubscriptionStatus.valueOf(it.status)
+                )
             }
     }
 
-    override fun saveTestSubscriptionAccessToken(accessToken: String): Completable {
-        return covidTestDao.getTestSubscription()
-            .map {
-                it.accessToken = accessToken
-                it.updated = System.currentTimeMillis()
+    override fun saveTestSubscription(testSubscriptionItem: TestSubscriptionItem): Completable {
+        return covidTestDao.updateTestSubscription(testSubscriptionItem.toTestSubscriptionDto())
+    }
 
-                it
-            }
-            .flatMapCompletable {
-                covidTestDao.updateTestSubscription(it)
-            }
+    override fun getTestSubscription(): Maybe<TestSubscriptionItem> {
+        return covidTestDao.getTestSubscription()
+            .map { it.toEntity() }
     }
 
     override fun getTestSubscriptionPin(): Single<String> {
@@ -66,27 +101,10 @@ class CovidTestRepositoryImpl(
         return covidTestDao.clearCovidTestData()
     }
 
-    private fun getTestSubscription(): Single<TestSubscriptionItem> {
-        return covidTestDao.getTestSubscription()
-            .map { it.toEntity() }
-    }
-
     private fun getSafetynetToken(): Single<String> {
         return safetyNetRepository.generateNonce(UUID.randomUUID().toString())
             .flatMap {
                 safetyNetRepository.getTokenFor(it)
             }
     }
-
-    private fun getCreateSubscriptionRequestData(
-        testPin: String,
-        guid: String
-    ): TestSubscriptionRequestData {
-        return TestSubscriptionRequestData(guid, testPin)
-    }
-
-    inner class CreateSubscriptionRequest(
-        val safetynetToken: String,
-        val testSubscriptionRequestData: TestSubscriptionRequestData
-    )
 }

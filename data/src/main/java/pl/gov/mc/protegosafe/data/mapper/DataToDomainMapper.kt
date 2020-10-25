@@ -32,7 +32,7 @@ import pl.gov.mc.protegosafe.domain.model.ExposureInformationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.ExposureSummaryItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
-import pl.gov.mc.protegosafe.domain.model.CovidTestSubscriptionStatus
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionStatus
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
@@ -162,9 +162,9 @@ fun DistrictActionData.toEntity() = DistrictActionItem(
 
 fun TestSubscriptionDto.toEntity() = TestSubscriptionItem(
     guid = guid,
-    status = CovidTestSubscriptionStatus.valueOf(status),
-    accessToken = accessToken,
-    updated = updated
+    status = TestSubscriptionStatus.valueOf(status),
+    updated = updated,
+    accessToken = accessToken
 )
 
 fun RiskLevelData.toEntity() = when (this) {

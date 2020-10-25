@@ -1,5 +1,6 @@
 package pl.gov.mc.protegosafe.domain.usecase.covidtest
 
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
@@ -9,10 +10,12 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.ResultStatus
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
 import java.net.UnknownHostException
+import java.util.UUID
 
-class UploadTestPinUseCase(
+class UploadTestSubscriptionPinUseCase(
     private val covidTestRepository: CovidTestRepository,
     private val payloadMapper: OutgoingBridgePayloadMapper,
     private val internetConnectionManager: InternetConnectionManager,
@@ -36,10 +39,9 @@ class UploadTestPinUseCase(
     }
 
     private fun startUpload(pin: String): Single<String> {
-        return covidTestRepository.getTestSubscriptionAccessToken(pin)
-            .flatMapCompletable {
-                covidTestRepository.saveTestSubscriptionAccessToken(it)
-                    .andThen(covidTestRepository.saveTestSubscriptionPin(pin))
+        return covidTestRepository.getTestSubscription(pin, UUID.randomUUID().toString())
+            .flatMapCompletable { testSubscription ->
+                saveData(pin, testSubscription)
             }
             .andThen(
                 Single.fromCallable {
@@ -55,6 +57,11 @@ class UploadTestPinUseCase(
                     }
                 }
             }
+    }
+
+    private fun saveData(pin: String, testSubscription: TestSubscriptionItem): Completable {
+        return covidTestRepository.saveTestSubscription(testSubscription)
+            .andThen(covidTestRepository.saveTestSubscriptionPin(pin))
     }
 
     private fun checkInternet(): Single<InternetConnectionManager.InternetConnectionStatus> {

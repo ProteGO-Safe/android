@@ -2,6 +2,7 @@ package pl.gov.mc.protegosafe.data.model
 
 import pl.gov.mc.protegosafe.data.extension.toJson
 import pl.gov.mc.protegosafe.data.mapper.toDistrictDto
+import pl.gov.mc.protegosafe.data.mapper.toTestSubscriptionStatusData
 import pl.gov.mc.protegosafe.data.mapper.toRiskLevelData
 import pl.gov.mc.protegosafe.data.mapper.toVoivodeshipData
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
@@ -10,6 +11,7 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.ResultStatus
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 
 class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
@@ -59,5 +61,11 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
 
     override fun composeUploadTestPinResult(resultStatus: ResultStatus): String {
         return SimpleResult(resultStatus.value).toJson()
+    }
+
+    override fun composeTestSubscriptionStatusResult(
+        testSubscriptionItem: TestSubscriptionItem?
+    ): String {
+        return testSubscriptionItem?.toTestSubscriptionStatusData()?.toJson() ?: ""
     }
 }

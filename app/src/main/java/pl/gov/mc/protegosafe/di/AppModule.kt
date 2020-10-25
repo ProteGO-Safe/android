@@ -25,6 +25,7 @@ import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetSystemLanguageUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
@@ -40,7 +41,7 @@ import pl.gov.mc.protegosafe.domain.usecase.StopExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
-import pl.gov.mc.protegosafe.domain.usecase.covidtest.UploadTestPinUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.UploadTestSubscriptionPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUseCase
@@ -62,6 +63,7 @@ val appModule = module {
 val useCaseModule = module {
     factory {
         OnGetBridgeDataUseCase(
+            get(),
             get(),
             get(),
             get(),
@@ -120,7 +122,8 @@ val useCaseModule = module {
     factory { HandleDistrictActionUseCase(get(), get(), get()) }
     factory { GetSubscribedDistrictsResultUseCase(get(), get(), get()) }
     factory { NotifyDistrictsUpdatedUseCase(get(), get(), get()) }
-    factory { UploadTestPinUseCase(get(), get(), get(), get(), get()) }
+    factory { UploadTestSubscriptionPinUseCase(get(), get(), get(), get(), get()) }
+    factory { GetTestSubscriptionStatusUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {

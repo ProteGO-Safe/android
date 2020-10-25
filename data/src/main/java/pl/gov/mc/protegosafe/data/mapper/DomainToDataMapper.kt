@@ -11,12 +11,15 @@ import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeyRequestData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeysUploadRequestBody
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusData
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 
 fun ExposureConfigurationItem.toExposureConfiguration(): ExposureConfiguration {
@@ -84,6 +87,19 @@ fun VoivodeshipItem.toVoivodeshipData() = VoivodeshipData(
     id = id,
     name = name,
     districts = districts.map { it.toDistrictData() }
+)
+
+fun TestSubscriptionItem.toTestSubscriptionStatusData() = TestSubscriptionStatusData(
+    guid = guid,
+    status = status.value,
+    updated = updated
+)
+
+fun TestSubscriptionItem.toTestSubscriptionDto() = TestSubscriptionDto(
+    guid = guid,
+    status = status.value,
+    updated = updated,
+    accessToken = accessToken
 )
 
 fun RiskLevelItem.toRiskLevelData() = when (this) {
