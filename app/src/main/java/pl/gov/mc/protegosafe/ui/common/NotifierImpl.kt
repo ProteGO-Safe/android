@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.core.app.NotificationCompat
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
@@ -12,14 +13,31 @@ import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.DistrictRestrictionStateItem
 import pl.gov.mc.protegosafe.domain.model.DistrictsUpdatedNotificationType
+import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
 import pl.gov.mc.protegosafe.ui.MainActivity
 import timber.log.Timber
 import java.util.Random
 
-class NotifierImpl(private val context: Context) : Notifier {
+class NotifierImpl(
+    context: Context,
+    private val getLocaleUseCase: GetLocaleUseCase
+) : Notifier {
+
+    private val localizedContext by lazy {
+        getLocalizedContext(context) ?: context
+    }
+
+    private fun getLocalizedContext(context: Context?): Context? {
+        val locale = getLocaleUseCase.execute()
+        val config = Configuration(context?.resources?.configuration).apply {
+            setLocale(locale)
+        }
+
+        return context?.createConfigurationContext(config)
+    }
 
     private val notificationManager by lazy {
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+        localizedContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
     }
 
     override fun showNotificationWithData(title: String, content: String, data: String) {
@@ -34,19 +52,19 @@ class NotifierImpl(private val context: Context) : Notifier {
             when (notificationType) {
                 is DistrictsUpdatedNotificationType.EmptySubscribedDistrictsList -> {
                     createNotification(
-                        context.getString(R.string.changes_in_districts_notification_title),
-                        context.getString(R.string.changes_in_districts_info),
+                        localizedContext.getString(R.string.changes_in_districts_notification_title),
+                        localizedContext.getString(R.string.changes_in_districts_info),
                     )
                 }
                 is DistrictsUpdatedNotificationType.NoDistrictsUpdated -> {
                     createNotification(
-                        context.getString(R.string.changes_in_districts_notification_title),
-                        context.getString(R.string.no_changes_in_subscribed_districts_info)
+                        localizedContext.getString(R.string.changes_in_districts_notification_title),
+                        localizedContext.getString(R.string.no_changes_in_subscribed_districts_info)
                     )
                 }
                 is DistrictsUpdatedNotificationType.DistrictsUpdated -> {
                     createNotification(
-                        context.getString(R.string.changes_in_districts_notification_title),
+                        localizedContext.getString(R.string.changes_in_districts_notification_title),
                         prepareDistrictsUpdatedNotificationContent(notificationType.districts)
                     )
                 }
@@ -59,18 +77,18 @@ class NotifierImpl(private val context: Context) : Notifier {
         content: String,
         data: String? = null
     ): Notification {
-        val notificationIntent = Intent(context, MainActivity::class.java).apply {
+        val notificationIntent = Intent(localizedContext, MainActivity::class.java).apply {
             data?.let { putExtra(Consts.GENERAL_NOTIFICATION_EXTRA_DATA, data) }
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
         val pendingIntent = PendingIntent.getActivity(
-            context,
+            localizedContext,
             0,
             notificationIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        return NotificationCompat.Builder(context, Consts.GENERAL_NOTIFICATION_CHANNEL_ID)
+        return NotificationCompat.Builder(localizedContext, Consts.GENERAL_NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -92,14 +110,14 @@ class NotifierImpl(private val context: Context) : Notifier {
         }
         val updatedDistrictsInfo = StringBuilder()
         updatedDistricts.forEach {
-            val updateDistrictInfo = context.getString(
+            val updateDistrictInfo = localizedContext.getString(
                 R.string.changed_district_info_with_params,
                 it.name,
                 getDistrictRestrictionZoneName(it.state)
             )
             updatedDistrictsInfo.append(" ").append(updateDistrictInfo).append(",")
         }
-        return context.getString(
+        return localizedContext.getString(
             notificationContentRes,
             updatedDistricts.size,
             updatedDistrictsInfo.dropLastWhile { it == ',' }
@@ -109,7 +127,7 @@ class NotifierImpl(private val context: Context) : Notifier {
     private fun getDistrictRestrictionZoneName(
         districtRestrictionState: DistrictRestrictionStateItem
     ): String {
-        return context.getString(
+        return localizedContext.getString(
             when (districtRestrictionState) {
                 DistrictRestrictionStateItem.NEUTRAL -> {
                     R.string.district_restriction_zone_neutral

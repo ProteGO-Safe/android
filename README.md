@@ -77,6 +77,16 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.6.0
+
+List of current color zones for poviats.
+
+Possibility of monitoring selected poviats - notification in case of a change in the color of the zone.
+
+Update of the screen that informs about the possibility to add a translation into a new language.
+
+Update UI
+
 4.5.0
 
 Added closing app on UI request

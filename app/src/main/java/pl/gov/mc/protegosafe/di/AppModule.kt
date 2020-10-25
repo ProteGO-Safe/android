@@ -51,7 +51,7 @@ import pl.gov.mc.protegosafe.ui.home.HomeViewModel
 import pl.gov.mc.protegosafe.ui.home.WebUrlProvider
 
 val appModule = module {
-    factory<Notifier> { NotifierImpl(get()) }
+    factory<Notifier> { NotifierImpl(get(), get()) }
     factory { WebUrlProvider(get()) }
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }

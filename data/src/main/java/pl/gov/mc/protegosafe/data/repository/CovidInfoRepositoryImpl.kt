@@ -62,7 +62,7 @@ class CovidInfoRepositoryImpl(
     override fun getSortedSubscribedDistricts(): Single<List<DistrictItem>> {
         return covidInfoDao.getSubscribedDistrictsIds()
             .flatMapObservable { subscribedDistrictsList ->
-                subscribedDistrictsList.sortedByDescending { it.updated }
+                subscribedDistrictsList.sortedBy { it.updated }
                     .toObservable()
             }.flatMapSingle {
                 covidInfoDao.getDistrictById(it.id)
