@@ -19,6 +19,7 @@ class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
             Timber.d("Boot completed received")
             scheduleProvideDiagnosisKeysWorker()
             scheduleRemoveOldExposuresWorker()
+            scheduleUpdateDistrictsRestrictionsWorker()
         }
     }
 
@@ -33,5 +34,9 @@ class BootCompleteReceiver : BroadcastReceiver(), KoinComponent {
 
     private fun scheduleRemoveOldExposuresWorker() {
         applicationTaskScheduler.scheduleRemoveOldExposuresTask()
+    }
+
+    private fun scheduleUpdateDistrictsRestrictionsWorker() {
+        applicationTaskScheduler.scheduleUpdateDistrictsRestrictionsTask()
     }
 }

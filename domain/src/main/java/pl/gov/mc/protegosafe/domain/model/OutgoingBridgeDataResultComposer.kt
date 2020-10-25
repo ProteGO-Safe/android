@@ -10,4 +10,9 @@ interface OutgoingBridgeDataResultComposer {
     fun composeAppVersionNameResult(versionName: String): String
     fun composeSystemLanguageResult(languageISO: String): String
     fun composeFontScaleResult(fontScale: Float): String
+    fun composeDistrictsRestrictionsResult(
+        voivodeships: List<VoivodeshipItem>,
+        updated: Long
+    ): String
+    fun composeSubscribedDistrictsResult(subscribedDistricts: List<DistrictItem>): String
 }

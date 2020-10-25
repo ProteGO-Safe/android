@@ -7,17 +7,18 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.AppRepositoryImpl
-import pl.gov.mc.protegosafe.domain.PushNotifier
+import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.repository.AppRepository
 import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
-import pl.gov.mc.protegosafe.domain.usecase.ClearExposureNotificationDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.ClearDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CloseAppUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateDistrictsRestrictionsUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetFontScaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
@@ -40,22 +41,40 @@ import pl.gov.mc.protegosafe.domain.usecase.StopExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.NotifyDistrictsUpdatedUseCase
 import pl.gov.mc.protegosafe.ui.MainViewModel
-import pl.gov.mc.protegosafe.ui.common.PushNotifierImpl
+import pl.gov.mc.protegosafe.ui.common.NotifierImpl
 import pl.gov.mc.protegosafe.ui.home.HomeViewModel
 import pl.gov.mc.protegosafe.ui.home.WebUrlProvider
 
 val appModule = module {
-    factory<PushNotifier> { PushNotifierImpl(get()) }
+    factory<Notifier> { NotifierImpl(get(), get()) }
     factory { WebUrlProvider(get()) }
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }
     single<AppUpdateManager> { AppUpdateManagerFactory.create(androidContext()) }
-    single<AppRepository> { AppRepositoryImpl(get(), androidContext()) }
+    single<AppRepository> { AppRepositoryImpl(get(), get(), get(), androidContext()) }
 }
 
 val useCaseModule = module {
-    factory { OnGetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get()) }
+    factory {
+        OnGetBridgeDataUseCase(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
@@ -64,7 +83,7 @@ val useCaseModule = module {
     factory { StopExposureNotificationUseCase(get(), get(), get()) }
     factory { GetServicesStatusUseCase(get()) }
     factory { ChangeServiceStatusUseCase(get(), get(), get()) }
-    factory { ClearExposureNotificationDataUseCase(get(), get(), get()) }
+    factory { ClearDataUseCase(get(), get(), get(), get()) }
     factory { ProvideDiagnosisKeysUseCase(get(), get(), get()) }
     factory { GetSafetyNetAttestationTokenUseCase(get(), get()) }
     factory {
@@ -96,6 +115,11 @@ val useCaseModule = module {
     factory { GetLocaleUseCase(get()) }
     factory { GetFontScaleUseCase(get(), get(), get()) }
     factory { CloseAppUseCase(get(), get()) }
+    factory { UpdateDistrictsRestrictionsUseCase(get(), get(), get()) }
+    factory { GetDistrictsRestrictionsResultUseCase(get(), get(), get()) }
+    factory { HandleDistrictActionUseCase(get(), get(), get()) }
+    factory { GetSubscribedDistrictsResultUseCase(get(), get(), get()) }
+    factory { NotifyDistrictsUpdatedUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {

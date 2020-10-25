@@ -19,4 +19,11 @@ interface ApplicationTaskScheduler {
      * If the task already scheduled then do nothing.
      */
     fun scheduleRemoveOldExposuresTask()
+
+    /**
+     * Schedule Update Districts Restrictions Task.
+     *
+     * If the task already scheduled then reschedule it.
+     */
+    fun scheduleUpdateDistrictsRestrictionsTask()
 }

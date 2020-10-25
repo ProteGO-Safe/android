@@ -96,7 +96,7 @@ class HomeViewModel(
     }
 
     fun getBridgeData(dataType: Int, data: String, requestId: String) {
-        onGetBridgeDataUseCase.execute(OutgoingBridgeDataType.valueOf(dataType))
+        onGetBridgeDataUseCase.execute(OutgoingBridgeDataType.valueOf(dataType), data)
             .subscribe(
                 {
                     webViewTimber().d("getBridgeData: $dataType output: $it")
@@ -197,7 +197,7 @@ class HomeViewModel(
             is ActionRequiredItem.RequestEnableNotifications -> {
                 _requestNotifications.postValue(Unit)
             }
-            is ActionRequiredItem.ClearExposureNotificationData -> {
+            is ActionRequiredItem.ClearData -> {
                 _requestClearData.postValue(Unit)
             }
             is ActionRequiredItem.SendTemporaryExposureKeysUploadResult -> {

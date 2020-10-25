@@ -11,8 +11,7 @@ import pl.gov.mc.protegosafe.domain.utils.CryptoUtil
 class RealmDatabaseBuilder(
     private val keystoreManager: KeystoreManager,
     sharedPreferencesDelegates: SharedPreferencesDelegates
-) :
-    RealmConfiguration.Builder() {
+) : RealmConfiguration.Builder() {
 
     private var _encryptedDatabaseKey by sharedPreferencesDelegates.stringPref(
         DATABASE_KEY_SHARED_PREFERENCE, ""
@@ -20,6 +19,7 @@ class RealmDatabaseBuilder(
 
     override fun build(): RealmConfiguration {
         schemaVersion(DATABASE_SCHEMA_VERSION)
+        migration(RealmMigrations())
 
         /*
          * Realm database encryption limited to Android API equal or greater 23 (M). Previous
@@ -57,7 +57,7 @@ class RealmDatabaseBuilder(
     }
 
     companion object {
-        const val DATABASE_SCHEMA_VERSION = 0L
+        const val DATABASE_SCHEMA_VERSION = 1L
         private const val DATABASE_KEY_SHARED_PREFERENCE = "RealmConfiguration.DATABASE_KEY_PREF"
         private const val DATABASE_KEY_LENGTH = 64
     }
