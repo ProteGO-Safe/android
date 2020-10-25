@@ -40,7 +40,7 @@ class GetAnalyzeResultUseCase(
                         exposureRepository.getRiskLevel(it, exposure)
                     }
                     .flatMap { riskLevel ->
-                        clearHighRiskDataIfNecessary(riskLevel)
+                        clearCovidTestDataIfNecessary(riskLevel)
                             .andThen(
                                 getResult(riskLevel)
                             )
@@ -55,7 +55,7 @@ class GetAnalyzeResultUseCase(
             .andThen(remoteConfigurationRepository.getRiskLevelConfiguration())
     }
 
-    private fun clearHighRiskDataIfNecessary(riskLevelItem: RiskLevelItem): Completable {
+    private fun clearCovidTestDataIfNecessary(riskLevelItem: RiskLevelItem): Completable {
         return if (riskLevelItem != RiskLevelItem.HIGH_RISK) {
             covidInfoRepository.clearCovidTestData()
         } else {
