@@ -14,7 +14,8 @@ import timber.log.Timber
 class ApplicationTaskSchedulerImpl(
     private val workManager: WorkManager,
     private val provideDiagnosisKeyWorker: Class<out RxWorker>,
-    private val removeOldExposuresWorker: Class<out RxWorker>
+    private val removeOldExposuresWorker: Class<out RxWorker>,
+    private val updateDistrictsRestrictionsWorker: Class<out RxWorker>
 ) : ApplicationTaskScheduler {
 
     companion object {
@@ -22,6 +23,7 @@ class ApplicationTaskSchedulerImpl(
         private val REPEAT_INTERVAL_TIME_UNIT = TimeUnit.HOURS
         const val PROVIDE_DIAGNOSIS_KEYS_WORK_NAME = "PROVIDE_DIAGNOSIS_KEYS_WORK_NAME"
         const val REMOVE_OLD_EXPOSURES_WORK_NAME = "REMOVE_OLD_EXPOSURES_WORK_NAME"
+        const val UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME = "UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME"
     }
 
     override fun scheduleProvideDiagnosisKeysTask() {
@@ -38,8 +40,8 @@ class ApplicationTaskSchedulerImpl(
                 .build()
         ).setBackoffCriteria(
             BackoffPolicy.LINEAR,
-            60L,
-            TimeUnit.MINUTES
+            1L,
+            TimeUnit.HOURS
         ).build()
 
         workManager.enqueueUniquePeriodicWork(
@@ -58,7 +60,7 @@ class ApplicationTaskSchedulerImpl(
         Timber.i("scheduleRemoveOldExposuresTask")
         val workRequest = PeriodicWorkRequest.Builder(
             removeOldExposuresWorker,
-            1,
+            1L,
             TimeUnit.DAYS
         ).setConstraints(
             Constraints.Builder()
@@ -73,6 +75,30 @@ class ApplicationTaskSchedulerImpl(
 
         workManager.enqueueUniquePeriodicWork(
             REMOVE_OLD_EXPOSURES_WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            workRequest
+        )
+    }
+
+    override fun scheduleUpdateDistrictsRestrictionsTask() {
+        Timber.i("scheduleUpdateDistrictsRestrictionsTask")
+        val workRequest = PeriodicWorkRequest.Builder(
+            updateDistrictsRestrictionsWorker,
+            REPEAT_INTERVAL,
+            REPEAT_INTERVAL_TIME_UNIT
+        ).setConstraints(
+            Constraints.Builder()
+                .setRequiresBatteryNotLow(true)
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+        ).setBackoffCriteria(
+            BackoffPolicy.LINEAR,
+            1,
+            TimeUnit.HOURS
+        ).build()
+
+        workManager.enqueueUniquePeriodicWork(
+            UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
             workRequest
         )

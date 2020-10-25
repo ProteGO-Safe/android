@@ -56,6 +56,7 @@ class App : Application(), KoinComponent {
         initializeStetho()
         initializeThreeTenABP()
         scheduleRemoveOldExposuresTask()
+        scheduleUpdateDistrictsRestrictionsTask()
         setTemporaryExposureKeysDownloadTimestampIfEmpty()
     }
 
@@ -83,6 +84,10 @@ class App : Application(), KoinComponent {
 
     private fun scheduleRemoveOldExposuresTask() {
         applicationTaskScheduler.scheduleRemoveOldExposuresTask()
+    }
+
+    private fun scheduleUpdateDistrictsRestrictionsTask() {
+        applicationTaskScheduler.scheduleUpdateDistrictsRestrictionsTask()
     }
 
     private fun initializeDatabase() {

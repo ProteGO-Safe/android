@@ -11,7 +11,7 @@ class OnSetBridgeDataUseCase(
     private val postExecutionThread: PostExecutionThread,
     private val saveTriageCompletedUseCase: SaveTriageCompletedUseCase,
     private val changeServiceStatusUseCase: ChangeServiceStatusUseCase,
-    private val clearExposureNotificationDataUseCase: ClearExposureNotificationDataUseCase,
+    private val clearDataUseCase: ClearDataUseCase,
     private val uploadTemporaryExposureKeysUseCase: UploadTemporaryExposureKeysUseCase,
     private val setAppLanguageUseCase: SetAppLanguageUseCase,
     private val closeAppUseCase: CloseAppUseCase
@@ -24,11 +24,8 @@ class OnSetBridgeDataUseCase(
             IncomingBridgeDataType.REQUEST_SERVICE_STATUS_CHANGE -> {
                 changeServiceStatusUseCase.execute(input.payload, onResultActionRequired)
             }
-            IncomingBridgeDataType.REQUEST_CLEAR_EXPOSURE_NOTIFICATIONS_DATA -> {
-                clearExposureNotificationDataUseCase.execute(
-                    input.payload,
-                    onResultActionRequired
-                )
+            IncomingBridgeDataType.REQUEST_CLEAR_DATA -> {
+                clearDataUseCase.execute(input.payload, onResultActionRequired)
             }
             IncomingBridgeDataType.REQUEST_TEMPORARY_EXPOSURE_KEYS_UPLOAD -> {
                 uploadTemporaryExposureKeysUseCase.execute(input.payload, onResultActionRequired)

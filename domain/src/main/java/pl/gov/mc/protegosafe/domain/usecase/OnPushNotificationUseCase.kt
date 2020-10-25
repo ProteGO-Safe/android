@@ -1,14 +1,14 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
 import java.util.Calendar
-import pl.gov.mc.protegosafe.domain.PushNotifier
+import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 
 class OnPushNotificationUseCase(
     private val triageRepository: TriageRepository,
-    private val pushNotifier: PushNotifier
+    private val notifier: Notifier
 ) {
 
     fun execute(notificationData: PushNotificationData, data: String) {
@@ -25,7 +25,7 @@ class OnPushNotificationUseCase(
     }
 
     private fun showNotificationWithData(notificationData: PushNotificationData, data: String) {
-        pushNotifier.showNotificationWithData(notificationData.title, notificationData.content, data)
+        notifier.showNotificationWithData(notificationData.title, notificationData.content, data)
     }
 
     private fun checkIfToday(timestamp: Long): Boolean {

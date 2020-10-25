@@ -45,6 +45,7 @@ android {
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
+            buildConfigField "String", "COVID_INFO_FILE", STAGING_COVID_INFO_FILE
         }
         stage {
             dimension "mode"
@@ -53,6 +54,7 @@ android {
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
+            buildConfigField "String", "COVID_INFO_FILE", STAGING_COVID_INFO_FILE
         }
         prod {
             dimension "mode"
@@ -61,6 +63,7 @@ android {
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", PRODUCTION_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", PRODUCTION_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", PRODUCTION_UPLOAD_BUCKET_ENDPOINT
+            buildConfigField "String", "COVID_INFO_FILE", PRODUCTION_COVID_INFO_FILE
         }
     }
 }
