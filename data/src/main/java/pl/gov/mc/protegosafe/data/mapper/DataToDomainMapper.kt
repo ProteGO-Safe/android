@@ -16,6 +16,7 @@ import pl.gov.mc.protegosafe.data.model.DistrictActionData
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.RiskLevelConfigurationData
+import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
@@ -36,6 +37,7 @@ import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
+import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TriageItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
@@ -164,3 +166,10 @@ fun TestSubscriptionDto.toEntity() = TestSubscriptionItem(
     accessToken = accessToken,
     updated = updated
 )
+
+fun RiskLevelData.toEntity() = when (this) {
+    RiskLevelData.NO_RISK -> RiskLevelItem.NO_RISK
+    RiskLevelData.LOW_RISK -> RiskLevelItem.LOW_RISK
+    RiskLevelData.MIDDLE_RISK -> RiskLevelItem.MIDDLE_RISK
+    RiskLevelData.HIGH_RISK -> RiskLevelItem.HIGH_RISK
+}

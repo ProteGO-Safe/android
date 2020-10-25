@@ -62,6 +62,10 @@ class CovidTestRepositoryImpl(
         return covidTestDao.updateTestPin(testPin)
     }
 
+    override fun clearCovidTestData(): Completable {
+        return covidTestDao.clearCovidTestData()
+    }
+
     private fun getTestSubscription(): Single<TestSubscriptionItem> {
         return covidTestDao.getTestSubscription()
             .map { it.toEntity() }

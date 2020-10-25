@@ -23,4 +23,6 @@ interface CovidTestRepository {
      * Create or update Subscription TEST PIN in realm database
      */
     fun saveTestSubscriptionPin(testPin: String): Completable
+
+    fun clearCovidTestData(): Completable
 }
