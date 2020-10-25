@@ -25,7 +25,7 @@ import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetTestSubscriptionStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.GetTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetSystemLanguageUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
@@ -41,6 +41,7 @@ import pl.gov.mc.protegosafe.domain.usecase.StopExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.UpdateTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.UploadTestSubscriptionPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
@@ -123,12 +124,13 @@ val useCaseModule = module {
     factory { GetSubscribedDistrictsResultUseCase(get(), get(), get()) }
     factory { NotifyDistrictsUpdatedUseCase(get(), get(), get()) }
     factory { UploadTestSubscriptionPinUseCase(get(), get(), get(), get(), get()) }
-    factory { GetTestSubscriptionStatusUseCase(get(), get(), get()) }
+    factory { GetTestSubscriptionStatusUseCase(get(), get(), get(), get()) }
+    factory { UpdateTestSubscriptionStatusUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {
     viewModel { MainViewModel(get(), get(), get()) }
     viewModel {
-        HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get())
+        HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
 }

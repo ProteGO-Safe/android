@@ -20,6 +20,7 @@ import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionConfigurationData
 import pl.gov.mc.protegosafe.domain.CovidInfoItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.CloseAppItem
@@ -40,6 +41,7 @@ import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TriageItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 
 private const val FCM_NOTIFICATION_TITLE_KEY = "title"
@@ -173,3 +175,8 @@ fun RiskLevelData.toEntity() = when (this) {
     RiskLevelData.MIDDLE_RISK -> RiskLevelItem.MIDDLE_RISK
     RiskLevelData.HIGH_RISK -> RiskLevelItem.HIGH_RISK
 }
+
+fun TestSubscriptionConfigurationData.toEntity() =
+    TestSubscriptionConfigurationItem(
+        interval = interval
+    )

@@ -18,7 +18,9 @@ open class CovidTestDao {
                     if (list.isEmpty()) {
                         emitter.onComplete()
                     } else {
-                        emitter.onSuccess(list.first())
+                        emitter.onSuccess(
+                            list.first()
+                        )
                     }
                 }
             }

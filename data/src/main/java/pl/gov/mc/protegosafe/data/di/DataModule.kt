@@ -40,6 +40,7 @@ import pl.gov.mc.protegosafe.data.mapper.PinMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RetrofitExceptionMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RiskLevelConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.db.dao.CovidTestDao
+import pl.gov.mc.protegosafe.data.mapper.TestSubscriptionConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.model.OutgoingBridgeDataResultComposerImpl
 import pl.gov.mc.protegosafe.data.repository.DiagnosisKeyRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureNotificationRepositoryImpl
@@ -64,6 +65,7 @@ import pl.gov.mc.protegosafe.domain.model.IncomingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationMapper
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
@@ -106,7 +108,7 @@ val dataModule = module {
     single { SharedPreferencesDelegates(get()) }
     single { Nearby.getExposureNotificationClient(androidApplication()) }
     single<ExposureNotificationRepository> { ExposureNotificationRepositoryImpl(get(), get()) }
-    single<RemoteConfigurationRepository> { RemoteConfigurationRepositoryImpl(get(), get(), get()) }
+    single<RemoteConfigurationRepository> { RemoteConfigurationRepositoryImpl(get(), get(), get(), get()) }
     factory<ExposureConfigurationMapper> { ExposureConfigurationMapperImpl() }
     factory<DiagnosisKeyDownloadConfigurationMapper> { DiagnosisKeyDownloadConfigurationMapperImpl() }
     factory<PinMapper> { PinMapperImpl() }
@@ -145,6 +147,7 @@ val dataModule = module {
     single { DiagnosisKeyDao() }
     single { CovidTestDao() }
     single<CovidTestRepository> { CovidTestRepositoryImpl(get(), get(), get()) }
+    single<TestSubscriptionConfigurationMapper> { TestSubscriptionConfigurationMapperImpl() }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(
