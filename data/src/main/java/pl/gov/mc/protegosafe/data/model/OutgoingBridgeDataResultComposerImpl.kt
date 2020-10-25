@@ -1,10 +1,12 @@
 package pl.gov.mc.protegosafe.data.model
 
+import com.google.gson.GsonBuilder
 import pl.gov.mc.protegosafe.data.extension.toJson
 import pl.gov.mc.protegosafe.data.mapper.toDistrictDto
 import pl.gov.mc.protegosafe.data.mapper.toTestSubscriptionStatusData
 import pl.gov.mc.protegosafe.data.mapper.toRiskLevelData
 import pl.gov.mc.protegosafe.data.mapper.toVoivodeshipData
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
@@ -66,6 +68,11 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
     override fun composeTestSubscriptionStatusResult(
         testSubscriptionItem: TestSubscriptionItem?
     ): String {
-        return testSubscriptionItem?.toTestSubscriptionStatusData()?.toJson() ?: ""
+        return GsonBuilder().serializeNulls().create()
+            .toJson(
+                TestSubscriptionStatusResult(
+                    testSubscriptionItem?.toTestSubscriptionStatusData()
+                )
+            )
     }
 }
