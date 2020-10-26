@@ -41,6 +41,7 @@ import pl.gov.mc.protegosafe.domain.usecase.StopExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.GetTestSubscriptionPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.UpdateTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.UploadTestSubscriptionPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
@@ -64,6 +65,7 @@ val appModule = module {
 val useCaseModule = module {
     factory {
         OnGetBridgeDataUseCase(
+            get(),
             get(),
             get(),
             get(),
@@ -126,6 +128,7 @@ val useCaseModule = module {
     factory { UploadTestSubscriptionPinUseCase(get(), get(), get(), get(), get()) }
     factory { GetTestSubscriptionStatusUseCase(get(), get(), get(), get()) }
     factory { UpdateTestSubscriptionStatusUseCase(get(), get(), get()) }
+    factory { GetTestSubscriptionPinUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {
