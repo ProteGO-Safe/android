@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import pl.gov.mc.protegosafe.domain.exception.CovidTestNotCompatibleDeviceException
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.exception.UploadException
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
@@ -140,6 +141,7 @@ class HomeViewModel(
             }
             is NoInternetConnectionException,
             is UnknownHostException,
+            is CovidTestNotCompatibleDeviceException,
             is UploadException -> {
                 _showUploadError.postValue(error as Exception)
             }

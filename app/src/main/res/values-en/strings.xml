@@ -25,4 +25,5 @@
     <string name="district_restriction_zone_neutral">"neutral"</string>
     <string name="district_restriction_zone_yellow">"yellow"</string>
     <string name="district_restriction_zone_red">"red"</string>
+    <string name="covid_test_not_compatible_device">Przepraszamy, ale Twoja wersja systemu Android nie zapewnia wystarczającego poziomu bezpieczeństwa, aby skorzystać z dostępu do darmowego testu laboratoryjnego.</string>
 </resources>

@@ -31,6 +31,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.BuildConfig
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.FragmentHomeBinding
+import pl.gov.mc.protegosafe.domain.exception.CovidTestNotCompatibleDeviceException
 import pl.gov.mc.protegosafe.domain.exception.UploadException
 import pl.gov.mc.protegosafe.domain.model.ActivityRequest
 import pl.gov.mc.protegosafe.domain.model.ActivityResult
@@ -279,10 +280,18 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun showError(error: Exception) {
-        binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
-            binding.webView.visibility = View.VISIBLE
-            vm.onUploadRetry()
+        if (error !is CovidTestNotCompatibleDeviceException) {
+            binding.missingConnectionLayout.button_check_internet_connection.visibility =
+                View.VISIBLE
+            binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
+                binding.webView.visibility = View.VISIBLE
+                vm.onUploadRetry()
+            }
+        } else {
+            binding.missingConnectionLayout.button_check_internet_connection.visibility =
+                View.INVISIBLE
         }
+
         binding.missingConnectionLayout.button_cancel.setOnClickListener {
             vm.onUploadCanceled()
             binding.webView.visibility = View.VISIBLE
@@ -336,6 +345,9 @@ class HomeFragment : BaseFragment() {
             }
             is UploadException.DailyLimitExceededError -> {
                 R.string.upload_temporary_exposure_keys_day_limit_exceed_error
+            }
+            is CovidTestNotCompatibleDeviceException -> {
+                R.string.covid_test_not_compatible_device
             }
             else -> {
                 R.string.no_internet_connection_msg

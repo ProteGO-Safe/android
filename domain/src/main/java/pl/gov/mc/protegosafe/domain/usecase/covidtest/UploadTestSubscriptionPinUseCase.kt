@@ -3,6 +3,7 @@ package pl.gov.mc.protegosafe.domain.usecase.covidtest
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import pl.gov.mc.protegosafe.domain.exception.CovidTestNotCompatibleDeviceException
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
@@ -22,8 +23,11 @@ class UploadTestSubscriptionPinUseCase(
     private val resultComposer: OutgoingBridgeDataResultComposer,
     private val postExecutionThread: PostExecutionThread
 ) {
-    fun execute(payload: String): Single<String> {
-        return checkInternet()
+    fun execute(
+        payload: String,
+    ): Single<String> {
+        return checkIfDeviceCompatibleOrError()
+            .andThen(checkInternet())
             .flatMap {
                 if (it.isConnected()) {
                     parsePayload(payload)
@@ -38,23 +42,32 @@ class UploadTestSubscriptionPinUseCase(
             .observeOn(postExecutionThread.scheduler)
     }
 
+    private fun checkIfDeviceCompatibleOrError(): Completable {
+        return covidTestRepository.isDeviceCompatible()
+            .flatMapCompletable { isAvailable ->
+                if (isAvailable) {
+                    Completable.complete()
+                } else {
+                    Completable.fromAction {
+                        throw CovidTestNotCompatibleDeviceException()
+                    }
+                }
+            }
+    }
+
     private fun startUpload(pin: String): Single<String> {
         return covidTestRepository.getTestSubscription(pin, UUID.randomUUID().toString())
             .flatMapCompletable { testSubscription ->
                 saveData(pin, testSubscription)
             }
             .andThen(
-                Single.fromCallable {
-                    resultComposer.composeUploadTestPinResult(ResultStatus.SUCCESS)
-                }
+                getResult(ResultStatus.SUCCESS)
             )
             .onErrorResumeNext {
-                Single.fromCallable {
-                    if (it is UnknownHostException) {
-                        throw it
-                    } else {
-                        resultComposer.composeUploadTestPinResult(ResultStatus.FAILURE)
-                    }
+                if (it is UnknownHostException) {
+                    throw it
+                } else {
+                    getResult(ResultStatus.FAILURE)
                 }
             }
     }
@@ -73,6 +86,12 @@ class UploadTestSubscriptionPinUseCase(
     private fun parsePayload(payload: String): Single<PinItem> {
         return Single.fromCallable {
             payloadMapper.toPinItem(payload)
+        }
+    }
+
+    private fun getResult(resultStatus: ResultStatus): Single<String> {
+        return Single.fromCallable {
+            resultComposer.composeUploadTestPinResult(resultStatus)
         }
     }
 }
