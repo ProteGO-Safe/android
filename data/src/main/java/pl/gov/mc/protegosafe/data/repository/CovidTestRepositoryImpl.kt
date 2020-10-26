@@ -1,5 +1,6 @@
 package pl.gov.mc.protegosafe.data.repository
 
+import android.os.Build
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -99,6 +100,12 @@ class CovidTestRepositoryImpl(
 
     override fun clearCovidTestData(): Completable {
         return covidTestDao.clearCovidTestData()
+    }
+
+    override fun isDeviceCompatible(): Single<Boolean> {
+        return Single.fromCallable {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        }
     }
 
     private fun getSafetynetToken(): Single<String> {

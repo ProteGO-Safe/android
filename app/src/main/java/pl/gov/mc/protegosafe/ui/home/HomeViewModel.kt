@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import pl.gov.mc.protegosafe.domain.exception.CovidTestNotCompatibleDeviceException
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.exception.UploadException
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
@@ -165,6 +166,10 @@ class HomeViewModel(
             is NoInternetConnectionException,
             is UnknownHostException,
             is UploadException -> {
+                _showUploadError.postValue(error as Exception)
+            }
+            is CovidTestNotCompatibleDeviceException -> {
+                onRequestCanceled()
                 _showUploadError.postValue(error as Exception)
             }
             else -> {

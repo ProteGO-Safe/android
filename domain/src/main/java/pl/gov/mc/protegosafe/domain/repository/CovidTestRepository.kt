@@ -28,4 +28,6 @@ interface CovidTestRepository {
     fun getTestSubscription(): Maybe<TestSubscriptionItem>
 
     fun clearCovidTestData(): Completable
+
+    fun isDeviceCompatible(): Single<Boolean>
 }
