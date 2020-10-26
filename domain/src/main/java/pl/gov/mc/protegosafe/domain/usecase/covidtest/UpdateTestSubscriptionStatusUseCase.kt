@@ -39,7 +39,7 @@ class UpdateTestSubscriptionStatusUseCase(
     private fun clearTestSubscriptionPinIfVerified(
         testSubscription: TestSubscriptionItem
     ): Completable {
-        return if (testSubscription.status == TestSubscriptionStatus.VERIFIED) {
+        return if (testSubscription.status == TestSubscriptionStatus.SCHEDULED) {
             covidTestRepository.saveTestSubscriptionPin("")
         } else {
             Completable.complete()
