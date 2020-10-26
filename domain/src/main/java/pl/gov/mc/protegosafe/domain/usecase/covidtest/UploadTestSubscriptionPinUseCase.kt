@@ -16,7 +16,6 @@ import pl.gov.mc.protegosafe.domain.model.ResultStatus
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.repository.CacheStore
 import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
-import java.lang.Exception
 import java.util.UUID
 
 class UploadTestSubscriptionPinUseCase(
