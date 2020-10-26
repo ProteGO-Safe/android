@@ -57,7 +57,7 @@ class RealmDatabaseBuilder(
     }
 
     companion object {
-        const val DATABASE_SCHEMA_VERSION = 1L
+        const val DATABASE_SCHEMA_VERSION = 2L
         private const val DATABASE_KEY_SHARED_PREFERENCE = "RealmConfiguration.DATABASE_KEY_PREF"
         private const val DATABASE_KEY_LENGTH = 64
     }
