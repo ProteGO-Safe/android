@@ -2,8 +2,10 @@ package pl.gov.mc.protegosafe.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.exception.CovidTestNotCompatibleDeviceException
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.exception.UploadException
@@ -11,11 +13,14 @@ import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
 import pl.gov.mc.protegosafe.domain.model.ActivityResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
+import pl.gov.mc.protegosafe.domain.model.GetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
+import pl.gov.mc.protegosafe.domain.model.SetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
+import pl.gov.mc.protegosafe.domain.repository.UiRequestCacheRepository
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
@@ -41,7 +46,8 @@ class HomeViewModel(
     private val storePendingActivityResultUseCase: StorePendingActivityResultUseCase,
     private val processPendingActivityResultUseCase: ProcessPendingActivityResultUseCase,
     private val updateTestSubscriptionStatusUseCase: UpdateTestSubscriptionStatusUseCase,
-    private val outgoingBridgeDataResultComposer: OutgoingBridgeDataResultComposer
+    private val outgoingBridgeDataResultComposer: OutgoingBridgeDataResultComposer,
+    private val uiRequestCacheRepository: UiRequestCacheRepository
 ) : BaseViewModel() {
 
     private val _javascriptCode = MutableLiveData<String>()
@@ -100,9 +106,7 @@ class HomeViewModel(
 
     fun getBridgeData(dataType: Int, data: String, requestId: String) {
         onGetBridgeDataUseCase.execute(
-            OutgoingBridgeDataType.valueOf(dataType),
-            data,
-            ::onResultActionRequired
+            OutgoingBridgeDataType.valueOf(dataType), data, requestId, ::onResultActionRequired
         )
             .subscribe(
                 {
@@ -116,18 +120,38 @@ class HomeViewModel(
             ).addTo(disposables)
     }
 
-    fun onUploadRetry() {
-        uploadTemporaryExposureKeysWithCachedPayload()
+    fun onRequestRetry() {
+        uiRequestCacheRepository.getCachedRequest()?.let { uiRequest ->
+            when (uiRequest) {
+                is SetBridgeDataUIRequestItem -> {
+                    retryCachedSetBridgeDataRequest(uiRequest)
+                }
+                is GetBridgeDataUIRequestItem -> {
+                    uiRequestCacheRepository.retryCachedRequest(uiRequest, ::getBridgeData)
+                }
+            }
+        }
     }
 
-    fun onUploadCanceled() {
-        sendUploadStatus(TemporaryExposureKeysUploadState.CANCELED)
+    fun onRequestCanceled() {
+        uiRequestCacheRepository.getCachedRequest()?.let { uiRequest ->
+            when (uiRequest) {
+                is SetBridgeDataUIRequestItem -> {
+                    uiRequestCacheRepository.cancelCachedRequest(uiRequest, ::onBridgeData)
+                }
+                is GetBridgeDataUIRequestItem -> {
+                    uiRequestCacheRepository.cancelCachedRequest(uiRequest, ::bridgeDataResponse)
+                }
+            }
+        }
     }
 
-    private fun sendUploadStatus(status: TemporaryExposureKeysUploadState) {
+    private fun sendAccessDeniedUploadStatus() {
         onBridgeData(
             OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code,
-            outgoingBridgeDataResultComposer.composeTemporaryExposureKeysUploadResult(status)
+            outgoingBridgeDataResultComposer.composeTemporaryExposureKeysUploadResult(
+                TemporaryExposureKeysUploadState.ACCESS_DENIED
+            )
         )
     }
 
@@ -213,7 +237,7 @@ class HomeViewModel(
                 onBridgeData(actionRequired.dataType, actionRequired.dataJson)
             }
             is ActionRequiredItem.TemporaryExposureKeysPermissionDenied -> {
-                sendUploadStatus(TemporaryExposureKeysUploadState.ACCESS_DENIED)
+                sendAccessDeniedUploadStatus()
             }
             is ActionRequiredItem.ExposureNotificationPermissionGranted -> {
                 onExposureNotificationPermissionGranted()
@@ -273,6 +297,27 @@ class HomeViewModel(
                     Timber.e(it, "sendServicesStatus failed")
                 }
             ).addTo(disposables)
+    }
+
+    private fun retryCachedSetBridgeDataRequest(
+        setBridgeDataUIRequestItem: SetBridgeDataUIRequestItem
+    ) {
+        uiRequestCacheRepository.retryCachedRequest(
+            setBridgeDataUIRequestItem,
+            ::onResultActionRequired
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    Timber.d("Success")
+                },
+                {
+                    handleError(it)
+                    Timber.e(it)
+                }
+            ).addTo(disposables)
+        // TODO move to usecase
     }
 
     private fun bridgeDataResponse(body: String, dataType: Int, requestId: String) {

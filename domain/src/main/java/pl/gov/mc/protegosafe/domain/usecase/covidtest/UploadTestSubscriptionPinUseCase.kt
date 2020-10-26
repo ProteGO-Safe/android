@@ -7,13 +7,16 @@ import pl.gov.mc.protegosafe.domain.exception.CovidTestNotCompatibleDeviceExcept
 import pl.gov.mc.protegosafe.domain.exception.NoInternetConnectionException
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
+import pl.gov.mc.protegosafe.domain.model.GetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
+import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.ResultStatus
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
+import pl.gov.mc.protegosafe.domain.repository.CacheStore
 import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
-import java.net.UnknownHostException
+import java.lang.Exception
 import java.util.UUID
 
 class UploadTestSubscriptionPinUseCase(
@@ -21,11 +24,10 @@ class UploadTestSubscriptionPinUseCase(
     private val payloadMapper: OutgoingBridgePayloadMapper,
     private val internetConnectionManager: InternetConnectionManager,
     private val resultComposer: OutgoingBridgeDataResultComposer,
+    private val cacheStore: CacheStore,
     private val postExecutionThread: PostExecutionThread
 ) {
-    fun execute(
-        payload: String,
-    ): Single<String> {
+    fun execute(payload: String, requestId: String): Single<String> {
         return checkIfDeviceCompatibleOrError()
             .andThen(checkInternet())
             .flatMap {
@@ -35,7 +37,9 @@ class UploadTestSubscriptionPinUseCase(
                             startUpload(pinItem.pin)
                         }
                 } else {
-                    throw NoInternetConnectionException()
+                    cacheRequestDataAndError(
+                        payload, requestId, NoInternetConnectionException()
+                    )
                 }
             }
             .subscribeOn(Schedulers.io())
@@ -64,10 +68,8 @@ class UploadTestSubscriptionPinUseCase(
                 getResult(ResultStatus.SUCCESS)
             )
             .onErrorResumeNext {
-                if (it is UnknownHostException) {
-                    throw it
-                } else {
-                    getResult(ResultStatus.FAILURE)
+                Single.fromCallable {
+                    resultComposer.composeUploadTestPinResult(ResultStatus.FAILURE)
                 }
             }
     }
@@ -93,5 +95,19 @@ class UploadTestSubscriptionPinUseCase(
         return Single.fromCallable {
             resultComposer.composeUploadTestPinResult(resultStatus)
         }
+    }
+
+    private fun cacheRequestDataAndError(
+        payload: String,
+        requestId: String,
+        exception: Exception
+    ): Single<String> {
+        return cacheStore.cacheUiRequest(
+            GetBridgeDataUIRequestItem(
+                OutgoingBridgeDataType.UPLOAD_COVID_TEST_PIN, payload, requestId
+            )
+        ).andThen(
+            Single.error(exception)
+        )
     }
 }

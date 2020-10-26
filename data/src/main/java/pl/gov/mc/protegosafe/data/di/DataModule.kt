@@ -42,6 +42,7 @@ import pl.gov.mc.protegosafe.data.mapper.RiskLevelConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.db.dao.CovidTestDao
 import pl.gov.mc.protegosafe.data.mapper.TestSubscriptionConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.model.OutgoingBridgeDataResultComposerImpl
+import pl.gov.mc.protegosafe.data.repository.CacheStoreImpl
 import pl.gov.mc.protegosafe.data.repository.DiagnosisKeyRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureNotificationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureRepositoryImpl
@@ -55,6 +56,7 @@ import pl.gov.mc.protegosafe.data.repository.CovidTestRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.SafetyNetRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TemporaryExposureKeysUploadRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TriageRepositoryImpl
+import pl.gov.mc.protegosafe.data.repository.UiRequestCacheRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.WorkerStateRepositoryImpl
 import pl.gov.mc.protegosafe.domain.model.ApiExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
@@ -66,6 +68,7 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationMapper
+import pl.gov.mc.protegosafe.domain.repository.CacheStore
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
@@ -80,6 +83,7 @@ import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
 import pl.gov.mc.protegosafe.domain.repository.SafetyNetRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
+import pl.gov.mc.protegosafe.domain.repository.UiRequestCacheRepository
 import pl.gov.mc.protegosafe.domain.repository.WorkerStateRepository
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -148,6 +152,8 @@ val dataModule = module {
     single { CovidTestDao() }
     single<CovidTestRepository> { CovidTestRepositoryImpl(get(), get(), get()) }
     single<TestSubscriptionConfigurationMapper> { TestSubscriptionConfigurationMapperImpl() }
+    single<UiRequestCacheRepository> { UiRequestCacheRepositoryImpl(get(), get(), get()) }
+    single<CacheStore> { CacheStoreImpl() }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(

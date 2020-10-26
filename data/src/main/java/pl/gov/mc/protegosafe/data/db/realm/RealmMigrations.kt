@@ -8,10 +8,14 @@ import io.realm.RealmSchema
 class RealmMigrations : RealmMigration {
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
-        when (oldVersion) {
-            REALM_VERSION_UP_TO_4_4 -> {
-                addDistricts(realm.schema)
-            }
+        var dbVersion = oldVersion
+        if (dbVersion == REALM_VERSION_UP_TO_4_4) {
+            addDistricts(realm.schema)
+            dbVersion++
+        }
+        if (dbVersion == REALM_VERSION_UP_TO_4_7) {
+            addCovidTest(realm.schema)
+            dbVersion++
         }
     }
 
@@ -31,7 +35,25 @@ class RealmMigrations : RealmMigration {
             ?.addField("updated", Long::class.java)
     }
 
+    private fun addCovidTest(realmSchema: RealmSchema) {
+        realmSchema.create("LatestProcessedDiagnosisKeyDto")
+            ?.addField("id", Int::class.java, FieldAttribute.PRIMARY_KEY)
+            ?.addField("timestamp", Long::class.java)
+
+        realmSchema.create("TestSubscriptionDto")
+            ?.addField("id", Int::class.java, FieldAttribute.PRIMARY_KEY)
+            ?.addField("status", Int::class.java)
+            ?.addField("accessToken", String::class.java, FieldAttribute.REQUIRED)
+            ?.addField("guid", String::class.java, FieldAttribute.REQUIRED)
+            ?.addField("updated", Long::class.java)
+
+        realmSchema.create("TestSubscriptionPinDto")
+            ?.addField("id", Int::class.java, FieldAttribute.PRIMARY_KEY)
+            ?.addField("testPin", String::class.java, FieldAttribute.REQUIRED)
+    }
+
     companion object {
         private const val REALM_VERSION_UP_TO_4_4 = 0L
+        private const val REALM_VERSION_UP_TO_4_7 = 1L
     }
 }

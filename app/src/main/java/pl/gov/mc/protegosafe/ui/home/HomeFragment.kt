@@ -285,7 +285,7 @@ class HomeFragment : BaseFragment() {
                 View.VISIBLE
             binding.missingConnectionLayout.button_check_internet_connection.setOnClickListener {
                 binding.webView.visibility = View.VISIBLE
-                vm.onUploadRetry()
+                vm.onRequestRetry()
             }
         } else {
             binding.missingConnectionLayout.button_check_internet_connection.visibility =
@@ -293,7 +293,7 @@ class HomeFragment : BaseFragment() {
         }
 
         binding.missingConnectionLayout.button_cancel.setOnClickListener {
-            vm.onUploadCanceled()
+            vm.onRequestCanceled()
             binding.webView.visibility = View.VISIBLE
         }
         binding.missingConnectionLayout.text_view_connection_error.setText(

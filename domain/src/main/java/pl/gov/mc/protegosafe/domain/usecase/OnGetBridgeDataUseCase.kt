@@ -33,6 +33,7 @@ class OnGetBridgeDataUseCase(
     fun execute(
         type: OutgoingBridgeDataType,
         data: String?,
+        requestId: String,
         onResultActionRequired: (ActionRequiredItem) -> Unit
     ): Single<String> {
         return when (type) {
@@ -70,7 +71,7 @@ class OnGetBridgeDataUseCase(
             }
             OutgoingBridgeDataType.UPLOAD_COVID_TEST_PIN -> {
                 data?.let {
-                    uploadTestSubscriptionPinUseCase.execute(it)
+                    uploadTestSubscriptionPinUseCase.execute(it, requestId)
                 } ?: throw IllegalArgumentException()
             }
             OutgoingBridgeDataType.GET_COVID_TEST_SUBSCRIPTION_STATUS -> {
