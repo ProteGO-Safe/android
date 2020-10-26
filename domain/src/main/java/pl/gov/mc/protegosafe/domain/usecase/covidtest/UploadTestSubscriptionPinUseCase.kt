@@ -28,7 +28,7 @@ class UploadTestSubscriptionPinUseCase(
     private val postExecutionThread: PostExecutionThread
 ) {
     fun execute(payload: String, requestId: String): Single<String> {
-        return checkIfDeviceCompatibleOrError()
+        return checkIfDeviceCompatibleOrError(payload, requestId)
             .andThen(checkInternet())
             .flatMap {
                 if (it.isConnected()) {
@@ -37,24 +37,22 @@ class UploadTestSubscriptionPinUseCase(
                             startUpload(pinItem.pin)
                         }
                 } else {
-                    cacheRequestDataAndError(
-                        payload, requestId, NoInternetConnectionException()
-                    )
+                    cacheRequestDataAndError(payload, requestId)
+                        .andThen(Single.error(NoInternetConnectionException()))
                 }
             }
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
     }
 
-    private fun checkIfDeviceCompatibleOrError(): Completable {
+    private fun checkIfDeviceCompatibleOrError(payload: String, requestId: String): Completable {
         return covidTestRepository.isDeviceCompatible()
             .flatMapCompletable { isAvailable ->
                 if (isAvailable) {
                     Completable.complete()
                 } else {
-                    Completable.fromAction {
-                        throw CovidTestNotCompatibleDeviceException()
-                    }
+                    cacheRequestDataAndError(payload, requestId)
+                        .andThen(Completable.error(CovidTestNotCompatibleDeviceException()))
                 }
             }
     }
@@ -68,9 +66,7 @@ class UploadTestSubscriptionPinUseCase(
                 getResult(ResultStatus.SUCCESS)
             )
             .onErrorResumeNext {
-                Single.fromCallable {
-                    resultComposer.composeUploadTestPinResult(ResultStatus.FAILURE)
-                }
+                getResult(ResultStatus.FAILURE)
             }
     }
 
@@ -100,14 +96,11 @@ class UploadTestSubscriptionPinUseCase(
     private fun cacheRequestDataAndError(
         payload: String,
         requestId: String,
-        exception: Exception
-    ): Single<String> {
+    ): Completable {
         return cacheStore.cacheUiRequest(
             GetBridgeDataUIRequestItem(
                 OutgoingBridgeDataType.UPLOAD_COVID_TEST_PIN, payload, requestId
             )
-        ).andThen(
-            Single.error(exception)
         )
     }
 }

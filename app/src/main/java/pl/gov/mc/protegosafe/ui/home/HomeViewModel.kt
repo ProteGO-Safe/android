@@ -165,8 +165,11 @@ class HomeViewModel(
             }
             is NoInternetConnectionException,
             is UnknownHostException,
-            is CovidTestNotCompatibleDeviceException,
             is UploadException -> {
+                _showUploadError.postValue(error as Exception)
+            }
+            is CovidTestNotCompatibleDeviceException -> {
+                onRequestCanceled()
                 _showUploadError.postValue(error as Exception)
             }
             else -> {
