@@ -3,9 +3,8 @@ package pl.gov.mc.protegosafe.domain.usecase.covidtest
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.OffsetDateTime
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
+import pl.gov.mc.protegosafe.domain.extension.getCurrentTimeInSeconds
 import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationItem
@@ -45,7 +44,7 @@ class GetTestSubscriptionStatusUseCase(
     ): Completable {
         return getUpdateSubscriptionConfiguration()
             .flatMapCompletable {
-                if (getCurrentTimeInMillis() - testSubscription.updated > it.interval) {
+                if (getCurrentTimeInSeconds() - testSubscription.updated > it.interval) {
                     Completable.fromAction {
                         onResultActionRequired(ActionRequiredItem.UpdateTestSubscription)
                     }
@@ -68,9 +67,5 @@ class GetTestSubscriptionStatusUseCase(
         return Single.fromCallable {
             resultComposer.composeTestSubscriptionStatusResult(testSubscriptionItem)
         }
-    }
-
-    private fun getCurrentTimeInMillis(): Long {
-        return LocalDateTime.now().toInstant(OffsetDateTime.now().offset).epochSecond
     }
 }
