@@ -311,6 +311,7 @@ class HomeViewModel(
                     Timber.d("Success")
                 },
                 {
+                    handleError(it)
                     Timber.e(it)
                 }
             ).addTo(disposables)

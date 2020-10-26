@@ -7,7 +7,6 @@ import pl.gov.mc.protegosafe.domain.model.SetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.UIRequest
 
 interface UiRequestCacheRepository {
-    fun cacheRequest(uiRequest: UIRequest): Completable
     fun getCachedRequest(): UIRequest?
     fun retryCachedRequest(
         uiRequest: GetBridgeDataUIRequestItem,

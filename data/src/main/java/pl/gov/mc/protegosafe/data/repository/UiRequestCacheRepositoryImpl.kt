@@ -10,6 +10,7 @@ import pl.gov.mc.protegosafe.domain.model.ResultStatus
 import pl.gov.mc.protegosafe.domain.model.SetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.model.UIRequest
+import pl.gov.mc.protegosafe.domain.repository.CacheStore
 import pl.gov.mc.protegosafe.domain.repository.UiRequestCacheRepository
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
 import timber.log.Timber
@@ -17,19 +18,11 @@ import timber.log.Timber
 class UiRequestCacheRepositoryImpl(
     private val outgoingBridgeDataResultComposer: OutgoingBridgeDataResultComposer,
     private val uploadTemporaryExposureKeysWithCachedPayloadUseCase: UploadTemporaryExposureKeysWithCachedPayloadUseCase,
+    private val cacheStore: CacheStore
 ) : UiRequestCacheRepository {
 
-    private var cachedUIRequest: UIRequest? = null
-
-    override fun cacheRequest(uiRequest: UIRequest): Completable {
-        return Completable.fromAction {
-            cachedUIRequest = uiRequest
-        }
-    }
-
     override fun getCachedRequest(): UIRequest? {
-        Timber.d("Get UI request cached: $cachedUIRequest")
-        return cachedUIRequest
+        return cacheStore.getCachedUiRequest()
     }
 
     override fun retryCachedRequest(

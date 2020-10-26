@@ -42,6 +42,7 @@ import pl.gov.mc.protegosafe.data.mapper.RiskLevelConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.db.dao.CovidTestDao
 import pl.gov.mc.protegosafe.data.mapper.TestSubscriptionConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.model.OutgoingBridgeDataResultComposerImpl
+import pl.gov.mc.protegosafe.data.repository.CacheStoreImpl
 import pl.gov.mc.protegosafe.data.repository.DiagnosisKeyRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureNotificationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureRepositoryImpl
@@ -67,6 +68,7 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationMapper
+import pl.gov.mc.protegosafe.domain.repository.CacheStore
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
@@ -150,7 +152,8 @@ val dataModule = module {
     single { CovidTestDao() }
     single<CovidTestRepository> { CovidTestRepositoryImpl(get(), get(), get()) }
     single<TestSubscriptionConfigurationMapper> { TestSubscriptionConfigurationMapperImpl() }
-    single<UiRequestCacheRepository> { UiRequestCacheRepositoryImpl(get(), get()) }
+    single<UiRequestCacheRepository> { UiRequestCacheRepositoryImpl(get(), get(), get()) }
+    single<CacheStore> { CacheStoreImpl() }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(

@@ -13,8 +13,8 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.ResultStatus
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
+import pl.gov.mc.protegosafe.domain.repository.CacheStore
 import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
-import pl.gov.mc.protegosafe.domain.repository.UiRequestCacheRepository
 import java.lang.Exception
 import java.util.UUID
 
@@ -23,7 +23,7 @@ class UploadTestSubscriptionPinUseCase(
     private val payloadMapper: OutgoingBridgePayloadMapper,
     private val internetConnectionManager: InternetConnectionManager,
     private val resultComposer: OutgoingBridgeDataResultComposer,
-    private val uiRequestCacheRepository: UiRequestCacheRepository,
+    private val cacheStore: CacheStore,
     private val postExecutionThread: PostExecutionThread
 ) {
     fun execute(payload: String, requestId: String): Single<String> {
@@ -83,7 +83,7 @@ class UploadTestSubscriptionPinUseCase(
         requestId: String,
         exception: Exception
     ): Single<String> {
-        return uiRequestCacheRepository.cacheRequest(
+        return cacheStore.cacheUiRequest(
             GetBridgeDataUIRequestItem(
                 OutgoingBridgeDataType.UPLOAD_COVID_TEST_PIN, payload, requestId
             )
