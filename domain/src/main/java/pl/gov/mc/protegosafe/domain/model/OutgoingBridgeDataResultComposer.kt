@@ -13,4 +13,7 @@ interface OutgoingBridgeDataResultComposer {
     ): String
     fun composeSubscribedDistrictsResult(subscribedDistricts: List<DistrictItem>): String
     fun composeUploadTestPinResult(resultStatus: ResultStatus): String
+    fun composeTestSubscriptionStatusResult(
+        testSubscriptionItem: TestSubscriptionItem?
+    ): String
 }

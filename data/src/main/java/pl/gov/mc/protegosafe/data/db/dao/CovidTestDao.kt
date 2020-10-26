@@ -2,6 +2,7 @@ package pl.gov.mc.protegosafe.data.db.dao
 
 import doTransaction
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionPinDto
@@ -10,25 +11,17 @@ import timber.log.Timber
 
 open class CovidTestDao {
 
-    /**
-     * If exists in database just return [TestSubscriptionDto] object
-     * else return new [TestSubscriptionDto] with default values and save it into database.
-     * @return [TestSubscriptionDto]
-     */
-    fun getTestSubscription(): Single<TestSubscriptionDto> {
+    fun getTestSubscription(): Maybe<TestSubscriptionDto> {
         return singleQuery<TestSubscriptionDto>()
-            .map {
-                if (it.isEmpty()) {
-                    TestSubscriptionDto()
-                } else {
-                    it.first()
-                }
-            }
-            .flatMap { subscriptionDto ->
-                doTransaction {
-                    it.copyToRealmOrUpdate(subscriptionDto)
-                }.toSingle {
-                    subscriptionDto
+            .flatMapMaybe { list ->
+                Maybe.create { emitter ->
+                    if (list.isEmpty()) {
+                        emitter.onComplete()
+                    } else {
+                        emitter.onSuccess(
+                            list.first()
+                        )
+                    }
                 }
             }
     }

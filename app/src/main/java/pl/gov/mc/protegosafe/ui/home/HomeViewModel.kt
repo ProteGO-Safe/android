@@ -23,6 +23,7 @@ import pl.gov.mc.protegosafe.domain.usecase.ProcessPendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StartExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.UpdateTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.logging.webViewTimber
 import pl.gov.mc.protegosafe.ui.common.BaseViewModel
 import pl.gov.mc.protegosafe.ui.common.livedata.SingleLiveEvent
@@ -38,6 +39,7 @@ class HomeViewModel(
     private val uploadTemporaryExposureKeysWithCachedPayloadUseCase: UploadTemporaryExposureKeysWithCachedPayloadUseCase,
     private val storePendingActivityResultUseCase: StorePendingActivityResultUseCase,
     private val processPendingActivityResultUseCase: ProcessPendingActivityResultUseCase,
+    private val updateTestSubscriptionStatusUseCase: UpdateTestSubscriptionStatusUseCase,
     private val outgoingBridgeDataResultComposer: OutgoingBridgeDataResultComposer
 ) : BaseViewModel() {
 
@@ -96,7 +98,11 @@ class HomeViewModel(
     }
 
     fun getBridgeData(dataType: Int, data: String, requestId: String) {
-        onGetBridgeDataUseCase.execute(OutgoingBridgeDataType.valueOf(dataType), data)
+        onGetBridgeDataUseCase.execute(
+            OutgoingBridgeDataType.valueOf(dataType),
+            data,
+            ::onResultActionRequired
+        )
             .subscribe(
                 {
                     webViewTimber().d("getBridgeData: $dataType output: $it")
@@ -219,6 +225,9 @@ class HomeViewModel(
             is ActionRequiredItem.CloseApp -> {
                 _closeApplication.postValue(Unit)
             }
+            is ActionRequiredItem.UpdateTestSubscription -> {
+                updateTestSubscriptionStatus()
+            }
         }
     }
 
@@ -244,6 +253,19 @@ class HomeViewModel(
             .subscribe(
                 {
                     onBridgeData(OutgoingBridgeDataType.SERVICES_STATUS.code, it)
+                },
+                {
+                    Timber.e(it, "sendServicesStatus failed")
+                }
+            ).addTo(disposables)
+    }
+
+    private fun updateTestSubscriptionStatus() {
+        Timber.d("updateTestSubscriptionStatus")
+        updateTestSubscriptionStatusUseCase.execute()
+            .subscribe(
+                {
+                    onBridgeData(OutgoingBridgeDataType.GET_COVID_TEST_SUBSCRIPTION_STATUS.code, it)
                 },
                 {
                     Timber.e(it, "sendServicesStatus failed")

@@ -2,7 +2,7 @@ package pl.gov.mc.protegosafe.data.model.covidtest
 
 import com.google.gson.annotations.SerializedName
 
-data class TestSubscriptionRequestData(
+data class CreateTestSubscriptionRequestData(
     @SerializedName("guid")
     val guid: String,
     @SerializedName("code")
