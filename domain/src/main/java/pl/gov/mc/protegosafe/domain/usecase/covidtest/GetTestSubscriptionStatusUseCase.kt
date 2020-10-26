@@ -9,6 +9,7 @@ import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionStatus
 import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
 
@@ -44,7 +45,10 @@ class GetTestSubscriptionStatusUseCase(
     ): Completable {
         return getUpdateSubscriptionConfiguration()
             .flatMapCompletable {
-                if (getCurrentTimeInSeconds() - testSubscription.updated > it.interval) {
+                if (
+                    testSubscription.status != TestSubscriptionStatus.SCHEDULED &&
+                    getCurrentTimeInSeconds() - testSubscription.updated > it.interval
+                ) {
                     Completable.fromAction {
                         onResultActionRequired(ActionRequiredItem.UpdateTestSubscription)
                     }
