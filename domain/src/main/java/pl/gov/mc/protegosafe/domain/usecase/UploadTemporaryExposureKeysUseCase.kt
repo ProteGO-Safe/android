@@ -15,10 +15,13 @@ import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
+import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
+import pl.gov.mc.protegosafe.domain.model.SetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem.Companion.ROLLING_PERIOD_MAX
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
+import pl.gov.mc.protegosafe.domain.repository.CacheStore
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.KeyUploadSystemInfoRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
@@ -32,6 +35,7 @@ class UploadTemporaryExposureKeysUseCase(
     private val temporaryExposureKeysUploadRepository: TemporaryExposureKeysUploadRepository,
     private val internetConnectionManager: InternetConnectionManager,
     private val retrofitExceptionMapper: RetrofitExceptionMapper,
+    private val cacheStore: CacheStore,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -66,6 +70,7 @@ class UploadTemporaryExposureKeysUseCase(
             }
             .onErrorResumeNext {
                 temporaryExposureKeysUploadRepository.cacheRequestPayload(payload)
+                    .andThen(cacheUIRequest())
                     .andThen(Single.error(it))
             }
             .flatMapCompletable {
@@ -109,6 +114,9 @@ class UploadTemporaryExposureKeysUseCase(
 
     private fun cachePayloadAndReturnConnectionError(payload: String): Completable {
         return temporaryExposureKeysUploadRepository.cacheRequestPayload(payload)
+            .andThen(
+                cacheUIRequest()
+            )
             .andThen(
                 Completable.error(NoInternetConnectionException())
             )
@@ -226,4 +234,12 @@ class UploadTemporaryExposureKeysUseCase(
                     }
                 }
             }
+
+    private fun cacheUIRequest(): Completable {
+        return cacheStore.cacheUiRequest(
+            SetBridgeDataUIRequestItem(
+                IncomingBridgeDataType.REQUEST_TEMPORARY_EXPOSURE_KEYS_UPLOAD
+            )
+        )
+    }
 }
