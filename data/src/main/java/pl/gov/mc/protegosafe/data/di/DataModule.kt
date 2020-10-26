@@ -55,6 +55,7 @@ import pl.gov.mc.protegosafe.data.repository.CovidTestRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.SafetyNetRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TemporaryExposureKeysUploadRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TriageRepositoryImpl
+import pl.gov.mc.protegosafe.data.repository.UiRequestCacheRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.WorkerStateRepositoryImpl
 import pl.gov.mc.protegosafe.domain.model.ApiExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
@@ -80,6 +81,7 @@ import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
 import pl.gov.mc.protegosafe.domain.repository.SafetyNetRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
+import pl.gov.mc.protegosafe.domain.repository.UiRequestCacheRepository
 import pl.gov.mc.protegosafe.domain.repository.WorkerStateRepository
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -148,6 +150,7 @@ val dataModule = module {
     single { CovidTestDao() }
     single<CovidTestRepository> { CovidTestRepositoryImpl(get(), get(), get()) }
     single<TestSubscriptionConfigurationMapper> { TestSubscriptionConfigurationMapperImpl() }
+    single<UiRequestCacheRepository> { UiRequestCacheRepositoryImpl(get(), get()) }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(

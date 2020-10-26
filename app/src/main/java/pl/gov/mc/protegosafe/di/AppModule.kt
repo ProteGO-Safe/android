@@ -100,6 +100,7 @@ val useCaseModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
@@ -125,7 +126,7 @@ val useCaseModule = module {
     factory { HandleDistrictActionUseCase(get(), get(), get()) }
     factory { GetSubscribedDistrictsResultUseCase(get(), get(), get()) }
     factory { NotifyDistrictsUpdatedUseCase(get(), get(), get()) }
-    factory { UploadTestSubscriptionPinUseCase(get(), get(), get(), get(), get()) }
+    factory { UploadTestSubscriptionPinUseCase(get(), get(), get(), get(), get(), get()) }
     factory { GetTestSubscriptionStatusUseCase(get(), get(), get(), get()) }
     factory { UpdateTestSubscriptionStatusUseCase(get(), get(), get()) }
     factory { GetTestSubscriptionPinUseCase(get(), get(), get()) }
@@ -134,6 +135,6 @@ val useCaseModule = module {
 val viewModelModule = module {
     viewModel { MainViewModel(get(), get(), get()) }
     viewModel {
-        HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
+        HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
 }
