@@ -169,7 +169,7 @@ class HomeFragment : BaseFragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (binding.webView.canGoBack()) {
-                        binding.webView.goBack()
+                        vm.onBackButtonPressed()
                     } else {
                         activity?.finish()
                     }

@@ -146,6 +146,13 @@ class HomeViewModel(
         }
     }
 
+    fun onBackButtonPressed() {
+        onBridgeData(
+            OutgoingBridgeDataType.BACK_BUTTON_PRESSED.code,
+            outgoingBridgeDataResultComposer.composeBackButtonPressedResult()
+        )
+    }
+
     private fun sendAccessDeniedUploadStatus() {
         onBridgeData(
             OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code,

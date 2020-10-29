@@ -17,4 +17,5 @@ interface OutgoingBridgeDataResultComposer {
         testSubscriptionItem: TestSubscriptionItem?
     ): String
     fun composeTestSubscriptionPinResult(pin: String): String
+    fun composeBackButtonPressedResult(): String
 }
