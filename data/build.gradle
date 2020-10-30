@@ -46,6 +46,7 @@ android {
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
             buildConfigField "String", "COVID_INFO_FILE", STAGING_COVID_INFO_FILE
+            buildConfigField "String", "COVID_TEST_URL", STAGING_COVID_TEST_URL
         }
         stage {
             dimension "mode"
@@ -55,6 +56,7 @@ android {
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
             buildConfigField "String", "COVID_INFO_FILE", STAGING_COVID_INFO_FILE
+            buildConfigField "String", "COVID_TEST_URL", STAGING_COVID_TEST_URL
         }
         prod {
             dimension "mode"
@@ -64,6 +66,7 @@ android {
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", PRODUCTION_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", PRODUCTION_UPLOAD_BUCKET_ENDPOINT
             buildConfigField "String", "COVID_INFO_FILE", PRODUCTION_COVID_INFO_FILE
+            buildConfigField "String", "COVID_TEST_URL", PRODUCTION_COVID_TEST_URL
         }
     }
 }

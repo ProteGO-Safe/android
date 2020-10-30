@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class SubscribedDistrictsResult(
     @SerializedName("districts")
-    val districts: List<DistrictDto>
+    val districts: List<DistrictData>
 )

@@ -24,8 +24,8 @@ import pl.gov.mc.protegosafe.domain.usecase.GetFontScaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetSafetyNetAttestationTokenUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.GetTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetSystemLanguageUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
@@ -41,6 +41,9 @@ import pl.gov.mc.protegosafe.domain.usecase.StopExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.GetTestSubscriptionPinUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.UpdateTestSubscriptionStatusUseCase
+import pl.gov.mc.protegosafe.domain.usecase.covidtest.UploadTestSubscriptionPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUseCase
@@ -72,6 +75,9 @@ val useCaseModule = module {
             get(),
             get(),
             get(),
+            get(),
+            get(),
+            get(),
             get()
         )
     }
@@ -85,9 +91,9 @@ val useCaseModule = module {
     factory { ChangeServiceStatusUseCase(get(), get(), get()) }
     factory { ClearDataUseCase(get(), get(), get(), get()) }
     factory { ProvideDiagnosisKeysUseCase(get(), get(), get()) }
-    factory { GetSafetyNetAttestationTokenUseCase(get(), get()) }
     factory {
         UploadTemporaryExposureKeysUseCase(
+            get(),
             get(),
             get(),
             get(),
@@ -105,7 +111,7 @@ val useCaseModule = module {
     factory { StorePendingActivityResultUseCase(get(), get()) }
     factory { ProcessPendingActivityResultUseCase(get(), get()) }
     factory { GetExposureInformationUseCase(get(), get()) }
-    factory { GetAnalyzeResultUseCase(get(), get(), get(), get()) }
+    factory { GetAnalyzeResultUseCase(get(), get(), get(), get(), get()) }
     factory { CheckDeviceRootedUseCase(get(), get(), get(), get()) }
     factory { PrepareMigrationIfRequiredUseCase(get(), get()) }
     factory { GetMigrationUrlUseCase(get()) }
@@ -120,11 +126,15 @@ val useCaseModule = module {
     factory { HandleDistrictActionUseCase(get(), get(), get()) }
     factory { GetSubscribedDistrictsResultUseCase(get(), get(), get()) }
     factory { NotifyDistrictsUpdatedUseCase(get(), get(), get()) }
+    factory { UploadTestSubscriptionPinUseCase(get(), get(), get(), get(), get(), get()) }
+    factory { GetTestSubscriptionStatusUseCase(get(), get(), get(), get()) }
+    factory { UpdateTestSubscriptionStatusUseCase(get(), get(), get()) }
+    factory { GetTestSubscriptionPinUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {
     viewModel { MainViewModel(get(), get(), get()) }
     viewModel {
-        HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get())
+        HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
 }

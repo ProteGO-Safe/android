@@ -1,6 +1,6 @@
 package pl.gov.mc.protegosafe.domain.model
 
-enum class OutgoingBridgeDataType(val code: Int) {
+enum class OutgoingBridgeDataType(override val code: Int) : UIRequestBridgeDataType {
     NOTIFICATION_DATA(2),
     APP_LIFECYCLE_STATE(11),
     TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS(43),
@@ -12,7 +12,10 @@ enum class OutgoingBridgeDataType(val code: Int) {
     DISTRICTS_STATUS(70),
     UPDATE_DISTRICTS_STATUSES(71),
     DISTRICT_ACTION(72),
-    GET_SUBSCRIBED_DISTRICTS(73);
+    GET_SUBSCRIBED_DISTRICTS(73),
+    UPLOAD_COVID_TEST_PIN(80),
+    GET_COVID_TEST_SUBSCRIPTION_STATUS(81),
+    GET_COVID_TEST_SUBSCRIPTION_PIN(82);
 
     companion object {
         fun valueOf(value: Int): OutgoingBridgeDataType =

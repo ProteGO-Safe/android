@@ -13,6 +13,8 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationItem
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationMapper
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -21,7 +23,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 class RemoteConfigurationRepositoryImpl(
     private val exposureConfigurationMapper: ExposureConfigurationMapper,
     private val diagnosisKeyDownloadConfigurationMapper: DiagnosisKeyDownloadConfigurationMapper,
-    private val riskLevelConfigurationMapper: RiskLevelConfigurationMapper
+    private val riskLevelConfigurationMapper: RiskLevelConfigurationMapper,
+    private val testSubscriptionConfigurationMapper: TestSubscriptionConfigurationMapper
 ) : RemoteConfigurationRepository {
 
     private val _remoteConfig = Firebase.remoteConfig
@@ -72,6 +75,18 @@ class RemoteConfigurationRepositoryImpl(
             )
     }
 
+    override fun getTestSubscriptionConfiguration(): Single<TestSubscriptionConfigurationItem> {
+        Timber.d("getExposureConfigurationItem")
+        return setUpConfigSettingsIfNeeded()
+            .andThen(
+                Single.fromCallable {
+                    _remoteConfig.getString(TEST_SUBSCRIPTION_CONFIGURATION).let { configurationJson ->
+                        testSubscriptionConfigurationMapper.toEntity(configurationJson)
+                    }
+                }
+            )
+    }
+
     private fun setUpConfigSettingsIfNeeded() = Completable.defer {
         Timber.d("setUpConfigSettingsIfNeeded: isSetUpNeeded = ${!areDefaultSettingsSetUp.get()}")
         if (areDefaultSettingsSetUp.get()) {
@@ -96,5 +111,6 @@ class RemoteConfigurationRepositoryImpl(
         private const val EXPOSURE_CONFIGURATION = "exposureConfiguration"
         private const val DIAGNOSIS_KEY_DOWNLOAD_CONFIGURATION = "diagnosisKeyDownloadConfiguration"
         private const val RISK_LEVEL_CONFIGURATION = "riskLevelConfiguration"
+        private const val TEST_SUBSCRIPTION_CONFIGURATION = "updateSubscriptionConfiguration"
     }
 }

@@ -27,8 +27,8 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 72
-        versionName "4.6.0"
+        versionCode 74
+        versionName "4.7.0"
 
         setProperty("archivesBaseName", "protegosafe-${defaultConfig.versionName}-${defaultConfig.versionCode}")
 

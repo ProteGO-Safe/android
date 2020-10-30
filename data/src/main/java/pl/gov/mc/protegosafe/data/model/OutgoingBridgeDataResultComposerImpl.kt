@@ -1,37 +1,33 @@
 package pl.gov.mc.protegosafe.data.model
 
+import com.google.gson.GsonBuilder
 import pl.gov.mc.protegosafe.data.extension.toJson
-import pl.gov.mc.protegosafe.data.mapper.toDistrictDto
+import pl.gov.mc.protegosafe.data.mapper.toDistrictData
+import pl.gov.mc.protegosafe.data.mapper.toTestSubscriptionStatusData
+import pl.gov.mc.protegosafe.data.mapper.toRiskLevelData
 import pl.gov.mc.protegosafe.data.mapper.toVoivodeshipData
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
-import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
-import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
+import pl.gov.mc.protegosafe.domain.model.ResultStatus
+import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 
 class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
 
-    enum class Result(val value: Int) {
-        SUCCESS(1),
-        FAILED(2)
-    }
-
     override fun composeTemporaryExposureKeysUploadResult(state: TemporaryExposureKeysUploadState): String =
-        TemporaryExposureKeysUploadResult(state.code).toJson()
+        SimpleResult(state.code).toJson()
 
     override fun composeAppLifecycleStateResult(state: AppLifecycleState): String =
         AppLifecycleStateResult(state.code).toJson()
 
     override fun composeAnalyzeResult(
-        riskLevelConfigurationItem: RiskLevelConfigurationItem,
-        exposure: ExposureItem
+        riskLevelItem: RiskLevelItem
     ): String = AnalyzeResultData(
-        RiskLevelData.fromRiskScore(
-            riskLevelConfigurationItem,
-            exposure.riskScore
-        ).value
+        riskLevelItem.toRiskLevelData().value
     ).toJson()
 
     override fun composeAppVersionNameResult(versionName: String): String {
@@ -52,9 +48,9 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
     ): String {
         return DistrictsRestrictionsResult(
             if (voivodeships.isEmpty()) {
-                Result.FAILED
+                ResultStatus.FAILURE
             } else {
-                Result.SUCCESS
+                ResultStatus.SUCCESS
             }.value,
             updated,
             voivodeships.map { it.toVoivodeshipData() }
@@ -62,6 +58,34 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
     }
 
     override fun composeSubscribedDistrictsResult(subscribedDistricts: List<DistrictItem>): String {
-        return SubscribedDistrictsResult(subscribedDistricts.map { it.toDistrictDto() }).toJson()
+        return SubscribedDistrictsResult(subscribedDistricts.map { it.toDistrictData() }).toJson()
+    }
+
+    override fun composeUploadTestPinResult(resultStatus: ResultStatus): String {
+        return SimpleResult(resultStatus.value).toJson()
+    }
+
+    override fun composeTestSubscriptionStatusResult(
+        testSubscriptionItem: TestSubscriptionItem?
+    ): String {
+        return GsonBuilder().serializeNulls().create()
+            .toJson(
+                TestSubscriptionStatusResult(
+                    testSubscriptionItem?.toTestSubscriptionStatusData()
+                )
+            )
+    }
+
+    override fun composeTestSubscriptionPinResult(pin: String): String {
+        return GsonBuilder().serializeNulls().create()
+            .toJson(
+                TestSubscriptionPinData(
+                    if (pin.isEmpty()) {
+                        null
+                    } else {
+                        pin
+                    }
+                )
+            )
     }
 }

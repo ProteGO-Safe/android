@@ -1,6 +1,7 @@
 package pl.gov.mc.protegosafe.domain.usecase
 
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
@@ -40,24 +41,29 @@ class ProvideDiagnosisKeysUseCase(
                         listOfFilesInBatch,
                         token,
                         exposureConfigurationItem
-                    ).doOnComplete {
+                    ).andThen(
                         finalizeDiagnosisKeyProviding(listOfFilesInBatch)
-                    }
+                    )
                 }
         )
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
     }
 
-    private fun finalizeDiagnosisKeyProviding(listOfFilesInBatch: List<File>) {
-        DiagnosisKeysFileNameToTimestampUseCase().execute(
-            listOfFilesInBatch.first().name
-        )?.let {
-            diagnosisKeyRepository.setLatestProcessedDiagnosisKeyTimestamp(
-                it
+    private fun finalizeDiagnosisKeyProviding(listOfFilesInBatch: List<File>): Completable {
+        return Maybe.fromCallable {
+            DiagnosisKeysFileNameToTimestampUseCase().execute(
+                listOfFilesInBatch.first().name
             )
         }
-        listOfFilesInBatch.forEach { it.delete() }
+            .flatMapCompletable {
+                diagnosisKeyRepository.setLatestProcessedDiagnosisKeyTimestamp(it)
+            }
+            .andThen(
+                Completable.fromAction {
+                    listOfFilesInBatch.forEach { it.delete() }
+                }
+            )
     }
 
     private fun filesToBatches(files: List<File>) =

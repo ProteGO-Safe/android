@@ -7,7 +7,10 @@ import pl.gov.mc.protegosafe.data.db.dao.ExposureDao
 import pl.gov.mc.protegosafe.data.mapper.toEntity
 import pl.gov.mc.protegosafe.data.mapper.toExposureDto
 import pl.gov.mc.protegosafe.data.model.ExposureDto
+import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
+import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
+import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
 
 class ExposureRepositoryImpl(
@@ -33,5 +36,17 @@ class ExposureRepositoryImpl(
 
     override fun nukeDb(): Completable {
         return exposureDao.nukeDb()
+    }
+
+    override fun getRiskLevel(
+        riskLevelConfigurationItem: RiskLevelConfigurationItem,
+        exposure: ExposureItem
+    ): Single<RiskLevelItem> {
+        return Single.fromCallable {
+            RiskLevelData.fromRiskScore(
+                riskLevelConfigurationItem,
+                exposure.riskScore
+            ).toEntity()
+        }
     }
 }

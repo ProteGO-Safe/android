@@ -5,6 +5,7 @@ import io.reactivex.Single
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationItem
 
 interface RemoteConfigurationRepository {
 
@@ -27,4 +28,9 @@ interface RemoteConfigurationRepository {
      * Get [RiskLevelConfigurationItem] stored in remote configuration.
      */
     fun getRiskLevelConfiguration(): Single<RiskLevelConfigurationItem>
+
+    /**
+     * Get [TestSubscriptionConfigurationItem] stored in remote configuration.
+     */
+    fun getTestSubscriptionConfiguration(): Single<TestSubscriptionConfigurationItem>
 }

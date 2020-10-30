@@ -18,4 +18,10 @@
             {"maxNoRiskScore":0,"maxLowRiskScore":1499,"maxMiddleRiskScore":2999}
         </value>
     </entry>
+    <entry>
+        <key>updateSubscriptionConfiguration</key>
+        <value>
+            {"interval" : 60}
+        </value>
+    </entry>
 </defaultsMap>

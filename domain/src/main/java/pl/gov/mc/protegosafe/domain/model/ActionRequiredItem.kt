@@ -14,4 +14,5 @@ sealed class ActionRequiredItem {
     data class SendTemporaryExposureKeysUploadResult(val dataJson: String) : ActionRequiredItem() {
         val dataType = OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code
     }
+    object UpdateTestSubscription : ActionRequiredItem()
 }
