@@ -1,6 +1,6 @@
 package pl.gov.mc.protegosafe.domain.model
 
-enum class IncomingBridgeDataType(val code: Int) {
+enum class IncomingBridgeDataType(override val code: Int) : UIRequestBridgeDataType {
     UNKNOWN(-1),
     TRIAGE(1),
     REQUEST_CLEAR_DATA(37),

@@ -13,11 +13,14 @@ import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.CovidInfoResponseData
 import pl.gov.mc.protegosafe.data.model.DistrictActionData
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.RiskLevelConfigurationData
+import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
+import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionConfigurationData
 import pl.gov.mc.protegosafe.domain.CovidInfoItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.CloseAppItem
@@ -29,12 +32,16 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureInformationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.ExposureSummaryItem
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionStatus
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationData
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
+import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TriageItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
+import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 
 private const val FCM_NOTIFICATION_TITLE_KEY = "title"
@@ -154,3 +161,22 @@ fun DistrictActionData.toEntity() = DistrictActionItem(
     type = DistrictActionItem.ActionType.valueOf(type),
     districtId = districtId
 )
+
+fun TestSubscriptionDto.toEntity() = TestSubscriptionItem(
+    guid = guid,
+    status = TestSubscriptionStatus.valueOf(status),
+    updated = updated,
+    accessToken = accessToken
+)
+
+fun RiskLevelData.toEntity() = when (this) {
+    RiskLevelData.NO_RISK -> RiskLevelItem.NO_RISK
+    RiskLevelData.LOW_RISK -> RiskLevelItem.LOW_RISK
+    RiskLevelData.MIDDLE_RISK -> RiskLevelItem.MIDDLE_RISK
+    RiskLevelData.HIGH_RISK -> RiskLevelItem.HIGH_RISK
+}
+
+fun TestSubscriptionConfigurationData.toEntity() =
+    TestSubscriptionConfigurationItem(
+        interval = interval
+    )
