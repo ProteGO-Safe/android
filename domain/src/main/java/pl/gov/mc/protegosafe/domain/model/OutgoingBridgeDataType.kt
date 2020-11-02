@@ -9,6 +9,7 @@ enum class OutgoingBridgeDataType(override val code: Int) : UIRequestBridgeDataT
     APP_VERSION(62),
     SYSTEM_LANGUAGE(63),
     GET_FONT_SCALE(65),
+    EXPOSURE_RISK_CANCELLATION(66),
     DISTRICTS_STATUS(70),
     UPDATE_DISTRICTS_STATUSES(71),
     DISTRICT_ACTION(72),
