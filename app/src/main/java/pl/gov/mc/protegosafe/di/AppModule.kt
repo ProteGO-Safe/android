@@ -10,6 +10,7 @@ import pl.gov.mc.protegosafe.AppRepositoryImpl
 import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.repository.AppRepository
+import pl.gov.mc.protegosafe.domain.usecase.CancelExposureRiskUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
@@ -78,6 +79,7 @@ val useCaseModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
@@ -130,6 +132,7 @@ val useCaseModule = module {
     factory { GetTestSubscriptionStatusUseCase(get(), get(), get(), get()) }
     factory { UpdateTestSubscriptionStatusUseCase(get(), get(), get()) }
     factory { GetTestSubscriptionPinUseCase(get(), get(), get()) }
+    factory { CancelExposureRiskUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {
