@@ -2,7 +2,7 @@ package pl.gov.mc.protegosafe.data.cloud
 
 import io.reactivex.Single
 import pl.gov.mc.protegosafe.data.BuildConfig
-import pl.gov.mc.protegosafe.data.model.GetAccessTokenResponseData
+import pl.gov.mc.protegosafe.data.model.GetTokenResponseData
 import pl.gov.mc.protegosafe.data.model.covidtest.CreateTestSubscriptionRequestData
 import pl.gov.mc.protegosafe.data.model.covidtest.SubscriptionStatusResponseData
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusRequestBody
@@ -17,7 +17,7 @@ interface CovidTestService {
         @Header(SAFETY_TOKEN_HEADER) safetynetToken: String,
         @Body createTestSubscriptionRequestData: CreateTestSubscriptionRequestData,
         @Header(USER_AGENT_HEADER) userAgent: String = USER_AGENT_ANDROID
-    ): Single<GetAccessTokenResponseData>
+    ): Single<GetTokenResponseData>
 
     @POST("${BuildConfig.COVID_TEST_URL}getSubscription")
     fun getSubscriptionStatus(

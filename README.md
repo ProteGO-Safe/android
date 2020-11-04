@@ -77,6 +77,14 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.7.0
+
+Possibility to generate Covid Test Subscription when Exposure Notification returns HIGH RISK
+
+Cache UI requests when error should be handled by native
+
+Update UI
+
 4.6.0
 
 List of current color zones for poviats.
