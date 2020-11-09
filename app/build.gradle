@@ -45,21 +45,20 @@ android {
     kotlinOptions { jvmTarget = "1.8" }
 
     buildTypes {
-        sauceLab {
+        release {
             debuggable false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            versionNameSuffix ".sauceLab"
         }
         debug {
             versionNameSuffix ".debug"
             signingConfig signingConfigs.debug
             buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "false"
         }
-        release {
-            debuggable false
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        sauceLab {
+            initWith buildTypes.release
+            signingConfig signingConfigs.debug
+            versionNameSuffix ".sauceLab"
         }
     }
     flavorDimensions "mode"
@@ -79,6 +78,12 @@ android {
         prod {
             dimension "mode"
             manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
+        }
+    }
+
+    sourceSets {
+        stageSauceLab {
+            setRoot 'src/stageDebug'
         }
     }
 }
@@ -162,6 +167,19 @@ dependencies {
     debugImplementation deps.hyperion.shared_preferences
     debugImplementation deps.hyperion.timber
     debugImplementation deps.hyperion.simple_item
+
+    sauceLabImplementation deps.hyperion.core
+    sauceLabImplementation deps.hyperion.attr
+    sauceLabImplementation deps.hyperion.build_config
+    sauceLabImplementation deps.hyperion.crash
+    sauceLabImplementation deps.hyperion.disk
+    sauceLabImplementation deps.hyperion.geiger_counter
+    sauceLabImplementation deps.hyperion.measurement
+    sauceLabImplementation deps.hyperion.phoenix
+    sauceLabImplementation deps.hyperion.recorder
+    sauceLabImplementation deps.hyperion.shared_preferences
+    sauceLabImplementation deps.hyperion.timber
+    sauceLabImplementation deps.hyperion.simple_item
 
     implementation project(path: ':data')
     implementation project(path: ":domain")

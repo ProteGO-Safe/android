@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <variable
+            name="vm"
+            type="pl.gov.mc.protegosafe.ui.TestHelpersViewModel" />
+        <import type="pl.gov.mc.protegosafe.domain.model.RiskLevelItem"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        tools:context=".ui.TestHelpersActivity">
+
+        <TextView
+            android:id="@+id/change_risk_level_title"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear exposure database and insert Risk Level"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/no_risk_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NO_RISK"
+            android:onClick="@{() -> vm.onRiskChangeClick(RiskLevelItem.NO_RISK)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/change_risk_level_title" />
+
+        <Button
+            android:id="@+id/low_risk_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LOW_RISK"
+            android:onClick="@{() -> vm.onRiskChangeClick(RiskLevelItem.LOW_RISK)}"
+            app:layout_constraintStart_toEndOf="@+id/no_risk_level"
+            app:layout_constraintTop_toBottomOf="@id/change_risk_level_title" />
+
+        <Button
+            android:id="@+id/mid_risk_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MID_RISK"
+            android:onClick="@{() -> vm.onRiskChangeClick(RiskLevelItem.MIDDLE_RISK)}"
+            app:layout_constraintStart_toEndOf="@+id/low_risk_level"
+            app:layout_constraintTop_toBottomOf="@id/change_risk_level_title" />
+
+        <Button
+            android:id="@+id/high_risk_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HIGH_RISK"
+            android:onClick="@{() -> vm.onRiskChangeClick(RiskLevelItem.HIGH_RISK)}"
+            app:layout_constraintStart_toEndOf="@+id/mid_risk_level"
+            app:layout_constraintTop_toBottomOf="@id/change_risk_level_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
