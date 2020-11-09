@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:text="Clear exposure database and insert Risk Level"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
@@ -60,6 +61,34 @@
             android:onClick="@{() -> vm.onRiskChangeClick(RiskLevelItem.HIGH_RISK)}"
             app:layout_constraintStart_toEndOf="@+id/mid_risk_level"
             app:layout_constraintTop_toBottomOf="@id/change_risk_level_title" />
+
+        <TextView
+            android:id="@+id/workers_interval_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Set Workers Time interval(eg. poviats notifications, CDN requests)"
+            app:layout_constraintTop_toBottomOf="@+id/no_risk_level"
+            android:layout_marginTop="16dp"
+            style="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/min_workers_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15 min"
+            android:onClick="@{() -> vm.onWorkersIntervalClick(15L)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/workers_interval_title" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4 h"
+            android:onClick="@{() -> vm.onWorkersIntervalClick(240L)}"
+            app:layout_constraintStart_toEndOf="@id/min_workers_interval"
+            app:layout_constraintTop_toBottomOf="@+id/workers_interval_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

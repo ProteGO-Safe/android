@@ -24,4 +24,8 @@ interface AppRepository {
     fun clearAppData(): Completable
 
     fun createRealmDatabase(): Completable
+
+    fun getWorkersIntervalInMinutes(): Long
+
+    fun setWorkersInterval(intervalInMinutes: Long)
 }

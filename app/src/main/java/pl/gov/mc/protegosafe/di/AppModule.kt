@@ -60,7 +60,7 @@ val appModule = module {
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }
     single<AppUpdateManager> { AppUpdateManagerFactory.create(androidContext()) }
-    single<AppRepository> { AppRepositoryImpl(get(), get(), get(), androidContext()) }
+    single<AppRepository> { AppRepositoryImpl(get(), get(), get(), get(), androidContext()) }
 }
 
 val useCaseModule = module {
