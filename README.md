@@ -77,23 +77,33 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.7.1
+
+Fixed back button handling
+
+Updated translations
+
+Possibility to cancel exposure risk on UI request
+
+Updated UI
+
 4.7.0
 
 Possibility to generate Covid Test Subscription when Exposure Notification returns HIGH RISK
 
-Cache UI requests when error should be handled by native
+Added cache for UI requests when error should be handled by native
 
-Update UI
+Updated UI
 
 4.6.0
 
-List of current color zones for poviats.
+Added list of current color zones for poviats.
 
 Possibility of monitoring selected poviats - notification in case of a change in the color of the zone.
 
-Update of the screen that informs about the possibility to add a translation into a new language.
+Updated screen that informs about the possibility to add a translation into a new language.
 
-Update UI
+Updated UI
 
 4.5.0
 

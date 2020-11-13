@@ -27,6 +27,7 @@ import pl.gov.mc.protegosafe.data.db.SharedPreferencesDelegates
 import pl.gov.mc.protegosafe.data.db.TriageDataStore
 import pl.gov.mc.protegosafe.data.db.AppVersionDataStore
 import pl.gov.mc.protegosafe.data.db.CovidInfoDataStore
+import pl.gov.mc.protegosafe.data.db.WorkersIntervalDataStore
 import pl.gov.mc.protegosafe.data.db.dao.ExposureDao
 import pl.gov.mc.protegosafe.data.db.dao.CovidInfoDao
 import pl.gov.mc.protegosafe.data.db.dao.DiagnosisKeyDao
@@ -154,6 +155,7 @@ val dataModule = module {
     single<TestSubscriptionConfigurationMapper> { TestSubscriptionConfigurationMapperImpl() }
     single<UiRequestCacheRepository> { UiRequestCacheRepositoryImpl(get(), get(), get()) }
     single<CacheStore> { CacheStoreImpl() }
+    single { WorkersIntervalDataStore(get()) }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(

@@ -7,11 +7,13 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.RxWorker
 import androidx.work.WorkManager
+import pl.gov.mc.protegosafe.domain.repository.AppRepository
 import java.util.concurrent.TimeUnit
 import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
 import timber.log.Timber
 
 class ApplicationTaskSchedulerImpl(
+    private val appRepository: AppRepository,
     private val workManager: WorkManager,
     private val provideDiagnosisKeyWorker: Class<out RxWorker>,
     private val removeOldExposuresWorker: Class<out RxWorker>,
@@ -26,12 +28,15 @@ class ApplicationTaskSchedulerImpl(
         const val UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME = "UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME"
     }
 
+    private val repeatIntervalInMinutes by lazy {
+        appRepository.getWorkersIntervalInMinutes()
+    }
+
     override fun scheduleProvideDiagnosisKeysTask() {
-        // TODO [PSAFE-1007]: Provide Remote Configuration for PeriodicWorkRequest
         Timber.i("scheduleProvideDiagnosisKeysTask")
         val workRequest = PeriodicWorkRequest.Builder(
             provideDiagnosisKeyWorker,
-            REPEAT_INTERVAL,
+            repeatIntervalInMinutes,
             REPEAT_INTERVAL_TIME_UNIT
         ).setConstraints(
             Constraints.Builder()
@@ -84,7 +89,7 @@ class ApplicationTaskSchedulerImpl(
         Timber.i("scheduleUpdateDistrictsRestrictionsTask")
         val workRequest = PeriodicWorkRequest.Builder(
             updateDistrictsRestrictionsWorker,
-            REPEAT_INTERVAL,
+            repeatIntervalInMinutes,
             REPEAT_INTERVAL_TIME_UNIT
         ).setConstraints(
             Constraints.Builder()
@@ -99,7 +104,7 @@ class ApplicationTaskSchedulerImpl(
 
         workManager.enqueueUniquePeriodicWork(
             UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME,
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.REPLACE,
             workRequest
         )
     }

@@ -10,6 +10,7 @@ import pl.gov.mc.protegosafe.AppRepositoryImpl
 import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.repository.AppRepository
+import pl.gov.mc.protegosafe.domain.usecase.CancelExposureRiskUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
@@ -59,12 +60,13 @@ val appModule = module {
     factory<PostExecutionThread> { pl.gov.mc.protegosafe.executor.PostExecutionThread() }
     factory { Realm.getDefaultInstance() }
     single<AppUpdateManager> { AppUpdateManagerFactory.create(androidContext()) }
-    single<AppRepository> { AppRepositoryImpl(get(), get(), get(), androidContext()) }
+    single<AppRepository> { AppRepositoryImpl(get(), get(), get(), get(), androidContext()) }
 }
 
 val useCaseModule = module {
     factory {
         OnGetBridgeDataUseCase(
+            get(),
             get(),
             get(),
             get(),
@@ -130,6 +132,7 @@ val useCaseModule = module {
     factory { GetTestSubscriptionStatusUseCase(get(), get(), get(), get()) }
     factory { UpdateTestSubscriptionStatusUseCase(get(), get(), get()) }
     factory { GetTestSubscriptionPinUseCase(get(), get(), get()) }
+    factory { CancelExposureRiskUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {
