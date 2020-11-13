@@ -40,6 +40,7 @@ val deviceModule = module {
     }
     single<ApplicationTaskScheduler> {
         ApplicationTaskSchedulerImpl(
+            appRepository = get(),
             workManager = get(),
             provideDiagnosisKeyWorker = ProvideDiagnosisKeyWorker::class.java,
             removeOldExposuresWorker = RemoveOldExposuresWorker::class.java,

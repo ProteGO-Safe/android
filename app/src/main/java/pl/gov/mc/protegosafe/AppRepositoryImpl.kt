@@ -7,6 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.realm.Realm
 import pl.gov.mc.protegosafe.data.db.AppLanguageDataStore
+import pl.gov.mc.protegosafe.data.db.WorkersIntervalDataStore
 import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.domain.repository.AppRepository
 import java.util.Locale
@@ -15,6 +16,7 @@ class AppRepositoryImpl(
     private val appLanguageDataStore: AppLanguageDataStore,
     private val sharedPreferences: SharedPreferences,
     private val realmDatabaseBuilder: RealmDatabaseBuilder,
+    private val workersIntervalDataStore: WorkersIntervalDataStore,
     private val context: Context
 ) : AppRepository {
     override fun getVersionName(): Single<String> {
@@ -64,5 +66,13 @@ class AppRepositoryImpl(
             Realm.init(context)
             Realm.setDefaultConfiguration(realmDatabaseBuilder.build())
         }
+    }
+
+    override fun getWorkersIntervalInMinutes(): Long {
+        return workersIntervalDataStore.timeIntervalInMinutes
+    }
+
+    override fun setWorkersInterval(intervalInMinutes: Long) {
+        workersIntervalDataStore.timeIntervalInMinutes = intervalInMinutes
     }
 }

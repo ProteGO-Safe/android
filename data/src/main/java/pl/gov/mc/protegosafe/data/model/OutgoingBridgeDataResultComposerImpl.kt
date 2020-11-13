@@ -88,4 +88,8 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
                 )
             )
     }
+
+    override fun composeBackButtonPressedResult(): String {
+        return BackButtonPressedData().toJson()
+    }
 }

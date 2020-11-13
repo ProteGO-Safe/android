@@ -27,6 +27,7 @@ class OnGetBridgeDataUseCase(
     private val uploadTestSubscriptionPinUseCase: UploadTestSubscriptionPinUseCase,
     private val getTestSubscriptionStatusUseCase: GetTestSubscriptionStatusUseCase,
     private val getTestSubscriptionPinUseCase: GetTestSubscriptionPinUseCase,
+    private val cancelExposureRiskUseCase: CancelExposureRiskUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -54,6 +55,9 @@ class OnGetBridgeDataUseCase(
             }
             OutgoingBridgeDataType.GET_FONT_SCALE -> {
                 getFontScaleUseCase.execute()
+            }
+            OutgoingBridgeDataType.EXPOSURE_RISK_CANCELLATION -> {
+                cancelExposureRiskUseCase.execute()
             }
             OutgoingBridgeDataType.DISTRICTS_STATUS -> {
                 getDistrictsRestrictionsResultUseCase.execute()

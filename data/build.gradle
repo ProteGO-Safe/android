@@ -29,11 +29,13 @@ android {
     kotlinOptions { jvmTarget = "1.8" }
 
     buildTypes {
-        sauceLab { }
         release {
             debuggable false
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        sauceLab {
+            initWith buildTypes.release
         }
     }
     flavorDimensions "mode"

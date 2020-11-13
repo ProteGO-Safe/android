@@ -31,7 +31,7 @@ import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import timber.log.Timber
 
-class App : Application(), KoinComponent {
+open class App : Application(), KoinComponent {
 
     private val disposables = CompositeDisposable()
     private val applicationTaskScheduler: ApplicationTaskScheduler by inject()
