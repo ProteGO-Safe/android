@@ -13,6 +13,7 @@ import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.CovidInfoResponseData
 import pl.gov.mc.protegosafe.data.model.DistrictActionData
+import pl.gov.mc.protegosafe.data.model.InteroperabilityData
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.RiskLevelConfigurationData
@@ -32,6 +33,7 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureInformationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.ExposureSummaryItem
+import pl.gov.mc.protegosafe.domain.model.InteroperabilityItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionStatus
 import pl.gov.mc.protegosafe.domain.model.PinItem
@@ -86,6 +88,10 @@ fun DiagnosisKeyDownloadConfigurationData.toEntity() = DiagnosisKeyDownloadConfi
 )
 
 fun PinData.toEntity() = PinItem(pin = pin)
+
+fun InteroperabilityData.toEntity() = InteroperabilityItem(
+    isInteroperabilityEnabled = isInteroperabilityEnabled
+)
 
 fun DistrictData.toEntity() = DistrictItem(
     id = id,

@@ -7,6 +7,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: 'com.google.firebase.crashlytics'
 apply from: '../ktlint.gradle'
 apply from: '../unzipUI.gradle'
+apply plugin: 'com.google.firebase.appdistribution'
 
 android {
     signingConfigs {
@@ -27,14 +28,12 @@ android {
         applicationId "pl.gov.mc.protegosafe"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 76
-        versionName "4.7.1"
+        versionCode 77
+        versionName "4.8.0"
 
         setProperty("archivesBaseName", "protegosafe-${defaultConfig.versionName}-${defaultConfig.versionCode}")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "false"
     }
 
     compileOptions {
@@ -53,7 +52,6 @@ android {
         debug {
             versionNameSuffix ".debug"
             signingConfig signingConfigs.debug
-            buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "false"
         }
         sauceLab {
             initWith buildTypes.release
@@ -74,6 +72,12 @@ android {
             applicationIdSuffix ".stage"
             versionNameSuffix '-STAGE'
             manifestPlaceholders = [crashlyticsCollectionEnabled: "true"]
+
+            firebaseAppDistribution {
+                serviceCredentialsFile="./appdistribution/app_distribution.json"
+                releaseNotesFile="./appdistribution/release_notes.txt"
+                groupsFile="./appdistribution/groups_file.txt"
+            }
         }
         prod {
             dimension "mode"

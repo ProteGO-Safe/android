@@ -13,4 +13,8 @@ interface IncomingBridgePayloadMapper {
     fun toChangeStatusRequestItemList(payload: String): List<ChangeStatusRequestItem>
 
     fun toCloseAppItem(payload: String): CloseAppItem
+
+    fun toPinItem(payload: String): PinItem
+
+    fun toInteroperabilityItem(payload: String): InteroperabilityItem
 }

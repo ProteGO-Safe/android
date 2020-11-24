@@ -90,5 +90,23 @@
             app:layout_constraintStart_toEndOf="@id/min_workers_interval"
             app:layout_constraintTop_toBottomOf="@+id/workers_interval_title" />
 
+        <TextView
+            android:id="@+id/ui_logs_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable UI logs"
+            style="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/min_workers_interval"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ui_logs_title"
+            android:checked="@={vm.loggingStatus}"
+            android:onCheckedChanged="@{(view, checked) -> vm.onUiLogsSwitch(checked)}" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

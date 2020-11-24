@@ -14,6 +14,8 @@ jobs:
       PROTEGO_KEYSTORE_FILE: protegosafe-stage.jks
       PROTEGO_KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
       PROTEGO_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      APP_DISTRIBUTION_KEY_ENCRYPTED: ${{ secrets.APP_DISTRIBUTION_KEY_ENCRYPTED }}
+      APP_DISTRIBUTION_GROUP: RC_TEST
 
     steps:
       - name: Clone Repository
@@ -46,11 +48,25 @@ jobs:
       - name: Run Unit Tests
         run: ./gradlew testProdReleaseUnitTest -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
-      - name: Assemble Stage Debug (Signed Stage Keystore)
-        run: ./gradlew assembleStageDebug -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+      - name: Prepare App Distribution
+        run: |
+          mkdir -p appdistribution
+          echo "${APP_DISTRIBUTION_KEY_ENCRYPTED}" | base64 --decode > appdistribution/app_distribution.json
+          echo "${APP_DISTRIBUTION_GROUP}" > appdistribution/groups_file.txt
 
-      - name: Assemble Stage Release (Signed Stage Keystore)
-        run: ./gradlew assembleStageRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+      - name: Assemble Stage Debug and upload to App Distribution (Signed Stage Keystore)
+        run: |
+          echo "Release Candidate Stage Debug uploaded by CI
+          RC name=${GITHUB_REF#refs/tags/}
+          Android run_id=$GITHUB_RUN_ID" > appdistribution/release_notes.txt
+          ./gradlew assembleStageDebug appDistributionUploadStageDebug -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
+      - name: Assemble Stage Release and upload to App Distribution (Signed Stage Keystore)
+        run: |
+          echo "Release Candidate Stage Release uploaded by CI
+          RC name=${GITHUB_REF#refs/tags/}
+          Android run_id=$GITHUB_RUN_ID" > appdistribution/release_notes.txt
+          ./gradlew assembleStageRelease appDistributionUploadStageRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
       - name: Assemble Stage SauceLab (Signed Stage Keystore)
         run: ./gradlew assembleStageSauceLab -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS

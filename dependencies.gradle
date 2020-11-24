@@ -1,6 +1,6 @@
 def versions = [:]
 versions.kotlin = "1.4.10"
-versions.android_gradle_plugin = '4.1.0'
+versions.android_gradle_plugin = '4.1.1'
 versions.kotlin_gradle_plugin = versions.kotlin
 versions.google_services = "4.3.4"
 versions.navigation_gradle_plugin = "2.3.0"
@@ -8,6 +8,7 @@ versions.crashlytics_gradle_plugin = "2.3.0"
 versions.license_tools_gradle_plugin = "1.2.2"
 versions.license_gradle_plugin = "0.8.80"
 versions.realm_gradle_plugin = "7.0.8"
+versions.app_distribution = "2.0.1"
 
 versions.appcompat = "1.2.0"
 versions.androidx_core_ktx = "1.3.2"
@@ -69,6 +70,7 @@ gradle_plugin.crashlytics = "com.google.firebase:firebase-crashlytics-gradle:$ve
 gradle_plugin.license_tools = "gradle.plugin.com.cookpad.android.plugin:plugin:$versions.license_tools_gradle_plugin"
 gradle_plugin.license = "com.jaredsburrows:gradle-license-plugin:$versions.license_gradle_plugin"
 gradle_plugin.realm = "io.realm:realm-gradle-plugin:$versions.realm_gradle_plugin"
+gradle_plugin.app_distribution = "com.google.firebase:firebase-appdistribution-gradle:$versions.app_distribution"
 deps.gradle_plugin = gradle_plugin
 
 def jetbrains = [:]
