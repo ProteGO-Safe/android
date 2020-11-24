@@ -30,7 +30,7 @@ import pl.gov.mc.protegosafe.domain.usecase.StartExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.UpdateTestSubscriptionStatusUseCase
-import pl.gov.mc.protegosafe.logging.webViewTimber
+import pl.gov.mc.protegosafe.logging.WebViewTimber
 import pl.gov.mc.protegosafe.ui.common.BaseViewModel
 import pl.gov.mc.protegosafe.ui.common.livedata.SingleLiveEvent
 import timber.log.Timber
@@ -110,7 +110,7 @@ class HomeViewModel(
         )
             .subscribe(
                 {
-                    webViewTimber().d("getBridgeData: $dataType output: $it")
+                    WebViewTimber.d("getBridgeData: $dataType output: $it")
                     bridgeDataResponse(it, dataType, requestId)
                 },
                 {
@@ -332,13 +332,13 @@ class HomeViewModel(
 
     private fun bridgeDataResponse(body: String, dataType: Int, requestId: String) {
         val codeToExecute = "bridgeDataResponse('$body', $dataType, '$requestId')"
-        webViewTimber().d("run Javascript: -$codeToExecute-")
+        WebViewTimber.d("run Javascript: -$codeToExecute-")
         _javascriptCode.postValue(codeToExecute)
     }
 
     private fun onBridgeData(dataType: Int, dataJson: String) {
         val codeToExecute = "onBridgeData($dataType, '$dataJson')"
-        webViewTimber().d("run Javascript: -$codeToExecute-")
+        WebViewTimber.d("run Javascript: -$codeToExecute-")
         _javascriptCode.postValue(codeToExecute)
     }
 

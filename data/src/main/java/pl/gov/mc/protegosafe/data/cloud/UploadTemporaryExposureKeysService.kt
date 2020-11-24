@@ -7,6 +7,7 @@ import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.model.GetAccessTokenResponseData
 import pl.gov.mc.protegosafe.data.model.RequestBody
 import pl.gov.mc.protegosafe.data.model.ResponseBody
+import pl.gov.mc.protegosafe.data.model.UploadTemporaryExposureKeysRequestBody
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -16,5 +17,5 @@ interface UploadTemporaryExposureKeysService {
     fun getAccessToken(@Body requestBody: RequestBody): Single<ResponseBody<GetAccessTokenResponseData>>
 
     @POST(BuildConfig.UPLOAD_BUCKET_ENDPOINT)
-    fun uploadDiagnosisKeys(@Body requestBody: RequestBody): Completable
+    fun uploadDiagnosisKeys(@Body requestBody: UploadTemporaryExposureKeysRequestBody): Completable
 }

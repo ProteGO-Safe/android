@@ -7,6 +7,10 @@ on:
         description: 'React Workflow run_id'     
         required: true
         default: 'warning'
+      app_distribution_group:
+        description: 'App distribution group'
+        required: false
+        default: ''
 
 jobs:
   nightly:
@@ -18,6 +22,8 @@ jobs:
       PROTEGO_KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
       PROTEGO_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       REACT_RUN_ID: ${{ github.event.inputs.react_run_id }}
+      APP_DISTRIBUTION_GROUP: ${{ github.event.inputs.app_distribution_group }}
+      APP_DISTRIBUTION_KEY_ENCRYPTED: ${{ secrets.APP_DISTRIBUTION_KEY_ENCRYPTED }}
       REACT_TOKEN_SCRIPT: ${{ secrets.REACT_TOKEN_SCRIPT }}
       PRIVATE_KEY: ${{ secrets.CI_PRIVATE_KEY }}
       PUBLIC_KEY: ${{ secrets.CI_PUBLIC_KEY }}
@@ -63,7 +69,7 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 4)
 
       - name: Setup Environment (Keystore)
         run: |
@@ -83,8 +89,21 @@ jobs:
       - name: Run Unit Tests
         run: ./gradlew testProdReleaseUnitTest -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
-      - name: Assemble Stage Debug with Screencast (Signed Stage Keystore)
+      - name: Assemble Stage Debug (Signed Stage Keystore)
+        if: github.event.inputs.app_distribution_group == ''
         run: ./gradlew assembleStageDebug -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
+
+      - name: Assemble Stage Debug and upload to App Distribution for specified group(Signed Stage Keystore)
+        if: github.event.inputs.app_distribution_group != ''
+        run: |
+          mkdir -p appdistribution
+          echo "${APP_DISTRIBUTION_KEY_ENCRYPTED}" | base64 --decode > appdistribution/app_distribution.json
+          echo "${APP_DISTRIBUTION_GROUP}" > appdistribution/groups_file.txt
+          echo "Stage Debug uploaded by CI
+          Android run_id=$GITHUB_RUN_ID
+          Android branch=${{ steps.get_version.outputs.VERSION }}
+          React run_id=${REACT_RUN_ID}" > appdistribution/release_notes.txt
+          ./gradlew assembleStageDebug appDistributionUploadStageDebug -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
 
       - name: Assemble Stage Release (Signed Stage Keystore)
         run: ./gradlew assembleStageRelease -Pandroid.injected.signing.store.file=$PROTEGO_KEYSTORE_FILE -Pandroid.injected.signing.store.password=$PROTEGO_KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$PROTEGO_KEYSTORE_ALIAS -Pandroid.injected.signing.key.password=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_FILE=$PROTEGO_KEYSTORE_FILE -PPROTEGO_KEYSTORE_DEBUG_PASSWORD=$PROTEGO_KEYSTORE_PASSWORD -PPROTEGO_KEYSTORE_DEBUG_ALIAS=$PROTEGO_KEYSTORE_ALIAS
@@ -95,5 +114,5 @@ jobs:
       - name: Upload APKs
         uses: actions/upload-artifact@v2
         with:
-          name: "${{ steps.get_version.outputs.VERSION }}_apks"
+          name: "${{ github.run_id }}_${{ steps.get_version.outputs.VERSION }}_apks"
           path: app/build/outputs/apk/*

@@ -2,7 +2,7 @@ package pl.gov.mc.protegosafe.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class TemporaryExposureKeysUploadRequestBody(
+data class TemporaryExposureKeysUploadData(
     @SerializedName("temporaryExposureKeys")
     val temporaryExposureKeys: List<TemporaryExposureKeyRequestData>,
     @SerializedName("platform")

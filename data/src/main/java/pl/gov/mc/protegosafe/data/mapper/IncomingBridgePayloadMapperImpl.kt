@@ -4,12 +4,16 @@ import com.google.gson.Gson
 import pl.gov.mc.protegosafe.data.model.AppLanguageData
 import pl.gov.mc.protegosafe.data.model.ClearData
 import pl.gov.mc.protegosafe.data.model.CloseAppData
+import pl.gov.mc.protegosafe.data.model.InteroperabilityData
+import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.domain.model.ChangeServiceStatusRequestMapper
 import pl.gov.mc.protegosafe.domain.model.ChangeStatusRequestItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.CloseAppItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgePayloadMapper
+import pl.gov.mc.protegosafe.domain.model.InteroperabilityItem
+import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.TriageItem
 
 class IncomingBridgePayloadMapperImpl(
@@ -34,5 +38,13 @@ class IncomingBridgePayloadMapperImpl(
 
     override fun toCloseAppItem(payload: String): CloseAppItem {
         return Gson().fromJson(payload, CloseAppData::class.java).toEntity()
+    }
+
+    override fun toPinItem(payload: String): PinItem {
+        return Gson().fromJson(payload, PinData::class.java).toEntity()
+    }
+
+    override fun toInteroperabilityItem(payload: String): InteroperabilityItem {
+        return Gson().fromJson(payload, InteroperabilityData::class.java).toEntity()
     }
 }

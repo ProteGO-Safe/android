@@ -21,6 +21,7 @@ buildscript {
         classpath deps.gradle_plugin.license_tools
         classpath deps.gradle_plugin.license
         classpath deps.gradle_plugin.realm
+        classpath deps.gradle_plugin.app_distribution
     }
 }
 

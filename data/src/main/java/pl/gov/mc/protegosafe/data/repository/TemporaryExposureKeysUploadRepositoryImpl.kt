@@ -4,9 +4,10 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.data.cloud.UploadTemporaryExposureKeysService
-import pl.gov.mc.protegosafe.data.mapper.toTemporaryExposureKeysUploadRequestBody
+import pl.gov.mc.protegosafe.data.mapper.toTemporaryExposureKeysUploadData
 import pl.gov.mc.protegosafe.data.model.GetAccessTokenRequestData
 import pl.gov.mc.protegosafe.data.model.RequestBody
+import pl.gov.mc.protegosafe.data.model.UploadTemporaryExposureKeysRequestBody
 import pl.gov.mc.protegosafe.domain.model.PinItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
@@ -58,7 +59,10 @@ class TemporaryExposureKeysUploadRepositoryImpl(
     override fun uploadTemporaryExposureKeys(
         requestItem: TemporaryExposureKeysUploadRequestItem
     ): Completable {
-        val requestBody = RequestBody(requestItem.toTemporaryExposureKeysUploadRequestBody())
+        val requestBody = UploadTemporaryExposureKeysRequestBody(
+            requestItem.isInteroperabilityEnabled,
+            requestItem.toTemporaryExposureKeysUploadData()
+        )
         return uploadTemporaryExposureKeysService.uploadDiagnosisKeys(requestBody)
             .subscribeOn(Schedulers.io())
     }

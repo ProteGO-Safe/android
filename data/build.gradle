@@ -16,6 +16,7 @@ android {
         versionName "1.0"
 
         buildConfigField "String", "SHARED_PREFERENCES_FILE_NAME", SHARED_PREFERENCES_FILE_NAME
+        buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "false"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'

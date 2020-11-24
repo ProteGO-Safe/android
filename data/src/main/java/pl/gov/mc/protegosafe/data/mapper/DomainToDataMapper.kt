@@ -8,7 +8,7 @@ import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeyRequestData
-import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeysUploadRequestBody
+import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeysUploadData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
@@ -48,8 +48,8 @@ fun TemporaryExposureKeyItem.toTemporaryExposureKeyRequestData(): TemporaryExpos
 fun List<TemporaryExposureKeyItem>.toTemporaryExposureKeyRequestDataList(): List<TemporaryExposureKeyRequestData> =
     map { it.toTemporaryExposureKeyRequestData() }
 
-fun TemporaryExposureKeysUploadRequestItem.toTemporaryExposureKeysUploadRequestBody(): TemporaryExposureKeysUploadRequestBody =
-    TemporaryExposureKeysUploadRequestBody(
+fun TemporaryExposureKeysUploadRequestItem.toTemporaryExposureKeysUploadData(): TemporaryExposureKeysUploadData =
+    TemporaryExposureKeysUploadData(
         temporaryExposureKeys = keys.toTemporaryExposureKeyRequestDataList(),
         platform = platform,
         appPackageName = appPackageName,

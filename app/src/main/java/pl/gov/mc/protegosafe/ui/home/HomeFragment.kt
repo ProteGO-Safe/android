@@ -38,7 +38,7 @@ import pl.gov.mc.protegosafe.domain.model.ActivityResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
-import pl.gov.mc.protegosafe.logging.webViewTimber
+import pl.gov.mc.protegosafe.logging.WebViewTimber
 import pl.gov.mc.protegosafe.ui.common.BaseFragment
 import pl.gov.mc.protegosafe.ui.common.livedata.observe
 import timber.log.Timber
@@ -155,7 +155,7 @@ class HomeFragment : BaseFragment() {
             if (BuildConfig.DEBUG) {
                 webChromeClient = object : WebChromeClient() {
                     override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
-                        webViewTimber().d("webView console ${consoleMessage.message()}")
+                        WebViewTimber.d("webView console ${consoleMessage.message()}")
                         return true
                     }
                 }
@@ -215,14 +215,14 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun runJavascript(script: String) {
-        webViewTimber().d("run javascript: $script")
+        WebViewTimber.d("run javascript: $script")
         binding.webView.evaluateJavascript(script, null)
     }
 
     private fun requestExposureNotificationPermission(
         exception: ExposureNotificationActionNotResolvedException
     ) {
-        webViewTimber()
+        WebViewTimber
             .d("Request exposure notification permission: ${exception.resolutionRequest}")
         when (val apiException = exception.apiException) {
             is ApiException -> {

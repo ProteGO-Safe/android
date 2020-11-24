@@ -12,10 +12,11 @@ import pl.gov.mc.protegosafe.domain.model.ActionRequiredItem
 import pl.gov.mc.protegosafe.domain.model.ConnectionException
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinItem
-import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
+import pl.gov.mc.protegosafe.domain.model.IncomingBridgePayloadMapper
+import pl.gov.mc.protegosafe.domain.model.InteroperabilityItem
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.SetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
@@ -31,7 +32,7 @@ class UploadTemporaryExposureKeysUseCase(
     private val exposureNotificationRepository: ExposureNotificationRepository,
     private val keyUploadSystemInfoRepository: KeyUploadSystemInfoRepository,
     private val resultComposer: OutgoingBridgeDataResultComposer,
-    private val pinMapper: PinMapper,
+    private val payloadMapper: IncomingBridgePayloadMapper,
     private val temporaryExposureKeysUploadRepository: TemporaryExposureKeysUploadRepository,
     private val internetConnectionManager: InternetConnectionManager,
     private val retrofitExceptionMapper: RetrofitExceptionMapper,
@@ -146,8 +147,8 @@ class UploadTemporaryExposureKeysUseCase(
         payload: String,
         onResultActionRequired: (ActionRequiredItem) -> Unit,
         keys: List<TemporaryExposureKeyItem>
-    ): Completable = getAccessToken(pinMapper.toEntity(payload))
-        .flatMapCompletable { uploadKeys(it, keys) }
+    ): Completable = getAccessToken(payloadMapper.toPinItem(payload))
+        .flatMapCompletable { uploadKeys(it, payloadMapper.toInteroperabilityItem(payload), keys) }
         .onErrorResumeNext {
             when (it) {
                 UploadException.PinVerificationFailed -> {
@@ -162,9 +163,10 @@ class UploadTemporaryExposureKeysUseCase(
 
     private fun uploadKeys(
         accessToken: String,
+        interoperabilityItem: InteroperabilityItem,
         keys: List<TemporaryExposureKeyItem>
     ): Completable =
-        getUploadRequestData(accessToken, keys)
+        getUploadRequestData(accessToken, interoperabilityItem, keys)
             .flatMapCompletable { uploadTemporaryExposureKeys(it) }
             .onErrorResumeNext {
                 temporaryExposureKeysUploadRepository.cacheRequestAccessToken(accessToken)
@@ -206,11 +208,13 @@ class UploadTemporaryExposureKeysUseCase(
 
     private fun getUploadRequestData(
         accessToken: String,
+        interoperabilityItem: InteroperabilityItem,
         keys: List<TemporaryExposureKeyItem>
     ): Single<TemporaryExposureKeysUploadRequestItem> =
         Single.just(
             TemporaryExposureKeysUploadRequestItem(
                 keys,
+                interoperabilityItem.isInteroperabilityEnabled,
                 keyUploadSystemInfoRepository.platform,
                 keyUploadSystemInfoRepository.appPackageName,
                 keyUploadSystemInfoRepository.regions,
