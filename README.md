@@ -81,6 +81,8 @@ Dev: ./app/src/dev/google-services.json
 
 Possibility to share Temporary Exposure Keys with other countries
 
+Updated UI
+
 4.7.1
 
 Fixed back button handling
