@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.manager
+package pl.gov.mc.protegosafe.device.manager
 
 import android.content.Context
 import android.net.ConnectivityManager

@@ -1,7 +1,7 @@
-package pl.gov.mc.protegosafe.mapper
+package pl.gov.mc.protegosafe.device.mapper
 
 import pl.gov.mc.protegosafe.domain.model.ChangeStatusRequestItem
-import pl.gov.mc.protegosafe.model.ChangeServiceStatusRequestData
+import pl.gov.mc.protegosafe.device.model.ChangeServiceStatusRequestData
 
 fun ChangeServiceStatusRequestData.toDomainItem(): List<ChangeStatusRequestItem> {
     val listOfChangeStatusRequests = mutableListOf<ChangeStatusRequestItem>()

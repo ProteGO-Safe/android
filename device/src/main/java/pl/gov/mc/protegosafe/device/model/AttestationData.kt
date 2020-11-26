@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.model
+package pl.gov.mc.protegosafe.device.model
 
 import com.google.gson.annotations.SerializedName
 

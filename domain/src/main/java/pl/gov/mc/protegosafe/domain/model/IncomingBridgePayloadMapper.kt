@@ -17,4 +17,6 @@ interface IncomingBridgePayloadMapper {
     fun toPinItem(payload: String): PinItem
 
     fun toInteroperabilityItem(payload: String): InteroperabilityItem
+
+    fun toAppReviewItem(payload: String): AppReviewItem
 }

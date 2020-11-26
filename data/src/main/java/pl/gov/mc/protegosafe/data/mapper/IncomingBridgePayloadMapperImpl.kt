@@ -2,11 +2,13 @@ package pl.gov.mc.protegosafe.data.mapper
 
 import com.google.gson.Gson
 import pl.gov.mc.protegosafe.data.model.AppLanguageData
+import pl.gov.mc.protegosafe.data.model.AppReviewData
 import pl.gov.mc.protegosafe.data.model.ClearData
 import pl.gov.mc.protegosafe.data.model.CloseAppData
 import pl.gov.mc.protegosafe.data.model.InteroperabilityData
 import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.TriageData
+import pl.gov.mc.protegosafe.domain.model.AppReviewItem
 import pl.gov.mc.protegosafe.domain.model.ChangeServiceStatusRequestMapper
 import pl.gov.mc.protegosafe.domain.model.ChangeStatusRequestItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
@@ -46,5 +48,9 @@ class IncomingBridgePayloadMapperImpl(
 
     override fun toInteroperabilityItem(payload: String): InteroperabilityItem {
         return Gson().fromJson(payload, InteroperabilityData::class.java).toEntity()
+    }
+
+    override fun toAppReviewItem(payload: String): AppReviewItem {
+        return Gson().fromJson(payload, AppReviewData::class.java).toEntity()
     }
 }

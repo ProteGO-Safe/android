@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.manager
+package pl.gov.mc.protegosafe.device.manager
 
 import android.content.Context
 import com.google.android.gms.safetynet.SafetyNet
@@ -8,8 +8,8 @@ import io.reactivex.Single
 import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKey
 import pl.gov.mc.protegosafe.domain.model.SafetyNetResult
-import pl.gov.mc.protegosafe.extension.toSingle
-import pl.gov.mc.protegosafe.model.AttestationData
+import pl.gov.mc.protegosafe.device.extension.toSingle
+import pl.gov.mc.protegosafe.device.model.AttestationData
 import timber.log.Timber
 import java.util.Locale
 

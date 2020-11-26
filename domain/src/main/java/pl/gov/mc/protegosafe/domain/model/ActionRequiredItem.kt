@@ -11,6 +11,7 @@ sealed class ActionRequiredItem {
     object ClearData : ActionRequiredItem()
     object RestartActivity : ActionRequiredItem()
     object CloseApp : ActionRequiredItem()
+    object AppReview : ActionRequiredItem()
     data class SendTemporaryExposureKeysUploadResult(val dataJson: String) : ActionRequiredItem() {
         val dataType = OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code
     }

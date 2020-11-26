@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.scheduler
+package pl.gov.mc.protegosafe.device.scheduler
 
 import android.content.Context
 import androidx.work.RxWorker

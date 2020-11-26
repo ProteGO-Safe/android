@@ -74,6 +74,9 @@ class HomeViewModel(
     private val _showUploadError = SingleLiveEvent<Exception>()
     val showConnectionError: LiveData<Exception> = _showUploadError
 
+    private val _requestAppReview = SingleLiveEvent<Unit>()
+    val requestAppReview: LiveData<Unit> = _requestAppReview
+
     private val _requestExposureNotificationPermission =
         SingleLiveEvent<ExposureNotificationActionNotResolvedException>()
     val requestResolve: LiveData<ExposureNotificationActionNotResolvedException> =
@@ -263,6 +266,9 @@ class HomeViewModel(
             }
             is ActionRequiredItem.UpdateTestSubscription -> {
                 updateTestSubscriptionStatus()
+            }
+            is ActionRequiredItem.AppReview -> {
+                _requestAppReview.postValue(Unit)
             }
         }
     }

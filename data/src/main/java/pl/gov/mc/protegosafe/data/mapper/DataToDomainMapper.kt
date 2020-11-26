@@ -4,6 +4,7 @@ import com.google.android.gms.nearby.exposurenotification.ExposureInformation
 import com.google.android.gms.nearby.exposurenotification.ExposureSummary
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import pl.gov.mc.protegosafe.data.BuildConfig
+import pl.gov.mc.protegosafe.data.model.AppReviewData
 import pl.gov.mc.protegosafe.data.model.ClearData
 import pl.gov.mc.protegosafe.data.model.CloseAppData
 import pl.gov.mc.protegosafe.data.model.DiagnosisKeyDownloadConfigurationData
@@ -23,6 +24,7 @@ import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionConfigurationData
 import pl.gov.mc.protegosafe.domain.CovidInfoItem
+import pl.gov.mc.protegosafe.domain.model.AppReviewItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.CloseAppItem
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration
@@ -182,7 +184,10 @@ fun RiskLevelData.toEntity() = when (this) {
     RiskLevelData.HIGH_RISK -> RiskLevelItem.HIGH_RISK
 }
 
-fun TestSubscriptionConfigurationData.toEntity() =
-    TestSubscriptionConfigurationItem(
-        interval = interval
-    )
+fun TestSubscriptionConfigurationData.toEntity() = TestSubscriptionConfigurationItem(
+    interval = interval
+)
+
+fun AppReviewData.toEntity() = AppReviewItem(
+    appReview = appReview
+)

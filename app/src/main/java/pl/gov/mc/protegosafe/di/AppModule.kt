@@ -10,6 +10,7 @@ import pl.gov.mc.protegosafe.AppRepositoryImpl
 import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.repository.AppRepository
+import pl.gov.mc.protegosafe.domain.usecase.AppReviewUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CancelExposureRiskUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ChangeServiceStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
@@ -83,7 +84,7 @@ val useCaseModule = module {
             get()
         )
     }
-    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get()) }
+    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get(), get()) }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
@@ -133,6 +134,7 @@ val useCaseModule = module {
     factory { UpdateTestSubscriptionStatusUseCase(get(), get(), get()) }
     factory { GetTestSubscriptionPinUseCase(get(), get(), get()) }
     factory { CancelExposureRiskUseCase(get(), get(), get()) }
+    factory { AppReviewUseCase(get(), get()) }
 }
 
 val viewModelModule = module {

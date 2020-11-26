@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.scheduler
+package pl.gov.mc.protegosafe.device.scheduler
 
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints

@@ -1,9 +1,9 @@
-package pl.gov.mc.protegosafe.di
+package pl.gov.mc.protegosafe.device.di
 
 import androidx.work.WorkManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
-import pl.gov.mc.protegosafe.repository.DeviceRepositoryImpl
+import pl.gov.mc.protegosafe.device.repository.DeviceRepositoryImpl
 import pl.gov.mc.protegosafe.device.BuildConfig
 import pl.gov.mc.protegosafe.domain.manager.InternetConnectionManager
 import pl.gov.mc.protegosafe.domain.manager.KeystoreManager
@@ -11,14 +11,14 @@ import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
 import pl.gov.mc.protegosafe.domain.model.ChangeServiceStatusRequestMapper
 import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
-import pl.gov.mc.protegosafe.manager.InternetConnectionManagerImpl
-import pl.gov.mc.protegosafe.manager.KeystoreManagerImpl
-import pl.gov.mc.protegosafe.manager.SafetyNetAttestationWrapperImpl
-import pl.gov.mc.protegosafe.mapper.ChangeServiceStatusRequestMapperImpl
-import pl.gov.mc.protegosafe.scheduler.ApplicationTaskSchedulerImpl
-import pl.gov.mc.protegosafe.scheduler.ProvideDiagnosisKeyWorker
-import pl.gov.mc.protegosafe.scheduler.RemoveOldExposuresWorker
-import pl.gov.mc.protegosafe.scheduler.UpdateDistrictsRestrictionsWorker
+import pl.gov.mc.protegosafe.device.manager.InternetConnectionManagerImpl
+import pl.gov.mc.protegosafe.device.manager.KeystoreManagerImpl
+import pl.gov.mc.protegosafe.device.manager.SafetyNetAttestationWrapperImpl
+import pl.gov.mc.protegosafe.device.mapper.ChangeServiceStatusRequestMapperImpl
+import pl.gov.mc.protegosafe.device.scheduler.ApplicationTaskSchedulerImpl
+import pl.gov.mc.protegosafe.device.scheduler.ProvideDiagnosisKeyWorker
+import pl.gov.mc.protegosafe.device.scheduler.RemoveOldExposuresWorker
+import pl.gov.mc.protegosafe.device.scheduler.UpdateDistrictsRestrictionsWorker
 
 val deviceModule = module {
     single<InternetConnectionManager> {

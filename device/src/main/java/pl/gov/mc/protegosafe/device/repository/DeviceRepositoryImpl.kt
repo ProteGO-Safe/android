@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.repository
+package pl.gov.mc.protegosafe.device.repository
 
 import android.bluetooth.BluetoothManager
 import android.content.Context
@@ -11,8 +11,8 @@ import io.reactivex.Single
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationStatusItem
 import pl.gov.mc.protegosafe.domain.repository.DeviceRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
-import pl.gov.mc.protegosafe.model.ServicesStatus
-import pl.gov.mc.protegosafe.model.ServicesStatusRoot
+import pl.gov.mc.protegosafe.device.model.ServicesStatus
+import pl.gov.mc.protegosafe.device.model.ServicesStatusRoot
 
 class DeviceRepositoryImpl(
     private val context: Context,

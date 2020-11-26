@@ -21,6 +21,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.api.ApiException
+import com.google.android.play.core.review.ReviewManagerFactory
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.view_connection_error.view.button_cancel
 import kotlinx.android.synthetic.main.view_connection_error.view.button_check_internet_connection
@@ -38,6 +39,8 @@ import pl.gov.mc.protegosafe.domain.model.ActivityResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
+import pl.gov.mc.protegosafe.extension.toCompletable
+import pl.gov.mc.protegosafe.extension.toSingle
 import pl.gov.mc.protegosafe.logging.WebViewTimber
 import pl.gov.mc.protegosafe.ui.common.BaseFragment
 import pl.gov.mc.protegosafe.ui.common.livedata.observe
@@ -98,6 +101,7 @@ class HomeFragment : BaseFragment() {
         vm.requestLocation.observe(viewLifecycleOwner, ::requestLocation)
         vm.requestClearData.observe(viewLifecycleOwner, ::requestClearData)
         vm.requestNotifications.observe(viewLifecycleOwner, ::requestNotifications)
+        vm.requestAppReview.observe(viewLifecycleOwner, ::startAppReview)
         vm.restartActivity.observe(viewLifecycleOwner, ::restartActivity)
         vm.closeApplication.observe(viewLifecycleOwner, ::closeApplication)
         vm.showConnectionError.observe(viewLifecycleOwner, ::showError)
@@ -265,6 +269,22 @@ class HomeFragment : BaseFragment() {
                 }
             }
         startActivityForResult(settingsIntent, ActivityRequest.ENABLE_NOTIFICATIONS.requestCode)
+    }
+
+    private fun startAppReview() {
+        val reviewManager = ReviewManagerFactory.create(context)
+
+        reviewManager.requestReviewFlow().toSingle()
+            .flatMapCompletable {
+                reviewManager.launchReviewFlow(activity, it).toCompletable()
+            }.subscribe(
+                {
+                    Timber.d("App reviewed")
+                },
+                {
+                    Timber.e(it, "App review failed")
+                }
+            ).addTo(disposables)
     }
 
     private fun restartActivity() {

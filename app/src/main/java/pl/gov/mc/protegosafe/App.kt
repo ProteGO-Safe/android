@@ -23,7 +23,7 @@ import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.data.di.dataModule
 import pl.gov.mc.protegosafe.data.extension.copyTo
 import pl.gov.mc.protegosafe.di.appModule
-import pl.gov.mc.protegosafe.di.deviceModule
+import pl.gov.mc.protegosafe.device.di.deviceModule
 import pl.gov.mc.protegosafe.di.useCaseModule
 import pl.gov.mc.protegosafe.di.viewModelModule
 import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository

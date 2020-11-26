@@ -1,4 +1,4 @@
-package pl.gov.mc.protegosafe.extension
+package pl.gov.mc.protegosafe.device.extension
 
 import com.google.android.gms.tasks.Task
 import io.reactivex.Single
