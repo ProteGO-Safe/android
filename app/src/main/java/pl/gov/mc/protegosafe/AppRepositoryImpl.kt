@@ -37,6 +37,12 @@ class AppRepositoryImpl(
         }
     }
 
+    override fun getAppLanguage(): Single<String> {
+        return Single.fromCallable {
+            appLanguageDataStore.appLanguageISO
+        }
+    }
+
     override fun getFontScale(): Single<Float> {
         return Single.just(context.resources.configuration.fontScale)
     }

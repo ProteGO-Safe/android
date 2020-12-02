@@ -3,7 +3,6 @@ package pl.gov.mc.protegosafe.data.mapper
 import com.google.android.gms.nearby.exposurenotification.ExposureInformation
 import com.google.android.gms.nearby.exposurenotification.ExposureSummary
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
-import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.model.AppReviewData
 import pl.gov.mc.protegosafe.data.model.ClearData
 import pl.gov.mc.protegosafe.data.model.CloseAppData
@@ -39,30 +38,12 @@ import pl.gov.mc.protegosafe.domain.model.InteroperabilityItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionStatus
 import pl.gov.mc.protegosafe.domain.model.PinItem
-import pl.gov.mc.protegosafe.domain.model.PushNotificationData
-import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TriageItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
-
-private const val FCM_NOTIFICATION_TITLE_KEY = "title"
-private const val FCM_NOTIFICATION_CONTENT_KEY = "content"
-fun Map<String, String>.hasNotification() =
-    !get(FCM_NOTIFICATION_TITLE_KEY).isNullOrBlank()
-
-fun Map<String, String>.toNotificationDataItem(topic: String?) = PushNotificationData(
-    title = get(FCM_NOTIFICATION_TITLE_KEY)
-        ?: throw IllegalArgumentException("Hash id has no value"),
-    content = get(FCM_NOTIFICATION_CONTENT_KEY) ?: "",
-    topic = when (topic) {
-        "/topics/${BuildConfig.MAIN_TOPIC}" -> PushNotificationTopic.MAIN
-        "/topics/${BuildConfig.DAILY_TOPIC}" -> PushNotificationTopic.DAILY
-        else -> PushNotificationTopic.UNKNOWN
-    }
-)
 
 fun TriageData.toEntity() = TriageItem(timestamp = timestamp)
 

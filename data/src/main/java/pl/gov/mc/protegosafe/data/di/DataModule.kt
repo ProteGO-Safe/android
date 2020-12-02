@@ -42,6 +42,7 @@ import pl.gov.mc.protegosafe.data.mapper.PinMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RetrofitExceptionMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RiskLevelConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.db.dao.CovidTestDao
+import pl.gov.mc.protegosafe.data.mapper.FcmNotificationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.TestSubscriptionConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.model.OutgoingBridgeDataResultComposerImpl
 import pl.gov.mc.protegosafe.data.repository.CacheStoreImpl
@@ -65,6 +66,7 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfigurationMapper
+import pl.gov.mc.protegosafe.domain.model.FcmNotificationMapper
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
@@ -158,6 +160,7 @@ val dataModule = module {
     single<CacheStore> { CacheStoreImpl() }
     single { WorkersIntervalDataStore(get()) }
     single { WebViewLoggingDataStore(get()) }
+    single<FcmNotificationMapper> { FcmNotificationMapperImpl(get()) }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(

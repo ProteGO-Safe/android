@@ -9,6 +9,7 @@ import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeyRequestData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeysUploadData
+import pl.gov.mc.protegosafe.data.model.UINotificationData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
@@ -16,6 +17,7 @@ import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusData
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
+import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
@@ -108,3 +110,9 @@ fun RiskLevelItem.toRiskLevelData() = when (this) {
     RiskLevelItem.MIDDLE_RISK -> RiskLevelData.MIDDLE_RISK
     RiskLevelItem.HIGH_RISK -> RiskLevelData.HIGH_RISK
 }
+
+fun PushNotificationItem.toUINotificationData() = UINotificationData(
+    title = title,
+    content = content,
+    status = status
+)

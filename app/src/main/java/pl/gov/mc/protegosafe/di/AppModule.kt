@@ -85,7 +85,7 @@ val useCaseModule = module {
         )
     }
     factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get(), get()) }
-    factory { OnPushNotificationUseCase(get(), get()) }
+    factory { OnPushNotificationUseCase(get(), get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
     factory { StartExposureNotificationUseCase(get(), get(), get()) }

@@ -12,6 +12,11 @@ interface AppRepository {
      */
     fun getSystemLanguage(): Single<String>
 
+    /**
+     * @return String in ISO 639-1 standard
+     */
+    fun getAppLanguage(): Single<String>
+
     fun setAppLanguage(languageISO: String): Completable
 
     fun getLocale(): Locale
