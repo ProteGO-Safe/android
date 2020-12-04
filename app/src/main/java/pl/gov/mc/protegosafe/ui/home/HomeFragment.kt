@@ -17,6 +17,7 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -30,6 +31,7 @@ import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.BuildConfig
+import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.FragmentHomeBinding
 import pl.gov.mc.protegosafe.domain.exception.CovidTestNotCompatibleDeviceException
@@ -279,7 +281,9 @@ class HomeFragment : BaseFragment() {
                 reviewManager.launchReviewFlow(activity, it).toCompletable()
             }.subscribe(
                 {
-                    Timber.d("App reviewed")
+                    if (BuildConfig.BUILD_TYPE != Consts.RELEASE_BUILD_TYPE) {
+                        Toast.makeText(context, "App reviewed", Toast.LENGTH_LONG).show()
+                    }
                 },
                 {
                     Timber.e(it, "App review failed")
