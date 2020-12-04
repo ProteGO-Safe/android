@@ -6,7 +6,7 @@ import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
 
-class SaveMatchedTokenUseCase(
+class SaveExposureUseCase(
     private val exposureRepository: ExposureRepository,
     private val postExecutionThread: PostExecutionThread
 ) {

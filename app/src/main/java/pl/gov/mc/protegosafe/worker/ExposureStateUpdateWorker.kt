@@ -8,9 +8,11 @@ import io.reactivex.Single
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import pl.gov.mc.protegosafe.Consts
+import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.toExposureItem
 import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
-import pl.gov.mc.protegosafe.domain.usecase.SaveMatchedTokenUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SaveExposureUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SaveExposureCheckActivityUseCase
 
 class ExposureStateUpdateWorker(
     appContext: Context,
@@ -18,18 +20,25 @@ class ExposureStateUpdateWorker(
 ) : RxWorker(appContext, workerParameters), KoinComponent {
 
     private val getExposureInformationUseCase: GetExposureInformationUseCase by inject()
-    private val saveExposureUseCase: SaveMatchedTokenUseCase by inject()
+    private val saveExposureUseCase: SaveExposureUseCase by inject()
+    private val saveExposureCheckActivityUseCase: SaveExposureCheckActivityUseCase by inject()
 
     override fun createWork(): Single<Result> {
         val token = inputData.getString(Consts.EXPOSURE_STATE_UPDATED_EXTRA_TOKEN)
         checkNotNull(token)
         return getExposureInformationUseCase.execute(token)
             .map { listOfExposureInformation ->
-                listOfExposureInformation.map { saveExposureUseCase.execute(it.toExposureItem()) }
-            }
-            .flatMapCompletable { listOfDbActions ->
-                Completable.merge(listOfDbActions.asIterable())
-            }
-            .toSingleDefault(Result.success())
+                listOfExposureInformation.map { it.toExposureItem() }
+            }.flatMapCompletable { listOfExposureItems ->
+                saveExposureCheckActivityUseCase.execute(listOfExposureItems)
+                    .andThen(saveExposures(listOfExposureItems))
+            }.toSingleDefault(Result.success())
+    }
+
+    private fun saveExposures(exposures: List<ExposureItem>): Completable {
+        return Completable.merge(
+            exposures.map { saveExposureUseCase.execute(it) }
+                .asIterable()
+        )
     }
 }

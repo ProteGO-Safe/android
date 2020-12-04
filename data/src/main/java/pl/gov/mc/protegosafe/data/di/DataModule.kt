@@ -133,7 +133,7 @@ val dataModule = module {
     }
     single<PendingActivityResultRepository> { PendingActivityResultRepositoryImpl() }
     single { ExposureDao() }
-    single<ExposureRepository> { ExposureRepositoryImpl(get()) }
+    single<ExposureRepository> { ExposureRepositoryImpl(get(), get()) }
     single<DiagnosisKeyRepository> { DiagnosisKeyRepositoryImpl(get(), get(), get(), get(), get()) }
     factory { RealmDatabaseBuilder(get(), get()) }
     single {

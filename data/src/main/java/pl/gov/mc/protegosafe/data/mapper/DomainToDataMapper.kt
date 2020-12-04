@@ -5,6 +5,7 @@ import io.realm.RealmList
 import pl.gov.mc.protegosafe.data.extension.toBase64
 import pl.gov.mc.protegosafe.data.model.DistrictData
 import pl.gov.mc.protegosafe.data.model.DistrictDto
+import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityDto
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeyRequestData
@@ -15,6 +16,7 @@ import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusData
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
+import pl.gov.mc.protegosafe.domain.model.ExposureCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
@@ -115,4 +117,9 @@ fun PushNotificationItem.toUINotificationData() = UINotificationData(
     title = title,
     content = content,
     status = status
+)
+
+fun ExposureCheckActivityItem.toExposureCheckActivityDto() = ExposureCheckActivityDto(
+    riskLevel = riskLevel.toRiskLevelData().value,
+    exposures = exposures
 )

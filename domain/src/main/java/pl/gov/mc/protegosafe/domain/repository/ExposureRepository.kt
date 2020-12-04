@@ -34,4 +34,8 @@ interface ExposureRepository {
         riskLevelConfigurationItem: RiskLevelConfigurationItem,
         exposure: ExposureItem
     ): Single<RiskLevelItem>
+
+    fun calcRiskLevel(exposure: ExposureItem): Single<RiskLevelItem>
+
+    fun getMaxExposureOrDefault(exposures: List<ExposureItem>): Single<ExposureItem>
 }

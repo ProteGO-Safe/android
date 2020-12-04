@@ -35,7 +35,7 @@ import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProcessPendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
-import pl.gov.mc.protegosafe.domain.usecase.SaveMatchedTokenUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SaveExposureUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveNotificationDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveTriageCompletedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SetAppLanguageUseCase
@@ -111,11 +111,11 @@ val useCaseModule = module {
     factory { UploadTemporaryExposureKeysWithCachedPayloadUseCase(get(), get(), get()) }
     factory { SaveTriageCompletedUseCase(get(), get()) }
     factory { ComposeAppLifecycleStateBrideDataUseCase(get()) }
-    factory { SaveMatchedTokenUseCase(get(), get()) }
+    factory { SaveExposureUseCase(get(), get()) }
     factory { StorePendingActivityResultUseCase(get(), get()) }
     factory { ProcessPendingActivityResultUseCase(get(), get()) }
     factory { GetExposureInformationUseCase(get(), get()) }
-    factory { GetAnalyzeResultUseCase(get(), get(), get(), get(), get()) }
+    factory { GetAnalyzeResultUseCase(get(), get(), get(), get()) }
     factory { CheckDeviceRootedUseCase(get(), get(), get(), get()) }
     factory { PrepareMigrationIfRequiredUseCase(get(), get()) }
     factory { GetMigrationUrlUseCase(get()) }
