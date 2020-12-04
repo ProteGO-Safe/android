@@ -12,8 +12,10 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
+import pl.gov.mc.protegosafe.domain.usecase.CountTemporaryExposuresKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
 import timber.log.Timber
+import java.io.File
 
 class ProvideDiagnosisKeyWorker(
     appContext: Context,
@@ -24,6 +26,7 @@ class ProvideDiagnosisKeyWorker(
     private val provideDiagnosisKeysUseCase: ProvideDiagnosisKeysUseCase by inject()
     private val remoteConfigurationRepository: RemoteConfigurationRepository by inject()
     private val diagnosisKeyRepository: DiagnosisKeyRepository by inject()
+    private val countTemporaryExposuresKeysUseCase: CountTemporaryExposuresKeysUseCase by inject()
 
     override fun createWork(): Single<Result> {
         return exposureNotificationRepository.isEnabled().flatMap { enabled ->
@@ -40,13 +43,7 @@ class ProvideDiagnosisKeyWorker(
                             Single.just(Result.success())
                         } else {
                             Timber.d("There are new diagnosis keys to provide: $diagnosisKeyFiles")
-                            getExposureConfiguration().flatMap { exposureConfiguration ->
-                                Timber.d("getExposureConfiguration() = $exposureConfiguration")
-                                provideDiagnosisKeysUseCase.execute(
-                                    files = diagnosisKeyFiles,
-                                    exposureConfigurationItem = exposureConfiguration
-                                ).toSingleDefault(Result.success())
-                            }
+                            handleDiagnosisKeyFiles(diagnosisKeyFiles)
                         }
                     }.onErrorResumeNext {
                         Timber.d(it, "ProvideDiagnosisKeyWorker")
@@ -63,5 +60,18 @@ class ProvideDiagnosisKeyWorker(
 
     override fun getBackgroundScheduler(): Scheduler {
         return Schedulers.io()
+    }
+
+    private fun handleDiagnosisKeyFiles(diagnosisKeyFiles: List<File>): Single<Result> {
+        return countTemporaryExposuresKeysUseCase.execute(diagnosisKeyFiles)
+            .andThen(
+                getExposureConfiguration().flatMap { exposureConfiguration ->
+                    Timber.d("getExposureConfiguration() = $exposureConfiguration")
+                    provideDiagnosisKeysUseCase.execute(
+                        files = diagnosisKeyFiles,
+                        exposureConfigurationItem = exposureConfiguration
+                    ).toSingleDefault(Result.success())
+                }
+            )
     }
 }

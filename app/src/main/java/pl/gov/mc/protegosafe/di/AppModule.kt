@@ -18,6 +18,7 @@ import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ClearDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CloseAppUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.CountTemporaryExposuresKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateDistrictsRestrictionsUseCase
@@ -135,6 +136,7 @@ val useCaseModule = module {
     factory { GetTestSubscriptionPinUseCase(get(), get(), get()) }
     factory { CancelExposureRiskUseCase(get(), get(), get()) }
     factory { AppReviewUseCase(get(), get()) }
+    factory { CountTemporaryExposuresKeysUseCase(get(), get()) }
 }
 
 val viewModelModule = module {

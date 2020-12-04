@@ -5,6 +5,16 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 apply from: '../ktlint.gradle'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath deps.gradle_plugin.wire_compiler
+    }
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -74,12 +84,36 @@ android {
     }
 }
 
+// This handles the protocol buffer generation with wire
+task generateWireClasses {
+    def protoPath = 'src/main/proto'
+    def wireGeneratedPath = 'src/main/java/'
+    def wireGeneratedPathWithPackage = 'src/main/java/pl/gov/mc/protegosafe/data/exposuresproto'
+
+    description = 'Generate Kotlin classes from protocol buffer (.proto) schema files for use with squareup\'s wire library'
+    delete(wireGeneratedPathWithPackage)
+    fileTree(dir: protoPath, include: '**/*.proto').each { File file ->
+        doLast {
+            javaexec {
+                main = 'com.squareup.wire.WireCompiler'
+                classpath = buildscript.configurations.classpath
+                args = ["--proto_path=${protoPath}", "--kotlin_out=${wireGeneratedPath}", "${file}"]
+            }
+        }
+    }
+}
+
+preBuild.dependsOn generateWireClasses
+
 dependencies {
     implementation project(':exposurenotification')
     implementation deps.jetbrains.kotlin_stdlib
     implementation deps.androidx.appcompat_appcompat
     implementation deps.androidx.core_ktx
     implementation deps.androidx.security_crypto
+
+    //Protobuf
+    implementation deps.protobuf.wire_runtime
 
     //koin
     implementation deps.koin.android

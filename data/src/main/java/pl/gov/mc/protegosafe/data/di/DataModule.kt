@@ -56,6 +56,7 @@ import pl.gov.mc.protegosafe.data.repository.MigrationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.RemoteConfigurationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.CovidInfoRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.CovidTestRepositoryImpl
+import pl.gov.mc.protegosafe.data.repository.ProtobufRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.SafetyNetRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TemporaryExposureKeysUploadRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TriageRepositoryImpl
@@ -84,6 +85,7 @@ import pl.gov.mc.protegosafe.domain.repository.MigrationRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
 import pl.gov.mc.protegosafe.domain.repository.CovidInfoRepository
 import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
+import pl.gov.mc.protegosafe.domain.repository.ProtobufRepository
 import pl.gov.mc.protegosafe.domain.repository.SafetyNetRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
@@ -161,6 +163,7 @@ val dataModule = module {
     single { WorkersIntervalDataStore(get()) }
     single { WebViewLoggingDataStore(get()) }
     single<FcmNotificationMapper> { FcmNotificationMapperImpl(get()) }
+    single<ProtobufRepository> { ProtobufRepositoryImpl() }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(
