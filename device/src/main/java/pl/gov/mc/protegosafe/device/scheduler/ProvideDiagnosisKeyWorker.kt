@@ -12,7 +12,7 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
-import pl.gov.mc.protegosafe.domain.usecase.CountTemporaryExposuresKeysUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SaveRiskCheckActivityUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
 import timber.log.Timber
 import java.io.File
@@ -26,7 +26,7 @@ class ProvideDiagnosisKeyWorker(
     private val provideDiagnosisKeysUseCase: ProvideDiagnosisKeysUseCase by inject()
     private val remoteConfigurationRepository: RemoteConfigurationRepository by inject()
     private val diagnosisKeyRepository: DiagnosisKeyRepository by inject()
-    private val countTemporaryExposuresKeysUseCase: CountTemporaryExposuresKeysUseCase by inject()
+    private val saveRiskCheckActivityUseCase: SaveRiskCheckActivityUseCase by inject()
 
     override fun createWork(): Single<Result> {
         return exposureNotificationRepository.isEnabled().flatMap { enabled ->
@@ -63,7 +63,7 @@ class ProvideDiagnosisKeyWorker(
     }
 
     private fun handleDiagnosisKeyFiles(diagnosisKeyFiles: List<File>): Single<Result> {
-        return countTemporaryExposuresKeysUseCase.execute(diagnosisKeyFiles)
+        return saveRiskCheckActivityUseCase.execute(diagnosisKeyFiles)
             .andThen(
                 getExposureConfiguration().flatMap { exposureConfiguration ->
                     Timber.d("getExposureConfiguration() = $exposureConfiguration")

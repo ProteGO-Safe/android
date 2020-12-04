@@ -29,6 +29,7 @@ import pl.gov.mc.protegosafe.data.db.AppVersionDataStore
 import pl.gov.mc.protegosafe.data.db.CovidInfoDataStore
 import pl.gov.mc.protegosafe.data.db.WebViewLoggingDataStore
 import pl.gov.mc.protegosafe.data.db.WorkersIntervalDataStore
+import pl.gov.mc.protegosafe.data.db.dao.ActivitiesDao
 import pl.gov.mc.protegosafe.data.db.dao.ExposureDao
 import pl.gov.mc.protegosafe.data.db.dao.CovidInfoDao
 import pl.gov.mc.protegosafe.data.db.dao.DiagnosisKeyDao
@@ -45,6 +46,7 @@ import pl.gov.mc.protegosafe.data.db.dao.CovidTestDao
 import pl.gov.mc.protegosafe.data.mapper.FcmNotificationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.TestSubscriptionConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.model.OutgoingBridgeDataResultComposerImpl
+import pl.gov.mc.protegosafe.data.repository.ActivitiesRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.CacheStoreImpl
 import pl.gov.mc.protegosafe.data.repository.DiagnosisKeyRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureNotificationRepositoryImpl
@@ -73,6 +75,7 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationMapper
+import pl.gov.mc.protegosafe.domain.repository.ActivitiesRepository
 import pl.gov.mc.protegosafe.domain.repository.CacheStore
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
@@ -164,6 +167,8 @@ val dataModule = module {
     single { WebViewLoggingDataStore(get()) }
     single<FcmNotificationMapper> { FcmNotificationMapperImpl(get()) }
     single<ProtobufRepository> { ProtobufRepositoryImpl() }
+    single { ActivitiesDao() }
+    single<ActivitiesRepository> { ActivitiesRepositoryImpl(get()) }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(
