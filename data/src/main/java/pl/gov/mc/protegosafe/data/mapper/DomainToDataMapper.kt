@@ -7,10 +7,10 @@ import pl.gov.mc.protegosafe.data.model.DistrictData
 import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityDto
 import pl.gov.mc.protegosafe.data.model.ExposureDto
+import pl.gov.mc.protegosafe.data.model.NotificationActivityDto
 import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeyRequestData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeysUploadData
-import pl.gov.mc.protegosafe.data.model.UINotificationData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
@@ -113,13 +113,16 @@ fun RiskLevelItem.toRiskLevelData() = when (this) {
     RiskLevelItem.HIGH_RISK -> RiskLevelData.HIGH_RISK
 }
 
-fun PushNotificationItem.toUINotificationData() = UINotificationData(
+fun PushNotificationItem.toNotificationActivityDto() = NotificationActivityDto(
+    id = id,
     title = title,
     content = content,
-    status = status
+    timestamp = timestamp
 )
 
 fun ExposureCheckActivityItem.toExposureCheckActivityDto() = ExposureCheckActivityDto(
+    id = id,
     riskLevel = riskLevel.toRiskLevelData().value,
-    exposures = exposures
+    exposures = exposures,
+    timestamp = timestamp
 )

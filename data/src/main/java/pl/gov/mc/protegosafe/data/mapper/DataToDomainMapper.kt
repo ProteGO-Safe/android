@@ -15,6 +15,7 @@ import pl.gov.mc.protegosafe.data.model.CovidInfoResponseData
 import pl.gov.mc.protegosafe.data.model.DistrictActionData
 import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityDto
 import pl.gov.mc.protegosafe.data.model.InteroperabilityData
+import pl.gov.mc.protegosafe.data.model.NotificationActivityDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.RiskCheckActivityDto
@@ -41,6 +42,7 @@ import pl.gov.mc.protegosafe.domain.model.InteroperabilityItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionStatus
 import pl.gov.mc.protegosafe.domain.model.PinItem
+import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.model.RiskCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
@@ -188,5 +190,12 @@ fun ExposureCheckActivityDto.toEntity() = ExposureCheckActivityItem(
     id = id,
     riskLevel = RiskLevelItem.valueOf(riskLevel),
     exposures = exposures,
+    timestamp = timestamp
+)
+
+fun NotificationActivityDto.toEntity() = PushNotificationItem(
+    id = id,
+    title = title,
+    content = content,
     timestamp = timestamp
 )

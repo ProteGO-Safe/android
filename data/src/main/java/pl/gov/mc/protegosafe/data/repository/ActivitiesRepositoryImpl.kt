@@ -5,10 +5,12 @@ import io.reactivex.Single
 import pl.gov.mc.protegosafe.data.db.dao.ActivitiesDao
 import pl.gov.mc.protegosafe.data.mapper.toEntity
 import pl.gov.mc.protegosafe.data.mapper.toExposureCheckActivityDto
+import pl.gov.mc.protegosafe.data.mapper.toNotificationActivityDto
 import pl.gov.mc.protegosafe.data.model.PreAnalyzeDto
 import pl.gov.mc.protegosafe.data.model.RiskCheckActivityDto
 import pl.gov.mc.protegosafe.domain.model.ActivitiesResultItem
 import pl.gov.mc.protegosafe.domain.model.ExposureCheckActivityItem
+import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.model.RiskCheckActivityItem
 import pl.gov.mc.protegosafe.domain.repository.ActivitiesRepository
 import timber.log.Timber
@@ -18,12 +20,12 @@ class ActivitiesRepositoryImpl(
 ) : ActivitiesRepository {
 
     override fun getActivitiesResult(): Single<ActivitiesResultItem> {
-        // TODO add notifications
         return Single.zip(
             getRiskCheckActivities(),
             getExposureCheckActivities(),
-            { riskChecks, exposureChecks ->
-                ActivitiesResultItem(riskChecks, exposureChecks)
+            getNotificationActivities(),
+            { riskChecks, exposureChecks, notifications ->
+                ActivitiesResultItem(riskChecks, exposureChecks, notifications)
             }
         )
     }
@@ -74,5 +76,20 @@ class ActivitiesRepositoryImpl(
 
     override fun getKeysCountForToken(token: String): Single<Long> {
         return activitiesDao.getKeysCountForToken(token)
+    }
+
+    override fun saveNotificationActivity(
+        pushNotificationItem: PushNotificationItem
+    ): Single<String> {
+        return activitiesDao.saveNotificationActivity(pushNotificationItem.toNotificationActivityDto())
+    }
+
+    private fun getNotificationActivities(): Single<List<PushNotificationItem>> {
+        return activitiesDao.getNotificationActivities()
+            .map { notificationActivities ->
+                notificationActivities.map {
+                    it.toEntity()
+                }
+            }
     }
 }

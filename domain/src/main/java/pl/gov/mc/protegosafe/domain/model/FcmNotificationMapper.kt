@@ -1,10 +1,16 @@
 package pl.gov.mc.protegosafe.domain.model
 
-interface FcmNotificationMapper {
-    fun toPushNotificationItem(
-        remoteMessageData: Map<String, String>,
-        topic: String?
-    ): PushNotificationItem?
+import io.reactivex.Single
 
-    fun toUINotificationJson(pushNotificationItem: PushNotificationItem): String
+interface FcmNotificationMapper {
+    fun getPushNotificationItem(
+        remoteMessageData: Map<String, String>
+    ): Single<PushNotificationItem>
+    fun getPushNotificationTopic(
+        remoteMessageData: Map<String, String>
+    ): Single<PushNotificationTopic>
+    fun getRouteJsonWithNotificationUUID(
+        remoteMessageData: Map<String, String>,
+        uuid: String
+    ): Single<String>
 }

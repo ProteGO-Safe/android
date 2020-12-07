@@ -1,15 +1,15 @@
 package pl.gov.mc.protegosafe.service
 
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.koin.android.ext.android.inject
-import pl.gov.mc.protegosafe.domain.model.FcmNotificationMapper
-import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
+import pl.gov.mc.protegosafe.data.Consts
+import pl.gov.mc.protegosafe.worker.SaveNotificationWorker
 
 class FcmService : FirebaseMessagingService() {
-
-    private val onPushNotificationUseCase: OnPushNotificationUseCase by inject()
-    private val fcmNotificationMapper: FcmNotificationMapper by inject()
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         if (remoteMessage.data.isNotEmpty()) {
@@ -18,8 +18,20 @@ class FcmService : FirebaseMessagingService() {
     }
 
     private fun handleNotification(remoteMessage: RemoteMessage) {
-        fcmNotificationMapper.toPushNotificationItem(remoteMessage.data, remoteMessage.from)?.let {
-            onPushNotificationUseCase.execute(it)
+        val dataBuilder = Data.Builder().apply {
+            remoteMessage.data.entries.forEach { entry ->
+                putString(
+                    entry.key, entry.value
+                )
+            }
+            putString(Consts.PUSH_NOTIFICATION_TOPIC_EXTRA, remoteMessage.from)
         }
+
+        val workManager: WorkManager by inject()
+        workManager.enqueue(
+            OneTimeWorkRequest.Builder(SaveNotificationWorker::class.java)
+                .setInputData(dataBuilder.build())
+                .build()
+        )
     }
 }

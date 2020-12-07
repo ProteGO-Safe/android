@@ -5,6 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityDto
 import pl.gov.mc.protegosafe.data.model.PreAnalyzeDto
+import pl.gov.mc.protegosafe.data.model.NotificationActivityDto
 import pl.gov.mc.protegosafe.data.model.RiskCheckActivityDto
 import queryAllAsSingle
 import timber.log.Timber
@@ -45,5 +46,17 @@ open class ActivitiesDao {
                     it.token == token
                 }?.keysCount
             }
+    }
+
+    fun saveNotificationActivity(notificationActivityDto: NotificationActivityDto): Single<String> {
+        return doTransaction {
+            it.copyToRealmOrUpdate(notificationActivityDto)
+        }.toSingle {
+            notificationActivityDto.id
+        }
+    }
+
+    fun getNotificationActivities(): Single<List<NotificationActivityDto>> {
+        return queryAllAsSingle()
     }
 }

@@ -2,27 +2,28 @@ package pl.gov.mc.protegosafe.domain.usecase
 
 import java.util.Calendar
 import pl.gov.mc.protegosafe.domain.Notifier
-import pl.gov.mc.protegosafe.domain.model.FcmNotificationMapper
 import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 
 class OnPushNotificationUseCase(
     private val triageRepository: TriageRepository,
-    private val fcmNotificationMapper: FcmNotificationMapper,
     private val notifier: Notifier
 ) {
 
-    fun execute(notificationItem: PushNotificationItem) {
-        val uiNotificationJson = fcmNotificationMapper.toUINotificationJson(notificationItem)
-        when (notificationItem.topic) {
+    fun execute(
+        topic: PushNotificationTopic,
+        notificationItem: PushNotificationItem,
+        data: String
+    ) {
+        when (topic) {
             PushNotificationTopic.DAILY -> {
                 if (!checkIfToday(triageRepository.getLastTriageCompletedTimestamp())) {
-                    showNotificationWithData(notificationItem, uiNotificationJson)
+                    showNotificationWithData(notificationItem, data)
                 }
             }
             else -> {
-                showNotificationWithData(notificationItem, uiNotificationJson)
+                showNotificationWithData(notificationItem, data)
             }
         }
     }
