@@ -4,13 +4,16 @@ import doTransaction
 import io.reactivex.Completable
 import io.reactivex.Single
 import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityDto
+import pl.gov.mc.protegosafe.data.model.PreAnalyzeDto
 import pl.gov.mc.protegosafe.data.model.RiskCheckActivityDto
 import queryAllAsSingle
+import timber.log.Timber
 
 open class ActivitiesDao {
-    fun addRiskCheckActivity(keysAmount: Long): Completable {
+    fun saveRiskCheckActivity(riskCheckActivityDto: RiskCheckActivityDto): Completable {
+        Timber.d("Saving risk check activity $riskCheckActivityDto")
         return doTransaction {
-            it.copyToRealmOrUpdate(RiskCheckActivityDto(keys = keysAmount))
+            it.copyToRealmOrUpdate(riskCheckActivityDto)
         }
     }
 
@@ -18,7 +21,8 @@ open class ActivitiesDao {
         return queryAllAsSingle()
     }
 
-    fun addExposureCheckActivity(exposureCheckActivityDto: ExposureCheckActivityDto): Completable {
+    fun saveExposureCheckActivity(exposureCheckActivityDto: ExposureCheckActivityDto): Completable {
+        Timber.d("Saving exposure check activity $exposureCheckActivityDto")
         return doTransaction {
             it.copyToRealmOrUpdate(exposureCheckActivityDto)
         }
@@ -26,5 +30,20 @@ open class ActivitiesDao {
 
     fun getExposureCheckActivities(): Single<List<ExposureCheckActivityDto>> {
         return queryAllAsSingle()
+    }
+
+    fun savePreAnalyze(preAnalyzeDto: PreAnalyzeDto): Completable {
+        return doTransaction {
+            it.copyToRealmOrUpdate(preAnalyzeDto)
+        }
+    }
+
+    fun getKeysCountForToken(token: String): Single<Long> {
+        return queryAllAsSingle<PreAnalyzeDto>()
+            .map { preAnalyzes ->
+                preAnalyzes.firstOrNull {
+                    it.token == token
+                }?.keysCount
+            }
     }
 }

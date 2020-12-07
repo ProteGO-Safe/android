@@ -18,7 +18,7 @@ import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ClearDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CloseAppUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.SaveRiskCheckActivityUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SaveKeysCountToAnalyzeUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateDistrictsRestrictionsUseCase
@@ -35,8 +35,10 @@ import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProcessPendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SaveExposureCheckActivityUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveExposureUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveNotificationDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SaveRiskCheckActivityUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveTriageCompletedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SetAppLanguageUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StartExposureNotificationUseCase
@@ -136,7 +138,9 @@ val useCaseModule = module {
     factory { GetTestSubscriptionPinUseCase(get(), get(), get()) }
     factory { CancelExposureRiskUseCase(get(), get(), get()) }
     factory { AppReviewUseCase(get(), get()) }
-    factory { SaveRiskCheckActivityUseCase(get(), get(), get()) }
+    factory { SaveKeysCountToAnalyzeUseCase(get(), get(), get()) }
+    factory { SaveRiskCheckActivityUseCase(get(), get()) }
+    factory { SaveExposureCheckActivityUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {

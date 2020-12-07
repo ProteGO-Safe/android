@@ -13,6 +13,7 @@ import pl.gov.mc.protegosafe.domain.model.toExposureItem
 import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveExposureUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveExposureCheckActivityUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SaveRiskCheckActivityUseCase
 
 class ExposureStateUpdateWorker(
     appContext: Context,
@@ -22,6 +23,7 @@ class ExposureStateUpdateWorker(
     private val getExposureInformationUseCase: GetExposureInformationUseCase by inject()
     private val saveExposureUseCase: SaveExposureUseCase by inject()
     private val saveExposureCheckActivityUseCase: SaveExposureCheckActivityUseCase by inject()
+    private val saveRiskCheckActivityUseCase: SaveRiskCheckActivityUseCase by inject()
 
     override fun createWork(): Single<Result> {
         val token = inputData.getString(Consts.EXPOSURE_STATE_UPDATED_EXTRA_TOKEN)
@@ -30,7 +32,7 @@ class ExposureStateUpdateWorker(
             .map { listOfExposureInformation ->
                 listOfExposureInformation.map { it.toExposureItem() }
             }.flatMapCompletable { listOfExposureItems ->
-                saveExposureCheckActivityUseCase.execute(listOfExposureItems)
+                saveActivities(token, listOfExposureItems)
                     .andThen(saveExposures(listOfExposureItems))
             }.toSingleDefault(Result.success())
     }
@@ -40,5 +42,19 @@ class ExposureStateUpdateWorker(
             exposures.map { saveExposureUseCase.execute(it) }
                 .asIterable()
         )
+    }
+
+    private fun saveActivities(
+        token: String,
+        listOfExposureItems: List<ExposureItem>
+    ): Completable {
+        return saveRiskCheckActivityUseCase.execute(token, listOfExposureItems.size)
+            .andThen(
+                Completable.defer {
+                    saveExposureCheckActivityUseCase.execute(
+                        listOfExposureItems
+                    )
+                }
+            )
     }
 }

@@ -12,6 +12,7 @@ import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 interface ExposureNotificationRepository {
 
     val ACTION_EXPOSURE_STATE_UPDATED: String
+    val ACTION_EXPOSURE_NOT_FOUND: String
     val EXTRA_TOKEN: String
 
     /**
