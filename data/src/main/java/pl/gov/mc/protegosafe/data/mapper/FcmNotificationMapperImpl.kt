@@ -50,7 +50,7 @@ class FcmNotificationMapperImpl(
                         this.params[ROUTE_UUID_KEY] = uuid
                     }
             } ?: RouteData(
-                name = ROUTE_NAME_DEFAULT,
+                name = ROUTE_NAME_FCM_DEFAULT,
                 params = mutableMapOf(Pair(ROUTE_UUID_KEY, uuid))
             )
             route.toJson()
@@ -72,4 +72,4 @@ class FcmNotificationMapperImpl(
 private const val FCM_DATA_NOTIFICATION_KEY = "notification"
 private const val FCM_DATA_ROUTE_KEY = "route"
 private const val ROUTE_UUID_KEY = "uuid"
-private const val ROUTE_NAME_DEFAULT = "notificationsHistory"
+private const val ROUTE_NAME_FCM_DEFAULT = "notificationsHistory"

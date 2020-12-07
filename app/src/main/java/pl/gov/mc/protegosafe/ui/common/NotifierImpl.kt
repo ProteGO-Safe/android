@@ -9,6 +9,8 @@ import android.content.res.Configuration
 import androidx.core.app.NotificationCompat
 import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
+import pl.gov.mc.protegosafe.data.extension.toJson
+import pl.gov.mc.protegosafe.data.model.RouteData
 import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.DistrictRestrictionStateItem
@@ -46,7 +48,10 @@ class NotifierImpl(
             ?: Timber.d("Show notification failed")
     }
 
-    override fun showDistrictsUpdatedNotification(notificationType: DistrictsUpdatedNotificationType) {
+    override fun showDistrictsUpdatedNotification(
+        notificationType: DistrictsUpdatedNotificationType
+    ) {
+        val data = RouteData(ROUTE_NAME_DISTRICT_RESTRICTIONS_DEFAULT, mutableMapOf()).toJson()
         notificationManager?.notify(
             Random().nextInt(),
             when (notificationType) {
@@ -54,18 +59,21 @@ class NotifierImpl(
                     createNotification(
                         localizedContext.getString(R.string.changes_in_districts_notification_title),
                         localizedContext.getString(R.string.changes_in_districts_info),
+                        data
                     )
                 }
                 is DistrictsUpdatedNotificationType.NoDistrictsUpdated -> {
                     createNotification(
                         localizedContext.getString(R.string.changes_in_districts_notification_title),
-                        localizedContext.getString(R.string.no_changes_in_subscribed_districts_info)
+                        localizedContext.getString(R.string.no_changes_in_subscribed_districts_info),
+                        data
                     )
                 }
                 is DistrictsUpdatedNotificationType.DistrictsUpdated -> {
                     createNotification(
                         localizedContext.getString(R.string.changes_in_districts_notification_title),
-                        prepareDistrictsUpdatedNotificationContent(notificationType.districts)
+                        prepareDistrictsUpdatedNotificationContent(notificationType.districts),
+                        data
                     )
                 }
             }
@@ -142,3 +150,5 @@ class NotifierImpl(
         )
     }
 }
+
+private const val ROUTE_NAME_DISTRICT_RESTRICTIONS_DEFAULT = "currentRestrictions"

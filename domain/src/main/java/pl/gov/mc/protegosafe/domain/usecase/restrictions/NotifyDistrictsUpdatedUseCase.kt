@@ -61,7 +61,9 @@ class NotifyDistrictsUpdatedUseCase(
         }
     }
 
-    private fun showChangesInSubscribedDistrictsNotification(districts: List<DistrictItem>): Completable {
+    private fun showChangesInSubscribedDistrictsNotification(
+        districts: List<DistrictItem>
+    ): Completable {
         return showDistrictsUpdatedNotification(
             if (districts.isEmpty()) {
                 DistrictsUpdatedNotificationType.NoDistrictsUpdated
@@ -71,7 +73,9 @@ class NotifyDistrictsUpdatedUseCase(
         )
     }
 
-    private fun showDistrictsUpdatedNotification(districtsUpdatedNotificationType: DistrictsUpdatedNotificationType): Completable {
+    private fun showDistrictsUpdatedNotification(
+        districtsUpdatedNotificationType: DistrictsUpdatedNotificationType
+    ): Completable {
         return Completable.fromAction {
             notifyManager.showDistrictsUpdatedNotification(districtsUpdatedNotificationType)
         }
