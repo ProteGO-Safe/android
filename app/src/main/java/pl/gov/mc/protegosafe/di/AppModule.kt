@@ -18,6 +18,7 @@ import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ClearDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CloseAppUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.DeleteActivitiesUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetActivitiesResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveKeysCountToAnalyzeUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
@@ -89,7 +90,19 @@ val useCaseModule = module {
             get()
         )
     }
-    factory { OnSetBridgeDataUseCase(get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory {
+        OnSetBridgeDataUseCase(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     factory { OnPushNotificationUseCase(get(), get()) }
     factory { SaveNotificationDataUseCase(get()) }
     factory { GetNotificationDataAndClearUseCase(get()) }
@@ -144,6 +157,7 @@ val useCaseModule = module {
     factory { SaveRiskCheckActivityUseCase(get(), get()) }
     factory { SaveExposureCheckActivityUseCase(get(), get(), get()) }
     factory { GetActivitiesResultUseCase(get(), get(), get()) }
+    factory { DeleteActivitiesUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {

@@ -9,6 +9,7 @@ import pl.gov.mc.protegosafe.data.mapper.toNotificationActivityDto
 import pl.gov.mc.protegosafe.data.model.PreAnalyzeDto
 import pl.gov.mc.protegosafe.data.model.RiskCheckActivityDto
 import pl.gov.mc.protegosafe.domain.model.ActivitiesResultItem
+import pl.gov.mc.protegosafe.domain.model.DeleteActivitiesItem
 import pl.gov.mc.protegosafe.domain.model.ExposureCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.model.RiskCheckActivityItem
@@ -95,5 +96,11 @@ class ActivitiesRepositoryImpl(
                     it.toEntity()
                 }
             }
+    }
+
+    override fun deleteActivities(deleteActivitiesItem: DeleteActivitiesItem): Completable {
+        return activitiesDao.deleteExposureChecksByID(deleteActivitiesItem.exposures)
+            .andThen(activitiesDao.deleteNotificationActivitiesByID(deleteActivitiesItem.notifications))
+            .andThen(activitiesDao.deleteRiskCheckByID(deleteActivitiesItem.riskChecks))
     }
 }

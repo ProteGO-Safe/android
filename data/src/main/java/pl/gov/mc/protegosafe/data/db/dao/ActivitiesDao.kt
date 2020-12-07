@@ -22,6 +22,14 @@ open class ActivitiesDao {
         return queryAllAsSingle()
     }
 
+    fun deleteRiskCheckByID(riskCheckIDs: List<String>): Completable {
+        return doTransaction { realm ->
+            realm.where(RiskCheckActivityDto::class.java).findAll()
+                .filter { riskCheckIDs.contains(it.id) }
+                .forEach { it.deleteFromRealm() }
+        }
+    }
+
     fun saveExposureCheckActivity(exposureCheckActivityDto: ExposureCheckActivityDto): Completable {
         Timber.d("Saving exposure check activity $exposureCheckActivityDto")
         return doTransaction {
@@ -31,6 +39,14 @@ open class ActivitiesDao {
 
     fun getExposureCheckActivities(): Single<List<ExposureCheckActivityDto>> {
         return queryAllAsSingle()
+    }
+
+    fun deleteExposureChecksByID(exposureCheckIDs: List<String>): Completable {
+        return doTransaction { realm ->
+            realm.where(ExposureCheckActivityDto::class.java).findAll()
+                .filter { exposureCheckIDs.contains(it.id) }
+                .forEach { it.deleteFromRealm() }
+        }
     }
 
     fun savePreAnalyze(preAnalyzeDto: PreAnalyzeDto): Completable {
@@ -58,5 +74,13 @@ open class ActivitiesDao {
 
     fun getNotificationActivities(): Single<List<NotificationActivityDto>> {
         return queryAllAsSingle()
+    }
+
+    fun deleteNotificationActivitiesByID(notificationIDs: List<String>): Completable {
+        return doTransaction { realm ->
+            realm.where(NotificationActivityDto::class.java).findAll()
+                .filter { notificationIDs.contains(it.id) }
+                .forEach { it.deleteFromRealm() }
+        }
     }
 }

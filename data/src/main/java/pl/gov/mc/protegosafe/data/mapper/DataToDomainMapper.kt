@@ -12,6 +12,7 @@ import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.CovidInfoResponseData
+import pl.gov.mc.protegosafe.data.model.DeleteActivitiesData
 import pl.gov.mc.protegosafe.data.model.DistrictActionData
 import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityDto
 import pl.gov.mc.protegosafe.data.model.InteroperabilityData
@@ -29,6 +30,7 @@ import pl.gov.mc.protegosafe.domain.CovidInfoItem
 import pl.gov.mc.protegosafe.domain.model.AppReviewItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.CloseAppItem
+import pl.gov.mc.protegosafe.domain.model.DeleteActivitiesItem
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration
 import pl.gov.mc.protegosafe.domain.model.DistrictActionItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
@@ -198,4 +200,10 @@ fun NotificationActivityDto.toEntity() = PushNotificationItem(
     title = title,
     content = content,
     timestamp = timestamp
+)
+
+fun DeleteActivitiesData.toEntity() = DeleteActivitiesItem(
+    notifications = notifications,
+    riskChecks = riskChecks,
+    exposures = exposures
 )

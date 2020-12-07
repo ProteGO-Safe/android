@@ -19,4 +19,6 @@ interface IncomingBridgePayloadMapper {
     fun toInteroperabilityItem(payload: String): InteroperabilityItem
 
     fun toAppReviewItem(payload: String): AppReviewItem
+
+    fun toDeleteActivities(payload: String): DeleteActivitiesItem
 }
