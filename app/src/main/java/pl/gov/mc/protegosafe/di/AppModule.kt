@@ -18,6 +18,7 @@ import pl.gov.mc.protegosafe.domain.usecase.CheckDeviceRootedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ClearDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.CloseAppUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetActivitiesResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveKeysCountToAnalyzeUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
@@ -70,6 +71,7 @@ val appModule = module {
 val useCaseModule = module {
     factory {
         OnGetBridgeDataUseCase(
+            get(),
             get(),
             get(),
             get(),
@@ -141,6 +143,7 @@ val useCaseModule = module {
     factory { SaveKeysCountToAnalyzeUseCase(get(), get(), get()) }
     factory { SaveRiskCheckActivityUseCase(get(), get()) }
     factory { SaveExposureCheckActivityUseCase(get(), get(), get()) }
+    factory { GetActivitiesResultUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {

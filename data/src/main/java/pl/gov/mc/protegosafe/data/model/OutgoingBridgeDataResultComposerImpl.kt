@@ -2,11 +2,13 @@ package pl.gov.mc.protegosafe.data.model
 
 import com.google.gson.GsonBuilder
 import pl.gov.mc.protegosafe.data.extension.toJson
+import pl.gov.mc.protegosafe.data.mapper.toActivitiesResultData
 import pl.gov.mc.protegosafe.data.mapper.toDistrictData
 import pl.gov.mc.protegosafe.data.mapper.toTestSubscriptionStatusData
 import pl.gov.mc.protegosafe.data.mapper.toRiskLevelData
 import pl.gov.mc.protegosafe.data.mapper.toVoivodeshipData
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusResult
+import pl.gov.mc.protegosafe.domain.model.ActivitiesResultItem
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
@@ -91,5 +93,9 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
 
     override fun composeBackButtonPressedResult(): String {
         return BackButtonPressedData().toJson()
+    }
+
+    override fun composeActivitiesResult(activitiesResultItem: ActivitiesResultItem): String {
+        return activitiesResultItem.toActivitiesResultData().toJson()
     }
 }

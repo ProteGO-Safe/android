@@ -28,6 +28,7 @@ class OnGetBridgeDataUseCase(
     private val getTestSubscriptionStatusUseCase: GetTestSubscriptionStatusUseCase,
     private val getTestSubscriptionPinUseCase: GetTestSubscriptionPinUseCase,
     private val cancelExposureRiskUseCase: CancelExposureRiskUseCase,
+    private val getActivitiesResultUseCase: GetActivitiesResultUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -80,6 +81,9 @@ class OnGetBridgeDataUseCase(
             }
             OutgoingBridgeDataType.GET_COVID_TEST_SUBSCRIPTION_PIN -> {
                 getTestSubscriptionPinUseCase.execute()
+            }
+            OutgoingBridgeDataType.GET_ACTIVITIES -> {
+                getActivitiesResultUseCase.execute()
             }
             else -> {
                 throw IllegalArgumentException("OutgoingBridgeDataType has wrong value")

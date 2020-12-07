@@ -25,7 +25,11 @@ class ActivitiesRepositoryImpl(
             getExposureCheckActivities(),
             getNotificationActivities(),
             { riskChecks, exposureChecks, notifications ->
-                ActivitiesResultItem(riskChecks, exposureChecks, notifications)
+                ActivitiesResultItem(
+                    riskChecks = riskChecks,
+                    exposures = exposureChecks,
+                    notifications = notifications
+                )
             }
         )
     }

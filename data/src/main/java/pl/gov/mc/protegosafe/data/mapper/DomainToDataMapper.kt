@@ -3,11 +3,15 @@ package pl.gov.mc.protegosafe.data.mapper
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import io.realm.RealmList
 import pl.gov.mc.protegosafe.data.extension.toBase64
+import pl.gov.mc.protegosafe.data.model.ActivitiesResultData
 import pl.gov.mc.protegosafe.data.model.DistrictData
 import pl.gov.mc.protegosafe.data.model.DistrictDto
+import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityData
 import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityDto
 import pl.gov.mc.protegosafe.data.model.ExposureDto
+import pl.gov.mc.protegosafe.data.model.NotificationActivityData
 import pl.gov.mc.protegosafe.data.model.NotificationActivityDto
+import pl.gov.mc.protegosafe.data.model.RiskCheckActivityData
 import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeyRequestData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeysUploadData
@@ -15,11 +19,13 @@ import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusData
+import pl.gov.mc.protegosafe.domain.model.ActivitiesResultItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.ExposureCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
+import pl.gov.mc.protegosafe.domain.model.RiskCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadRequestItem
@@ -125,4 +131,31 @@ fun ExposureCheckActivityItem.toExposureCheckActivityDto() = ExposureCheckActivi
     riskLevel = riskLevel.toRiskLevelData().value,
     exposures = exposures,
     timestamp = timestamp
+)
+
+fun PushNotificationItem.toNotificationActivityData() = NotificationActivityData(
+    id = id,
+    title = title,
+    content = content,
+    timestamp = timestamp
+)
+
+fun RiskCheckActivityItem.toRiskCheckActivityData() = RiskCheckActivityData(
+    id = id,
+    keys = keys,
+    exposures = exposures,
+    timestamp = timestamp
+)
+
+fun ExposureCheckActivityItem.toExposureCheckActivityData() = ExposureCheckActivityData(
+    id = id,
+    riskLevel = riskLevel.value,
+    exposures = exposures,
+    timestamp = timestamp
+)
+
+fun ActivitiesResultItem.toActivitiesResultData() = ActivitiesResultData(
+    notifications = notifications.map { it.toNotificationActivityData() },
+    riskChecks = riskChecks.map { it.toRiskCheckActivityData() },
+    exposures = exposures.map { it.toExposureCheckActivityData() }
 )
