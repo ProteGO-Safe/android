@@ -22,6 +22,7 @@ import pl.gov.mc.protegosafe.domain.model.SetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.repository.UiRequestCacheRepository
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
@@ -47,6 +48,7 @@ class HomeViewModel(
     private val processPendingActivityResultUseCase: ProcessPendingActivityResultUseCase,
     private val updateTestSubscriptionStatusUseCase: UpdateTestSubscriptionStatusUseCase,
     private val outgoingBridgeDataResultComposer: OutgoingBridgeDataResultComposer,
+    private val getRouteAndClearUseCase: GetNotificationDataAndClearUseCase,
     private val uiRequestCacheRepository: UiRequestCacheRepository
 ) : BaseViewModel() {
 
@@ -273,8 +275,11 @@ class HomeViewModel(
         }
     }
 
-    fun onAppLifecycleStateChanged(state: AppLifecycleState) {
+    fun onAppLifecycleStateChanged(state: AppLifecycleState, webViewProgress: Int? = null) {
         Timber.d("onAppLifecycleStateChanged $state")
+        if (webViewProgress == MAX_WEBVIEW_PROGRESS) {
+            sendRerouteRequestIfNotEmpty()
+        }
         if (state == AppLifecycleState.RESUMED) {
             sendServicesStatus()
         }
@@ -285,6 +290,20 @@ class HomeViewModel(
                 },
                 {
                     Timber.e(it, "onAppLifecycleStateChanged failed")
+                }
+            ).addTo(disposables)
+    }
+
+    private fun sendRerouteRequestIfNotEmpty() {
+        getRouteAndClearUseCase.execute()
+            .subscribe(
+                {
+                    if (it.isNotEmpty()) {
+                        onBridgeData(OutgoingBridgeDataType.REROUTE_USER.code, it)
+                    }
+                },
+                {
+                    Timber.e(it, "Can not reroute user")
                 }
             ).addTo(disposables)
     }
@@ -352,3 +371,5 @@ class HomeViewModel(
         _requestExposureNotificationPermission.postValue(exception)
     }
 }
+
+private const val MAX_WEBVIEW_PROGRESS = 100

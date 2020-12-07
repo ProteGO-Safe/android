@@ -38,9 +38,6 @@ class OnGetBridgeDataUseCase(
         onResultActionRequired: (ActionRequiredItem) -> Unit
     ): Single<String> {
         return when (type) {
-            OutgoingBridgeDataType.NOTIFICATION_DATA -> {
-                Single.fromCallable { getNotificationDataAndClear.execute() }
-            }
             OutgoingBridgeDataType.SERVICES_STATUS -> {
                 getServicesStatusUseCase.execute()
             }

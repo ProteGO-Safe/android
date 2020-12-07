@@ -24,6 +24,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.api.ApiException
 import com.google.android.play.core.review.ReviewManagerFactory
 import io.reactivex.rxkotlin.addTo
+import kotlinx.android.synthetic.main.fragment_home.webView
 import kotlinx.android.synthetic.main.view_connection_error.view.button_cancel
 import kotlinx.android.synthetic.main.view_connection_error.view.button_check_internet_connection
 import kotlinx.android.synthetic.main.view_connection_error.view.text_view_connection_error
@@ -79,7 +80,7 @@ class HomeFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         manageWebView(resumed = true)
-        vm.onAppLifecycleStateChanged(AppLifecycleState.RESUMED)
+        vm.onAppLifecycleStateChanged(AppLifecycleState.RESUMED, webView.progress)
         vm.processPendingActivityResult()
     }
 

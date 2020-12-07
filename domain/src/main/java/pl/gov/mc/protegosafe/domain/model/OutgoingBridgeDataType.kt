@@ -1,7 +1,6 @@
 package pl.gov.mc.protegosafe.domain.model
 
 enum class OutgoingBridgeDataType(override val code: Int) : UIRequestBridgeDataType {
-    NOTIFICATION_DATA(2),
     APP_LIFECYCLE_STATE(11),
     TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS(43),
     SERVICES_STATUS(51),
@@ -11,6 +10,7 @@ enum class OutgoingBridgeDataType(override val code: Int) : UIRequestBridgeDataT
     GET_FONT_SCALE(65),
     EXPOSURE_RISK_CANCELLATION(66),
     BACK_BUTTON_PRESSED(67),
+    REROUTE_USER(69),
     DISTRICTS_STATUS(70),
     UPDATE_DISTRICTS_STATUSES(71),
     DISTRICT_ACTION(72),
