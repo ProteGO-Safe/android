@@ -277,9 +277,6 @@ class HomeViewModel(
 
     fun onAppLifecycleStateChanged(state: AppLifecycleState, webViewProgress: Int? = null) {
         Timber.d("onAppLifecycleStateChanged $state")
-        if (webViewProgress == MAX_WEBVIEW_PROGRESS) {
-            sendRerouteRequestIfNotEmpty()
-        }
         if (state == AppLifecycleState.RESUMED) {
             sendServicesStatus()
         }
@@ -292,6 +289,14 @@ class HomeViewModel(
                     Timber.e(it, "onAppLifecycleStateChanged failed")
                 }
             ).addTo(disposables)
+
+        if (webViewProgress == MAX_WEBVIEW_PROGRESS) {
+            sendRerouteRequestIfNotEmpty()
+        }
+    }
+
+    fun onPageFinished() {
+        sendRerouteRequestIfNotEmpty()
     }
 
     private fun sendRerouteRequestIfNotEmpty() {

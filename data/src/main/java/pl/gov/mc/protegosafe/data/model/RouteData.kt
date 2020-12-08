@@ -6,5 +6,5 @@ data class RouteData(
     @SerializedName("name")
     val name: String,
     @SerializedName("params")
-    val params: MutableMap<String, String>
+    var params: MutableMap<String, String> = mutableMapOf()
 )

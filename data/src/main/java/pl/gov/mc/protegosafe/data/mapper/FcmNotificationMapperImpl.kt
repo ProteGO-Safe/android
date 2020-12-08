@@ -47,7 +47,12 @@ class FcmNotificationMapperImpl(
             val route = remoteMessageData[FCM_DATA_ROUTE_KEY]?.let {
                 Gson().fromJson(it, RouteData::class.java)
                     ?.apply {
-                        this.params[ROUTE_UUID_KEY] = uuid
+                        // Can be [null] because Gson breaks null safety
+                        if (params != null) {
+                            this.params[ROUTE_UUID_KEY] = uuid
+                        } else {
+                            params = mutableMapOf(Pair(ROUTE_UUID_KEY, uuid))
+                        }
                     }
             } ?: RouteData(
                 name = ROUTE_NAME_FCM_DEFAULT,

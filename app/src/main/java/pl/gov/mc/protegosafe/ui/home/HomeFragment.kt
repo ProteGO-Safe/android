@@ -203,6 +203,7 @@ class HomeFragment : BaseFragment() {
                 binding.webView.reload()
                 binding.migrationLayout.isVisible = false
             }
+            vm.onPageFinished()
         }
 
         override fun onReceivedSslError(
