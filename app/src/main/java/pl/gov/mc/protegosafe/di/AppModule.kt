@@ -28,10 +28,11 @@ import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetFontScaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetRouteDataAndClearUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.GetTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetSystemLanguageUseCase
+import pl.gov.mc.protegosafe.domain.usecase.HandleNewUriUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
@@ -39,7 +40,7 @@ import pl.gov.mc.protegosafe.domain.usecase.ProcessPendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveExposureCheckActivityUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveExposureUseCase
-import pl.gov.mc.protegosafe.domain.usecase.SaveNotificationDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SaveRouteUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveRiskCheckActivityUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveTriageCompletedUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SetAppLanguageUseCase
@@ -87,7 +88,6 @@ val useCaseModule = module {
             get(),
             get(),
             get(),
-            get()
         )
     }
     factory {
@@ -104,8 +104,8 @@ val useCaseModule = module {
         )
     }
     factory { OnPushNotificationUseCase(get(), get()) }
-    factory { SaveNotificationDataUseCase(get()) }
-    factory { GetNotificationDataAndClearUseCase(get()) }
+    factory { SaveRouteUseCase(get(), get()) }
+    factory { GetRouteDataAndClearUseCase(get()) }
     factory { StartExposureNotificationUseCase(get(), get(), get()) }
     factory { StopExposureNotificationUseCase(get(), get(), get()) }
     factory { GetServicesStatusUseCase(get()) }
@@ -158,10 +158,11 @@ val useCaseModule = module {
     factory { SaveExposureCheckActivityUseCase(get(), get(), get()) }
     factory { GetActivitiesResultUseCase(get(), get(), get()) }
     factory { DeleteActivitiesUseCase(get(), get(), get()) }
+    factory { HandleNewUriUseCase(get(), get()) }
 }
 
 val viewModelModule = module {
-    viewModel { MainViewModel(get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get()) }
     viewModel {
         HomeViewModel(
             get(),

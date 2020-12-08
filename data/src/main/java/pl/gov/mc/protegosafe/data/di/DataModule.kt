@@ -21,7 +21,7 @@ import pl.gov.mc.protegosafe.data.cloud.CovidInfoService
 import pl.gov.mc.protegosafe.data.cloud.CovidTestService
 import pl.gov.mc.protegosafe.data.cloud.UploadTemporaryExposureKeysService
 import pl.gov.mc.protegosafe.data.db.AppLanguageDataStore
-import pl.gov.mc.protegosafe.data.db.NotificationDataStore
+import pl.gov.mc.protegosafe.data.db.RouteDataStore
 import pl.gov.mc.protegosafe.data.db.SafetyNetDataStore
 import pl.gov.mc.protegosafe.data.db.SharedPreferencesDelegates
 import pl.gov.mc.protegosafe.data.db.TriageDataStore
@@ -51,7 +51,7 @@ import pl.gov.mc.protegosafe.data.repository.CacheStoreImpl
 import pl.gov.mc.protegosafe.data.repository.DiagnosisKeyRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureNotificationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureRepositoryImpl
-import pl.gov.mc.protegosafe.data.repository.NotificationRepositoryImpl
+import pl.gov.mc.protegosafe.data.repository.RouteRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.PendingActivityResultRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.CertificatePinningRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.MigrationRepositoryImpl
@@ -81,7 +81,7 @@ import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
 import pl.gov.mc.protegosafe.domain.repository.KeyUploadSystemInfoRepository
-import pl.gov.mc.protegosafe.domain.repository.NotificationRepository
+import pl.gov.mc.protegosafe.domain.repository.RouteRepository
 import pl.gov.mc.protegosafe.domain.repository.PendingActivityResultRepository
 import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository
 import pl.gov.mc.protegosafe.domain.repository.MigrationRepository
@@ -114,9 +114,9 @@ val dataModule = module {
     single<CovidTestService> {
         get<Retrofit>().create(CovidTestService::class.java)
     }
-    single<NotificationRepository> { NotificationRepositoryImpl(get()) }
+    single<RouteRepository> { RouteRepositoryImpl(get()) }
     single<TriageRepository> { TriageRepositoryImpl(get()) }
-    single { NotificationDataStore() }
+    single { RouteDataStore() }
     single { TriageDataStore(get()) }
     single { SharedPreferencesDelegates(get()) }
     single { Nearby.getExposureNotificationClient(androidApplication()) }

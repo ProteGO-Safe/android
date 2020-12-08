@@ -44,7 +44,7 @@ class MainActivity : BaseActivity() {
         binding.vm = vm
         binding.lifecycleOwner = this
 
-        saveNotificationData(intent)
+        handleIntentData(intent)
         createNotificationChannel()
         observeRequests()
         if (BuildConfig.DEBUG) {
@@ -59,12 +59,14 @@ class MainActivity : BaseActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        saveNotificationData(intent)
+        handleIntentData(intent)
     }
 
-    private fun saveNotificationData(intent: Intent?) {
+    private fun handleIntentData(intent: Intent?) {
         intent?.getStringExtra(Consts.GENERAL_NOTIFICATION_EXTRA_DATA)?.let {
-            vm.onNotificationDataReceived(it)
+            vm.onRouteReceived(it)
+        } ?: intent?.data?.let {
+            vm.handleNewUri(it)
         }
     }
 

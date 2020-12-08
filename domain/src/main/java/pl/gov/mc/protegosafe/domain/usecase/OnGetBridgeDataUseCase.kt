@@ -14,7 +14,6 @@ import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUse
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateDistrictsRestrictionsUseCase
 
 class OnGetBridgeDataUseCase(
-    private val getNotificationDataAndClear: GetNotificationDataAndClearUseCase,
     private val getServicesStatusUseCase: GetServicesStatusUseCase,
     private val getAnalyzeResultUseCase: GetAnalyzeResultUseCase,
     private val getAppVersionNameUseCase: GetAppVersionNameUseCase,

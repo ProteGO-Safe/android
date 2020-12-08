@@ -22,7 +22,7 @@ import pl.gov.mc.protegosafe.domain.model.SetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.repository.UiRequestCacheRepository
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
-import pl.gov.mc.protegosafe.domain.usecase.GetNotificationDataAndClearUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetRouteDataAndClearUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
@@ -48,7 +48,7 @@ class HomeViewModel(
     private val processPendingActivityResultUseCase: ProcessPendingActivityResultUseCase,
     private val updateTestSubscriptionStatusUseCase: UpdateTestSubscriptionStatusUseCase,
     private val outgoingBridgeDataResultComposer: OutgoingBridgeDataResultComposer,
-    private val getRouteAndClearUseCase: GetNotificationDataAndClearUseCase,
+    private val getRouteAndClearUseCase: GetRouteDataAndClearUseCase,
     private val uiRequestCacheRepository: UiRequestCacheRepository
 ) : BaseViewModel() {
 
