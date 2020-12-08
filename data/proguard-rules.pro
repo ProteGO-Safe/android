@@ -31,3 +31,5 @@
 -dontwarn io.realm.**
 -keepnames public class * extends io.realm.RealmObject
 -keep class * extends io.realm.RealmObject
+-keep class com.squareup.wire.** { *; }
+-keep class pl.gov.mc.protegosafe.data.exposuresproto.** { *; }
