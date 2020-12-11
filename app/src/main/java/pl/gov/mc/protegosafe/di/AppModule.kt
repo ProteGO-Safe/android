@@ -146,7 +146,7 @@ val useCaseModule = module {
     factory { GetDistrictsRestrictionsResultUseCase(get(), get(), get()) }
     factory { HandleDistrictActionUseCase(get(), get(), get()) }
     factory { GetSubscribedDistrictsResultUseCase(get(), get(), get()) }
-    factory { NotifyDistrictsUpdatedUseCase(get(), get(), get()) }
+    factory { NotifyDistrictsUpdatedUseCase(get(), get(), get(), get()) }
     factory { UploadTestSubscriptionPinUseCase(get(), get(), get(), get(), get(), get()) }
     factory { GetTestSubscriptionStatusUseCase(get(), get(), get(), get()) }
     factory { UpdateTestSubscriptionStatusUseCase(get(), get(), get()) }

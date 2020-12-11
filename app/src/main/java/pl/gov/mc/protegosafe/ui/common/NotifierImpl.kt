@@ -15,6 +15,7 @@ import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.DistrictRestrictionStateItem
 import pl.gov.mc.protegosafe.domain.model.DistrictsUpdatedNotificationType
+import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
 import pl.gov.mc.protegosafe.ui.MainActivity
 import timber.log.Timber
@@ -48,45 +49,52 @@ class NotifierImpl(
             ?: Timber.d("Show notification failed")
     }
 
-    override fun showDistrictsUpdatedNotification(
+    override fun getDistrictsUpdatedNotification(
         notificationType: DistrictsUpdatedNotificationType
+    ): PushNotificationItem {
+        return when (notificationType) {
+            is DistrictsUpdatedNotificationType.EmptySubscribedDistrictsList -> {
+                PushNotificationItem(
+                    title = localizedContext.getString(R.string.changes_in_districts_notification_title),
+                    content = localizedContext.getString(R.string.changes_in_districts_info)
+                )
+            }
+            is DistrictsUpdatedNotificationType.NoDistrictsUpdated -> {
+                PushNotificationItem(
+                    title = localizedContext.getString(R.string.changes_in_districts_notification_title),
+                    content = localizedContext.getString(R.string.no_changes_in_subscribed_districts_info),
+                )
+            }
+            is DistrictsUpdatedNotificationType.DistrictsUpdated -> {
+                PushNotificationItem(
+                    title = localizedContext.getString(R.string.changes_in_districts_notification_title),
+                    content = prepareDistrictsUpdatedNotificationContent(notificationType.districts),
+                )
+            }
+        }
+    }
+
+    override fun showDistrictsUpdatedNotification(
+        notificationItem: PushNotificationItem
     ) {
-        val data = RouteData(ROUTE_NAME_DISTRICT_RESTRICTIONS_DEFAULT, mutableMapOf()).toJson()
+        val routeJson = RouteData(ROUTE_NAME_DISTRICT_RESTRICTIONS_DEFAULT, mutableMapOf()).toJson()
         notificationManager?.notify(
             Random().nextInt(),
-            when (notificationType) {
-                is DistrictsUpdatedNotificationType.EmptySubscribedDistrictsList -> {
-                    createNotification(
-                        localizedContext.getString(R.string.changes_in_districts_notification_title),
-                        localizedContext.getString(R.string.changes_in_districts_info),
-                        data
-                    )
-                }
-                is DistrictsUpdatedNotificationType.NoDistrictsUpdated -> {
-                    createNotification(
-                        localizedContext.getString(R.string.changes_in_districts_notification_title),
-                        localizedContext.getString(R.string.no_changes_in_subscribed_districts_info),
-                        data
-                    )
-                }
-                is DistrictsUpdatedNotificationType.DistrictsUpdated -> {
-                    createNotification(
-                        localizedContext.getString(R.string.changes_in_districts_notification_title),
-                        prepareDistrictsUpdatedNotificationContent(notificationType.districts),
-                        data
-                    )
-                }
-            }
+            createNotification(
+                title = notificationItem.title,
+                content = notificationItem.content,
+                routeJson = routeJson
+            )
         ) ?: Timber.d("Show notification failed")
     }
 
     private fun createNotification(
         title: String,
         content: String,
-        data: String? = null
+        routeJson: String? = null
     ): Notification {
         val notificationIntent = Intent(localizedContext, MainActivity::class.java).apply {
-            data?.let { putExtra(Consts.GENERAL_NOTIFICATION_EXTRA_DATA, data) }
+            routeJson?.let { putExtra(Consts.GENERAL_NOTIFICATION_EXTRA_DATA, routeJson) }
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
