@@ -17,6 +17,10 @@ class RealmMigrations : RealmMigration {
             addCovidTest(realm.schema)
             dbVersion++
         }
+        if (dbVersion == REALM_VERSION_UP_TO_4_9) {
+            addActivities(realm.schema)
+            dbVersion++
+        }
     }
 
     private fun addDistricts(realmSchema: RealmSchema) {
@@ -52,8 +56,33 @@ class RealmMigrations : RealmMigration {
             ?.addField("testPin", String::class.java, FieldAttribute.REQUIRED)
     }
 
+    private fun addActivities(realmSchema: RealmSchema) {
+        realmSchema.create("NotificationActivityDto")
+            ?.addField("id", String::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+            ?.addField("title", String::class.java, FieldAttribute.REQUIRED)
+            ?.addField("content", String::class.java, FieldAttribute.REQUIRED)
+            ?.addField("timestamp", Long::class.java)
+
+        realmSchema.create("ExposureCheckActivityDto")
+            ?.addField("id", String::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+            ?.addField("riskLevel", Int::class.java)
+            ?.addField("exposures", Int::class.java)
+            ?.addField("timestamp", Long::class.java)
+
+        realmSchema.create("PreAnalyzeDto")
+            ?.addField("token", String::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+            ?.addField("keysCount", Long::class.java)
+
+        realmSchema.create("RiskCheckActivityDto")
+            ?.addField("id", String::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+            ?.addField("keys", Long::class.java)
+            ?.addField("exposures", Int::class.java)
+            ?.addField("timestamp", Long::class.java)
+    }
+
     companion object {
         private const val REALM_VERSION_UP_TO_4_4 = 0L
         private const val REALM_VERSION_UP_TO_4_7 = 1L
+        private const val REALM_VERSION_UP_TO_4_9 = 2L
     }
 }
