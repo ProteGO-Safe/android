@@ -9,7 +9,7 @@ import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedE
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.helpers.GetTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.helpers.GetWebViewLoggingStatusUseCase
-import pl.gov.mc.protegosafe.helpers.SetRiskHelperUseCase
+import pl.gov.mc.protegosafe.helpers.SetRiskAndAddNotificationHelperUseCase
 import pl.gov.mc.protegosafe.helpers.SetWebViewLoggingEnabledUseCase
 import pl.gov.mc.protegosafe.helpers.SetWorkersIntervalUseCase
 import pl.gov.mc.protegosafe.ui.common.BaseViewModel
@@ -17,11 +17,11 @@ import pl.gov.mc.protegosafe.ui.common.livedata.SingleLiveEvent
 import timber.log.Timber
 
 class TestHelpersViewModel(
-    private val setRiskHelperUseCase: SetRiskHelperUseCase,
+    private val setRiskAndAddNotificationHelperUseCase: SetRiskAndAddNotificationHelperUseCase,
     private val setWorkersIntervalUseCase: SetWorkersIntervalUseCase,
     private val setWebViewLoggingEnabledUseCase: SetWebViewLoggingEnabledUseCase,
     private val getWebViewLoggingStatusUseCase: GetWebViewLoggingStatusUseCase,
-    private val getTemporaryExposureKeysUseCase: GetTemporaryExposureKeysUseCase
+    private val getTemporaryExposureKeysUseCase: GetTemporaryExposureKeysUseCase,
 ) : BaseViewModel() {
 
     val loggingStatus = SingleLiveEvent<Boolean>()
@@ -53,7 +53,7 @@ class TestHelpersViewModel(
     }
 
     fun onRiskChangeClick(riskLevelItem: RiskLevelItem) {
-        setRiskHelperUseCase.execute(riskLevelItem)
+        setRiskAndAddNotificationHelperUseCase.execute(riskLevelItem)
             .subscribe(
                 {
                     _successfulEvent.postValue(it)

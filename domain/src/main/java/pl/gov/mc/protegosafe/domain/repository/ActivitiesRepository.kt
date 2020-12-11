@@ -9,7 +9,7 @@ import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 
 interface ActivitiesRepository {
     fun getActivitiesResult(): Single<ActivitiesResultItem>
-    fun saveRiskCheckActivity(keysAmount: Long, exposures: Int): Completable
+    fun saveRiskCheckActivity(keysCount: Long, exposures: Int): Completable
     fun saveExposureCheckActivity(exposureCheckActivityItem: ExposureCheckActivityItem): Completable
     fun saveKeysCountToAnalyze(token: String, keysCount: Long): Completable
     fun getKeysCountForToken(token: String): Single<Long>

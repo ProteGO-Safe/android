@@ -35,10 +35,10 @@ class ActivitiesRepositoryImpl(
         )
     }
 
-    override fun saveRiskCheckActivity(keysAmount: Long, exposures: Int): Completable {
-        Timber.d("Saving risk check(keysAmount=$keysAmount, exposures=$exposures)")
+    override fun saveRiskCheckActivity(keysCount: Long, exposures: Int): Completable {
+        Timber.d("Saving risk check(keysAmount=$keysCount, exposures=$exposures)")
         return activitiesDao.saveRiskCheckActivity(
-            RiskCheckActivityDto(keys = keysAmount, exposures = exposures)
+            RiskCheckActivityDto(keys = keysCount, exposures = exposures)
         )
     }
 
