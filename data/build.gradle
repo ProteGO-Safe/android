@@ -40,6 +40,9 @@ android {
     kotlinOptions { jvmTarget = "1.8" }
 
     buildTypes {
+        debug {
+            buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "true"
+        }
         release {
             debuggable false
             minifyEnabled true
