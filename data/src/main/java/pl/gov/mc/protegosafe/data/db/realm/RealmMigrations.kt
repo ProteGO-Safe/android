@@ -78,6 +78,16 @@ class RealmMigrations : RealmMigration {
             ?.addField("keys", Long::class.java)
             ?.addField("exposures", Int::class.java)
             ?.addField("timestamp", Long::class.java)
+
+        realmSchema.create("CovidStatsDto")
+            ?.addField("id", Int::class.java, FieldAttribute.PRIMARY_KEY)
+            ?.addField("updated", Long::class.java)
+            ?.addField("newCases", Long::class.java)
+            ?.addField("totalCases", Long::class.java)
+            ?.addField("newDeaths", Long::class.java)
+            ?.addField("totalDeaths", Long::class.java)
+            ?.addField("newRecovered", Long::class.java)
+            ?.addField("totalRecovered", Long::class.java)
     }
 
     companion object {

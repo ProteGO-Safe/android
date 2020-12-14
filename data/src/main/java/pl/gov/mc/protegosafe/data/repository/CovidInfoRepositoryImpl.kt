@@ -6,10 +6,12 @@ import io.reactivex.rxkotlin.toObservable
 import pl.gov.mc.protegosafe.data.cloud.CovidInfoService
 import pl.gov.mc.protegosafe.data.db.CovidInfoDataStore
 import pl.gov.mc.protegosafe.data.db.dao.CovidInfoDao
+import pl.gov.mc.protegosafe.data.mapper.toCovidStatsDto
 import pl.gov.mc.protegosafe.data.mapper.toEntity
 import pl.gov.mc.protegosafe.data.mapper.toVoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.SubscribedDistrictDto
 import pl.gov.mc.protegosafe.domain.CovidInfoItem
+import pl.gov.mc.protegosafe.domain.model.CovidStatsItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 import pl.gov.mc.protegosafe.domain.repository.CovidInfoRepository
@@ -69,5 +71,16 @@ class CovidInfoRepositoryImpl(
             }
             .map { it.toEntity() }
             .toList()
+    }
+
+    override fun updateCovidStats(covidStatsItem: CovidStatsItem): Completable {
+        return covidInfoDao.upsertCovidStats(covidStatsItem.toCovidStatsDto())
+    }
+
+    override fun getCovidStats(): Single<CovidStatsItem> {
+        return covidInfoDao.getCovidStats()
+            .map {
+                it.toEntity()
+            }
     }
 }

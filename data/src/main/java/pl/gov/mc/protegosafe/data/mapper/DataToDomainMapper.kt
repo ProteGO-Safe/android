@@ -12,6 +12,8 @@ import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.CovidInfoResponseData
+import pl.gov.mc.protegosafe.data.model.CovidStatsData
+import pl.gov.mc.protegosafe.data.model.CovidStatsDto
 import pl.gov.mc.protegosafe.data.model.DeleteActivitiesData
 import pl.gov.mc.protegosafe.data.model.DistrictActionData
 import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityDto
@@ -30,6 +32,7 @@ import pl.gov.mc.protegosafe.domain.CovidInfoItem
 import pl.gov.mc.protegosafe.domain.model.AppReviewItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.CloseAppItem
+import pl.gov.mc.protegosafe.domain.model.CovidStatsItem
 import pl.gov.mc.protegosafe.domain.model.DeleteActivitiesItem
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration
 import pl.gov.mc.protegosafe.domain.model.DistrictActionItem
@@ -94,6 +97,26 @@ fun VoivodeshipData.toEntity() = VoivodeshipItem(
     id = id,
     name = name,
     districts = districts.map { it.toEntity() }
+)
+
+fun CovidStatsData.toEntity() = CovidStatsItem(
+    updated = updated,
+    newCases = newCases,
+    totalCases = totalCases,
+    newDeaths = newDeaths,
+    totalDeaths = totalDeaths,
+    newRecovered = newRecovered,
+    totalRecovered = totalRecovered
+)
+
+fun CovidStatsDto.toEntity() = CovidStatsItem(
+    updated = updated,
+    newCases = newCases,
+    totalCases = totalCases,
+    newDeaths = newDeaths,
+    totalDeaths = totalDeaths,
+    newRecovered = newRecovered,
+    totalRecovered = totalRecovered
 )
 
 fun CovidInfoResponseData.toEntity() = CovidInfoItem(

@@ -4,6 +4,7 @@ import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import io.realm.RealmList
 import pl.gov.mc.protegosafe.data.extension.toBase64
 import pl.gov.mc.protegosafe.data.model.ActivitiesResultData
+import pl.gov.mc.protegosafe.data.model.CovidStatsDto
 import pl.gov.mc.protegosafe.data.model.DistrictData
 import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityData
@@ -20,6 +21,7 @@ import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusData
 import pl.gov.mc.protegosafe.domain.model.ActivitiesResultItem
+import pl.gov.mc.protegosafe.domain.model.CovidStatsItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.ExposureCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
@@ -158,4 +160,14 @@ fun ActivitiesResultItem.toActivitiesResultData() = ActivitiesResultData(
     notifications = notifications.map { it.toNotificationActivityData() },
     riskChecks = riskChecks.map { it.toRiskCheckActivityData() },
     exposures = exposures.map { it.toExposureCheckActivityData() }
+)
+
+fun CovidStatsItem.toCovidStatsDto() = CovidStatsDto(
+    updated = updated,
+    newCases = newCases,
+    totalCases = totalCases,
+    newDeaths = newDeaths,
+    totalDeaths = totalDeaths,
+    newRecovered = newRecovered,
+    totalRecovered = totalRecovered
 )

@@ -9,6 +9,9 @@ interface FcmNotificationMapper {
     fun getPushNotificationTopic(
         remoteMessageData: Map<String, String>
     ): Single<PushNotificationTopic>
+    fun getCovidStatsItem(
+        remoteMessageData: Map<String, String>
+    ): Single<CovidStatsItem>
     fun getRouteJsonWithNotificationUUID(
         remoteMessageData: Map<String, String>,
         uuid: String
