@@ -72,6 +72,7 @@ class RealmMigrations : RealmMigration {
         realmSchema.create("PreAnalyzeDto")
             ?.addField("token", String::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
             ?.addField("keysCount", Long::class.java)
+            ?.addField("timestamp", Long::class.java)
 
         realmSchema.create("RiskCheckActivityDto")
             ?.addField("id", String::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
@@ -88,6 +89,11 @@ class RealmMigrations : RealmMigration {
             ?.addField("totalDeaths", Long::class.java)
             ?.addField("newRecovered", Long::class.java)
             ?.addField("totalRecovered", Long::class.java)
+
+        realmSchema.create("TotalKeysCountDto")
+            ?.addField("id", Int::class.java, FieldAttribute.PRIMARY_KEY)
+            ?.addField("totalKeysCount", Long::class.java)
+            ?.addField("lastRiskCheckTimestamp", Long::class.java)
     }
 
     companion object {

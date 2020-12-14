@@ -9,7 +9,7 @@ import java.util.zip.ZipFile
 
 class ProtobufRepositoryImpl : ProtobufRepository {
 
-    override fun getTemporaryExposureKeysAmount(files: List<File>): Single<Long> {
+    override fun getTemporaryExposureKeysCount(files: List<File>): Single<Long> {
         return Single.fromCallable {
             var counter = 0L
             files.forEach { file ->

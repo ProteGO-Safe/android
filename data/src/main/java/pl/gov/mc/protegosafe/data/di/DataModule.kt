@@ -153,7 +153,7 @@ val dataModule = module {
     single<RetrofitExceptionMapper> { RetrofitExceptionMapperImpl() }
     single<IncomingBridgePayloadMapper> { IncomingBridgePayloadMapperImpl(get()) }
     single { AppLanguageDataStore(get()) }
-    single<CovidInfoRepository> { CovidInfoRepositoryImpl(get(), get(), get()) }
+    single<CovidInfoRepository> { CovidInfoRepositoryImpl(get(), get(), get(), get()) }
     single { CovidInfoDao() }
     single { CovidInfoDataStore(get()) }
     single<OutgoingBridgePayloadMapper> { OutgoingBridgePayloadMapperImpl() }

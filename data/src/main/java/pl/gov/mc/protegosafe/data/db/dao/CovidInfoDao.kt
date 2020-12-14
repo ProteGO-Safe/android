@@ -5,6 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import pl.gov.mc.protegosafe.data.model.CovidStatsDto
 import pl.gov.mc.protegosafe.data.model.DistrictDto
+import pl.gov.mc.protegosafe.data.model.TotalKeysCountDto
 import pl.gov.mc.protegosafe.data.model.SubscribedDistrictDto
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import queryAllAsSingle
@@ -56,6 +57,19 @@ open class CovidInfoDao {
 
     fun getCovidStats(): Single<CovidStatsDto> {
         return queryAllAsSingle<CovidStatsDto>()
+            .map {
+                it.firstOrNull()
+            }
+    }
+
+    fun upsertTotalKeysCount(totalKeysCountDto: TotalKeysCountDto): Completable {
+        return doTransaction {
+            it.copyToRealmOrUpdate(totalKeysCountDto)
+        }
+    }
+
+    fun getTotalKeysCount(): Single<TotalKeysCountDto> {
+        return queryAllAsSingle<TotalKeysCountDto>()
             .map {
                 it.firstOrNull()
             }

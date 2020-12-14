@@ -64,6 +64,10 @@ open class ActivitiesDao {
             }
     }
 
+    fun getPreAnalyzes(): Single<List<PreAnalyzeDto>> {
+        return queryAllAsSingle()
+    }
+
     fun saveNotificationActivity(notificationActivityDto: NotificationActivityDto): Single<String> {
         return doTransaction {
             it.copyToRealmOrUpdate(notificationActivityDto)

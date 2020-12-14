@@ -153,7 +153,7 @@ val useCaseModule = module {
     factory { GetTestSubscriptionPinUseCase(get(), get(), get()) }
     factory { CancelExposureRiskUseCase(get(), get(), get()) }
     factory { AppReviewUseCase(get(), get()) }
-    factory { SaveKeysCountToAnalyzeUseCase(get(), get(), get()) }
+    factory { SaveKeysCountToAnalyzeUseCase(get(), get(), get(), get()) }
     factory { SaveRiskCheckActivityUseCase(get(), get()) }
     factory { SaveExposureCheckActivityUseCase(get(), get(), get()) }
     factory { GetActivitiesResultUseCase(get(), get(), get()) }
