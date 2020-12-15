@@ -34,11 +34,11 @@ interface AppRepository {
 
     fun setWorkersInterval(intervalInMinutes: Long)
 
-    fun setCovidStatsNotificationsAgreement(areAllowed: Boolean): Completable
+    fun setCovidStatsNotificationsAgreement(isAllowed: Boolean): Completable
 
     fun areCovidStatsNotificationsAllowed(): Single<Boolean>
 
-    fun subscribeToCovidStatsNotification(): Completable
+    fun subscribeToCovidStatsNotificationsTopic(): Completable
 
-    fun unsubscribeFromCovidStatsNotification(): Completable
+    fun unsubscribeFromCovidStatsNotificationsTopic(): Completable
 }

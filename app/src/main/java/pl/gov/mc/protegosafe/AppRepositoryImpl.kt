@@ -87,9 +87,9 @@ class AppRepositoryImpl(
         workersIntervalDataStore.timeIntervalInMinutes = intervalInMinutes
     }
 
-    override fun setCovidStatsNotificationsAgreement(areAllowed: Boolean): Completable {
+    override fun setCovidStatsNotificationsAgreement(isAllowed: Boolean): Completable {
         return Completable.fromAction {
-            covidStatsDataStore.covidStatsNotificationAgreement = areAllowed
+            covidStatsDataStore.covidStatsNotificationAgreement = isAllowed
         }
     }
 
@@ -99,7 +99,7 @@ class AppRepositoryImpl(
         }
     }
 
-    override fun subscribeToCovidStatsNotification(): Completable {
+    override fun subscribeToCovidStatsNotificationsTopic(): Completable {
         return pl.gov.mc.protegosafe.data.BuildConfig.COVID_STATS_TOPIC.let {
             Timber.d("Subscribed to: $it")
             FirebaseMessaging.getInstance().subscribeToTopic(it)
@@ -107,7 +107,7 @@ class AppRepositoryImpl(
         }
     }
 
-    override fun unsubscribeFromCovidStatsNotification(): Completable {
+    override fun unsubscribeFromCovidStatsNotificationsTopic(): Completable {
         return pl.gov.mc.protegosafe.data.BuildConfig.COVID_STATS_TOPIC.let {
             Timber.d("Unsubscribed from: $it")
             FirebaseMessaging.getInstance().unsubscribeFromTopic(it)

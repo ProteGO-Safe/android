@@ -13,7 +13,7 @@ class SubscribeCovidStatusTopicUseCase(
         return appRepository.areCovidStatsNotificationsAllowed()
             .flatMapCompletable {
                 if (it) {
-                    appRepository.subscribeToCovidStatsNotification()
+                    appRepository.subscribeToCovidStatsNotificationsTopic()
                 } else {
                     throw IllegalStateException("Covid stats not allowed")
                 }

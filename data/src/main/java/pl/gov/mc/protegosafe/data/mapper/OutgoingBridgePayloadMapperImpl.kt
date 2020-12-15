@@ -21,6 +21,6 @@ class OutgoingBridgePayloadMapperImpl() : OutgoingBridgePayloadMapper {
         return Gson().fromJson(
             payload,
             CovidStatsNotificationsStatusData::class.java
-        ).isCovidStatsNotificationEnabled
+        ).areCovidStatsNotificationsAllowed
     }
 }
