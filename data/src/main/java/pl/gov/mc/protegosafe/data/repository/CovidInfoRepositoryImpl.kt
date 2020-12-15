@@ -117,9 +117,7 @@ class CovidInfoRepositoryImpl(
         return covidInfoDao.getTotalKeysCount()
             .onErrorReturn {
                 if (it is NullPointerException) {
-                    TotalKeysCountDto(
-                        totalKeysCount = keysCount
-                    )
+                    TotalKeysCountDto()
                 } else {
                     throw it
                 }

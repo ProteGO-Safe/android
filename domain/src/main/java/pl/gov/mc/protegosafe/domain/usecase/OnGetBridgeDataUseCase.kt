@@ -31,6 +31,7 @@ class OnGetBridgeDataUseCase(
     private val getCovidStatsResultAndUpdateUseCase: GetCovidStatsResultAndUpdateUseCase,
     private val updateCovidStatsNotificationsStatusUseCase: UpdateCovidStatsNotificationsStatusUseCase,
     private val getCovidStatsNotificationStatusUseCase: GetCovidStatsNotificationStatusUseCase,
+    private val getENStatsResultUseCase: GetENStatsResultUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -97,6 +98,9 @@ class OnGetBridgeDataUseCase(
                 data?.let {
                     updateCovidStatsNotificationsStatusUseCase.execute(it)
                 } ?: throw IllegalArgumentException()
+            }
+            OutgoingBridgeDataType.GET_EN_STATS -> {
+                getENStatsResultUseCase.execute()
             }
             else -> {
                 throw IllegalArgumentException("OutgoingBridgeDataType has wrong value")

@@ -8,6 +8,7 @@ import pl.gov.mc.protegosafe.data.model.CovidStatsData
 import pl.gov.mc.protegosafe.data.model.CovidStatsDto
 import pl.gov.mc.protegosafe.data.model.DistrictData
 import pl.gov.mc.protegosafe.data.model.DistrictDto
+import pl.gov.mc.protegosafe.data.model.ENStatsData
 import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityData
 import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityDto
 import pl.gov.mc.protegosafe.data.model.ExposureDto
@@ -24,6 +25,7 @@ import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusData
 import pl.gov.mc.protegosafe.domain.model.ActivitiesResultItem
 import pl.gov.mc.protegosafe.domain.model.CovidStatsItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
+import pl.gov.mc.protegosafe.domain.model.ENStatsItem
 import pl.gov.mc.protegosafe.domain.model.ExposureCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
@@ -181,4 +183,11 @@ fun CovidStatsItem.toCovidStatsData() = CovidStatsData(
     totalDeaths = totalDeaths,
     newRecovered = newRecovered,
     totalRecovered = totalRecovered
+)
+
+fun ENStatsItem.toENStatsData() = ENStatsData(
+    lastRiskCheckTimestamp = lastRiskCheckTimestamp,
+    todayKeysCount = todayKeysCount,
+    last7daysKeysCount = last7daysKeysCount,
+    totalKeysCount = totalKeysCount
 )

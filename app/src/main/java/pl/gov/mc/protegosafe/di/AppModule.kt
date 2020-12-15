@@ -25,6 +25,7 @@ import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetCovidStatsNotificationStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetCovidStatsResultAndUpdateUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetENStatsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateDistrictsRestrictionsUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetFontScaleUseCase
@@ -79,6 +80,7 @@ val appModule = module {
 val useCaseModule = module {
     factory {
         OnGetBridgeDataUseCase(
+            get(),
             get(),
             get(),
             get(),
@@ -174,6 +176,7 @@ val useCaseModule = module {
     factory { GetCovidStatsNotificationStatusUseCase(get(), get(), get()) }
     factory { UpdateCovidStatsNotificationsStatusUseCase(get(), get(), get(), get()) }
     factory { SubscribeCovidStatusTopicUseCase(get(), get()) }
+    factory { GetENStatsResultUseCase(get(), get(), get()) }
 }
 
 val viewModelModule = module {
