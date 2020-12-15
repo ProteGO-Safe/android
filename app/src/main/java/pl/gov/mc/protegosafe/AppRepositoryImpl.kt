@@ -3,19 +3,24 @@ package pl.gov.mc.protegosafe
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.realm.Realm
 import pl.gov.mc.protegosafe.data.db.AppLanguageDataStore
+import pl.gov.mc.protegosafe.data.db.CovidStatsDataStore
 import pl.gov.mc.protegosafe.data.db.WorkersIntervalDataStore
 import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
+import pl.gov.mc.protegosafe.data.extension.toCompletable
 import pl.gov.mc.protegosafe.domain.repository.AppRepository
+import timber.log.Timber
 import java.util.Locale
 
 class AppRepositoryImpl(
     private val appLanguageDataStore: AppLanguageDataStore,
     private val sharedPreferences: SharedPreferences,
     private val realmDatabaseBuilder: RealmDatabaseBuilder,
+    private val covidStatsDataStore: CovidStatsDataStore,
     private val workersIntervalDataStore: WorkersIntervalDataStore,
     private val context: Context
 ) : AppRepository {
@@ -80,5 +85,33 @@ class AppRepositoryImpl(
 
     override fun setWorkersInterval(intervalInMinutes: Long) {
         workersIntervalDataStore.timeIntervalInMinutes = intervalInMinutes
+    }
+
+    override fun setCovidStatsNotificationsAgreement(areAllowed: Boolean): Completable {
+        return Completable.fromAction {
+            covidStatsDataStore.covidStatsNotificationAgreement = areAllowed
+        }
+    }
+
+    override fun areCovidStatsNotificationsAllowed(): Single<Boolean> {
+        return Single.fromCallable {
+            covidStatsDataStore.covidStatsNotificationAgreement
+        }
+    }
+
+    override fun subscribeToCovidStatsNotification(): Completable {
+        return pl.gov.mc.protegosafe.data.BuildConfig.COVID_STATS_TOPIC.let {
+            Timber.d("Subscribed to: $it")
+            FirebaseMessaging.getInstance().subscribeToTopic(it)
+                .toCompletable()
+        }
+    }
+
+    override fun unsubscribeFromCovidStatsNotification(): Completable {
+        return pl.gov.mc.protegosafe.data.BuildConfig.COVID_STATS_TOPIC.let {
+            Timber.d("Unsubscribed from: $it")
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(it)
+                .toCompletable()
+        }
     }
 }

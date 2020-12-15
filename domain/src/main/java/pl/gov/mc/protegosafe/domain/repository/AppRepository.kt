@@ -33,4 +33,12 @@ interface AppRepository {
     fun getWorkersIntervalInMinutes(): Long
 
     fun setWorkersInterval(intervalInMinutes: Long)
+
+    fun setCovidStatsNotificationsAgreement(areAllowed: Boolean): Completable
+
+    fun areCovidStatsNotificationsAllowed(): Single<Boolean>
+
+    fun subscribeToCovidStatsNotification(): Completable
+
+    fun unsubscribeFromCovidStatsNotification(): Completable
 }

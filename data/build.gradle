@@ -58,6 +58,7 @@ android {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main-localized-dev\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily-localized-dev\""
+            buildConfigField "String", "COVID_STATS_TOPIC", "\"covid-stats-android-dev\""
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
@@ -68,6 +69,7 @@ android {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main-localized-stage\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily-localized-stage\""
+            buildConfigField "String", "COVID_STATS_TOPIC", "\"covid-stats-android-stage\""
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
@@ -78,6 +80,7 @@ android {
             dimension "mode"
             buildConfigField "String", "MAIN_TOPIC", "\"main-localized\""
             buildConfigField "String", "DAILY_TOPIC", "\"daily-localized\""
+            buildConfigField "String", "COVID_STATS_TOPIC", "\"covid-stats-android\""
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", PRODUCTION_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", PRODUCTION_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", PRODUCTION_UPLOAD_BUCKET_ENDPOINT

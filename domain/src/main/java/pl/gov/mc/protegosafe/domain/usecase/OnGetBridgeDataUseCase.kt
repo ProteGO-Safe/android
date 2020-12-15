@@ -29,6 +29,8 @@ class OnGetBridgeDataUseCase(
     private val cancelExposureRiskUseCase: CancelExposureRiskUseCase,
     private val getActivitiesResultUseCase: GetActivitiesResultUseCase,
     private val getCovidStatsResultAndUpdateUseCase: GetCovidStatsResultAndUpdateUseCase,
+    private val updateCovidStatsNotificationsStatusUseCase: UpdateCovidStatsNotificationsStatusUseCase,
+    private val getCovidStatsNotificationStatusUseCase: GetCovidStatsNotificationStatusUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -87,6 +89,14 @@ class OnGetBridgeDataUseCase(
             }
             OutgoingBridgeDataType.GET_COVID_STATS -> {
                 getCovidStatsResultAndUpdateUseCase.execute(onResultActionRequired)
+            }
+            OutgoingBridgeDataType.GET_COVID_STATS_NOTIFICATION_AGREEMENT -> {
+                getCovidStatsNotificationStatusUseCase.execute()
+            }
+            OutgoingBridgeDataType.UPDATE_COVID_STATS_NOTIFICATION_AGREEMENT -> {
+                data?.let {
+                    updateCovidStatsNotificationsStatusUseCase.execute(it)
+                } ?: throw IllegalArgumentException()
             }
             else -> {
                 throw IllegalArgumentException("OutgoingBridgeDataType has wrong value")

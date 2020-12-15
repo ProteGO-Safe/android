@@ -113,4 +113,8 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
                 )
             )
     }
+
+    override fun composeCovidStatsNotificationsStatusResult(areAllowed: Boolean): String {
+        return CovidStatsNotificationsStatusData(areAllowed).toJson()
+    }
 }

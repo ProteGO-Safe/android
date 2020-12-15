@@ -29,6 +29,7 @@ import pl.gov.mc.protegosafe.di.viewModelModule
 import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository
 import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SubscribeCovidStatusTopicUseCase
 import timber.log.Timber
 
 open class App : Application(), KoinComponent {
@@ -154,6 +155,16 @@ open class App : Application(), KoinComponent {
                     )
                 }
         }
+
+        get<SubscribeCovidStatusTopicUseCase>().execute()
+            .subscribe(
+                {
+                    Timber.d("FCM COVID STATS topic subscribe success")
+                },
+                {
+                    Timber.e(it)
+                }
+            ).addTo(disposables)
     }
 
     private fun initializeStetho() {

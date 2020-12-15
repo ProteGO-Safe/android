@@ -20,4 +20,5 @@ interface OutgoingBridgeDataResultComposer {
     fun composeBackButtonPressedResult(): String
     fun composeActivitiesResult(activitiesResultItem: ActivitiesResultItem): String
     fun composeCovidStatsResult(covidStatsItem: CovidStatsItem): String
+    fun composeCovidStatsNotificationsStatusResult(areAllowed: Boolean): String
 }
