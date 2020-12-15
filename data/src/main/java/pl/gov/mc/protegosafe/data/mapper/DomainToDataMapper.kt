@@ -4,6 +4,7 @@ import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import io.realm.RealmList
 import pl.gov.mc.protegosafe.data.extension.toBase64
 import pl.gov.mc.protegosafe.data.model.ActivitiesResultData
+import pl.gov.mc.protegosafe.data.model.CovidStatsData
 import pl.gov.mc.protegosafe.data.model.CovidStatsDto
 import pl.gov.mc.protegosafe.data.model.DistrictData
 import pl.gov.mc.protegosafe.data.model.DistrictDto
@@ -163,6 +164,16 @@ fun ActivitiesResultItem.toActivitiesResultData() = ActivitiesResultData(
 )
 
 fun CovidStatsItem.toCovidStatsDto() = CovidStatsDto(
+    updated = updated,
+    newCases = newCases,
+    totalCases = totalCases,
+    newDeaths = newDeaths,
+    totalDeaths = totalDeaths,
+    newRecovered = newRecovered,
+    totalRecovered = totalRecovered
+)
+
+fun CovidStatsItem.toCovidStatsData() = CovidStatsData(
     updated = updated,
     newCases = newCases,
     totalCases = totalCases,

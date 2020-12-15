@@ -18,7 +18,8 @@ enum class OutgoingBridgeDataType(override val code: Int) : UIRequestBridgeDataT
     UPLOAD_COVID_TEST_PIN(80),
     GET_COVID_TEST_SUBSCRIPTION_STATUS(81),
     GET_COVID_TEST_SUBSCRIPTION_PIN(82),
-    GET_ACTIVITIES(90);
+    GET_ACTIVITIES(90),
+    GET_COVID_STATS(102);
 
     companion object {
         fun valueOf(value: Int): OutgoingBridgeDataType =

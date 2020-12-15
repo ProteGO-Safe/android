@@ -12,9 +12,10 @@ import pl.gov.mc.protegosafe.data.db.dao.CovidInfoDao
 import pl.gov.mc.protegosafe.data.mapper.toCovidStatsDto
 import pl.gov.mc.protegosafe.data.mapper.toEntity
 import pl.gov.mc.protegosafe.data.mapper.toVoivodeshipDto
+import pl.gov.mc.protegosafe.data.model.CovidStatsDto
 import pl.gov.mc.protegosafe.data.model.TotalKeysCountDto
 import pl.gov.mc.protegosafe.data.model.SubscribedDistrictDto
-import pl.gov.mc.protegosafe.domain.CovidInfoItem
+import pl.gov.mc.protegosafe.domain.model.CovidInfoItem
 import pl.gov.mc.protegosafe.domain.extension.getCurrentTimeInSeconds
 import pl.gov.mc.protegosafe.domain.model.CovidStatsItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
@@ -36,15 +37,27 @@ class CovidInfoRepositoryImpl(
             .map { it.toEntity() }
     }
 
-    override fun saveCovidInfoUpdateTimestamp(timestamp: Long): Completable {
+    override fun saveVoivodeshipsUpdateTimestamp(timestamp: Long): Completable {
         return Completable.fromAction {
-            covidInfoDataStore.updateTimestamp = timestamp
+            covidInfoDataStore.voivodeshipsUpdateTimestamp = timestamp
         }
     }
 
-    override fun getCovidInfoUpdateTimestamp(): Single<Long> {
+    override fun getVoivodeshipsUpdateTimestamp(): Single<Long> {
         return Single.fromCallable {
-            covidInfoDataStore.updateTimestamp
+            covidInfoDataStore.voivodeshipsUpdateTimestamp
+        }
+    }
+
+    override fun saveCovidStatsCheckTimestamp(timestamp: Long): Completable {
+        return Completable.fromAction {
+            covidInfoDataStore.covidStatsCheckTimestamp = timestamp
+        }
+    }
+
+    override fun getCovidStatsCheckTimestamp(): Single<Long> {
+        return Single.fromCallable {
+            covidInfoDataStore.covidStatsCheckTimestamp
         }
     }
 
@@ -82,11 +95,19 @@ class CovidInfoRepositoryImpl(
     }
 
     override fun updateCovidStats(covidStatsItem: CovidStatsItem): Completable {
+        Timber.d("Update covid stats: $covidStatsItem")
         return covidInfoDao.upsertCovidStats(covidStatsItem.toCovidStatsDto())
     }
 
     override fun getCovidStats(): Single<CovidStatsItem> {
         return covidInfoDao.getCovidStats()
+            .onErrorReturn {
+                if (it is NullPointerException) {
+                    CovidStatsDto()
+                } else {
+                    throw it
+                }
+            }
             .map {
                 it.toEntity()
             }

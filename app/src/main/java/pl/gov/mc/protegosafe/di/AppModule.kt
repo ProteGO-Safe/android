@@ -23,6 +23,7 @@ import pl.gov.mc.protegosafe.domain.usecase.GetActivitiesResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveKeysCountToAnalyzeUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAnalyzeResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetAppVersionNameUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetCovidStatsResultAndUpdateUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateDistrictsRestrictionsUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetExposureInformationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetFontScaleUseCase
@@ -47,6 +48,8 @@ import pl.gov.mc.protegosafe.domain.usecase.SetAppLanguageUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StartExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StopExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.UpdateCovidStatsAndGetResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.UpdateCovidStatsUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.GetTestSubscriptionPinUseCase
@@ -88,6 +91,7 @@ val useCaseModule = module {
             get(),
             get(),
             get(),
+            get()
         )
     }
     factory {
@@ -159,12 +163,16 @@ val useCaseModule = module {
     factory { GetActivitiesResultUseCase(get(), get(), get()) }
     factory { DeleteActivitiesUseCase(get(), get(), get()) }
     factory { HandleNewUriUseCase(get(), get()) }
+    factory { UpdateCovidStatsUseCase(get(), get()) }
+    factory { GetCovidStatsResultAndUpdateUseCase(get(), get(), get()) }
+    factory { UpdateCovidStatsAndGetResultUseCase(get(), get(), get(), get()) }
 }
 
 val viewModelModule = module {
     viewModel { MainViewModel(get(), get(), get(), get()) }
     viewModel {
         HomeViewModel(
+            get(),
             get(),
             get(),
             get(),

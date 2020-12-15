@@ -28,7 +28,7 @@ import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionConfigurationData
-import pl.gov.mc.protegosafe.domain.CovidInfoItem
+import pl.gov.mc.protegosafe.domain.model.CovidInfoItem
 import pl.gov.mc.protegosafe.domain.model.AppReviewItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.CloseAppItem
@@ -120,8 +120,9 @@ fun CovidStatsDto.toEntity() = CovidStatsItem(
 )
 
 fun CovidInfoResponseData.toEntity() = CovidInfoItem(
-    lastUpdate = update,
-    voivodeships = voivodeships.map { it.toEntity() }
+    voivodeships = voivodeships.map { it.toEntity() },
+    voivodeshipsUpdated = voivodeshipsUpdated,
+    covidStatsItem = covidStats.toEntity()
 )
 
 /**

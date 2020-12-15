@@ -15,7 +15,7 @@ class GetDistrictsRestrictionsResultUseCase(
     fun execute(): Single<String> {
         return covidInfoRepository.getDistrictsRestrictions()
             .zipWith(
-                covidInfoRepository.getCovidInfoUpdateTimestamp()
+                covidInfoRepository.getVoivodeshipsUpdateTimestamp()
             ) { voivodeships, timestamp ->
                 getResult(voivodeships, timestamp)
             }
