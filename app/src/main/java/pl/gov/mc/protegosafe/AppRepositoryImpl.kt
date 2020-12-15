@@ -89,13 +89,13 @@ class AppRepositoryImpl(
 
     override fun setCovidStatsNotificationsAgreement(isAllowed: Boolean): Completable {
         return Completable.fromAction {
-            covidStatsDataStore.covidStatsNotificationAgreement = isAllowed
+            covidStatsDataStore.covidStatsNotificationsAgreement = isAllowed
         }
     }
 
     override fun areCovidStatsNotificationsAllowed(): Single<Boolean> {
         return Single.fromCallable {
-            covidStatsDataStore.covidStatsNotificationAgreement
+            covidStatsDataStore.covidStatsNotificationsAgreement
         }
     }
 

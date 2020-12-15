@@ -33,8 +33,8 @@ class UpdateCovidStatsNotificationsStatusUseCase(
         }
     }
 
-    private fun handleNewSubscriptionState(areNotificationAllowed: Boolean): Completable {
-        return if (areNotificationAllowed) {
+    private fun handleNewSubscriptionState(areNotificationsAllowed: Boolean): Completable {
+        return if (areNotificationsAllowed) {
             appRepository.subscribeToCovidStatsNotificationsTopic()
         } else {
             appRepository.unsubscribeFromCovidStatsNotificationsTopic()
