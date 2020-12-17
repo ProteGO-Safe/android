@@ -4,9 +4,9 @@ interface ApplicationTaskScheduler {
     /**
      * Schedule Provide Diagnosis Keys Task.
      *
-     * If the task already scheduled then reschedule it.
+     * @param shouldReplaceExistingWork If the task already scheduled then reschedule it or keep.
      */
-    fun scheduleProvideDiagnosisKeysTask()
+    fun scheduleProvideDiagnosisKeysTask(shouldReplaceExistingWork: Boolean = true)
 
     /**
      * Cancel Provide Diagnosis Keys Task.

@@ -29,6 +29,7 @@ import pl.gov.mc.protegosafe.di.viewModelModule
 import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository
 import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
+import pl.gov.mc.protegosafe.domain.usecase.RescheduleProvideDiagnosisKeysTaskUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SubscribeCovidStatusTopicUseCase
 import timber.log.Timber
 
@@ -53,6 +54,7 @@ open class App : Application(), KoinComponent {
         initializeFcm()
         initializeStetho()
         initializeThreeTenABP()
+        rescheduleProvideDiagnosisKeysTask()
         scheduleRemoveOldExposuresTask()
         scheduleUpdateDistrictsRestrictionsTask()
     }
@@ -77,6 +79,10 @@ open class App : Application(), KoinComponent {
 
     private fun initializeThreeTenABP() {
         AndroidThreeTen.init(this)
+    }
+
+    private fun rescheduleProvideDiagnosisKeysTask() {
+        get<RescheduleProvideDiagnosisKeysTaskUseCase>().execute()
     }
 
     private fun scheduleRemoveOldExposuresTask() {

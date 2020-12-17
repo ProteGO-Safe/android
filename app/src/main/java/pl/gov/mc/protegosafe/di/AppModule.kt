@@ -41,6 +41,7 @@ import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProcessPendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
+import pl.gov.mc.protegosafe.domain.usecase.RescheduleProvideDiagnosisKeysTaskUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveExposureCheckActivityUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveExposureUseCase
 import pl.gov.mc.protegosafe.domain.usecase.SaveRouteUseCase
@@ -177,6 +178,7 @@ val useCaseModule = module {
     factory { UpdateCovidStatsNotificationsStatusUseCase(get(), get(), get(), get()) }
     factory { SubscribeCovidStatusTopicUseCase(get(), get()) }
     factory { GetENStatsResultUseCase(get(), get(), get()) }
+    factory { RescheduleProvideDiagnosisKeysTaskUseCase(get(), get()) }
 }
 
 val viewModelModule = module {

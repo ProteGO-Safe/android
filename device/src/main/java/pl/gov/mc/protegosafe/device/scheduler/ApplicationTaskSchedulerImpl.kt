@@ -32,8 +32,13 @@ class ApplicationTaskSchedulerImpl(
         appRepository.getWorkersIntervalInMinutes()
     }
 
-    override fun scheduleProvideDiagnosisKeysTask() {
+    override fun scheduleProvideDiagnosisKeysTask(shouldReplaceExistingWork: Boolean) {
         Timber.i("scheduleProvideDiagnosisKeysTask")
+        val existingPeriodicWorkPolicy = if (shouldReplaceExistingWork) {
+            ExistingPeriodicWorkPolicy.REPLACE
+        } else {
+            ExistingPeriodicWorkPolicy.KEEP
+        }
         val workRequest = PeriodicWorkRequest.Builder(
             provideDiagnosisKeyWorker,
             repeatIntervalInMinutes,
@@ -51,7 +56,7 @@ class ApplicationTaskSchedulerImpl(
 
         workManager.enqueueUniquePeriodicWork(
             PROVIDE_DIAGNOSIS_KEYS_WORK_NAME,
-            ExistingPeriodicWorkPolicy.REPLACE,
+            existingPeriodicWorkPolicy,
             workRequest
         )
     }
