@@ -96,7 +96,25 @@ class CovidInfoRepositoryImpl(
 
     override fun updateCovidStats(covidStatsItem: CovidStatsItem): Completable {
         Timber.d("Update covid stats: $covidStatsItem")
-        return covidInfoDao.upsertCovidStats(covidStatsItem.toCovidStatsDto())
+        return isCovidStatsDataValid(covidStatsItem)
+            .flatMapCompletable {
+                if (it) {
+                    covidInfoDao.upsertCovidStats(covidStatsItem.toCovidStatsDto())
+                } else {
+                    Completable.error(IllegalStateException("Data is not valid: $covidStatsItem"))
+                }
+            }
+    }
+
+    private fun isCovidStatsDataValid(covidStats: CovidStatsItem): Single<Boolean> {
+        return getCovidStats().flatMap {
+            Single.just(
+                (it.updated < covidStats.updated) ||
+                    (covidStats.newCases != null && covidStats.totalCases != null) ||
+                    (covidStats.newDeaths != null && covidStats.totalDeaths != null) ||
+                    (covidStats.newRecovered != null && covidStats.totalRecovered != null)
+            )
+        }
     }
 
     override fun getCovidStats(): Single<CovidStatsItem> {

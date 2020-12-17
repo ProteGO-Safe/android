@@ -6,6 +6,7 @@ import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.extension.getCurrentTimeInSeconds
 import pl.gov.mc.protegosafe.domain.model.CovidInfoItem
+import pl.gov.mc.protegosafe.domain.model.CovidStatsItem
 import pl.gov.mc.protegosafe.domain.repository.CovidInfoRepository
 
 class UpdateCovidStatsUseCase(
@@ -15,10 +16,14 @@ class UpdateCovidStatsUseCase(
     fun execute(covidInfo: CovidInfoItem? = null): Completable {
         return getCovidInfo(covidInfo)
             .flatMapCompletable {
-                updateCovidStats(it)
+                updateCovidStats(it.covidStatsItem)
             }
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
+    }
+
+    fun execute(covidStatsItem: CovidStatsItem): Completable {
+        return updateCovidStats(covidStatsItem)
     }
 
     private fun getCovidInfo(covidInfo: CovidInfoItem?): Single<CovidInfoItem> {
@@ -29,8 +34,8 @@ class UpdateCovidStatsUseCase(
         }
     }
 
-    private fun updateCovidStats(covidInfo: CovidInfoItem): Completable {
-        return covidInfoRepository.updateCovidStats(covidInfo.covidStatsItem)
+    private fun updateCovidStats(covidStats: CovidStatsItem): Completable {
+        return covidInfoRepository.updateCovidStats(covidStats)
             .andThen(
                 Completable.defer {
                     covidInfoRepository.saveCovidStatsCheckTimestamp(getCurrentTimeInSeconds())

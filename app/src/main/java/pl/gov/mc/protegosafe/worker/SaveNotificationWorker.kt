@@ -10,8 +10,8 @@ import org.koin.core.inject
 import pl.gov.mc.protegosafe.domain.model.FcmNotificationMapper
 import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.repository.ActivitiesRepository
-import pl.gov.mc.protegosafe.domain.repository.CovidInfoRepository
 import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
+import pl.gov.mc.protegosafe.domain.usecase.UpdateCovidStatsUseCase
 
 class SaveNotificationWorker(
     appContext: Context,
@@ -21,7 +21,7 @@ class SaveNotificationWorker(
     private val onPushNotificationUseCase: OnPushNotificationUseCase by inject()
     private val fcmNotificationMapper: FcmNotificationMapper by inject()
     private val activitiesRepository: ActivitiesRepository by inject()
-    private val covidInfoRepository: CovidInfoRepository by inject()
+    private val updateCovidStatsUseCase: UpdateCovidStatsUseCase by inject()
 
     private val notificationData by lazy {
         mutableMapOf<String, String>().apply {
@@ -70,7 +70,7 @@ class SaveNotificationWorker(
     private fun updateCovidStatsIfAvailable(notificationData: Map<String, String>): Completable {
         return fcmNotificationMapper.getCovidStatsItem(notificationData)
             .flatMapCompletable {
-                covidInfoRepository.updateCovidStats(it)
+                updateCovidStatsUseCase.execute(it)
             }
     }
 }

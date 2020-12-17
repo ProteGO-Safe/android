@@ -6,15 +6,15 @@ data class CovidStatsData(
     @SerializedName("updated")
     val updated: Long,
     @SerializedName("newCases")
-    val newCases: Long,
+    val newCases: Long?,
     @SerializedName("totalCases")
-    val totalCases: Long,
+    val totalCases: Long?,
     @SerializedName("newDeaths")
-    val newDeaths: Long,
+    val newDeaths: Long?,
     @SerializedName("totalDeaths")
-    val totalDeaths: Long,
+    val totalDeaths: Long?,
     @SerializedName("newRecovered")
-    val newRecovered: Long,
+    val newRecovered: Long?,
     @SerializedName("totalRecovered")
-    val totalRecovered: Long,
+    val totalRecovered: Long?,
 )
