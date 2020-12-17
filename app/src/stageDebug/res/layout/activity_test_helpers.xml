@@ -23,7 +23,7 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Clear exposure database and insert Risk Level, generate risk check and exposure activities"
+            android:text="Clear exposure database and insert Risk Level, generate fake risk check and exposure activities"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -124,12 +124,33 @@
             app:layout_constraintTop_toBottomOf="@+id/ui_logs_switch" />
 
         <Button
+            android:id="@+id/share_keys"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{() -> vm.shareTemporaryExposureKeys()}"
             android:text="Share"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/share_keys_title" />
+
+        <TextView
+            android:id="@+id/analyze_teks_title"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Get all files from CDN and provide to analyze"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/share_keys" />
+
+        <Button
+            android:id="@+id/analyze_teks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Download and Provide to analyze"
+            app:layout_constraintStart_toStartOf="parent"
+            android:onClick="@{() -> vm.getAllTeksAndProvideToAnalyze()}"
+            app:layout_constraintTop_toBottomOf="@+id/analyze_teks_title" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

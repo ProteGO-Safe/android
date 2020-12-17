@@ -6,7 +6,6 @@ import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.data.db.dao.ActivitiesDao
 import pl.gov.mc.protegosafe.data.model.RiskCheckActivityDto
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
-import pl.gov.mc.protegosafe.domain.extension.getCurrentTimeInSeconds
 import pl.gov.mc.protegosafe.domain.model.ExposureCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
@@ -14,7 +13,6 @@ import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.repository.ActivitiesRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
-import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 class SetRiskAndAddNotificationHelperUseCase(
@@ -95,12 +93,6 @@ class SetRiskAndAddNotificationHelperUseCase(
             RiskCheckActivityDto(
                 keys = Random.nextLong(1L, 1000L),
                 exposures = Random.nextInt(1, 1000),
-                timestamp = getCurrentTimeInSeconds() - TimeUnit.DAYS.toSeconds(
-                    Random.nextLong(
-                        1L,
-                        5L
-                    )
-                )
             )
         )
     }

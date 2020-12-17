@@ -7,6 +7,7 @@ import pl.gov.mc.protegosafe.data.extension.toJson
 import pl.gov.mc.protegosafe.data.mapper.toTemporaryExposureKeyRequestDataList
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
+import pl.gov.mc.protegosafe.helpers.GetAllTeksAndAnalyzeUseCase
 import pl.gov.mc.protegosafe.helpers.GetTemporaryExposureKeysUseCase
 import pl.gov.mc.protegosafe.helpers.GetWebViewLoggingStatusUseCase
 import pl.gov.mc.protegosafe.helpers.SetRiskAndAddNotificationHelperUseCase
@@ -22,6 +23,7 @@ class TestHelpersViewModel(
     private val setWebViewLoggingEnabledUseCase: SetWebViewLoggingEnabledUseCase,
     private val getWebViewLoggingStatusUseCase: GetWebViewLoggingStatusUseCase,
     private val getTemporaryExposureKeysUseCase: GetTemporaryExposureKeysUseCase,
+    private val getAllTeksAndAnalyzeUseCase: GetAllTeksAndAnalyzeUseCase
 ) : BaseViewModel() {
 
     val loggingStatus = SingleLiveEvent<Boolean>()
@@ -100,6 +102,18 @@ class TestHelpersViewModel(
                     (error as? ExposureNotificationActionNotResolvedException)?.let {
                         _requestExposureNotificationPermission.postValue(it)
                     }
+                }
+            ).addTo(disposables)
+    }
+
+    fun getAllTeksAndProvideToAnalyze() {
+        getAllTeksAndAnalyzeUseCase.execute()
+            .subscribe(
+                {
+                    _successfulEvent.postValue(it)
+                },
+                {
+                    _failedEvent.postValue(it.message)
                 }
             ).addTo(disposables)
     }
