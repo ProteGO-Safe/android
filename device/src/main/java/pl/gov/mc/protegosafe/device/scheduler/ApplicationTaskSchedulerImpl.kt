@@ -21,8 +21,7 @@ class ApplicationTaskSchedulerImpl(
 ) : ApplicationTaskScheduler {
 
     companion object {
-        private const val REPEAT_INTERVAL = 4L
-        private val REPEAT_INTERVAL_TIME_UNIT = TimeUnit.HOURS
+        private val REPEAT_INTERVAL_TIME_UNIT = TimeUnit.MINUTES
         const val PROVIDE_DIAGNOSIS_KEYS_WORK_NAME = "PROVIDE_DIAGNOSIS_KEYS_WORK_NAME"
         const val REMOVE_OLD_EXPOSURES_WORK_NAME = "REMOVE_OLD_EXPOSURES_WORK_NAME"
         const val UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME = "UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME"

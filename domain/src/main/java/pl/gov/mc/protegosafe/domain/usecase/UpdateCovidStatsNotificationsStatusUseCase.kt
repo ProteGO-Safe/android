@@ -10,7 +10,7 @@ import pl.gov.mc.protegosafe.domain.repository.AppRepository
 class UpdateCovidStatsNotificationsStatusUseCase(
     private val appRepository: AppRepository,
     private val outgoingBridgePayloadMapper: OutgoingBridgePayloadMapper,
-    private val getCovidStatsNotificationStatusUseCase: GetCovidStatsNotificationStatusUseCase,
+    private val getCovidStatsNotificationStatusResultUseCase: GetCovidStatsNotificationStatusResultUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
     fun execute(payload: String): Single<String> {
@@ -21,7 +21,7 @@ class UpdateCovidStatsNotificationsStatusUseCase(
                         handleNewSubscriptionState(it)
                     )
             }.andThen(
-                getCovidStatsNotificationStatusUseCase.execute()
+                getCovidStatsNotificationStatusResultUseCase.execute()
             )
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)

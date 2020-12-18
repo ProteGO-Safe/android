@@ -17,6 +17,7 @@ import pl.gov.mc.protegosafe.domain.model.DistrictRestrictionStateItem
 import pl.gov.mc.protegosafe.domain.model.DistrictsUpdatedNotificationType
 import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.usecase.GetLocaleUseCase
+import pl.gov.mc.protegosafe.receiver.UnsubscribeCovidStatsTopicBroadcastReceiver
 import pl.gov.mc.protegosafe.ui.MainActivity
 import timber.log.Timber
 import java.util.Random
@@ -43,10 +44,9 @@ class NotifierImpl(
         localizedContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
     }
 
-    override fun showNotificationWithData(title: String, content: String, data: String) {
-        val notification = createNotification(title, content, data)
-        notificationManager?.notify(Consts.GENERAL_NOTIFICATION_PUSH_ID, notification)
-            ?: Timber.d("Show notification failed")
+    override fun showSimpleNotificationWithData(title: String, content: String, data: String) {
+        val notification = createNotificationBuilder(title, content, data).build()
+        showNotification(notification)
     }
 
     override fun getDistrictsUpdatedNotification(
@@ -72,50 +72,6 @@ class NotifierImpl(
                 )
             }
         }
-    }
-
-    override fun showDistrictsUpdatedNotification(
-        notificationItem: PushNotificationItem
-    ) {
-        val routeJson = RouteData(ROUTE_NAME_DISTRICT_RESTRICTIONS_DEFAULT, mutableMapOf()).toJson()
-        notificationManager?.notify(
-            Random().nextInt(),
-            createNotification(
-                title = notificationItem.title,
-                content = notificationItem.content,
-                routeJson = routeJson
-            )
-        ) ?: Timber.d("Show notification failed")
-    }
-
-    private fun createNotification(
-        title: String,
-        content: String,
-        routeJson: String? = null
-    ): Notification {
-        val notificationIntent = Intent(localizedContext, MainActivity::class.java).apply {
-            routeJson?.let { putExtra(Consts.GENERAL_NOTIFICATION_EXTRA_DATA, routeJson) }
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        }
-
-        val pendingIntent = PendingIntent.getActivity(
-            localizedContext,
-            0,
-            notificationIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        return NotificationCompat.Builder(localizedContext, Consts.GENERAL_NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(title)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setContentText(content)
-            .setContentIntent(pendingIntent)
-            .setStyle(
-                NotificationCompat.BigTextStyle()
-                    .bigText(content)
-            )
-            .setAutoCancel(true)
-            .build()
     }
 
     private fun prepareDistrictsUpdatedNotificationContent(updatedDistricts: List<DistrictItem>): String {
@@ -157,6 +113,94 @@ class NotifierImpl(
             }
         )
     }
+
+    override fun showDistrictsUpdatedNotification(
+        notificationItem: PushNotificationItem
+    ) {
+        val routeJson = RouteData(ROUTE_NAME_DISTRICT_RESTRICTIONS_DEFAULT, mutableMapOf()).toJson()
+        createNotificationBuilder(
+            title = notificationItem.title,
+            content = notificationItem.content,
+            routeJson = routeJson
+        ).build().let {
+            showNotification(it)
+        }
+    }
+
+    override fun showCovidStatsUpdatedNotification(
+        notificationItem: PushNotificationItem,
+        data: String
+    ) {
+        val notificationId = Random().nextInt()
+        val routeJson = if (data.isNullOrBlank()) {
+            RouteData(ROUTE_NAME_COVID_STATS_DEFAULT, mutableMapOf()).toJson()
+        } else {
+            data
+        }
+
+        val intent = Intent(
+            localizedContext,
+            UnsubscribeCovidStatsTopicBroadcastReceiver::class.java
+        ).apply {
+            action = Consts.ACTION_UNSUBSCRIBE_COVID_STATS_TOPIC
+            putExtra(Consts.COVID_STATS_NOTIIFICATION_EXTRA_ID, notificationId)
+        }
+
+        createNotificationBuilder(
+            title = notificationItem.title,
+            content = notificationItem.content,
+            routeJson = routeJson
+        ).addAction(
+            0,
+            localizedContext.getString(R.string.do_not_show_again),
+            PendingIntent.getBroadcast(localizedContext, 0, intent, 0)
+        ).build().let {
+            Timber.d("Show notification $it, with id = $notificationId")
+            showNotification(it, notificationId)
+        }
+    }
+
+    private fun createNotificationBuilder(
+        title: String,
+        content: String,
+        routeJson: String? = null
+    ): NotificationCompat.Builder {
+        val notificationIntent = Intent(localizedContext, MainActivity::class.java).apply {
+            routeJson?.let { putExtra(Consts.GENERAL_NOTIFICATION_EXTRA_DATA, routeJson) }
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            localizedContext,
+            0,
+            notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        return NotificationCompat.Builder(localizedContext, Consts.GENERAL_NOTIFICATION_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(title)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setContentText(content)
+            .setContentIntent(pendingIntent)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(content)
+            )
+            .setAutoCancel(true)
+    }
+
+    private fun showNotification(
+        notification: Notification,
+        notificationId: Int = Random().nextInt()
+    ) {
+        notificationManager?.notify(notificationId, notification)
+            ?: Timber.d("Show notification failed")
+    }
+
+    override fun cancelNotificationById(notificationId: Int) {
+        notificationManager?.cancel(notificationId) ?: Timber.d("Notification can't be cancelled")
+    }
 }
 
+private const val ROUTE_NAME_COVID_STATS_DEFAULT = "home"
 private const val ROUTE_NAME_DISTRICT_RESTRICTIONS_DEFAULT = "currentRestrictions"

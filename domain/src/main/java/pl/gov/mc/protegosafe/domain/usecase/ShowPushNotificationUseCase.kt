@@ -6,7 +6,7 @@ import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
 
-class OnPushNotificationUseCase(
+class ShowPushNotificationUseCase(
     private val triageRepository: TriageRepository,
     private val notifier: Notifier
 ) {
@@ -22,6 +22,9 @@ class OnPushNotificationUseCase(
                     showNotificationWithData(notificationItem, data)
                 }
             }
+            PushNotificationTopic.COVID_STATS -> {
+                showCovidStatsNotification(notificationItem, data)
+            }
             else -> {
                 showNotificationWithData(notificationItem, data)
             }
@@ -29,7 +32,15 @@ class OnPushNotificationUseCase(
     }
 
     private fun showNotificationWithData(notificationItem: PushNotificationItem, data: String) {
-        notifier.showNotificationWithData(notificationItem.title, notificationItem.content, data)
+        notifier.showSimpleNotificationWithData(
+            title = notificationItem.title,
+            content = notificationItem.content,
+            data = data
+        )
+    }
+
+    private fun showCovidStatsNotification(notificationItem: PushNotificationItem, data: String) {
+        notifier.showCovidStatsUpdatedNotification(notificationItem = notificationItem, data = data)
     }
 
     private fun checkIfToday(timestamp: Long): Boolean {

@@ -6,7 +6,7 @@ import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.repository.AppRepository
 
-class GetCovidStatsNotificationStatusUseCase(
+class GetCovidStatsNotificationStatusResultUseCase(
     private val appRepository: AppRepository,
     private val outgoingBridgeDataResultComposer: OutgoingBridgeDataResultComposer,
     private val postExecutionThread: PostExecutionThread

@@ -36,6 +36,7 @@ class FcmNotificationMapperImpl(
             when (remoteMessageData[Consts.PUSH_NOTIFICATION_TOPIC_EXTRA]) {
                 "/topics/${BuildConfig.MAIN_TOPIC}" -> PushNotificationTopic.MAIN
                 "/topics/${BuildConfig.DAILY_TOPIC}" -> PushNotificationTopic.DAILY
+                "/topics/${BuildConfig.COVID_STATS_TOPIC}" -> PushNotificationTopic.COVID_STATS
                 else -> PushNotificationTopic.UNKNOWN
             }
         }

@@ -10,15 +10,15 @@ import org.koin.core.inject
 import pl.gov.mc.protegosafe.domain.model.FcmNotificationMapper
 import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.repository.ActivitiesRepository
-import pl.gov.mc.protegosafe.domain.usecase.OnPushNotificationUseCase
+import pl.gov.mc.protegosafe.domain.usecase.ShowPushNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UpdateCovidStatsUseCase
 
-class SaveNotificationWorker(
+class HandleFcmNotificationWorker(
     appContext: Context,
     workerParameters: WorkerParameters
 ) : RxWorker(appContext, workerParameters), KoinComponent {
 
-    private val onPushNotificationUseCase: OnPushNotificationUseCase by inject()
+    private val showPushNotificationUseCase: ShowPushNotificationUseCase by inject()
     private val fcmNotificationMapper: FcmNotificationMapper by inject()
     private val activitiesRepository: ActivitiesRepository by inject()
     private val updateCovidStatsUseCase: UpdateCovidStatsUseCase by inject()
@@ -57,7 +57,7 @@ class SaveNotificationWorker(
                 fcmNotificationMapper.getRouteJsonWithNotificationUUID(notificationData, uuid)
                     .flatMapCompletable { route ->
                         Completable.fromAction {
-                            onPushNotificationUseCase.execute(
+                            showPushNotificationUseCase.execute(
                                 topic = topic,
                                 notificationItem = notificationItem,
                                 data = route

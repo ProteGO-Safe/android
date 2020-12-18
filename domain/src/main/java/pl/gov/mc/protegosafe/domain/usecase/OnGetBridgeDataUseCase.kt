@@ -30,7 +30,7 @@ class OnGetBridgeDataUseCase(
     private val getActivitiesResultUseCase: GetActivitiesResultUseCase,
     private val getCovidStatsResultAndUpdateUseCase: GetCovidStatsResultAndUpdateUseCase,
     private val updateCovidStatsNotificationsStatusUseCase: UpdateCovidStatsNotificationsStatusUseCase,
-    private val getCovidStatsNotificationStatusUseCase: GetCovidStatsNotificationStatusUseCase,
+    private val getCovidStatsNotificationStatusResultUseCase: GetCovidStatsNotificationStatusResultUseCase,
     private val getENStatsResultUseCase: GetENStatsResultUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
@@ -92,7 +92,7 @@ class OnGetBridgeDataUseCase(
                 getCovidStatsResultAndUpdateUseCase.execute(onResultActionRequired)
             }
             OutgoingBridgeDataType.GET_COVID_STATS_NOTIFICATION_AGREEMENT -> {
-                getCovidStatsNotificationStatusUseCase.execute()
+                getCovidStatsNotificationStatusResultUseCase.execute()
             }
             OutgoingBridgeDataType.UPDATE_COVID_STATS_NOTIFICATION_AGREEMENT -> {
                 data?.let {

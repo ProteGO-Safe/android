@@ -87,6 +87,13 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".receiver.UnsubscribeCovidStatsTopicBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name=".Consts.ACTION_UNSUBSCRIBE_COVID_STATS_TOPIC" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

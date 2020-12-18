@@ -7,7 +7,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.koin.android.ext.android.inject
 import pl.gov.mc.protegosafe.data.Consts
-import pl.gov.mc.protegosafe.worker.SaveNotificationWorker
+import pl.gov.mc.protegosafe.worker.HandleFcmNotificationWorker
 
 class FcmService : FirebaseMessagingService() {
 
@@ -29,7 +29,7 @@ class FcmService : FirebaseMessagingService() {
 
         val workManager: WorkManager by inject()
         workManager.enqueue(
-            OneTimeWorkRequest.Builder(SaveNotificationWorker::class.java)
+            OneTimeWorkRequest.Builder(HandleFcmNotificationWorker::class.java)
                 .setInputData(dataBuilder.build())
                 .build()
         )
