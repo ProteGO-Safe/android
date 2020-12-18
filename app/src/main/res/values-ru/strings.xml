@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="changed_district_info_with_params">"повет %1$s - зона %2$s"</string>
+    <string name="changes_in_districts_info">"Были внесены изменения в правила безопасности. Будьте в курсе: выберите поветы и получайте уведомления о текущем разделении на зоны."</string>
+    <string name="changes_in_districts_notification_title">"Изменения ограничений в поветах."</string>
+    <string name="changes_in_subscribed_district_info_with_params">"В 1 повете, за которым вы наблюдаете, произошли изменения:%2$s."</string>
+    <string name="changes_in_subscribed_districts_info_with_params">"В %1$d поветах, за которыми вы наблюдаете, произошли изменения:%2$s."</string>
+    <string name="common_ok">"ОК"</string>
+    <string name="covid_test_not_compatible_device">"К сожалению, ваша версия операционной системы Android не обеспечивает достаточного уровня защиты, чтобы воспользоваться доступом к лабораторному тестированию."</string>
+    <string name="data_migration_in_progress">"Выполняется перенос данных"</string>
+    <string name="debug_write_store_rationale">"Тестовая версия приложения требует полномочий для записи журналов отслеживания устройств."</string>
+    <string name="district_restriction_zone_neutral">"нейтральная"</string>
+    <string name="district_restriction_zone_red">"красная"</string>
+    <string name="district_restriction_zone_yellow">"желтая"</string>
+    <string name="general_notification_channel_name">"Сообщения STOP COVID - ProteGO Safe"</string>
+    <string name="get_temporary_exposure_keys_error">"При получении ежедневных ключей произошла ошибка"</string>
+    <string name="no_changes_in_subscribed_districts_info">"Правила безопасности были изменены в поветах, за которыми вы не наблюдаете. Полный список поветов с разделением на зоны доступен в приложении и на сайте gov.pl."</string>
+    <string name="no_internet_connection_cancel">"Отмена"</string>
+    <string name="no_internet_connection_msg">"Проверить интернет-соединение"</string>
+    <string name="no_internet_connection_retry">"Попробуйте еще раз"</string>
+    <string name="not_secure_connection_msg">"Соединение не защищено"</string>
+    <string name="pin_verification_error">"Произошла ошибка проверки ПИН-кода"</string>
+    <string name="safetynet_dialog_title">"Возникла проблема"</string>
+    <string name="safetynet_dialog_verification_error">"Ваше устройство не может быть подтверждено положительно"</string>
+    <string name="upload_temporary_exposure_keys_day_limit_exceed_error">"Слишком большое количество ключей отправлено за один день. Обратитесь в Контактный центр, чтобы сообщить о проблеме"</string>
+    <string name="upload_temporary_exposure_keys_empty_error">"В настоящее время приложение не имеет никаких данных для предоставления. Обратитесь в Контактный центр, чтобы сообщить о проблеме."</string>
+    <string name="upload_temporary_exposure_keys_error">"Возникла ошибка передачи данных"</string>
+    <string name="upload_temporary_exposure_keys_limit_exceed_error">"Приложение содержит слишком большое количество данных для предоставления. Обратитесь в Контактный центр, чтобы сообщить о проблеме."</string>
+    <string name="do_not_show_again">"Не показывать больше"</string>
+</resources>
