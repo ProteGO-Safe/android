@@ -90,7 +90,7 @@ open class App : Application(), KoinComponent {
     }
 
     private fun scheduleUpdateDistrictsRestrictionsTask() {
-        applicationTaskScheduler.scheduleUpdateDistrictsRestrictionsTask()
+        applicationTaskScheduler.scheduleUpdateDistrictsRestrictionsTask(false)
     }
 
     private fun initializeDatabase() {

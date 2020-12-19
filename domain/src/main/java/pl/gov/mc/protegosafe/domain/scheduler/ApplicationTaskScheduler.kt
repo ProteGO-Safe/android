@@ -25,5 +25,5 @@ interface ApplicationTaskScheduler {
      *
      * If the task already scheduled then reschedule it.
      */
-    fun scheduleUpdateDistrictsRestrictionsTask()
+    fun scheduleUpdateDistrictsRestrictionsTask(shouldReplaceExistingWork: Boolean = true)
 }

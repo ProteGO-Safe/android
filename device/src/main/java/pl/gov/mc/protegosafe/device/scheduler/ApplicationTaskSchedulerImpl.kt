@@ -24,7 +24,8 @@ class ApplicationTaskSchedulerImpl(
         private val REPEAT_INTERVAL_TIME_UNIT = TimeUnit.MINUTES
         const val PROVIDE_DIAGNOSIS_KEYS_WORK_NAME = "PROVIDE_DIAGNOSIS_KEYS_WORK_NAME"
         const val REMOVE_OLD_EXPOSURES_WORK_NAME = "REMOVE_OLD_EXPOSURES_WORK_NAME"
-        const val UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME = "UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME"
+        const val UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME =
+            "UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME"
     }
 
     private val repeatIntervalInMinutes by lazy {
@@ -33,11 +34,6 @@ class ApplicationTaskSchedulerImpl(
 
     override fun scheduleProvideDiagnosisKeysTask(shouldReplaceExistingWork: Boolean) {
         Timber.i("scheduleProvideDiagnosisKeysTask")
-        val existingPeriodicWorkPolicy = if (shouldReplaceExistingWork) {
-            ExistingPeriodicWorkPolicy.REPLACE
-        } else {
-            ExistingPeriodicWorkPolicy.KEEP
-        }
         val workRequest = PeriodicWorkRequest.Builder(
             provideDiagnosisKeyWorker,
             repeatIntervalInMinutes,
@@ -55,7 +51,7 @@ class ApplicationTaskSchedulerImpl(
 
         workManager.enqueueUniquePeriodicWork(
             PROVIDE_DIAGNOSIS_KEYS_WORK_NAME,
-            existingPeriodicWorkPolicy,
+            getExistingPeriodicWorkPolicy(shouldReplaceExistingWork),
             workRequest
         )
     }
@@ -89,7 +85,7 @@ class ApplicationTaskSchedulerImpl(
         )
     }
 
-    override fun scheduleUpdateDistrictsRestrictionsTask() {
+    override fun scheduleUpdateDistrictsRestrictionsTask(shouldReplaceExistingWork: Boolean) {
         Timber.i("scheduleUpdateDistrictsRestrictionsTask")
         val workRequest = PeriodicWorkRequest.Builder(
             updateDistrictsRestrictionsWorker,
@@ -108,8 +104,18 @@ class ApplicationTaskSchedulerImpl(
 
         workManager.enqueueUniquePeriodicWork(
             UPDATE_DISTRICTS_RESTRICTIONS_WORK_NAME,
-            ExistingPeriodicWorkPolicy.REPLACE,
+            getExistingPeriodicWorkPolicy(shouldReplaceExistingWork),
             workRequest
         )
+    }
+
+    private fun getExistingPeriodicWorkPolicy(
+        shouldReplaceExistingWork: Boolean
+    ): ExistingPeriodicWorkPolicy {
+        return if (shouldReplaceExistingWork) {
+            ExistingPeriodicWorkPolicy.REPLACE
+        } else {
+            ExistingPeriodicWorkPolicy.KEEP
+        }
     }
 }
