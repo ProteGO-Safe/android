@@ -1,1 +1,3 @@
 /build
+#Ignore generated Kotlin classes from protocol buffer (.proto) schema files for use with squareup's wire library
+/src/main/java/pl/gov/mc/protegosafe/data/exposuresproto

@@ -5,6 +5,16 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 apply from: '../ktlint.gradle'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath deps.gradle_plugin.wire_compiler
+    }
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -30,6 +40,9 @@ android {
     kotlinOptions { jvmTarget = "1.8" }
 
     buildTypes {
+        debug {
+            buildConfigField "boolean", "ENABLE_WEBVIEW_LOGS", "true"
+        }
         release {
             debuggable false
             minifyEnabled true
@@ -43,8 +56,9 @@ android {
     productFlavors {
         dev {
             dimension "mode"
-            buildConfigField "String", "MAIN_TOPIC", "\"main-dev\""
-            buildConfigField "String", "DAILY_TOPIC", "\"daily-dev\""
+            buildConfigField "String", "MAIN_TOPIC", "\"main-localized-dev\""
+            buildConfigField "String", "DAILY_TOPIC", "\"daily-localized-dev\""
+            buildConfigField "String", "COVID_STATS_TOPIC", "\"covid-stats-android-dev\""
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
@@ -53,8 +67,9 @@ android {
         }
         stage {
             dimension "mode"
-            buildConfigField "String", "MAIN_TOPIC", "\"main-stage\""
-            buildConfigField "String", "DAILY_TOPIC", "\"daily-stage\""
+            buildConfigField "String", "MAIN_TOPIC", "\"main-localized-stage\""
+            buildConfigField "String", "DAILY_TOPIC", "\"daily-localized-stage\""
+            buildConfigField "String", "COVID_STATS_TOPIC", "\"covid-stats-android-stage\""
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
@@ -63,8 +78,9 @@ android {
         }
         prod {
             dimension "mode"
-            buildConfigField "String", "MAIN_TOPIC", "\"main\""
-            buildConfigField "String", "DAILY_TOPIC", "\"daily\""
+            buildConfigField "String", "MAIN_TOPIC", "\"main-localized\""
+            buildConfigField "String", "DAILY_TOPIC", "\"daily-localized\""
+            buildConfigField "String", "COVID_STATS_TOPIC", "\"covid-stats-android\""
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", PRODUCTION_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", PRODUCTION_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", PRODUCTION_UPLOAD_BUCKET_ENDPOINT
@@ -74,12 +90,39 @@ android {
     }
 }
 
+// This handles the protocol buffer generation with wire
+task generateWireClasses {
+    def protoPath = 'src/main/proto'
+    def wireGeneratedPath = 'src/main/java/'
+    def wireGeneratedPathWithPackage = 'src/main/java/pl/gov/mc/protegosafe/data/exposuresproto'
+
+    description = 'Generate Kotlin classes from protocol buffer (.proto) schema files for use with squareup\'s wire library'
+    delete(wireGeneratedPathWithPackage)
+    fileTree(dir: protoPath, include: '**/*.proto').each { File file ->
+        doLast {
+            javaexec {
+                main = 'com.squareup.wire.WireCompiler'
+                classpath = buildscript.configurations.classpath
+                args = ["--proto_path=${protoPath}", "--kotlin_out=${wireGeneratedPath}", "${file}"]
+            }
+        }
+    }
+}
+
+preBuild.dependsOn generateWireClasses
+
 dependencies {
     implementation project(':exposurenotification')
     implementation deps.jetbrains.kotlin_stdlib
     implementation deps.androidx.appcompat_appcompat
     implementation deps.androidx.core_ktx
     implementation deps.androidx.security_crypto
+
+    //ThreeTenABP
+    implementation deps.time.threetenabp
+
+    //Protobuf
+    implementation deps.protobuf.wire_runtime
 
     //koin
     implementation deps.koin.android

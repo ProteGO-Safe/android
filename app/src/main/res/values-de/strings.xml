@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="changed_district_info_with_params">"Landkreis %1$s – Zone %2$s"</string>
+    <string name="changes_in_districts_info">"Die Sicherheitsregeln wurden geändert. Bleibe auf dem Laufenden: Wähle Landkreise aus und erhalte Benachrichtigungen über die aktuelle Zoneneinteilung."</string>
+    <string name="changes_in_districts_notification_title">"Anpassungen der Einschränkungen in den Landkreisen."</string>
+    <string name="changes_in_subscribed_district_info_with_params">"In 1 Landkreis, den Du beobachtest, gab es Änderungen:%2$s."</string>
+    <string name="changes_in_subscribed_districts_info_with_params">"In %1$d Landkreisen, die Du beobachtest, gab es Änderungen:%2$s."</string>
+    <string name="common_ok">"ok"</string>
+    <string name="covid_test_not_compatible_device">"Es tut uns leid, aber Ihre Android-Version bietet nicht genügend Sicherheit, um Ihnen den Zugriff auf den Labortest zu gewährleisten."</string>
+    <string name="data_migration_in_progress">"Datenmigration läuft"</string>
+    <string name="debug_write_store_rationale">"Die Testversion der App braucht Ihre Einwilligung zum Speichern von Geräteverfolgungsprotokollen."</string>
+    <string name="district_restriction_zone_neutral">"neutral"</string>
+    <string name="district_restriction_zone_red">"rot"</string>
+    <string name="district_restriction_zone_yellow">"gelb"</string>
+    <string name="general_notification_channel_name">"Benachrichtigungen von STOP COVID - ProteGO Safe"</string>
+    <string name="get_temporary_exposure_keys_error">"Ein Fehler beim Downloadversuch Ihrer täglichen Schlüssel ist aufgetreten"</string>
+    <string name="no_changes_in_subscribed_districts_info">"In Ländkreisen, die Du nicht beobachtest, wurden Sicherheitsänderungen vorgenommen. Eine vollständige Liste der Landkreise mit einer Unterteilung in Zonen findest Du in der App und auf gov.pl."</string>
+    <string name="no_internet_connection_cancel">"Abbrechen"</string>
+    <string name="no_internet_connection_msg">"Überprüfen Sie Ihre Internetverbindung"</string>
+    <string name="no_internet_connection_retry">"Versuchen Sie es noch einmal"</string>
+    <string name="not_secure_connection_msg">"Ihre Verbindung ist nicht sicher"</string>
+    <string name="pin_verification_error">"Ein PIN-Verifizierungsfehler ist aufgetreten"</string>
+    <string name="safetynet_dialog_title">"Es gab ein Problem"</string>
+    <string name="safetynet_dialog_verification_error">"Ihr Gerät konnte nicht positiv verifiziert werden"</string>
+    <string name="upload_temporary_exposure_keys_day_limit_exceed_error">"Zu viele Schlüssel an einem Tag gesendet. Kontaktieren Sie die Kontaktstelle, um das Problem zu melden"</string>
+    <string name="upload_temporary_exposure_keys_empty_error">"Zurzeit stehen der App keine Daten zur Verfügung. Kontaktieren Sie die Kontaktstelle, um das Problem zu melden"</string>
+    <string name="upload_temporary_exposure_keys_error">"Ein Datenübertragungsfehler ist aufgetreten"</string>
+    <string name="upload_temporary_exposure_keys_limit_exceed_error">"Der App stehen zu viele Daten zur Verfügung. Kontaktieren Sie die Kontaktstelle, um das Problem zu melden."</string>
+    <string name="do_not_show_again">"Nicht mehr anzeigen"</string>
+</resources>

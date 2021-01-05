@@ -22,12 +22,14 @@ import pl.gov.mc.protegosafe.domain.model.SetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.repository.UiRequestCacheRepository
 import pl.gov.mc.protegosafe.domain.usecase.ComposeAppLifecycleStateBrideDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.GetRouteDataAndClearUseCase
 import pl.gov.mc.protegosafe.domain.usecase.GetServicesStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProcessPendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StartExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.UpdateCovidStatsAndGetResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.UpdateTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.logging.WebViewTimber
@@ -47,6 +49,8 @@ class HomeViewModel(
     private val processPendingActivityResultUseCase: ProcessPendingActivityResultUseCase,
     private val updateTestSubscriptionStatusUseCase: UpdateTestSubscriptionStatusUseCase,
     private val outgoingBridgeDataResultComposer: OutgoingBridgeDataResultComposer,
+    private val getRouteAndClearUseCase: GetRouteDataAndClearUseCase,
+    private val updateCovidStatsAndGetResultUseCase: UpdateCovidStatsAndGetResultUseCase,
     private val uiRequestCacheRepository: UiRequestCacheRepository
 ) : BaseViewModel() {
 
@@ -73,6 +77,9 @@ class HomeViewModel(
 
     private val _showUploadError = SingleLiveEvent<Exception>()
     val showConnectionError: LiveData<Exception> = _showUploadError
+
+    private val _requestAppReview = SingleLiveEvent<Unit>()
+    val requestAppReview: LiveData<Unit> = _requestAppReview
 
     private val _requestExposureNotificationPermission =
         SingleLiveEvent<ExposureNotificationActionNotResolvedException>()
@@ -264,10 +271,16 @@ class HomeViewModel(
             is ActionRequiredItem.UpdateTestSubscription -> {
                 updateTestSubscriptionStatus()
             }
+            is ActionRequiredItem.AppReview -> {
+                _requestAppReview.postValue(Unit)
+            }
+            is ActionRequiredItem.UpdateCovidStats -> {
+                updateCovidStats()
+            }
         }
     }
 
-    fun onAppLifecycleStateChanged(state: AppLifecycleState) {
+    fun onAppLifecycleStateChanged(state: AppLifecycleState, webViewProgress: Int? = null) {
         Timber.d("onAppLifecycleStateChanged $state")
         if (state == AppLifecycleState.RESUMED) {
             sendServicesStatus()
@@ -279,6 +292,28 @@ class HomeViewModel(
                 },
                 {
                     Timber.e(it, "onAppLifecycleStateChanged failed")
+                }
+            ).addTo(disposables)
+
+        if (webViewProgress == MAX_WEBVIEW_PROGRESS) {
+            sendRerouteRequestIfNotEmpty()
+        }
+    }
+
+    fun onPageFinished() {
+        sendRerouteRequestIfNotEmpty()
+    }
+
+    private fun sendRerouteRequestIfNotEmpty() {
+        getRouteAndClearUseCase.execute()
+            .subscribe(
+                {
+                    if (it.isNotEmpty()) {
+                        onBridgeData(OutgoingBridgeDataType.REROUTE_USER.code, it)
+                    }
+                },
+                {
+                    Timber.e(it, "Can not reroute user")
                 }
             ).addTo(disposables)
     }
@@ -305,6 +340,19 @@ class HomeViewModel(
                 },
                 {
                     Timber.e(it, "sendServicesStatus failed")
+                }
+            ).addTo(disposables)
+    }
+
+    private fun updateCovidStats() {
+        Timber.d("updateCovidStats")
+        updateCovidStatsAndGetResultUseCase.execute()
+            .subscribe(
+                {
+                    onBridgeData(OutgoingBridgeDataType.GET_COVID_STATS.code, it)
+                },
+                {
+                    Timber.d("updateCovidStats failed")
                 }
             ).addTo(disposables)
     }
@@ -346,3 +394,5 @@ class HomeViewModel(
         _requestExposureNotificationPermission.postValue(exception)
     }
 }
+
+private const val MAX_WEBVIEW_PROGRESS = 100

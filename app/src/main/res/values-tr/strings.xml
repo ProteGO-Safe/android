@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="changed_district_info_with_params">"ilçe %1$s – bölge %2$s"</string>
+    <string name="changes_in_districts_info">"Güvenlik önlemlerinde değişiklikler oldu. Haberdar olun: takip etmek istediğiniz ilçeleri seçin ve mevcut durum ile ilgili bildirim alın."</string>
+    <string name="changes_in_districts_notification_title">"İlçelerdeki kısıtlamalardaki değişiklikler."</string>
+    <string name="changes_in_subscribed_district_info_with_params">"Takip etmekte olduğunuz 1 ilçede değişiklikler var:%2$s."</string>
+    <string name="changes_in_subscribed_districts_info_with_params">"Takip etmekte olduğunuz %1$d ilçede değişiklikler var:%2$s."</string>
+    <string name="common_ok">"Tamam"</string>
+    <string name="covid_test_not_compatible_device">"Üzgünüz, Adroid işletim sistemi sürümünüz, laboratuvar testi erişimi özelliğini kullanabilmeniz için gerekli güvenlik şartlarını sağlamamaktadır."</string>
+    <string name="data_migration_in_progress">"Veri taşıma işlemi devam ediyor"</string>
+    <string name="debug_write_store_rationale">"Uygulamanın test versiyonu, cihaz takip loglarına yazma yetkisine ihtiyaç duymaktadır."</string>
+    <string name="district_restriction_zone_neutral">"nötr"</string>
+    <string name="district_restriction_zone_red">"kırmızı"</string>
+    <string name="district_restriction_zone_yellow">"sarı"</string>
+    <string name="general_notification_channel_name">"STOP COVID - ProteGO Safe mesajları"</string>
+    <string name="get_temporary_exposure_keys_error">"Günlük anahtarlarınız alınırken hata oluştu"</string>
+    <string name="no_changes_in_subscribed_districts_info">"Takip etmediğiniz ilçelerdeki güvenlik önlemlerinde değişiklikler oldu. İlçelerin tamamının listesi gov.pl sitesinde ve uygulamada bulunmaktadır."</string>
+    <string name="no_internet_connection_cancel">"İptal"</string>
+    <string name="no_internet_connection_msg">"İnternet bağlantınızı kontrol edin"</string>
+    <string name="no_internet_connection_retry">"Tekrar dene"</string>
+    <string name="not_secure_connection_msg">"Bağlantı güvenli değil"</string>
+    <string name="pin_verification_error">"PIN doğrulama hatası oluştu"</string>
+    <string name="safetynet_dialog_title">"Bir problem oluştu"</string>
+    <string name="safetynet_dialog_verification_error">"Cihazınız olumlu bir şekilde doğrulanamadı"</string>
+    <string name="upload_temporary_exposure_keys_day_limit_exceed_error">"Bir günde aşırı fazla sayıda anahtar gönderildi. Sorunu bildirmek için lütfen İletişim Merkezi ile iletişime geçin."</string>
+    <string name="upload_temporary_exposure_keys_empty_error">"Şu anda uygulamada paylaşılacak herhangi bir veri yok. Sorunu bildirmek için lütfen İletişim Merkezi ile iletişime geçin."</string>
+    <string name="upload_temporary_exposure_keys_error">"Veri aktarım hatası oluştu"</string>
+    <string name="upload_temporary_exposure_keys_limit_exceed_error">"Uygulamada paylaşılamayacak kadar fazla veri var. Sorunu bildirmek için lütfen İletişim Merkezi ile iletişime geçin."</string>
+    <string name="do_not_show_again">"Tekrar gösterme"</string>
+</resources>

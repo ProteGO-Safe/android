@@ -28,6 +28,8 @@ class ExposureNotificationRepositoryImpl(
 
     override val ACTION_EXPOSURE_STATE_UPDATED: String
         get() = ExposureNotificationClient.ACTION_EXPOSURE_STATE_UPDATED
+    override val ACTION_EXPOSURE_NOT_FOUND: String
+        get() = ExposureNotificationClient.ACTION_EXPOSURE_NOT_FOUND
     override val EXTRA_TOKEN: String
         get() = ExposureNotificationClient.EXTRA_TOKEN
 

@@ -14,11 +14,6 @@ class ProvideDiagnosisKeysUseCase(
     private val diagnosisKeyRepository: DiagnosisKeyRepository,
     private val postExecutionThread: PostExecutionThread
 ) {
-
-    companion object {
-        private const val BATCH_DELIMITER = "-"
-    }
-
     /**
      * @param files - List of files that contain key information
      * @param token - A unique token for this batch can also be provided,
@@ -30,44 +25,36 @@ class ProvideDiagnosisKeysUseCase(
      */
     fun execute(
         files: List<File>,
-        token: String = exposureNotificationRepository.generateRandomToken(),
+        token: String,
         exposureConfigurationItem: ExposureConfigurationItem? = null
     ): Completable {
-        return Completable.concat(
-            filesToBatches(files)
-                .sortedBy { it.first().name }
-                .map { listOfFilesInBatch ->
-                    exposureNotificationRepository.provideDiagnosisKeys(
-                        listOfFilesInBatch,
-                        token,
-                        exposureConfigurationItem
-                    ).andThen(
-                        finalizeDiagnosisKeyProviding(listOfFilesInBatch)
-                    )
-                }
+        return exposureNotificationRepository.provideDiagnosisKeys(
+            files,
+            token,
+            exposureConfigurationItem
+        ).andThen(
+            finalizeDiagnosisKeyProviding(files)
         )
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
     }
 
-    private fun finalizeDiagnosisKeyProviding(listOfFilesInBatch: List<File>): Completable {
+    private fun finalizeDiagnosisKeyProviding(files: List<File>): Completable {
         return Maybe.fromCallable {
-            DiagnosisKeysFileNameToTimestampUseCase().execute(
-                listOfFilesInBatch.first().name
-            )
-        }
-            .flatMapCompletable {
+            files.map {
+                DiagnosisKeysFileNameToTimestampUseCase().execute(
+                    it.name
+                )
+            }.sortedBy { it }
+        }.flatMapCompletable { sortedFiles ->
+            sortedFiles.lastOrNull()?.let {
                 diagnosisKeyRepository.setLatestProcessedDiagnosisKeyTimestamp(it)
-            }
-            .andThen(
-                Completable.fromAction {
-                    listOfFilesInBatch.forEach { it.delete() }
-                }
-            )
+            } ?: Completable.complete()
+                .andThen(
+                    Completable.fromAction {
+                        files.forEach { it.delete() }
+                    }
+                )
+        }
     }
-
-    private fun filesToBatches(files: List<File>) =
-        files.groupBy {
-            it.name.substringBefore(BATCH_DELIMITER)
-        }.values.toList()
 }

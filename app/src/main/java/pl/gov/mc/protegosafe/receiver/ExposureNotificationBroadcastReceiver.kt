@@ -16,7 +16,7 @@ import timber.log.Timber
 /**
  * Broadcast receiver for callbacks from exposure notification API.
  *
- * Receive broadcasts of the ACTION_EXPOSURE_STATE_UPDATED intent.
+ * Receive broadcasts of the ACTION_EXPOSURE_STATE_UPDATED intent and ACTION_EXPOSURE_NOT_FOUND.
  * This intent is broadcast when diagnosis keys have been compared with the keys on the device,
  * which follows calls to provideDiagnosisKeys().
  * Respond to the broadcast by presenting information to the user.
@@ -26,7 +26,9 @@ class ExposureNotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent
     private val exposureNotificationRepository: ExposureNotificationRepository by inject()
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (exposureNotificationRepository.ACTION_EXPOSURE_STATE_UPDATED == intent?.action) {
+        if (intent?.action == exposureNotificationRepository.ACTION_EXPOSURE_STATE_UPDATED ||
+            intent?.action == exposureNotificationRepository.ACTION_EXPOSURE_NOT_FOUND
+        ) {
             intent.getStringExtra(exposureNotificationRepository.EXTRA_TOKEN)?.let { token ->
                 Timber.d("Exposure notification state updated")
                 val workManager: WorkManager by inject()

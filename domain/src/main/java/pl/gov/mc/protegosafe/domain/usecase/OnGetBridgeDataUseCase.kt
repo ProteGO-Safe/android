@@ -14,7 +14,6 @@ import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUse
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateDistrictsRestrictionsUseCase
 
 class OnGetBridgeDataUseCase(
-    private val getNotificationDataAndClear: GetNotificationDataAndClearUseCase,
     private val getServicesStatusUseCase: GetServicesStatusUseCase,
     private val getAnalyzeResultUseCase: GetAnalyzeResultUseCase,
     private val getAppVersionNameUseCase: GetAppVersionNameUseCase,
@@ -28,6 +27,11 @@ class OnGetBridgeDataUseCase(
     private val getTestSubscriptionStatusUseCase: GetTestSubscriptionStatusUseCase,
     private val getTestSubscriptionPinUseCase: GetTestSubscriptionPinUseCase,
     private val cancelExposureRiskUseCase: CancelExposureRiskUseCase,
+    private val getActivitiesResultUseCase: GetActivitiesResultUseCase,
+    private val getCovidStatsResultAndUpdateUseCase: GetCovidStatsResultAndUpdateUseCase,
+    private val updateCovidStatsNotificationsStatusUseCase: UpdateCovidStatsNotificationsStatusUseCase,
+    private val getCovidStatsNotificationStatusResultUseCase: GetCovidStatsNotificationStatusResultUseCase,
+    private val getENStatsResultUseCase: GetENStatsResultUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -38,9 +42,6 @@ class OnGetBridgeDataUseCase(
         onResultActionRequired: (ActionRequiredItem) -> Unit
     ): Single<String> {
         return when (type) {
-            OutgoingBridgeDataType.NOTIFICATION_DATA -> {
-                Single.fromCallable { getNotificationDataAndClear.execute() }
-            }
             OutgoingBridgeDataType.SERVICES_STATUS -> {
                 getServicesStatusUseCase.execute()
             }
@@ -83,6 +84,23 @@ class OnGetBridgeDataUseCase(
             }
             OutgoingBridgeDataType.GET_COVID_TEST_SUBSCRIPTION_PIN -> {
                 getTestSubscriptionPinUseCase.execute()
+            }
+            OutgoingBridgeDataType.GET_ACTIVITIES -> {
+                getActivitiesResultUseCase.execute()
+            }
+            OutgoingBridgeDataType.GET_COVID_STATS -> {
+                getCovidStatsResultAndUpdateUseCase.execute(onResultActionRequired)
+            }
+            OutgoingBridgeDataType.GET_COVID_STATS_NOTIFICATION_AGREEMENT -> {
+                getCovidStatsNotificationStatusResultUseCase.execute()
+            }
+            OutgoingBridgeDataType.UPDATE_COVID_STATS_NOTIFICATION_AGREEMENT -> {
+                data?.let {
+                    updateCovidStatsNotificationsStatusUseCase.execute(it)
+                } ?: throw IllegalArgumentException()
+            }
+            OutgoingBridgeDataType.GET_EN_STATS -> {
+                getENStatsResultUseCase.execute()
             }
             else -> {
                 throw IllegalArgumentException("OutgoingBridgeDataType has wrong value")

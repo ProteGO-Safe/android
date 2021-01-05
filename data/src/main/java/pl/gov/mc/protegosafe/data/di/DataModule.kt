@@ -21,14 +21,16 @@ import pl.gov.mc.protegosafe.data.cloud.CovidInfoService
 import pl.gov.mc.protegosafe.data.cloud.CovidTestService
 import pl.gov.mc.protegosafe.data.cloud.UploadTemporaryExposureKeysService
 import pl.gov.mc.protegosafe.data.db.AppLanguageDataStore
-import pl.gov.mc.protegosafe.data.db.NotificationDataStore
+import pl.gov.mc.protegosafe.data.db.RouteDataStore
 import pl.gov.mc.protegosafe.data.db.SafetyNetDataStore
 import pl.gov.mc.protegosafe.data.db.SharedPreferencesDelegates
 import pl.gov.mc.protegosafe.data.db.TriageDataStore
 import pl.gov.mc.protegosafe.data.db.AppVersionDataStore
 import pl.gov.mc.protegosafe.data.db.CovidInfoDataStore
+import pl.gov.mc.protegosafe.data.db.CovidStatsDataStore
 import pl.gov.mc.protegosafe.data.db.WebViewLoggingDataStore
 import pl.gov.mc.protegosafe.data.db.WorkersIntervalDataStore
+import pl.gov.mc.protegosafe.data.db.dao.ActivitiesDao
 import pl.gov.mc.protegosafe.data.db.dao.ExposureDao
 import pl.gov.mc.protegosafe.data.db.dao.CovidInfoDao
 import pl.gov.mc.protegosafe.data.db.dao.DiagnosisKeyDao
@@ -42,19 +44,22 @@ import pl.gov.mc.protegosafe.data.mapper.PinMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RetrofitExceptionMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.RiskLevelConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.db.dao.CovidTestDao
+import pl.gov.mc.protegosafe.data.mapper.FcmNotificationMapperImpl
 import pl.gov.mc.protegosafe.data.mapper.TestSubscriptionConfigurationMapperImpl
 import pl.gov.mc.protegosafe.data.model.OutgoingBridgeDataResultComposerImpl
+import pl.gov.mc.protegosafe.data.repository.ActivitiesRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.CacheStoreImpl
 import pl.gov.mc.protegosafe.data.repository.DiagnosisKeyRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureNotificationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.ExposureRepositoryImpl
-import pl.gov.mc.protegosafe.data.repository.NotificationRepositoryImpl
+import pl.gov.mc.protegosafe.data.repository.RouteRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.PendingActivityResultRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.CertificatePinningRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.MigrationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.RemoteConfigurationRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.CovidInfoRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.CovidTestRepositoryImpl
+import pl.gov.mc.protegosafe.data.repository.ProtobufRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.SafetyNetRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TemporaryExposureKeysUploadRepositoryImpl
 import pl.gov.mc.protegosafe.data.repository.TriageRepositoryImpl
@@ -65,23 +70,26 @@ import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.PinMapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfigurationMapper
+import pl.gov.mc.protegosafe.domain.model.FcmNotificationMapper
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.RetrofitExceptionMapper
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationMapper
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationMapper
+import pl.gov.mc.protegosafe.domain.repository.ActivitiesRepository
 import pl.gov.mc.protegosafe.domain.repository.CacheStore
 import pl.gov.mc.protegosafe.domain.repository.DiagnosisKeyRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureNotificationRepository
 import pl.gov.mc.protegosafe.domain.repository.ExposureRepository
 import pl.gov.mc.protegosafe.domain.repository.KeyUploadSystemInfoRepository
-import pl.gov.mc.protegosafe.domain.repository.NotificationRepository
+import pl.gov.mc.protegosafe.domain.repository.RouteRepository
 import pl.gov.mc.protegosafe.domain.repository.PendingActivityResultRepository
 import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository
 import pl.gov.mc.protegosafe.domain.repository.MigrationRepository
 import pl.gov.mc.protegosafe.domain.repository.RemoteConfigurationRepository
 import pl.gov.mc.protegosafe.domain.repository.CovidInfoRepository
 import pl.gov.mc.protegosafe.domain.repository.CovidTestRepository
+import pl.gov.mc.protegosafe.domain.repository.ProtobufRepository
 import pl.gov.mc.protegosafe.domain.repository.SafetyNetRepository
 import pl.gov.mc.protegosafe.domain.repository.TemporaryExposureKeysUploadRepository
 import pl.gov.mc.protegosafe.domain.repository.TriageRepository
@@ -107,9 +115,9 @@ val dataModule = module {
     single<CovidTestService> {
         get<Retrofit>().create(CovidTestService::class.java)
     }
-    single<NotificationRepository> { NotificationRepositoryImpl(get()) }
+    single<RouteRepository> { RouteRepositoryImpl(get()) }
     single<TriageRepository> { TriageRepositoryImpl(get()) }
-    single { NotificationDataStore() }
+    single { RouteDataStore() }
     single { TriageDataStore(get()) }
     single { SharedPreferencesDelegates(get()) }
     single { Nearby.getExposureNotificationClient(androidApplication()) }
@@ -126,7 +134,7 @@ val dataModule = module {
     }
     single<PendingActivityResultRepository> { PendingActivityResultRepositoryImpl() }
     single { ExposureDao() }
-    single<ExposureRepository> { ExposureRepositoryImpl(get()) }
+    single<ExposureRepository> { ExposureRepositoryImpl(get(), get()) }
     single<DiagnosisKeyRepository> { DiagnosisKeyRepositoryImpl(get(), get(), get(), get(), get()) }
     factory { RealmDatabaseBuilder(get(), get()) }
     single {
@@ -146,7 +154,7 @@ val dataModule = module {
     single<RetrofitExceptionMapper> { RetrofitExceptionMapperImpl() }
     single<IncomingBridgePayloadMapper> { IncomingBridgePayloadMapperImpl(get()) }
     single { AppLanguageDataStore(get()) }
-    single<CovidInfoRepository> { CovidInfoRepositoryImpl(get(), get(), get()) }
+    single<CovidInfoRepository> { CovidInfoRepositoryImpl(get(), get(), get(), get()) }
     single { CovidInfoDao() }
     single { CovidInfoDataStore(get()) }
     single<OutgoingBridgePayloadMapper> { OutgoingBridgePayloadMapperImpl() }
@@ -158,6 +166,11 @@ val dataModule = module {
     single<CacheStore> { CacheStoreImpl() }
     single { WorkersIntervalDataStore(get()) }
     single { WebViewLoggingDataStore(get()) }
+    single<FcmNotificationMapper> { FcmNotificationMapperImpl(get()) }
+    single<ProtobufRepository> { ProtobufRepositoryImpl() }
+    single { ActivitiesDao() }
+    single<ActivitiesRepository> { ActivitiesRepositoryImpl(get()) }
+    single { CovidStatsDataStore(get()) }
 }
 
 fun provideEncryptedSharedPreferences(context: Context) = EncryptedSharedPreferences.create(

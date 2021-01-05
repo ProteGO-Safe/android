@@ -4,7 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.zipWith
 import io.reactivex.schedulers.Schedulers
-import pl.gov.mc.protegosafe.domain.CovidInfoItem
+import pl.gov.mc.protegosafe.domain.model.CovidInfoItem
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
 import pl.gov.mc.protegosafe.domain.repository.CovidInfoRepository
@@ -15,23 +15,23 @@ class UpdateDistrictsRestrictionsUseCase(
     private val postExecutionThread: PostExecutionThread
 ) {
 
-    private sealed class UpdateState {
-        object NoNewData : UpdateState()
-        class InitialData(val covidInfo: CovidInfoItem) : UpdateState()
-        class NewData(val covidInfo: CovidInfoItem) : UpdateState()
+    private sealed class DistrictsUpdateState {
+        object NoNewData : DistrictsUpdateState()
+        class InitialData(val covidInfo: CovidInfoItem) : DistrictsUpdateState()
+        class NewData(val covidInfo: CovidInfoItem) : DistrictsUpdateState()
     }
 
-    fun execute(): Completable {
-        return updateData()
+    fun execute(covidInfo: CovidInfoItem? = null): Completable {
+        return updateData(covidInfo)
             .flatMapCompletable { updateState ->
                 when (updateState) {
-                    is UpdateState.NoNewData -> {
+                    is DistrictsUpdateState.NoNewData -> {
                         Completable.complete()
                     }
-                    is UpdateState.InitialData -> {
+                    is DistrictsUpdateState.InitialData -> {
                         handleInitialData(updateState.covidInfo)
                     }
-                    is UpdateState.NewData -> {
+                    is DistrictsUpdateState.NewData -> {
                         handleNewData(updateState.covidInfo)
                     }
                 }
@@ -40,23 +40,31 @@ class UpdateDistrictsRestrictionsUseCase(
             .observeOn(postExecutionThread.scheduler)
     }
 
-    private fun updateData(): Single<UpdateState> {
-        return covidInfoRepository.getCovidInfo()
-            .zipWith<CovidInfoItem, Long, UpdateState>(
-                covidInfoRepository.getCovidInfoUpdateTimestamp()
+    private fun updateData(covidInfoItem: CovidInfoItem?): Single<DistrictsUpdateState> {
+        return getCovidInfo(covidInfoItem)
+            .zipWith<CovidInfoItem, Long, DistrictsUpdateState>(
+                covidInfoRepository.getVoivodeshipsUpdateTimestamp()
             ) { covidInfo: CovidInfoItem, updatedTimeStamp: Long ->
                 when {
-                    covidInfo.lastUpdate == updatedTimeStamp -> {
-                        UpdateState.NoNewData
+                    covidInfo.voivodeshipsUpdated == updatedTimeStamp -> {
+                        DistrictsUpdateState.NoNewData
                     }
                     updatedTimeStamp == 0L -> {
-                        UpdateState.InitialData(covidInfo)
+                        DistrictsUpdateState.InitialData(covidInfo)
                     }
                     else -> {
-                        UpdateState.NewData(covidInfo)
+                        DistrictsUpdateState.NewData(covidInfo)
                     }
                 }
             }
+    }
+
+    private fun getCovidInfo(covidInfo: CovidInfoItem?): Single<CovidInfoItem> {
+        return if (covidInfo == null) {
+            covidInfoRepository.getCovidInfo()
+        } else {
+            Single.just(covidInfo)
+        }
     }
 
     private fun handleInitialData(covidInfo: CovidInfoItem): Completable {
@@ -78,7 +86,7 @@ class UpdateDistrictsRestrictionsUseCase(
 
     private fun syncWithDbAndSaveTimestamp(covidInfo: CovidInfoItem): Completable {
         return syncWithDb(covidInfo.voivodeships)
-            .andThen(saveTimeUpdateTimestamp(covidInfo.lastUpdate))
+            .andThen(saveTimeUpdateTimestamp(covidInfo.voivodeshipsUpdated))
     }
 
     private fun syncWithDb(voivodeships: List<VoivodeshipItem>): Completable {
@@ -86,6 +94,6 @@ class UpdateDistrictsRestrictionsUseCase(
     }
 
     private fun saveTimeUpdateTimestamp(timestamp: Long): Completable {
-        return covidInfoRepository.saveCovidInfoUpdateTimestamp(timestamp)
+        return covidInfoRepository.saveVoivodeshipsUpdateTimestamp(timestamp)
     }
 }

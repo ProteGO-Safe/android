@@ -17,11 +17,14 @@ import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.api.ApiException
+import com.google.android.play.core.review.ReviewManagerFactory
 import io.reactivex.rxkotlin.addTo
+import kotlinx.android.synthetic.main.fragment_home.webView
 import kotlinx.android.synthetic.main.view_connection_error.view.button_cancel
 import kotlinx.android.synthetic.main.view_connection_error.view.button_check_internet_connection
 import kotlinx.android.synthetic.main.view_connection_error.view.text_view_connection_error
@@ -29,6 +32,7 @@ import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.gov.mc.protegosafe.BuildConfig
+import pl.gov.mc.protegosafe.Consts
 import pl.gov.mc.protegosafe.R
 import pl.gov.mc.protegosafe.databinding.FragmentHomeBinding
 import pl.gov.mc.protegosafe.domain.exception.CovidTestNotCompatibleDeviceException
@@ -38,6 +42,8 @@ import pl.gov.mc.protegosafe.domain.model.ActivityResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
+import pl.gov.mc.protegosafe.extension.toCompletable
+import pl.gov.mc.protegosafe.extension.toSingle
 import pl.gov.mc.protegosafe.logging.WebViewTimber
 import pl.gov.mc.protegosafe.ui.common.BaseFragment
 import pl.gov.mc.protegosafe.ui.common.livedata.observe
@@ -74,7 +80,7 @@ class HomeFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         manageWebView(resumed = true)
-        vm.onAppLifecycleStateChanged(AppLifecycleState.RESUMED)
+        vm.onAppLifecycleStateChanged(AppLifecycleState.RESUMED, webView.progress)
         vm.processPendingActivityResult()
     }
 
@@ -98,6 +104,7 @@ class HomeFragment : BaseFragment() {
         vm.requestLocation.observe(viewLifecycleOwner, ::requestLocation)
         vm.requestClearData.observe(viewLifecycleOwner, ::requestClearData)
         vm.requestNotifications.observe(viewLifecycleOwner, ::requestNotifications)
+        vm.requestAppReview.observe(viewLifecycleOwner, ::startAppReview)
         vm.restartActivity.observe(viewLifecycleOwner, ::restartActivity)
         vm.closeApplication.observe(viewLifecycleOwner, ::closeApplication)
         vm.showConnectionError.observe(viewLifecycleOwner, ::showError)
@@ -196,6 +203,7 @@ class HomeFragment : BaseFragment() {
                 binding.webView.reload()
                 binding.migrationLayout.isVisible = false
             }
+            vm.onPageFinished()
         }
 
         override fun onReceivedSslError(
@@ -265,6 +273,24 @@ class HomeFragment : BaseFragment() {
                 }
             }
         startActivityForResult(settingsIntent, ActivityRequest.ENABLE_NOTIFICATIONS.requestCode)
+    }
+
+    private fun startAppReview() {
+        val reviewManager = ReviewManagerFactory.create(context)
+
+        reviewManager.requestReviewFlow().toSingle()
+            .flatMapCompletable {
+                reviewManager.launchReviewFlow(activity, it).toCompletable()
+            }.subscribe(
+                {
+                    if (BuildConfig.BUILD_TYPE != Consts.RELEASE_BUILD_TYPE) {
+                        Toast.makeText(context, "App reviewed", Toast.LENGTH_LONG).show()
+                    }
+                },
+                {
+                    Timber.e(it, "App review failed")
+                }
+            ).addTo(disposables)
     }
 
     private fun restartActivity() {

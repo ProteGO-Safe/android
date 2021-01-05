@@ -23,12 +23,14 @@ import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.data.di.dataModule
 import pl.gov.mc.protegosafe.data.extension.copyTo
 import pl.gov.mc.protegosafe.di.appModule
-import pl.gov.mc.protegosafe.di.deviceModule
+import pl.gov.mc.protegosafe.device.di.deviceModule
 import pl.gov.mc.protegosafe.di.useCaseModule
 import pl.gov.mc.protegosafe.di.viewModelModule
 import pl.gov.mc.protegosafe.domain.repository.CertificatePinningRepository
 import pl.gov.mc.protegosafe.domain.scheduler.ApplicationTaskScheduler
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
+import pl.gov.mc.protegosafe.domain.usecase.RescheduleProvideDiagnosisKeysTaskUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SubscribeCovidStatusTopicUseCase
 import timber.log.Timber
 
 open class App : Application(), KoinComponent {
@@ -52,6 +54,7 @@ open class App : Application(), KoinComponent {
         initializeFcm()
         initializeStetho()
         initializeThreeTenABP()
+        rescheduleProvideDiagnosisKeysTask()
         scheduleRemoveOldExposuresTask()
         scheduleUpdateDistrictsRestrictionsTask()
     }
@@ -78,12 +81,16 @@ open class App : Application(), KoinComponent {
         AndroidThreeTen.init(this)
     }
 
+    private fun rescheduleProvideDiagnosisKeysTask() {
+        get<RescheduleProvideDiagnosisKeysTaskUseCase>().execute()
+    }
+
     private fun scheduleRemoveOldExposuresTask() {
         applicationTaskScheduler.scheduleRemoveOldExposuresTask()
     }
 
     private fun scheduleUpdateDistrictsRestrictionsTask() {
-        applicationTaskScheduler.scheduleUpdateDistrictsRestrictionsTask()
+        applicationTaskScheduler.scheduleUpdateDistrictsRestrictionsTask(false)
     }
 
     private fun initializeDatabase() {
@@ -154,6 +161,16 @@ open class App : Application(), KoinComponent {
                     )
                 }
         }
+
+        get<SubscribeCovidStatusTopicUseCase>().execute()
+            .subscribe(
+                {
+                    Timber.d("FCM COVID STATS topic subscribe success")
+                },
+                {
+                    Timber.e(it)
+                }
+            ).addTo(disposables)
     }
 
     private fun initializeStetho() {

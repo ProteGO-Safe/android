@@ -75,7 +75,15 @@ class DiagnosisKeyRepositoryImpl(
                     .flatMapCompletable { completables ->
                         Completable.merge(completables)
                     }
-                    .toSingleDefault(downloadedFileList)
+                    .toSingleDefault(
+                        downloadedFileList.also {
+                            if (it.isEmpty()) {
+                                Timber.i("No new diagnosis keys to provide.")
+                            } else {
+                                Timber.d("There are new diagnosis keys to provide: $it")
+                            }
+                        }
+                    )
             }
     }
 

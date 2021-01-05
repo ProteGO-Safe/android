@@ -77,6 +77,22 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+4.9.0
+
+Added information on COVID-19 statistics in Poland
+
+Added information about the checks carried out by the application on meetings with people who reported to have got sick with COVID-19
+
+Added history of application activity (information about performed checks, indicated threats, system notifications)
+
+Added possibility of redirecting to a specific application screen by system notification
+
+Added possibility to evaluate applications in the Google Play / Apple App Store
+
+Added translations of the application into Russian, German and Turkish.
+
+Updated UI
+
 4.8.0
 
 Possibility to share Temporary Exposure Keys with other countries

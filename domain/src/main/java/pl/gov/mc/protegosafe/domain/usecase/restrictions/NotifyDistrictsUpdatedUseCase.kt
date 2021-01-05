@@ -9,24 +9,27 @@ import pl.gov.mc.protegosafe.domain.Notifier
 import pl.gov.mc.protegosafe.domain.executor.PostExecutionThread
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.DistrictsUpdatedNotificationType
+import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
+import pl.gov.mc.protegosafe.domain.repository.ActivitiesRepository
 import pl.gov.mc.protegosafe.domain.repository.CovidInfoRepository
 
 class NotifyDistrictsUpdatedUseCase(
     private val covidInfoRepository: CovidInfoRepository,
     private val notifyManager: Notifier,
+    private val activitiesRepository: ActivitiesRepository,
     private val postExecutionThread: PostExecutionThread
 ) {
     fun execute(newDistrictsData: List<DistrictItem>): Completable {
         return covidInfoRepository.getSortedSubscribedDistricts()
             .flatMapCompletable { subscribedDistricts ->
                 if (subscribedDistricts.isEmpty()) {
-                    showDistrictsUpdatedNotification(
+                    handleUpdateStatus(
                         DistrictsUpdatedNotificationType.EmptySubscribedDistrictsList
                     )
                 } else {
                     getUpdatedSubscribedDistricts(newDistrictsData.sortedBy { it.id })
                         .flatMapCompletable { updatedDistricts ->
-                            showChangesInSubscribedDistrictsNotification(updatedDistricts)
+                            handleChangesInSubscribedDistricts(updatedDistricts)
                         }
                 }
             }
@@ -61,8 +64,10 @@ class NotifyDistrictsUpdatedUseCase(
         }
     }
 
-    private fun showChangesInSubscribedDistrictsNotification(districts: List<DistrictItem>): Completable {
-        return showDistrictsUpdatedNotification(
+    private fun handleChangesInSubscribedDistricts(
+        districts: List<DistrictItem>
+    ): Completable {
+        return handleUpdateStatus(
             if (districts.isEmpty()) {
                 DistrictsUpdatedNotificationType.NoDistrictsUpdated
             } else {
@@ -71,9 +76,38 @@ class NotifyDistrictsUpdatedUseCase(
         )
     }
 
-    private fun showDistrictsUpdatedNotification(districtsUpdatedNotificationType: DistrictsUpdatedNotificationType): Completable {
-        return Completable.fromAction {
-            notifyManager.showDistrictsUpdatedNotification(districtsUpdatedNotificationType)
+    private fun handleUpdateStatus(
+        districtsUpdatedNotificationType: DistrictsUpdatedNotificationType
+    ): Completable {
+        return prepareNotification(districtsUpdatedNotificationType)
+            .flatMapCompletable {
+                saveNotificationActivity(it)
+                    .andThen(
+                        Completable.defer {
+                            showNotification(it)
+                        }
+                    )
+            }
+    }
+
+    private fun prepareNotification(
+        districtsUpdatedNotificationType: DistrictsUpdatedNotificationType
+    ): Single<PushNotificationItem> {
+        return Single.fromCallable {
+            notifyManager.getDistrictsUpdatedNotification(districtsUpdatedNotificationType)
         }
+    }
+
+    private fun showNotification(
+        pushNotificationItem: PushNotificationItem
+    ): Completable {
+        return Completable.fromAction {
+            notifyManager.showDistrictsUpdatedNotification(pushNotificationItem)
+        }
+    }
+
+    private fun saveNotificationActivity(pushNotificationItem: PushNotificationItem): Completable {
+        return activitiesRepository.saveNotificationActivity(pushNotificationItem)
+            .ignoreElement()
     }
 }

@@ -3,7 +3,7 @@ package pl.gov.mc.protegosafe.data.mapper
 import com.google.android.gms.nearby.exposurenotification.ExposureInformation
 import com.google.android.gms.nearby.exposurenotification.ExposureSummary
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
-import pl.gov.mc.protegosafe.data.BuildConfig
+import pl.gov.mc.protegosafe.data.model.AppReviewData
 import pl.gov.mc.protegosafe.data.model.ClearData
 import pl.gov.mc.protegosafe.data.model.CloseAppData
 import pl.gov.mc.protegosafe.data.model.DiagnosisKeyDownloadConfigurationData
@@ -12,23 +12,33 @@ import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ExposureConfigurationItemData
 import pl.gov.mc.protegosafe.data.model.ExposureDto
 import pl.gov.mc.protegosafe.data.model.CovidInfoResponseData
+import pl.gov.mc.protegosafe.data.model.CovidStatsData
+import pl.gov.mc.protegosafe.data.model.CovidStatsDto
+import pl.gov.mc.protegosafe.data.model.DeleteActivitiesData
 import pl.gov.mc.protegosafe.data.model.DistrictActionData
+import pl.gov.mc.protegosafe.data.model.ExposureCheckActivityDto
 import pl.gov.mc.protegosafe.data.model.InteroperabilityData
+import pl.gov.mc.protegosafe.data.model.NotificationActivityDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.PinData
+import pl.gov.mc.protegosafe.data.model.RiskCheckActivityDto
 import pl.gov.mc.protegosafe.data.model.RiskLevelConfigurationData
 import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionConfigurationData
-import pl.gov.mc.protegosafe.domain.CovidInfoItem
+import pl.gov.mc.protegosafe.domain.model.CovidInfoItem
+import pl.gov.mc.protegosafe.domain.model.AppReviewItem
 import pl.gov.mc.protegosafe.domain.model.ClearItem
 import pl.gov.mc.protegosafe.domain.model.CloseAppItem
+import pl.gov.mc.protegosafe.domain.model.CovidStatsItem
+import pl.gov.mc.protegosafe.domain.model.DeleteActivitiesItem
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKeyDownloadConfiguration
 import pl.gov.mc.protegosafe.domain.model.DistrictActionItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.DistrictRestrictionStateItem
+import pl.gov.mc.protegosafe.domain.model.ExposureCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.ExposureConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureInformationItem
 import pl.gov.mc.protegosafe.domain.model.ExposureItem
@@ -37,30 +47,14 @@ import pl.gov.mc.protegosafe.domain.model.InteroperabilityItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionStatus
 import pl.gov.mc.protegosafe.domain.model.PinItem
-import pl.gov.mc.protegosafe.domain.model.PushNotificationData
-import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
+import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
+import pl.gov.mc.protegosafe.domain.model.RiskCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TriageItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
-
-private const val FCM_NOTIFICATION_TITLE_KEY = "title"
-private const val FCM_NOTIFICATION_CONTENT_KEY = "content"
-fun Map<String, String>.hasNotification() =
-    !get(FCM_NOTIFICATION_TITLE_KEY).isNullOrBlank()
-
-fun Map<String, String>.toNotificationDataItem(topic: String?) = PushNotificationData(
-    title = get(FCM_NOTIFICATION_TITLE_KEY)
-        ?: throw IllegalArgumentException("Hash id has no value"),
-    content = get(FCM_NOTIFICATION_CONTENT_KEY) ?: "",
-    topic = when (topic) {
-        "/topics/${BuildConfig.MAIN_TOPIC}" -> PushNotificationTopic.MAIN
-        "/topics/${BuildConfig.DAILY_TOPIC}" -> PushNotificationTopic.DAILY
-        else -> PushNotificationTopic.UNKNOWN
-    }
-)
 
 fun TriageData.toEntity() = TriageItem(timestamp = timestamp)
 
@@ -105,9 +99,30 @@ fun VoivodeshipData.toEntity() = VoivodeshipItem(
     districts = districts.map { it.toEntity() }
 )
 
+fun CovidStatsData.toEntity() = CovidStatsItem(
+    updated = updated,
+    newCases = newCases,
+    totalCases = totalCases,
+    newDeaths = newDeaths,
+    totalDeaths = totalDeaths,
+    newRecovered = newRecovered,
+    totalRecovered = totalRecovered
+)
+
+fun CovidStatsDto.toEntity() = CovidStatsItem(
+    updated = updated,
+    newCases = newCases,
+    totalCases = totalCases,
+    newDeaths = newDeaths,
+    totalDeaths = totalDeaths,
+    newRecovered = newRecovered,
+    totalRecovered = totalRecovered
+)
+
 fun CovidInfoResponseData.toEntity() = CovidInfoItem(
-    lastUpdate = update,
-    voivodeships = voivodeships.map { it.toEntity() }
+    voivodeships = voivodeships.map { it.toEntity() },
+    voivodeshipsUpdated = voivodeshipsUpdated,
+    covidStatsItem = covidStats.toEntity()
 )
 
 /**
@@ -182,7 +197,37 @@ fun RiskLevelData.toEntity() = when (this) {
     RiskLevelData.HIGH_RISK -> RiskLevelItem.HIGH_RISK
 }
 
-fun TestSubscriptionConfigurationData.toEntity() =
-    TestSubscriptionConfigurationItem(
-        interval = interval
-    )
+fun TestSubscriptionConfigurationData.toEntity() = TestSubscriptionConfigurationItem(
+    interval = interval
+)
+
+fun AppReviewData.toEntity() = AppReviewItem(
+    appReview = appReview
+)
+
+fun RiskCheckActivityDto.toEntity() = RiskCheckActivityItem(
+    id = id,
+    keys = keys,
+    exposures = exposures,
+    timestamp = timestamp
+)
+
+fun ExposureCheckActivityDto.toEntity() = ExposureCheckActivityItem(
+    id = id,
+    riskLevel = RiskLevelItem.valueOf(riskLevel),
+    exposures = exposures,
+    timestamp = timestamp
+)
+
+fun NotificationActivityDto.toEntity() = PushNotificationItem(
+    id = id,
+    title = title,
+    content = content,
+    timestamp = timestamp
+)
+
+fun DeleteActivitiesData.toEntity() = DeleteActivitiesItem(
+    notifications = notifications,
+    riskChecks = riskChecks,
+    exposures = exposures
+)

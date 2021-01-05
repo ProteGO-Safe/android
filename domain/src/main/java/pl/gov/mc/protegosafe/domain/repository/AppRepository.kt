@@ -12,6 +12,11 @@ interface AppRepository {
      */
     fun getSystemLanguage(): Single<String>
 
+    /**
+     * @return String in ISO 639-1 standard
+     */
+    fun getAppLanguage(): Single<String>
+
     fun setAppLanguage(languageISO: String): Completable
 
     fun getLocale(): Locale
@@ -28,4 +33,12 @@ interface AppRepository {
     fun getWorkersIntervalInMinutes(): Long
 
     fun setWorkersInterval(intervalInMinutes: Long)
+
+    fun setCovidStatsNotificationsAgreement(isAllowed: Boolean): Completable
+
+    fun areCovidStatsNotificationsAllowed(): Single<Boolean>
+
+    fun subscribeToCovidStatsNotificationsTopic(): Completable
+
+    fun unsubscribeFromCovidStatsNotificationsTopic(): Completable
 }
