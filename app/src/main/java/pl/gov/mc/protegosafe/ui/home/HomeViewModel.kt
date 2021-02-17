@@ -1,5 +1,6 @@
 package pl.gov.mc.protegosafe.ui.home
 
+import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -379,15 +380,17 @@ class HomeViewModel(
     }
 
     private fun bridgeDataResponse(body: String, dataType: Int, requestId: String) {
-        val codeToExecute = "bridgeDataResponse('$body', $dataType, '$requestId')"
-        WebViewTimber.d("run Javascript: -$codeToExecute-")
-        _javascriptCode.postValue(codeToExecute)
+        runJavaScriptCode("bridgeDataResponse('$body', $dataType, '$requestId')")
     }
 
     private fun onBridgeData(dataType: Int, dataJson: String) {
-        val codeToExecute = "onBridgeData($dataType, '$dataJson')"
+        runJavaScriptCode("onBridgeData($dataType, '$dataJson')")
+    }
+
+    @MainThread
+    private fun runJavaScriptCode(codeToExecute: String) {
         WebViewTimber.d("run Javascript: -$codeToExecute-")
-        _javascriptCode.postValue(codeToExecute)
+        _javascriptCode.value = codeToExecute
     }
 
     private fun handleNotResolvedException(exception: ExposureNotificationActionNotResolvedException) {
