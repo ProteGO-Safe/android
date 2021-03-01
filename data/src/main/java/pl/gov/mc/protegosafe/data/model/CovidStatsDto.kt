@@ -11,6 +11,12 @@ open class CovidStatsDto(
     var totalDeaths: Long? = 0,
     var newRecovered: Long? = 0,
     var totalRecovered: Long? = 0,
+    var newVaccinations: Long? = null,
+    var totalVaccinations: Long? = null,
+    var newVaccinationsDose1: Long? = null,
+    var totalVaccinationsDose1: Long? = null,
+    var newVaccinationsDose2: Long? = null,
+    var totalVaccinationsDose2: Long? = null
 ) : RealmObject() {
     @PrimaryKey
     var id: Int = 1

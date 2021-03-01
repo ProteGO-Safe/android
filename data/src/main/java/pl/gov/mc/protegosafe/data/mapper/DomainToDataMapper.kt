@@ -172,7 +172,13 @@ fun CovidStatsItem.toCovidStatsDto() = CovidStatsDto(
     newDeaths = newDeaths,
     totalDeaths = totalDeaths,
     newRecovered = newRecovered,
-    totalRecovered = totalRecovered
+    totalRecovered = totalRecovered,
+    newVaccinations = newVaccinations,
+    totalVaccinations = totalVaccinations,
+    newVaccinationsDose1 = newVaccinationsDose1,
+    totalVaccinationsDose1 = totalVaccinationsDose1,
+    newVaccinationsDose2 = newVaccinationsDose2,
+    totalVaccinationsDose2 = totalVaccinationsDose2
 )
 
 fun CovidStatsItem.toCovidStatsData() = CovidStatsData(
@@ -182,7 +188,13 @@ fun CovidStatsItem.toCovidStatsData() = CovidStatsData(
     newDeaths = newDeaths,
     totalDeaths = totalDeaths,
     newRecovered = newRecovered,
-    totalRecovered = totalRecovered
+    totalRecovered = totalRecovered,
+    newVaccinations = newVaccinations,
+    totalVaccinations = totalVaccinations,
+    newVaccinationsDose1 = newVaccinationsDose1,
+    totalVaccinationsDose1 = totalVaccinationsDose1,
+    newVaccinationsDose2 = newVaccinationsDose2,
+    totalVaccinationsDose2 = totalVaccinationsDose2
 )
 
 fun ENStatsItem.toENStatsData() = ENStatsData(

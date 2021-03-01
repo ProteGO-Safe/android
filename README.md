@@ -77,159 +77,148 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
-4.9.0
+**4.9.1**
 
-Added information on COVID-19 statistics in Poland
+- Added information on vaccination statistics in Poland
+- Updated UI
 
-Added information about the checks carried out by the application on meetings with people who reported to have got sick with COVID-19
 
-Added history of application activity (information about performed checks, indicated threats, system notifications)
+**4.9.0**
 
-Added possibility of redirecting to a specific application screen by system notification
+- Added information on COVID-19 statistics in Poland
+- Added information about the checks carried out by the application on meetings with people who reported to have got sick with COVID-19
+- Added history of application activity (information about performed checks, indicated threats, system notifications)
+- Added possibility of redirecting to a specific application screen by system notification
+- Added possibility to evaluate applications in the Google Play / Apple App Store
+- Added translations of the application into Russian, German and Turkish.
+- Updated UI
 
-Added possibility to evaluate applications in the Google Play / Apple App Store
 
-Added translations of the application into Russian, German and Turkish.
+**4.8.0**
 
-Updated UI
+- Possibility to share Temporary Exposure Keys with other countries
+- Updated UI
 
-4.8.0
 
-Possibility to share Temporary Exposure Keys with other countries
+**4.7.1**
 
-Updated UI
+- Fixed back button handling
+- Updated translations
+- Possibility to cancel exposure risk on UI request
+- Updated UI
 
-4.7.1
 
-Fixed back button handling
+**4.7.0**
 
-Updated translations
+- Possibility to generate Covid Test Subscription when Exposure Notification returns HIGH RISK
+- Added cache for UI requests when error should be handled by native
+- Updated UI
 
-Possibility to cancel exposure risk on UI request
 
-Updated UI
+**4.6.0**
 
-4.7.0
+- Added list of current color zones for poviats.
+- Possibility of monitoring selected poviats - notification in case of a change in the color of the zone.
+- Updated screen that informs about the possibility to add a translation into a new language.
+- Updated UI
 
-Possibility to generate Covid Test Subscription when Exposure Notification returns HIGH RISK
 
-Added cache for UI requests when error should be handled by native
+**4.5.0**
 
-Updated UI
+- Added closing app on UI request
+- Upgraded gradle and gradle dependencies
+- Added response "ACCESS_DENIED" code(5) when user denied sharing TEKs
+- Updated UI
 
-4.6.0
 
-Added list of current color zones for poviats.
+**4.4.0**
 
-Possibility of monitoring selected poviats - notification in case of a change in the color of the zone.
+- Added translations for English and Ukrainian languages
+- Updated UI
 
-Updated screen that informs about the possibility to add a translation into a new language.
 
-Updated UI
+**4.3.1**
 
-4.5.0
+- Updated UI
 
-Added closing app on UI request
 
-Upgraded gradle and gradle dependencies
+**4.3.0**
 
-Added response "ACCESS_DENIED" code(5) when user denied sharing TEKs
+- Updated app name
+- Updated UI
+- Added validation of Temporary Exposure Keys before upload
+- Getting and setting application language/locale (not supported by UI yet)
 
-Updated UI
 
-4.4.0
+**4.2.4**
 
-Added translations for English and Ukrainian languages
+- Updated GIS recommendations
 
-Updated UI
 
-4.3.1
+**4.2.3**
 
-Updated UI
+- Updated PWA
+- Passed app version to PWA
+- Updated certification pinning
 
-4.3.0
 
-Updated app name
+**4.2.2**
 
-Updated UI
+- Updated PWA
 
-Added validation of Temporary Exposure Keys before upload
 
-Getting and setting application language/locale (not supported by UI yet)
+**4.2.1**
 
-4.2.4
+- Increased connection timeouts
+- Handled upload errors
+- Updated PWA
 
-Updated GIS recommendations
 
-4.2.3
+**4.2.0**
 
-Updated PWA
+- PWA GUI migrated to offline version (local assets)
+- Migration of PWA data from previous versions added
+- Improved device verification check (missing Google Play services handled properly)
+- Risk level thresholds added as configuration
+- VPN connection problem fixed (still valid for keys upload)
+- Improved download files process (omitting not existing files)
 
-Passed app version to PWA
 
-Updated certification pinning
+**4.1.1**
 
-4.2.2
+- Security fixes added:
+    - Migration of Firebase Cloud Functions to HTTP calls
+    - Certificate pinning for HTTP calls and PWA application
+    - Preventing app screen recording/taking screenshots
+    - Warning about rooted devices displayed on first app launch
+    - In-app updates added
+- Config changes
 
-Updated PWA
 
-4.2.1
+**4.1.0**
 
-Increased connection timeouts
+- Exposure Notification API added
+- OpenTrace module fully removed together with all collected data
+- New types of communication with PWA via JS Bridge
 
-Handled upload errors
 
-Updated PWA
+**3.0.3**
 
-4.2.0
+- Fixed wrong condition for battery optimization check for Android 5
+- SafetyNet check disabled
 
-PWA GUI migrated to offline version (local assets)
 
-Migration of PWA data from previous versions added
+**3.0.2**
 
-Improved device verification check (missing Google Play services handled properly)
+- Improved Bluetooth module operation
+- Added support for deleting all data collected by Bluetooth module
 
-Risk level thresholds added as configuration
 
-VPN connection problem fixed (still valid for keys upload)
+**3.0.1**
 
-Improved download files process (omitting not existing files)
+- Added OpenTrace module for collecting BLE contacts
 
-4.1.1
 
-Security fixes added:
-- Migration of Firebase Cloud Functions to HTTP calls
-- Certificate pinning for HTTP calls and PWA application
-- Preventing app screen recording/taking screenshots
-- Warning about rooted devices displayed on first app launch
-- In-app updates added
+**2.0.1**
 
-Config changes
-
-4.1.0
-
-Exposure Notification API added
-
-OpenTrace module fully removed together with all collected data
-
-New types of communication with PWA via JS Bridge
-
-3.0.3
-
-Fixed wrong condition for battery optimization check for Android 5
-
-SafetyNet check disabled
-
-3.0.2
-
-Improved Bluetooth module operation
-
-Added support for deleting all data collected by Bluetooth module
-
-3.0.1
-
-Added OpenTrace module for collecting BLE contacts
-
-2.0.1
-
-Basic version with PWA, and notifications
+- Basic version with PWA, and notifications

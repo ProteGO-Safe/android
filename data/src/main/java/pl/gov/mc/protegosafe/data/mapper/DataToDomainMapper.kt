@@ -106,7 +106,13 @@ fun CovidStatsData.toEntity() = CovidStatsItem(
     newDeaths = newDeaths,
     totalDeaths = totalDeaths,
     newRecovered = newRecovered,
-    totalRecovered = totalRecovered
+    totalRecovered = totalRecovered,
+    newVaccinations = newVaccinations,
+    totalVaccinations = totalVaccinations,
+    newVaccinationsDose1 = newVaccinationsDose1,
+    totalVaccinationsDose1 = totalVaccinationsDose1,
+    newVaccinationsDose2 = newVaccinationsDose2,
+    totalVaccinationsDose2 = totalVaccinationsDose2
 )
 
 fun CovidStatsDto.toEntity() = CovidStatsItem(
@@ -116,7 +122,13 @@ fun CovidStatsDto.toEntity() = CovidStatsItem(
     newDeaths = newDeaths,
     totalDeaths = totalDeaths,
     newRecovered = newRecovered,
-    totalRecovered = totalRecovered
+    totalRecovered = totalRecovered,
+    newVaccinations = newVaccinations,
+    totalVaccinations = totalVaccinations,
+    newVaccinationsDose1 = newVaccinationsDose1,
+    totalVaccinationsDose1 = totalVaccinationsDose1,
+    newVaccinationsDose2 = newVaccinationsDose2,
+    totalVaccinationsDose2 = totalVaccinationsDose2
 )
 
 fun CovidInfoResponseData.toEntity() = CovidInfoItem(

@@ -17,4 +17,16 @@ data class CovidStatsData(
     val newRecovered: Long?,
     @SerializedName("totalRecovered")
     val totalRecovered: Long?,
+    @SerializedName("newVaccinations")
+    val newVaccinations: Long?,
+    @SerializedName("totalVaccinations")
+    val totalVaccinations: Long?,
+    @SerializedName("newVaccinationsDose1")
+    val newVaccinationsDose1: Long?,
+    @SerializedName("totalVaccinationsDose1")
+    val totalVaccinationsDose1: Long?,
+    @SerializedName("newVaccinationsDose2")
+    val newVaccinationsDose2: Long?,
+    @SerializedName("totalVaccinationsDose2")
+    val totalVaccinationsDose2: Long?
 )

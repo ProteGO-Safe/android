@@ -21,6 +21,10 @@ class RealmMigrations : RealmMigration {
             addActivities(realm.schema)
             dbVersion++
         }
+        if (dbVersion == REALM_VERSION_UP_TO_4_9_1) {
+            extendCovidStats(realm.schema)
+            dbVersion++
+        }
     }
 
     private fun addDistricts(realmSchema: RealmSchema) {
@@ -122,9 +126,20 @@ class RealmMigrations : RealmMigration {
             ?.addField("lastRiskCheckTimestamp", Long::class.java)
     }
 
+    fun extendCovidStats(realmSchema: RealmSchema) {
+        realmSchema.get("CovidStatsDto")
+            ?.addField("newVaccinations", Long::class.javaObjectType)
+            ?.addField("totalVaccinations", Long::class.javaObjectType)
+            ?.addField("newVaccinationsDose1", Long::class.javaObjectType)
+            ?.addField("totalVaccinationsDose1", Long::class.javaObjectType)
+            ?.addField("newVaccinationsDose2", Long::class.javaObjectType)
+            ?.addField("totalVaccinationsDose2", Long::class.javaObjectType)
+    }
+
     companion object {
         private const val REALM_VERSION_UP_TO_4_4 = 0L
         private const val REALM_VERSION_UP_TO_4_7 = 1L
         private const val REALM_VERSION_UP_TO_4_9 = 2L
+        private const val REALM_VERSION_UP_TO_4_9_1 = 3L
     }
 }

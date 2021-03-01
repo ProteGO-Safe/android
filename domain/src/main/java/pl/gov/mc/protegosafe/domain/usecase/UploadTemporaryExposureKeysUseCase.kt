@@ -201,7 +201,7 @@ class UploadTemporaryExposureKeysUseCase(
                     resultComposer.composeTemporaryExposureKeysUploadResult(state)
                 )
             )
-        }
+        }.subscribeOn(postExecutionThread.scheduler)
 
     private fun uploadTemporaryExposureKeys(requestItem: TemporaryExposureKeysUploadRequestItem) =
         temporaryExposureKeysUploadRepository.uploadTemporaryExposureKeys(requestItem)
