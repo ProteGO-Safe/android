@@ -18,7 +18,7 @@ import pl.gov.mc.protegosafe.device.mapper.ChangeServiceStatusRequestMapperImpl
 import pl.gov.mc.protegosafe.device.scheduler.ApplicationTaskSchedulerImpl
 import pl.gov.mc.protegosafe.device.scheduler.ProvideDiagnosisKeyWorker
 import pl.gov.mc.protegosafe.device.scheduler.RemoveOldExposuresWorker
-import pl.gov.mc.protegosafe.device.scheduler.UpdateCovidInfoWorker
+import pl.gov.mc.protegosafe.device.scheduler.UpdateDistrictsRestrictionsWorker
 
 val deviceModule = module {
     single<InternetConnectionManager> {
@@ -44,7 +44,7 @@ val deviceModule = module {
             workManager = get(),
             provideDiagnosisKeyWorker = ProvideDiagnosisKeyWorker::class.java,
             removeOldExposuresWorker = RemoveOldExposuresWorker::class.java,
-            updateDistrictsRestrictionsWorker = UpdateCovidInfoWorker::class.java
+            updateDistrictsRestrictionsWorker = UpdateDistrictsRestrictionsWorker::class.java
         )
     }
 }

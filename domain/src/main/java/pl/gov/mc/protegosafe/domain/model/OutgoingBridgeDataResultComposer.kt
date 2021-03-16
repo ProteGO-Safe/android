@@ -7,19 +7,13 @@ interface OutgoingBridgeDataResultComposer {
     fun composeAppVersionNameResult(versionName: String): String
     fun composeSystemLanguageResult(languageISO: String): String
     fun composeFontScaleResult(fontScale: Float): String
-    fun composeDistrictsRestrictionsResult(
-        voivodeships: List<VoivodeshipItem>,
-        updated: Long
-    ): String
+    fun composeDistrictsRestrictionsResult(voivodeshipsItem: VoivodeshipsItem): String
     fun composeSubscribedDistrictsResult(subscribedDistricts: List<DistrictItem>): String
     fun composeUploadTestPinResult(resultStatus: ResultStatus): String
-    fun composeTestSubscriptionStatusResult(
-        testSubscriptionItem: TestSubscriptionItem?
-    ): String
+    fun composeTestSubscriptionStatusResult(testSubscriptionItem: TestSubscriptionItem?): String
     fun composeTestSubscriptionPinResult(pin: String): String
     fun composeBackButtonPressedResult(): String
     fun composeActivitiesResult(activitiesResultItem: ActivitiesResultItem): String
-    fun composeCovidStatsResult(covidStatsItem: CovidStatsItem): String
     fun composeCovidStatsNotificationsStatusResult(areAllowed: Boolean): String
     fun composeENStatsResult(enStatsItem: ENStatsItem?): String
 }

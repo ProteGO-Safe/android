@@ -1,18 +1,16 @@
 package pl.gov.mc.protegosafe.data.model
 
-import com.google.gson.GsonBuilder
+import com.google.gson.Gson
 import pl.gov.mc.protegosafe.data.extension.toJson
 import pl.gov.mc.protegosafe.data.mapper.toActivitiesResultData
-import pl.gov.mc.protegosafe.data.mapper.toCovidStatsData
 import pl.gov.mc.protegosafe.data.mapper.toDistrictData
 import pl.gov.mc.protegosafe.data.mapper.toENStatsData
-import pl.gov.mc.protegosafe.data.mapper.toTestSubscriptionStatusData
 import pl.gov.mc.protegosafe.data.mapper.toRiskLevelData
+import pl.gov.mc.protegosafe.data.mapper.toTestSubscriptionStatusData
 import pl.gov.mc.protegosafe.data.mapper.toVoivodeshipData
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusResult
 import pl.gov.mc.protegosafe.domain.model.ActivitiesResultItem
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
-import pl.gov.mc.protegosafe.domain.model.CovidStatsItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.ENStatsItem
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
@@ -21,8 +19,11 @@ import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
 import pl.gov.mc.protegosafe.domain.model.VoivodeshipItem
+import pl.gov.mc.protegosafe.domain.model.VoivodeshipsItem
 
-class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
+class OutgoingBridgeDataResultComposerImpl(
+    private val gson: Gson
+) : OutgoingBridgeDataResultComposer {
 
     override fun composeTemporaryExposureKeysUploadResult(state: TemporaryExposureKeysUploadState): String =
         SimpleResult(state.code).toJson()
@@ -48,18 +49,15 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
         return FontScaleResult(fontScale).toJson()
     }
 
-    override fun composeDistrictsRestrictionsResult(
-        voivodeships: List<VoivodeshipItem>,
-        updated: Long
-    ): String {
+    override fun composeDistrictsRestrictionsResult(voivodeshipsItem: VoivodeshipsItem): String {
         return DistrictsRestrictionsResult(
-            if (voivodeships.isEmpty()) {
+            if (voivodeshipsItem.items.isEmpty()) {
                 ResultStatus.FAILURE
             } else {
                 ResultStatus.SUCCESS
             }.value,
-            updated,
-            voivodeships.map { it.toVoivodeshipData() }
+            voivodeshipsItem.updated,
+            voivodeshipsItem.items.map(VoivodeshipItem::toVoivodeshipData)
         ).toJson()
     }
 
@@ -74,25 +72,11 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
     override fun composeTestSubscriptionStatusResult(
         testSubscriptionItem: TestSubscriptionItem?
     ): String {
-        return GsonBuilder().serializeNulls().create()
-            .toJson(
-                TestSubscriptionStatusResult(
-                    testSubscriptionItem?.toTestSubscriptionStatusData()
-                )
-            )
+        return TestSubscriptionStatusResult(testSubscriptionItem?.toTestSubscriptionStatusData()).toJson(gson)
     }
 
     override fun composeTestSubscriptionPinResult(pin: String): String {
-        return GsonBuilder().serializeNulls().create()
-            .toJson(
-                TestSubscriptionPinData(
-                    if (pin.isEmpty()) {
-                        null
-                    } else {
-                        pin
-                    }
-                )
-            )
+        return TestSubscriptionPinData(pin.takeIf { it.isNotEmpty() }).toJson(gson)
     }
 
     override fun composeBackButtonPressedResult(): String {
@@ -103,25 +87,11 @@ class OutgoingBridgeDataResultComposerImpl : OutgoingBridgeDataResultComposer {
         return activitiesResultItem.toActivitiesResultData().toJson()
     }
 
-    override fun composeCovidStatsResult(covidStatsItem: CovidStatsItem): String {
-        return GsonBuilder().serializeNulls().create()
-            .toJson(
-                CovidStatsResultData(
-                    if (covidStatsItem.updated == 0L) {
-                        null
-                    } else {
-                        covidStatsItem.toCovidStatsData()
-                    }
-                )
-            )
-    }
-
     override fun composeCovidStatsNotificationsStatusResult(areAllowed: Boolean): String {
         return CovidStatsNotificationsStatusData(areAllowed).toJson()
     }
 
     override fun composeENStatsResult(enStatsItem: ENStatsItem?): String {
-        return GsonBuilder().serializeNulls().create()
-            .toJson(ENStatsResultData(enStatsItem?.toENStatsData()))
+        return ENStatsResultData(enStatsItem?.toENStatsData()).toJson(gson)
     }
 }

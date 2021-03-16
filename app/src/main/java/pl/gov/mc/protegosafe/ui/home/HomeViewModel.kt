@@ -30,7 +30,6 @@ import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProcessPendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StartExposureNotificationUseCase
 import pl.gov.mc.protegosafe.domain.usecase.StorePendingActivityResultUseCase
-import pl.gov.mc.protegosafe.domain.usecase.UpdateCovidStatsAndGetResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.UploadTemporaryExposureKeysWithCachedPayloadUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.UpdateTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.logging.WebViewTimber
@@ -51,7 +50,6 @@ class HomeViewModel(
     private val updateTestSubscriptionStatusUseCase: UpdateTestSubscriptionStatusUseCase,
     private val outgoingBridgeDataResultComposer: OutgoingBridgeDataResultComposer,
     private val getRouteAndClearUseCase: GetRouteDataAndClearUseCase,
-    private val updateCovidStatsAndGetResultUseCase: UpdateCovidStatsAndGetResultUseCase,
     private val uiRequestCacheRepository: UiRequestCacheRepository
 ) : BaseViewModel() {
 
@@ -275,9 +273,6 @@ class HomeViewModel(
             is ActionRequiredItem.AppReview -> {
                 _requestAppReview.postValue(Unit)
             }
-            is ActionRequiredItem.UpdateCovidStats -> {
-                updateCovidStats()
-            }
         }
     }
 
@@ -341,19 +336,6 @@ class HomeViewModel(
                 },
                 {
                     Timber.e(it, "sendServicesStatus failed")
-                }
-            ).addTo(disposables)
-    }
-
-    private fun updateCovidStats() {
-        Timber.d("updateCovidStats")
-        updateCovidStatsAndGetResultUseCase.execute()
-            .subscribe(
-                {
-                    onBridgeData(OutgoingBridgeDataType.GET_COVID_STATS.code, it)
-                },
-                {
-                    Timber.d("updateCovidStats failed")
                 }
             ).addTo(disposables)
     }

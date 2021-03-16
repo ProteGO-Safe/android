@@ -8,10 +8,13 @@ import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.GetTestSubscriptionPinUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.GetTestSubscriptionStatusUseCase
 import pl.gov.mc.protegosafe.domain.usecase.covidtest.UploadTestSubscriptionPinUseCase
-import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetDistrictsRestrictionsResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.info.UpdateDashboardIfRequiredAndGetResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.info.UpdateDetailsIfRequiredAndGetResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetSubscribedDistrictsResultUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetVoivodeshipsResultOrFetchIfRequiredUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.GetVoivodeshipsResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.restrictions.HandleDistrictActionUseCase
-import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateDistrictsRestrictionsUseCase
+import pl.gov.mc.protegosafe.domain.usecase.restrictions.UpdateVoivodeshipsIfRequiredUseCase
 
 class OnGetBridgeDataUseCase(
     private val getServicesStatusUseCase: GetServicesStatusUseCase,
@@ -19,8 +22,6 @@ class OnGetBridgeDataUseCase(
     private val getAppVersionNameUseCase: GetAppVersionNameUseCase,
     private val getSystemLanguageUseCase: GetSystemLanguageUseCase,
     private val getFontScaleUseCase: GetFontScaleUseCase,
-    private val getDistrictsRestrictionsResultUseCase: GetDistrictsRestrictionsResultUseCase,
-    private val updateDistrictsRestrictionsUseCase: UpdateDistrictsRestrictionsUseCase,
     private val handleDistrictActionUseCase: HandleDistrictActionUseCase,
     private val getSubscribedDistrictsResultUseCase: GetSubscribedDistrictsResultUseCase,
     private val uploadTestSubscriptionPinUseCase: UploadTestSubscriptionPinUseCase,
@@ -28,10 +29,14 @@ class OnGetBridgeDataUseCase(
     private val getTestSubscriptionPinUseCase: GetTestSubscriptionPinUseCase,
     private val cancelExposureRiskUseCase: CancelExposureRiskUseCase,
     private val getActivitiesResultUseCase: GetActivitiesResultUseCase,
-    private val getCovidStatsResultAndUpdateUseCase: GetCovidStatsResultAndUpdateUseCase,
+    private val getVoivodeshipsResultUseCase: GetVoivodeshipsResultUseCase,
+    private val getVoivodeshipsResultOrFetchIfRequiredUseCase: GetVoivodeshipsResultOrFetchIfRequiredUseCase,
+    private val updateVoivodeshipsIfRequiredUseCase: UpdateVoivodeshipsIfRequiredUseCase,
     private val updateCovidStatsNotificationsStatusUseCase: UpdateCovidStatsNotificationsStatusUseCase,
     private val getCovidStatsNotificationStatusResultUseCase: GetCovidStatsNotificationStatusResultUseCase,
     private val getENStatsResultUseCase: GetENStatsResultUseCase,
+    private val updateDashboardIfRequiredAndGetResultUseCase: UpdateDashboardIfRequiredAndGetResultUseCase,
+    private val updateDetailsIfRequiredAndGetResultUseCase: UpdateDetailsIfRequiredAndGetResultUseCase,
     private val postExecutionThread: PostExecutionThread
 ) {
 
@@ -61,10 +66,11 @@ class OnGetBridgeDataUseCase(
                 cancelExposureRiskUseCase.execute()
             }
             OutgoingBridgeDataType.DISTRICTS_STATUS -> {
-                getDistrictsRestrictionsResultUseCase.execute()
+                getVoivodeshipsResultOrFetchIfRequiredUseCase.execute()
             }
             OutgoingBridgeDataType.UPDATE_DISTRICTS_STATUSES -> {
-                updateAndGetDistrictsRestrictionsResult()
+                updateVoivodeshipsIfRequiredUseCase.execute()
+                    .andThen(getVoivodeshipsResultUseCase.execute())
             }
             OutgoingBridgeDataType.DISTRICT_ACTION -> {
                 data?.let {
@@ -89,7 +95,7 @@ class OnGetBridgeDataUseCase(
                 getActivitiesResultUseCase.execute()
             }
             OutgoingBridgeDataType.GET_COVID_STATS -> {
-                getCovidStatsResultAndUpdateUseCase.execute(onResultActionRequired)
+                updateDashboardIfRequiredAndGetResultUseCase.execute()
             }
             OutgoingBridgeDataType.GET_COVID_STATS_NOTIFICATION_AGREEMENT -> {
                 getCovidStatsNotificationStatusResultUseCase.execute()
@@ -102,18 +108,15 @@ class OnGetBridgeDataUseCase(
             OutgoingBridgeDataType.GET_EN_STATS -> {
                 getENStatsResultUseCase.execute()
             }
+            OutgoingBridgeDataType.GET_DETAILS -> {
+                updateDetailsIfRequiredAndGetResultUseCase.execute()
+            }
             else -> {
                 throw IllegalArgumentException("OutgoingBridgeDataType has wrong value")
             }
         }
             .subscribeOn(Schedulers.io())
             .observeOn(postExecutionThread.scheduler)
-    }
-
-    private fun updateAndGetDistrictsRestrictionsResult(): Single<String> {
-        return updateDistrictsRestrictionsUseCase.execute()
-            .onErrorComplete()
-            .andThen(getDistrictsRestrictionsResultUseCase.execute())
     }
 
     private fun handleDistrictActionAndGetSubscribedDistrictResult(payload: String): Single<String> {

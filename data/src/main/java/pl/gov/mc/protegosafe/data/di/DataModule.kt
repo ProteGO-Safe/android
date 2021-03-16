@@ -8,10 +8,12 @@ import androidx.security.crypto.MasterKeys
 import com.datatheorem.android.trustkit.pinning.OkHttp3Helper
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.android.gms.nearby.Nearby
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.Consts
@@ -102,7 +104,8 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 val dataModule = module {
-    single<Retrofit> { provideRetrofit() }
+    single(named(COMPOSER_GSON_NAME)) { GsonBuilder().serializeNulls().create() }
+    single { provideRetrofit() }
     single<DiagnosisKeyDownloadService> {
         get<Retrofit>().create(DiagnosisKeyDownloadService::class.java)
     }
@@ -127,7 +130,7 @@ val dataModule = module {
     factory<DiagnosisKeyDownloadConfigurationMapper> { DiagnosisKeyDownloadConfigurationMapperImpl() }
     factory<PinMapper> { PinMapperImpl() }
     factory<KeyUploadSystemInfoRepository> { KeyUploadSystemInfoRepositoryImpl(androidApplication()) }
-    factory<OutgoingBridgeDataResultComposer> { OutgoingBridgeDataResultComposerImpl() }
+    factory<OutgoingBridgeDataResultComposer> { OutgoingBridgeDataResultComposerImpl(get(COMPOSER_GSON_QUALIFIER)) }
     factory<ApiExceptionMapper> { ApiExceptionMapperImpl() }
     single<TemporaryExposureKeysUploadRepository> {
         TemporaryExposureKeysUploadRepositoryImpl(get())
@@ -154,7 +157,7 @@ val dataModule = module {
     single<RetrofitExceptionMapper> { RetrofitExceptionMapperImpl() }
     single<IncomingBridgePayloadMapper> { IncomingBridgePayloadMapperImpl(get()) }
     single { AppLanguageDataStore(get()) }
-    single<CovidInfoRepository> { CovidInfoRepositoryImpl(get(), get(), get(), get()) }
+    single<CovidInfoRepository> { CovidInfoRepositoryImpl(get(), get(), get(), get(), get()) }
     single { CovidInfoDao() }
     single { CovidInfoDataStore(get()) }
     single<OutgoingBridgePayloadMapper> { OutgoingBridgePayloadMapperImpl() }
@@ -217,3 +220,7 @@ fun provideRetrofit(): Retrofit {
 }
 
 private const val DEFAULT_TIMEOUT_SEC = 40L
+
+private const val COMPOSER_GSON_NAME = "gson-composer"
+
+private val COMPOSER_GSON_QUALIFIER = named(COMPOSER_GSON_NAME)
