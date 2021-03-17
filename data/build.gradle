@@ -62,10 +62,7 @@ android {
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
-            buildConfigField "String", "COVID_INFO_TIMESTAMPS", STAGING_COVID_INFO_TIMESTAMPS
-            buildConfigField "String", "COVID_INFO_DASHBOARD", STAGING_COVID_INFO_DASHBOARD
-            buildConfigField "String", "COVID_INFO_DETAILS", STAGING_COVID_INFO_DETAILS
-            buildConfigField "String", "COVID_INFO_VOIVODESHIPS", STAGING_COVID_INFO_VOIVODESHIPS
+            buildConfigField "String", "STORAGE_BASE_URL", STAGING_STORAGE_BASE_URL
             buildConfigField "String", "COVID_TEST_URL", STAGING_COVID_TEST_URL
         }
         stage {
@@ -76,10 +73,7 @@ android {
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", STAGING_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", STAGING_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", STAGING_UPLOAD_BUCKET_ENDPOINT
-            buildConfigField "String", "COVID_INFO_TIMESTAMPS", STAGING_COVID_INFO_TIMESTAMPS
-            buildConfigField "String", "COVID_INFO_DASHBOARD", STAGING_COVID_INFO_DASHBOARD
-            buildConfigField "String", "COVID_INFO_DETAILS", STAGING_COVID_INFO_DETAILS
-            buildConfigField "String", "COVID_INFO_VOIVODESHIPS", STAGING_COVID_INFO_VOIVODESHIPS
+            buildConfigField "String", "STORAGE_BASE_URL", STAGING_STORAGE_BASE_URL
             buildConfigField "String", "COVID_TEST_URL", STAGING_COVID_TEST_URL
         }
         prod {
@@ -90,10 +84,7 @@ android {
             buildConfigField "String", "STORAGE_BUCKET_ENDPOINT", PRODUCTION_STORAGE_BUCKET_ENDPOINT
             buildConfigField "String", "GET_ACCESS_TOKEN_ENDPOINT", PRODUCTION_GET_ACCESS_TOKEN_ENDPOINT
             buildConfigField "String", "UPLOAD_BUCKET_ENDPOINT", PRODUCTION_UPLOAD_BUCKET_ENDPOINT
-            buildConfigField "String", "COVID_INFO_TIMESTAMPS", PRODUCTION_COVID_INFO_TIMESTAMPS
-            buildConfigField "String", "COVID_INFO_DASHBOARD", PRODUCTION_COVID_INFO_DASHBOARD
-            buildConfigField "String", "COVID_INFO_DETAILS", PRODUCTION_COVID_INFO_DETAILS
-            buildConfigField "String", "COVID_INFO_VOIVODESHIPS", PRODUCTION_COVID_INFO_VOIVODESHIPS
+            buildConfigField "String", "STORAGE_BASE_URL", PRODUCTION_STORAGE_BASE_URL
             buildConfigField "String", "COVID_TEST_URL", PRODUCTION_COVID_TEST_URL
         }
     }
