@@ -7,4 +7,5 @@ interface FileRepository {
     fun writeInternalFile(fileName: String, text: String): Completable
     fun readInternalFile(fileName: String): Single<String>
     fun readInternalFileOrEmpty(fileName: String): Single<String>
+    fun clearAllInternalFiles(): Completable
 }

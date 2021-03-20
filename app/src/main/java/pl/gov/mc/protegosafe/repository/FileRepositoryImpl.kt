@@ -46,4 +46,15 @@ class FileRepositoryImpl(private val context: Context) : FileRepository {
     override fun readInternalFileOrEmpty(fileName: String): Single<String> {
         return readInternalFile(fileName).onErrorReturn { "" }
     }
+
+    /**
+     * Removes all internal files recursively
+     */
+    override fun clearAllInternalFiles(): Completable {
+        return Completable.fromAction {
+            context.filesDir.listFiles()?.forEach { file ->
+                file.deleteRecursively()
+            }
+        }
+    }
 }
