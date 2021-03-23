@@ -22,7 +22,8 @@ enum class OutgoingBridgeDataType(override val code: Int) : UIRequestBridgeDataT
     GET_COVID_STATS_NOTIFICATION_AGREEMENT(100),
     UPDATE_COVID_STATS_NOTIFICATION_AGREEMENT(101),
     GET_COVID_STATS(102),
-    GET_EN_STATS(103);
+    GET_EN_STATS(103),
+    GET_DETAILS(104);
 
     companion object {
         fun valueOf(value: Int): OutgoingBridgeDataType =
