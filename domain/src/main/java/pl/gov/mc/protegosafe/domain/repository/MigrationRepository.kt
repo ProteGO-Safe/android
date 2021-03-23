@@ -12,6 +12,11 @@ interface MigrationRepository {
     fun updateCurrentVersion(versionName: String)
     fun getMigrationUrlAndClear(): String
     fun prepareMigrationUrlIfRequired(): Completable
+    fun prepareCovidInfoDataStoreMigrationIfRequired(): Completable
 }
 private const val VERSION_3_URL = "https://safesafe.app"
 private const val VERSION_4_1_URL = "https://v4.safesafe.app/"
+
+enum class CovidInfoDataStoreMigration(val oldVersion: Long, val newVersion: Long) {
+    VERSION_1_2(1, 2);
+}
