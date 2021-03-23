@@ -150,7 +150,7 @@ val dataModule = module {
     single<SafetyNetRepository> { SafetyNetRepositoryImpl(get(), get()) }
     single<RiskLevelConfigurationMapper> { RiskLevelConfigurationMapperImpl() }
     single { AppVersionDataStore(get()) }
-    single<MigrationRepository> { MigrationRepositoryImpl(get(), get(), get()) }
+    single<MigrationRepository> { MigrationRepositoryImpl(get(), get(), get(), get()) }
     single<RetrofitExceptionMapper> { RetrofitExceptionMapperImpl() }
     single<IncomingBridgePayloadMapper> { IncomingBridgePayloadMapperImpl(get()) }
     single { AppLanguageDataStore(get()) }
