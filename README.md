@@ -77,6 +77,10 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+**4.10.1**
+
+- Fix missing districts
+
 **4.10.0**
 
 - Added new file storage method

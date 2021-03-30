@@ -4,13 +4,16 @@ import android.content.Context
 import android.content.SharedPreferences
 import io.reactivex.Completable
 import pl.gov.mc.protegosafe.data.db.AppVersionDataStore
+import pl.gov.mc.protegosafe.data.db.CovidInfoDataStore
 import pl.gov.mc.protegosafe.data.db.SHARED_PREFS_SAFETYNET_IS_DEVICE_CHECKED
+import pl.gov.mc.protegosafe.domain.repository.CovidInfoDataStoreMigration
 import pl.gov.mc.protegosafe.domain.repository.MigrationRepository
 
 class MigrationRepositoryImpl(
     private val appVersionDataStore: AppVersionDataStore,
     private val context: Context,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val covidInfoDataStore: CovidInfoDataStore
 ) : MigrationRepository {
 
     override fun updateCurrentVersion(versionName: String) {
@@ -29,6 +32,22 @@ class MigrationRepositoryImpl(
     override fun getMigrationUrlAndClear(): String {
         return appVersionDataStore.lastVersionUrl.also {
             appVersionDataStore.lastVersionUrl = ""
+        }
+    }
+
+    override fun prepareCovidInfoDataStoreMigrationIfRequired(): Completable {
+        return Completable.fromAction {
+            val lastMigration = CovidInfoDataStoreMigration.values().last()
+            if (covidInfoDataStore.currentVersion != lastMigration.newVersion) {
+                CovidInfoDataStoreMigration.values().forEach { migration ->
+                    when (migration) {
+                        CovidInfoDataStoreMigration.VERSION_1_2 -> {
+                            covidInfoDataStore.voivodeshipsUpdateTimestamp = 0L
+                        }
+                    }
+                    covidInfoDataStore.currentVersion = migration.newVersion
+                }
+            }
         }
     }
 
