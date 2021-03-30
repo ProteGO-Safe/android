@@ -77,6 +77,10 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+**4.11.0**
+
+- Updated UI
+
 **4.10.1**
 
 - Fix missing districts
