@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.webkit.ConsoleMessage
 import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
@@ -127,12 +128,10 @@ class HomeFragment : BaseFragment() {
             ).addTo(disposables)
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     private fun startPwaMigration(url: String) {
         binding.migrationLayout.isVisible = true
         binding.webView.apply {
-            settings.javaScriptEnabled = true
-            settings.domStorageEnabled = true
+            applySettings()
             webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
                     binding.webView.evaluateJavascript(DUMP_UI_COMMAND) { dump ->
@@ -145,11 +144,9 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     private fun setUpWebView() {
         binding.webView.apply {
-            settings.javaScriptEnabled = true
-            settings.domStorageEnabled = true
+            applySettings()
             webViewClient = ProteGoWebViewClient()
             addJavascriptInterface(
                 NativeBridgeInterface(
@@ -181,6 +178,17 @@ class HomeFragment : BaseFragment() {
         )
 
         vm.javascriptCode.observe(viewLifecycleOwner, ::runJavascript)
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun WebView.applySettings() {
+        settings.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                forceDark = WebSettings.FORCE_DARK_OFF
+            }
+            javaScriptEnabled = true
+            domStorageEnabled = true
+        }
     }
 
     private inner class ProteGoWebViewClient : WebViewClient() {

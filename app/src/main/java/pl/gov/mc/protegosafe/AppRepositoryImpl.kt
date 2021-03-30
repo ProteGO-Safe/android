@@ -13,6 +13,7 @@ import pl.gov.mc.protegosafe.data.db.WorkersIntervalDataStore
 import pl.gov.mc.protegosafe.data.db.realm.RealmDatabaseBuilder
 import pl.gov.mc.protegosafe.data.extension.toCompletable
 import pl.gov.mc.protegosafe.domain.repository.AppRepository
+import pl.gov.mc.protegosafe.domain.repository.FileRepository
 import timber.log.Timber
 import java.util.Locale
 
@@ -22,6 +23,7 @@ class AppRepositoryImpl(
     private val realmDatabaseBuilder: RealmDatabaseBuilder,
     private val covidStatsDataStore: CovidStatsDataStore,
     private val workersIntervalDataStore: WorkersIntervalDataStore,
+    private val fileRepository: FileRepository,
     private val context: Context
 ) : AppRepository {
     override fun getVersionName(): Single<String> {
@@ -54,9 +56,8 @@ class AppRepositoryImpl(
 
     override fun clearAppData(): Completable {
         return clearDatabase()
-            .andThen(
-                clearSharedPreferences()
-            )
+            .andThen(clearSharedPreferences())
+            .andThen(fileRepository.clearAllInternalFiles())
     }
 
     private fun clearDatabase(): Completable {

@@ -6,10 +6,8 @@ import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.Consts
 import pl.gov.mc.protegosafe.data.db.AppLanguageDataStore
 import pl.gov.mc.protegosafe.data.extension.toJson
-import pl.gov.mc.protegosafe.data.model.CovidStatsData
 import pl.gov.mc.protegosafe.data.model.PushNotificationContentData
 import pl.gov.mc.protegosafe.data.model.RouteData
-import pl.gov.mc.protegosafe.domain.model.CovidStatsItem
 import pl.gov.mc.protegosafe.domain.model.FcmNotificationMapper
 import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.model.PushNotificationTopic
@@ -42,12 +40,9 @@ class FcmNotificationMapperImpl(
         }
     }
 
-    override fun getCovidStatsItem(remoteMessageData: Map<String, String>): Single<CovidStatsItem> {
+    override fun getDashboard(remoteMessageData: Map<String, String>): Single<String> {
         return Single.fromCallable {
-            remoteMessageData[FCM_DATA_COVID_STATS_KEY]?.let {
-                Gson().fromJson(it, CovidStatsData::class.java)
-                    .toEntity()
-            }
+            remoteMessageData[FCM_DATA_DASHBOARD_KEY]
         }
     }
 
@@ -88,6 +83,6 @@ class FcmNotificationMapperImpl(
 
 private const val FCM_DATA_NOTIFICATION_KEY = "notification"
 private const val FCM_DATA_ROUTE_KEY = "route"
-private const val FCM_DATA_COVID_STATS_KEY = "covidStats"
+private const val FCM_DATA_DASHBOARD_KEY = "covidStats"
 private const val ROUTE_UUID_KEY = "uuid"
 private const val ROUTE_NAME_FCM_DEFAULT = "historyActivities"

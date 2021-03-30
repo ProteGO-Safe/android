@@ -8,10 +8,12 @@ import androidx.security.crypto.MasterKeys
 import com.datatheorem.android.trustkit.pinning.OkHttp3Helper
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.android.gms.nearby.Nearby
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import pl.gov.mc.protegosafe.data.BuildConfig
 import pl.gov.mc.protegosafe.data.Consts
@@ -102,19 +104,17 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 val dataModule = module {
-    single<Retrofit> { provideRetrofit() }
+    single(named(COMPOSER_GSON_NAME)) { GsonBuilder().serializeNulls().create() }
+    single(named(API_RETROFIT_NAME)) { provideRetrofit(Consts.BASE_URL_FORMAT) }
+    single(named(CDN_RETROFIT_NAME)) { provideRetrofit(BuildConfig.STORAGE_BASE_URL) }
     single<DiagnosisKeyDownloadService> {
-        get<Retrofit>().create(DiagnosisKeyDownloadService::class.java)
+        get<Retrofit>(API_RETROFIT_QUALIFIER).create(DiagnosisKeyDownloadService::class.java)
     }
     single<UploadTemporaryExposureKeysService> {
-        get<Retrofit>().create(UploadTemporaryExposureKeysService::class.java)
+        get<Retrofit>(API_RETROFIT_QUALIFIER).create(UploadTemporaryExposureKeysService::class.java)
     }
-    single<CovidInfoService> {
-        get<Retrofit>().create(CovidInfoService::class.java)
-    }
-    single<CovidTestService> {
-        get<Retrofit>().create(CovidTestService::class.java)
-    }
+    single<CovidTestService> { get<Retrofit>(API_RETROFIT_QUALIFIER).create(CovidTestService::class.java) }
+    single<CovidInfoService> { get<Retrofit>(CDN_RETROFIT_QUALIFIER).create(CovidInfoService::class.java) }
     single<RouteRepository> { RouteRepositoryImpl(get()) }
     single<TriageRepository> { TriageRepositoryImpl(get()) }
     single { RouteDataStore() }
@@ -127,7 +127,7 @@ val dataModule = module {
     factory<DiagnosisKeyDownloadConfigurationMapper> { DiagnosisKeyDownloadConfigurationMapperImpl() }
     factory<PinMapper> { PinMapperImpl() }
     factory<KeyUploadSystemInfoRepository> { KeyUploadSystemInfoRepositoryImpl(androidApplication()) }
-    factory<OutgoingBridgeDataResultComposer> { OutgoingBridgeDataResultComposerImpl() }
+    factory<OutgoingBridgeDataResultComposer> { OutgoingBridgeDataResultComposerImpl(get(COMPOSER_GSON_QUALIFIER)) }
     factory<ApiExceptionMapper> { ApiExceptionMapperImpl() }
     single<TemporaryExposureKeysUploadRepository> {
         TemporaryExposureKeysUploadRepositoryImpl(get())
@@ -154,7 +154,7 @@ val dataModule = module {
     single<RetrofitExceptionMapper> { RetrofitExceptionMapperImpl() }
     single<IncomingBridgePayloadMapper> { IncomingBridgePayloadMapperImpl(get()) }
     single { AppLanguageDataStore(get()) }
-    single<CovidInfoRepository> { CovidInfoRepositoryImpl(get(), get(), get(), get()) }
+    single<CovidInfoRepository> { CovidInfoRepositoryImpl(get(), get(), get(), get(), get()) }
     single { CovidInfoDao() }
     single { CovidInfoDataStore(get()) }
     single<OutgoingBridgePayloadMapper> { OutgoingBridgePayloadMapperImpl() }
@@ -187,7 +187,7 @@ fun provideRegularSharedPreferences(context: Context): SharedPreferences =
         Context.MODE_PRIVATE
     )
 
-fun provideRetrofit(): Retrofit {
+fun provideRetrofit(baseUrl: String): Retrofit {
     val client = OkHttpClient.Builder().apply {
         sslSocketFactory(OkHttp3Helper.getSSLSocketFactory(), OkHttp3Helper.getTrustManager())
         addInterceptor(OkHttp3Helper.getPinningInterceptor())
@@ -209,7 +209,7 @@ fun provideRetrofit(): Retrofit {
     }.build()
 
     return Retrofit.Builder()
-        .baseUrl(Consts.BASE_URL_FORMAT)
+        .baseUrl(baseUrl)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
@@ -217,3 +217,11 @@ fun provideRetrofit(): Retrofit {
 }
 
 private const val DEFAULT_TIMEOUT_SEC = 40L
+
+private const val COMPOSER_GSON_NAME = "gson-composer"
+private const val API_RETROFIT_NAME = "retrofit-api"
+private const val CDN_RETROFIT_NAME = "retrofit-cdn"
+
+private val COMPOSER_GSON_QUALIFIER = named(COMPOSER_GSON_NAME)
+private val API_RETROFIT_QUALIFIER = named(API_RETROFIT_NAME)
+private val CDN_RETROFIT_QUALIFIER = named(CDN_RETROFIT_NAME)

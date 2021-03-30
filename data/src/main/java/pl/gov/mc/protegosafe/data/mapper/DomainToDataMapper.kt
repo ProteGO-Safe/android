@@ -1,11 +1,8 @@
 package pl.gov.mc.protegosafe.data.mapper
 
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
-import io.realm.RealmList
 import pl.gov.mc.protegosafe.data.extension.toBase64
 import pl.gov.mc.protegosafe.data.model.ActivitiesResultData
-import pl.gov.mc.protegosafe.data.model.CovidStatsData
-import pl.gov.mc.protegosafe.data.model.CovidStatsDto
 import pl.gov.mc.protegosafe.data.model.DistrictData
 import pl.gov.mc.protegosafe.data.model.DistrictDto
 import pl.gov.mc.protegosafe.data.model.ENStatsData
@@ -19,11 +16,9 @@ import pl.gov.mc.protegosafe.data.model.RiskLevelData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeyRequestData
 import pl.gov.mc.protegosafe.data.model.TemporaryExposureKeysUploadData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
-import pl.gov.mc.protegosafe.data.model.VoivodeshipDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionStatusData
 import pl.gov.mc.protegosafe.domain.model.ActivitiesResultItem
-import pl.gov.mc.protegosafe.domain.model.CovidStatsItem
 import pl.gov.mc.protegosafe.domain.model.DistrictItem
 import pl.gov.mc.protegosafe.domain.model.ENStatsItem
 import pl.gov.mc.protegosafe.domain.model.ExposureCheckActivityItem
@@ -82,14 +77,6 @@ fun DistrictItem.toDistrictDto() = DistrictDto(
     id = id,
     name = name,
     state = state.value
-)
-
-fun VoivodeshipItem.toVoivodeshipDto() = VoivodeshipDto(
-    id = id,
-    name = name,
-    districts = districts
-        .map { it.toDistrictDto() }
-        .toCollection(RealmList<DistrictDto>())
 )
 
 fun DistrictItem.toDistrictData() = DistrictData(
@@ -163,38 +150,6 @@ fun ActivitiesResultItem.toActivitiesResultData() = ActivitiesResultData(
     notifications = notifications.map { it.toNotificationActivityData() },
     riskChecks = riskChecks.map { it.toRiskCheckActivityData() },
     exposures = exposures.map { it.toExposureCheckActivityData() }
-)
-
-fun CovidStatsItem.toCovidStatsDto() = CovidStatsDto(
-    updated = updated,
-    newCases = newCases,
-    totalCases = totalCases,
-    newDeaths = newDeaths,
-    totalDeaths = totalDeaths,
-    newRecovered = newRecovered,
-    totalRecovered = totalRecovered,
-    newVaccinations = newVaccinations,
-    totalVaccinations = totalVaccinations,
-    newVaccinationsDose1 = newVaccinationsDose1,
-    totalVaccinationsDose1 = totalVaccinationsDose1,
-    newVaccinationsDose2 = newVaccinationsDose2,
-    totalVaccinationsDose2 = totalVaccinationsDose2
-)
-
-fun CovidStatsItem.toCovidStatsData() = CovidStatsData(
-    updated = updated,
-    newCases = newCases,
-    totalCases = totalCases,
-    newDeaths = newDeaths,
-    totalDeaths = totalDeaths,
-    newRecovered = newRecovered,
-    totalRecovered = totalRecovered,
-    newVaccinations = newVaccinations,
-    totalVaccinations = totalVaccinations,
-    newVaccinationsDose1 = newVaccinationsDose1,
-    totalVaccinationsDose1 = totalVaccinationsDose1,
-    newVaccinationsDose2 = newVaccinationsDose2,
-    totalVaccinationsDose2 = totalVaccinationsDose2
 )
 
 fun ENStatsItem.toENStatsData() = ENStatsData(

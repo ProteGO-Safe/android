@@ -16,5 +16,4 @@ sealed class ActionRequiredItem {
         val dataType = OutgoingBridgeDataType.TEMPORARY_EXPOSURE_KEYS_UPLOAD_STATUS.code
     }
     object UpdateTestSubscription : ActionRequiredItem()
-    object UpdateCovidStats : ActionRequiredItem()
 }

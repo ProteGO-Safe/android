@@ -11,7 +11,7 @@ import pl.gov.mc.protegosafe.domain.model.FcmNotificationMapper
 import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.repository.ActivitiesRepository
 import pl.gov.mc.protegosafe.domain.usecase.ShowPushNotificationUseCase
-import pl.gov.mc.protegosafe.domain.usecase.UpdateCovidStatsUseCase
+import pl.gov.mc.protegosafe.domain.usecase.info.UpdateDashboardUseCase
 
 class HandleFcmNotificationWorker(
     appContext: Context,
@@ -21,7 +21,7 @@ class HandleFcmNotificationWorker(
     private val showPushNotificationUseCase: ShowPushNotificationUseCase by inject()
     private val fcmNotificationMapper: FcmNotificationMapper by inject()
     private val activitiesRepository: ActivitiesRepository by inject()
-    private val updateCovidStatsUseCase: UpdateCovidStatsUseCase by inject()
+    private val updateDashboardUseCase: UpdateDashboardUseCase by inject()
 
     private val notificationData by lazy {
         mutableMapOf<String, String>().apply {
@@ -42,7 +42,7 @@ class HandleFcmNotificationWorker(
                     }
             }.andThen(
                 Completable.defer {
-                    updateCovidStatsIfAvailable(notificationData)
+                    updateDashboardIfAvailable(notificationData)
                 }
             )
             .toSingleDefault(Result.success())
@@ -67,10 +67,9 @@ class HandleFcmNotificationWorker(
             }
     }
 
-    private fun updateCovidStatsIfAvailable(notificationData: Map<String, String>): Completable {
-        return fcmNotificationMapper.getCovidStatsItem(notificationData)
-            .flatMapCompletable {
-                updateCovidStatsUseCase.execute(it)
-            }
+    private fun updateDashboardIfAvailable(notificationData: Map<String, String>): Completable {
+        return fcmNotificationMapper
+            .getDashboard(notificationData)
+            .flatMapCompletable(updateDashboardUseCase::execute)
     }
 }
