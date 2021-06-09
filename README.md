@@ -77,6 +77,11 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+**4.12.0**
+
+- Disabled SafetyNet token check for lab test 
+- Updated UI
+
 **4.11.0**
 
 - Updated UI

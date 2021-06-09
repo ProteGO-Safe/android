@@ -2,14 +2,12 @@ package pl.gov.mc.protegosafe.data.repository
 
 import io.reactivex.Single
 import pl.gov.mc.protegosafe.data.db.SafetyNetDataStore
-import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
 import pl.gov.mc.protegosafe.domain.repository.SafetyNetRepository
 import java.io.ByteArrayOutputStream
 import java.security.SecureRandom
 
 class SafetyNetRepositoryImpl(
-    private val safetyNetDataStore: SafetyNetDataStore,
-    private val safetyNetAttestationWrapper: SafetyNetAttestationWrapper
+    private val safetyNetDataStore: SafetyNetDataStore
 ) : SafetyNetRepository {
 
     override fun isDeviceChecked(): Single<Boolean> {
@@ -18,10 +16,6 @@ class SafetyNetRepositoryImpl(
 
     override fun setDeviceChecked() {
         safetyNetDataStore.isDeviceChecked = true
-    }
-
-    override fun getTokenFor(byteArray: ByteArray): Single<String> {
-        return safetyNetAttestationWrapper.getTokenFor(byteArray)
     }
 
     /**
