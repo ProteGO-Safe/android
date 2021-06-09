@@ -6,5 +6,4 @@ interface SafetyNetRepository {
     fun isDeviceChecked(): Single<Boolean>
     fun setDeviceChecked()
     fun generateNonce(data: String): Single<ByteArray>
-    fun getTokenFor(byteArray: ByteArray): Single<String>
 }

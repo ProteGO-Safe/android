@@ -5,11 +5,11 @@ import com.google.android.gms.safetynet.SafetyNet
 import com.google.common.io.BaseEncoding
 import com.google.gson.Gson
 import io.reactivex.Single
+import pl.gov.mc.protegosafe.device.extension.toSingle
+import pl.gov.mc.protegosafe.device.model.AttestationData
 import pl.gov.mc.protegosafe.domain.manager.SafetyNetAttestationWrapper
 import pl.gov.mc.protegosafe.domain.model.DiagnosisKey
 import pl.gov.mc.protegosafe.domain.model.SafetyNetResult
-import pl.gov.mc.protegosafe.device.extension.toSingle
-import pl.gov.mc.protegosafe.device.model.AttestationData
 import timber.log.Timber
 import java.util.Locale
 
@@ -19,11 +19,6 @@ class SafetyNetAttestationWrapperImpl(
 ) : SafetyNetAttestationWrapper {
 
     private val _base64: BaseEncoding = BaseEncoding.base64()
-
-    override fun getTokenFor(byteArray: ByteArray): Single<String> {
-        val nonce = _base64.encode(byteArray)
-        return safetyNetAttestationFor(nonce)
-    }
 
     override fun attestFor(byteArray: ByteArray): Single<SafetyNetResult> {
         val nonce = _base64.encode(byteArray)
