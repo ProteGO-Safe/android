@@ -5,5 +5,4 @@ import pl.gov.mc.protegosafe.domain.model.SafetyNetResult
 
 interface SafetyNetAttestationWrapper {
     fun attestFor(byteArray: ByteArray): Single<SafetyNetResult>
-    fun getTokenFor(byteArray: ByteArray): Single<String>
 }

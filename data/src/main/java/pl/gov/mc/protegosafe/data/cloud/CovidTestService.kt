@@ -14,7 +14,6 @@ interface CovidTestService {
 
     @POST("${BuildConfig.COVID_TEST_URL}createSubscription")
     fun createSubscription(
-        @Header(SAFETY_TOKEN_HEADER) safetynetToken: String,
         @Body createTestSubscriptionRequestData: CreateTestSubscriptionRequestData,
         @Header(USER_AGENT_HEADER) userAgent: String = USER_AGENT_ANDROID
     ): Single<GetTokenResponseData>
@@ -22,13 +21,11 @@ interface CovidTestService {
     @POST("${BuildConfig.COVID_TEST_URL}getSubscription")
     fun getSubscriptionStatus(
         @Header(AUTHORIZATION_HEADER) accessToken: String,
-        @Header(SAFETY_TOKEN_HEADER) safetynetToken: String,
         @Body testSubscriptionStatusRequestBody: TestSubscriptionStatusRequestBody,
         @Header(USER_AGENT_HEADER) userAgent: String = USER_AGENT_ANDROID
     ): Single<SubscriptionStatusResponseData>
 }
 
-private const val SAFETY_TOKEN_HEADER = "Safety-Token"
 private const val USER_AGENT_HEADER = "User-Agent"
 private const val USER_AGENT_ANDROID = "android"
 private const val AUTHORIZATION_HEADER = "Authorization"
