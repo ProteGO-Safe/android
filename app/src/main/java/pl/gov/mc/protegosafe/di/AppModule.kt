@@ -34,6 +34,7 @@ import pl.gov.mc.protegosafe.domain.usecase.GetSystemLanguageUseCase
 import pl.gov.mc.protegosafe.domain.usecase.HandleNewUriUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnGetBridgeDataUseCase
 import pl.gov.mc.protegosafe.domain.usecase.OnSetBridgeDataUseCase
+import pl.gov.mc.protegosafe.domain.usecase.SendSmsAppUseCase
 import pl.gov.mc.protegosafe.domain.usecase.PrepareMigrationIfRequiredUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProcessPendingActivityResultUseCase
 import pl.gov.mc.protegosafe.domain.usecase.ProvideDiagnosisKeysUseCase
@@ -120,6 +121,7 @@ val useCaseModule = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
@@ -190,6 +192,7 @@ val useCaseModule = module {
     factory { GetVoivodeshipsResultOrFetchIfRequiredUseCase(get(), get(), get(), get()) }
     factory { UpdateVoivodeshipsAndSyncDistrictsUseCase(get(), get(), get()) }
     factory { UpdateVoivodeshipsIfRequiredUseCase(get(), get(), get(), get()) }
+    factory { SendSmsAppUseCase(get(), get()) }
 }
 
 val viewModelModule = module {

@@ -19,6 +19,7 @@ import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgeDataType
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataResultComposer
 import pl.gov.mc.protegosafe.domain.model.OutgoingBridgeDataType
+import pl.gov.mc.protegosafe.domain.model.SendSmsItem
 import pl.gov.mc.protegosafe.domain.model.SetBridgeDataUIRequestItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeysUploadState
 import pl.gov.mc.protegosafe.domain.repository.UiRequestCacheRepository
@@ -79,6 +80,9 @@ class HomeViewModel(
 
     private val _requestAppReview = SingleLiveEvent<Unit>()
     val requestAppReview: LiveData<Unit> = _requestAppReview
+
+    private val _openSmsApp = SingleLiveEvent<SendSmsItem>()
+    val openSmsApp: LiveData<SendSmsItem> = _openSmsApp
 
     private val _requestExposureNotificationPermission =
         SingleLiveEvent<ExposureNotificationActionNotResolvedException>()
@@ -272,6 +276,10 @@ class HomeViewModel(
             }
             is ActionRequiredItem.AppReview -> {
                 _requestAppReview.postValue(Unit)
+            }
+            is ActionRequiredItem.OpenSmsApp -> {
+                val item = SendSmsItem(number = actionRequired.number, text = actionRequired.text)
+                _openSmsApp.postValue(item)
             }
         }
     }

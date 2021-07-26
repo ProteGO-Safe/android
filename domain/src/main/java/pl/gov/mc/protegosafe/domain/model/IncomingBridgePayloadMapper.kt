@@ -21,4 +21,6 @@ interface IncomingBridgePayloadMapper {
     fun toAppReviewItem(payload: String): AppReviewItem
 
     fun toDeleteActivities(payload: String): DeleteActivitiesItem
+
+    fun toSendSmsItem(payload: String): SendSmsItem
 }
