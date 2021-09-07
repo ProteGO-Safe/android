@@ -4,6 +4,7 @@ import doTransaction
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionDto
 import pl.gov.mc.protegosafe.data.model.covidtest.TestSubscriptionPinDto
 import singleQuery
@@ -13,6 +14,7 @@ open class CovidTestDao {
 
     fun getTestSubscription(): Maybe<TestSubscriptionDto> {
         return singleQuery<TestSubscriptionDto>()
+            .observeOn(Schedulers.io())
             .flatMapMaybe { list ->
                 Maybe.create { emitter ->
                     if (list.isEmpty()) {

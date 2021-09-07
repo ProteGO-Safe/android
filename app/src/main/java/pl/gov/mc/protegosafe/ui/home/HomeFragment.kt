@@ -42,6 +42,7 @@ import pl.gov.mc.protegosafe.domain.model.ActivityRequest
 import pl.gov.mc.protegosafe.domain.model.ActivityResult
 import pl.gov.mc.protegosafe.domain.model.AppLifecycleState
 import pl.gov.mc.protegosafe.domain.model.ExposureNotificationActionNotResolvedException
+import pl.gov.mc.protegosafe.domain.model.SendSmsItem
 import pl.gov.mc.protegosafe.domain.usecase.GetMigrationUrlUseCase
 import pl.gov.mc.protegosafe.extension.toCompletable
 import pl.gov.mc.protegosafe.extension.toSingle
@@ -62,7 +63,7 @@ class HomeFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_home,
@@ -109,6 +110,7 @@ class HomeFragment : BaseFragment() {
         vm.restartActivity.observe(viewLifecycleOwner, ::restartActivity)
         vm.closeApplication.observe(viewLifecycleOwner, ::closeApplication)
         vm.showConnectionError.observe(viewLifecycleOwner, ::showError)
+        vm.openSmsApp.observe(viewLifecycleOwner, ::openSmsApp)
     }
 
     private fun setupPWA() {
@@ -299,6 +301,16 @@ class HomeFragment : BaseFragment() {
                     Timber.e(it, "App review failed")
                 }
             ).addTo(disposables)
+    }
+
+    private fun openSmsApp(sendSmsItem: SendSmsItem) {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("smsto:${sendSmsItem.number}")
+            putExtra("sms_body", sendSmsItem.text)
+        }
+        if (intent.resolveActivity(requireContext().packageManager) != null) {
+            startActivity(intent)
+        }
     }
 
     private fun restartActivity() {
