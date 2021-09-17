@@ -77,6 +77,11 @@ Dev: ./app/src/dev/google-services.json
 
 ## ChangeLog
 
+**4.13.0**
+- Added handling deep links
+- Added handling redirect to sms application
+- Updated UI
+
 **4.12.0**
 
 - Disabled SafetyNet token check for lab test 

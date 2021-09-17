@@ -16,7 +16,8 @@ class OnSetBridgeDataUseCase(
     private val setAppLanguageUseCase: SetAppLanguageUseCase,
     private val closeAppUseCase: CloseAppUseCase,
     private val appReviewUseCase: AppReviewUseCase,
-    private val deleteActivitiesUseCase: DeleteActivitiesUseCase
+    private val deleteActivitiesUseCase: DeleteActivitiesUseCase,
+    private val sendSmsAppUseCase: SendSmsAppUseCase
 ) {
     fun execute(input: IncomingBridgeDataItem, onResultActionRequired: (ActionRequiredItem) -> Unit): Completable =
         when (input.type) {
@@ -43,6 +44,9 @@ class OnSetBridgeDataUseCase(
             }
             IncomingBridgeDataType.DELETE_ACTIVITIES -> {
                 deleteActivitiesUseCase.execute(input.payload)
+            }
+            IncomingBridgeDataType.SEND_SMS -> {
+                sendSmsAppUseCase.execute(input.payload, onResultActionRequired)
             }
             else -> throw IllegalStateException("Illegal input type")
         }

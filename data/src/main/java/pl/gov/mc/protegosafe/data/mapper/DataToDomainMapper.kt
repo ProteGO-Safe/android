@@ -20,6 +20,7 @@ import pl.gov.mc.protegosafe.data.model.PinData
 import pl.gov.mc.protegosafe.data.model.RiskCheckActivityDto
 import pl.gov.mc.protegosafe.data.model.RiskLevelConfigurationData
 import pl.gov.mc.protegosafe.data.model.RiskLevelData
+import pl.gov.mc.protegosafe.data.model.SendSmsData
 import pl.gov.mc.protegosafe.data.model.TimestampsResponseData
 import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.data.model.VoivodeshipData
@@ -45,6 +46,7 @@ import pl.gov.mc.protegosafe.domain.model.PushNotificationItem
 import pl.gov.mc.protegosafe.domain.model.RiskCheckActivityItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.RiskLevelItem
+import pl.gov.mc.protegosafe.domain.model.SendSmsItem
 import pl.gov.mc.protegosafe.domain.model.TemporaryExposureKeyItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionConfigurationItem
 import pl.gov.mc.protegosafe.domain.model.TestSubscriptionItem
@@ -208,4 +210,9 @@ fun DeleteActivitiesData.toEntity() = DeleteActivitiesItem(
     notifications = notifications,
     riskChecks = riskChecks,
     exposures = exposures
+)
+
+fun SendSmsData.toEntity() = SendSmsItem(
+    number = number,
+    text = text
 )

@@ -10,7 +10,8 @@ enum class IncomingBridgeDataType(override val code: Int) : UIRequestBridgeDataT
     SYSTEM_LANGUAGE(63),
     CLOSE_APPLICATION(64),
     APP_REVIEW(68),
-    DELETE_ACTIVITIES(91);
+    DELETE_ACTIVITIES(91),
+    SEND_SMS(105);
 
     companion object {
         fun valueOf(value: Int): IncomingBridgeDataType =

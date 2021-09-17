@@ -8,6 +8,7 @@ import pl.gov.mc.protegosafe.data.model.CloseAppData
 import pl.gov.mc.protegosafe.data.model.DeleteActivitiesData
 import pl.gov.mc.protegosafe.data.model.InteroperabilityData
 import pl.gov.mc.protegosafe.data.model.PinData
+import pl.gov.mc.protegosafe.data.model.SendSmsData
 import pl.gov.mc.protegosafe.data.model.TriageData
 import pl.gov.mc.protegosafe.domain.model.AppReviewItem
 import pl.gov.mc.protegosafe.domain.model.ChangeServiceStatusRequestMapper
@@ -18,6 +19,7 @@ import pl.gov.mc.protegosafe.domain.model.DeleteActivitiesItem
 import pl.gov.mc.protegosafe.domain.model.IncomingBridgePayloadMapper
 import pl.gov.mc.protegosafe.domain.model.InteroperabilityItem
 import pl.gov.mc.protegosafe.domain.model.PinItem
+import pl.gov.mc.protegosafe.domain.model.SendSmsItem
 import pl.gov.mc.protegosafe.domain.model.TriageItem
 
 class IncomingBridgePayloadMapperImpl(
@@ -58,5 +60,9 @@ class IncomingBridgePayloadMapperImpl(
 
     override fun toDeleteActivities(payload: String): DeleteActivitiesItem {
         return Gson().fromJson(payload, DeleteActivitiesData::class.java).toEntity()
+    }
+
+    override fun toSendSmsItem(payload: String): SendSmsItem {
+        return Gson().fromJson(payload, SendSmsData::class.java).toEntity()
     }
 }
